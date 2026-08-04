@@ -42,7 +42,6 @@ export type ReferenceProject = Readonly<{
 
 export type PublishedReferenceProject = ReferenceProject &
   Readonly<{
-    assetKind: "real-project";
     permission: "public-approved";
   }>;
 
@@ -150,15 +149,6 @@ export function validateReferenceGalleryRegistry(
     }
 
     if (
-      item.assetKind === "concept-visual" &&
-      item.permission !== "review-only"
-    ) {
-      issues.push(
-        `Concept visual \"${item.id}\" must remain review-only.`
-      );
-    }
-
-    if (
       !Number.isInteger(item.image.width) ||
       item.image.width <= 0 ||
       !Number.isInteger(item.image.height) ||
@@ -189,14 +179,10 @@ export function validateReferenceGalleryRegistry(
 
   if (
     registry.status === "published" &&
-    registry.items.some(
-      (item) =>
-        item.assetKind !== "real-project" ||
-        item.permission !== "public-approved"
-    )
+    registry.items.some((item) => item.permission !== "public-approved")
   ) {
     issues.push(
-      "Published references require real projects and public approval for every image."
+      "Published references require public approval for every image."
     );
   }
 

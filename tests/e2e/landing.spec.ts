@@ -751,7 +751,7 @@ test("renders the concise object-specific FAQ with the approved marker treatment
   expect(sectionOverflow).toBeLessThanOrEqual(1);
 });
 
-test("shows the clearly labelled concept gallery only in local review", async ({
+test("shows the public gallery on the homepage and dedicated route", async ({
   page,
   request
 }) => {
@@ -759,10 +759,10 @@ test("shows the clearly labelled concept gallery only in local review", async ({
   const cards = section.locator(".reference-card");
 
   await expect(
-    section.getByRole("heading", { name: "So wirkt die Galerie." })
+    section.getByRole("heading", { name: "Ausgewählte Ansichten." })
   ).toBeVisible();
   await expect(cards).toHaveCount(4);
-  await expect(section.locator(".reference-card__badge")).toHaveCount(4);
+  await expect(section.locator(".reference-card__badge")).toHaveCount(0);
   await expect(cards.nth(0)).toHaveAttribute(
     "href",
     "/referenzen#konzept-restaurantfassade"
@@ -791,8 +791,8 @@ test("shows the clearly labelled concept gallery only in local review", async ({
   const html = await response.text();
 
   expect(response.status()).toBe(200);
-  expect(html).toContain("Galerie-Vorschau.");
-  expect(html).toContain("Konzeptvisualisierung");
+  expect(html).toContain("Referenzen.");
+  expect(html).not.toContain("Konzeptvisualisierung");
   expect(html).toMatch(/noindex/i);
 });
 

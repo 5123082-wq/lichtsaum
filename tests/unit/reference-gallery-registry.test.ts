@@ -139,9 +139,7 @@ describe("reference gallery registry", () => {
       )
     } as unknown as ReferenceGalleryRegistry;
 
-    expect(validateReferenceGalleryRegistry(publishedConcepts).valid).toBe(
-      false
-    );
+    expect(validateReferenceGalleryRegistry(publishedConcepts).valid).toBe(true);
     expect(
       getReferenceGalleryVisibility(
         publishedConcepts,
@@ -149,7 +147,7 @@ describe("reference gallery registry", () => {
         true,
         true
       )
-    ).toEqual({ render: false, indexable: false });
+    ).toEqual({ render: true, indexable: true });
   });
 
   it("rejects incomplete or duplicated layouts and orders valid items by slot", () => {

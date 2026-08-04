@@ -123,11 +123,6 @@ export function ReferenceGallery({ items }: ReferenceGalleryProps) {
             key={item.id}
             onClick={(event) => openModal(event, index)}
           >
-            {item.assetKind === "concept-visual" ? (
-              <span className="reference-card__badge">
-                Konzeptvisualisierung
-              </span>
-            ) : null}
             <Image
               alt={item.image.alt}
               className="reference-card__image"
@@ -171,9 +166,7 @@ export function ReferenceGallery({ items }: ReferenceGalleryProps) {
           >
             <header className="reference-modal__header">
               <p>
-                {activeItem.assetKind === "concept-visual"
-                  ? `Konzeptvisualisierung · ${activeItem.context}`
-                  : activeItem.context}
+                {activeItem.context}
               </p>
               <button
                 aria-label="Galeriebild schließen"

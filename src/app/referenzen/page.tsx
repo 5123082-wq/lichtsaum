@@ -14,7 +14,6 @@ import { siteConfig } from "@/config/site";
 import { referenceGallery } from "@/content/references.de";
 import {
   getReferenceGalleryVisibility,
-  isReferenceGalleryPublished,
   orderReferenceProjects
 } from "@/features/references/types";
 
@@ -26,18 +25,11 @@ const visibility = getReferenceGalleryVisibility(
 );
 
 const orderedReferences = orderReferenceProjects(referenceGallery.items);
-const galleryIsPublished = isReferenceGalleryPublished(referenceGallery);
-const galleryHasConceptVisuals = referenceGallery.items.some(
-  (item) => item.assetKind === "concept-visual"
-);
 
 export function generateMetadata(): Metadata {
-  const title = galleryIsPublished
-    ? `Referenzen | ${siteConfig.name}`
-    : `Galerie-Vorschau | ${siteConfig.name}`;
-  const description = galleryIsPublished
-    ? "Ausgewählte realisierte Projekte mit beleuchteten Markisen-Volants in unterschiedlichen Einbausituationen."
-    : "Nicht öffentliche Vorschau der Galerie-Komposition mit temporären Konzeptvisualisierungen.";
+  const title = `Galerie | ${siteConfig.name}`;
+  const description =
+    "Ausgewählte Ansichten beleuchteter Markisen-Volants in unterschiedlichen Objekt- und Einbausituationen.";
 
   if (!visibility.indexable || !siteUrl) {
     return {
@@ -87,17 +79,12 @@ export default function ReferencesPage() {
       <main className="references-page" id="main-content">
         <header className="references-page__intro container">
           <p className="eyebrow">
-            {galleryIsPublished
-              ? "Realisierte Projekte"
-              : "Temporäre Konzeptvisualisierungen"}
+            Galerie
           </p>
-          <h1>{galleryIsPublished ? "Referenzen." : "Galerie-Vorschau."}</h1>
+          <h1>Referenzen.</h1>
           <p>
-            {galleryIsPublished
-              ? "Ausgewählte Objekte mit bestätigtem Projektumfang und zur Veröffentlichung freigegebenem Bildmaterial."
-              : galleryHasConceptVisuals
-                ? "Diese KI-generierten Bilder dienen nur der Beurteilung von Raster, Zuschnitt und Interaktion. Sie zeigen keine realisierten LICHTSAUM-Projekte und werden durch freigegebene Originalfotos ersetzt."
-                : "Für die interne Prüfung zusammengestellte reale Projekte mit dokumentiertem Kontext und zugeordnetem Bildmaterial."}
+            Ausgewählte Ansichten mit beleuchteten Markisen-Volants in
+            unterschiedlichen Objekt- und Einbausituationen.
           </p>
         </header>
 
@@ -124,9 +111,7 @@ export default function ReferencesPage() {
               <div className="references-page__copy">
                 <p>
                   {String(index + 1).padStart(2, "0")} /{" "}
-                  {item.assetKind === "concept-visual"
-                    ? `Konzeptvisualisierung · ${item.context}`
-                    : item.context}
+                  {item.context}
                 </p>
                 <h2>{item.title}</h2>
                 <p>{item.caption}</p>
