@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CHISEL ARCHITECTURAL | Премиальные Системы Солнцезащиты</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&amp;family=Archivo+Narrow:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"primary-fixed": "#ffdbce", "secondary-fixed": "#e3e2e1", "on-background": "#e5e2e1", "surface-container-high": "#2a2a2a", "inverse-primary": "#a73a00", background: "#131313", "charcoal-deep": "#0F0F0F", "outline-variant": "#5b4137", "on-primary-container": "#521800", "on-surface-variant": "#e4beb1", "tertiary-fixed-dim": "#a0c9ff", "on-secondary-fixed-variant": "#464746", "surface-bright": "#393939", "tertiary-fixed": "#d2e4ff", "surface-container-highest": "#353534", "on-primary": "#5a1b00", "error-container": "#93000a", "on-primary-fixed-variant": "#802a00", "on-error-container": "#ffdad6", "secondary-container": "#484949", outline: "#ab897d", "on-secondary-fixed": "#1a1c1c", "on-secondary-container": "#b8b8b7", "slate-gray": "#2A2A2A", "inverse-surface": "#e5e2e1", tertiary: "#a0c9ff", "inverse-on-surface": "#313030", "on-tertiary-container": "#002d51", error: "#ffb4ab", "primary-fixed-dim": "#ffb59a", primary: "#ffb59a", "on-primary-fixed": "#370e00", "surface-container": "#201f1f", "on-error": "#690005", "on-tertiary-fixed-variant": "#00497f", "surface-dim": "#131313", "tertiary-container": "#0096fd", secondary: "#c7c6c5", "primary-container": "#ff5c00", "on-secondary": "#2f3130", "on-surface": "#e5e2e1", "surface-variant": "#353534", "surface-container-lowest": "#0e0e0e", "on-tertiary-fixed": "#001c37", "surface-container-low": "#1c1b1b", "architectural-orange": "#FF5C00", surface: "#131313", "on-tertiary": "#00325a", "surface-tint": "#ffb59a", "secondary-fixed-dim": "#c7c6c5"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {"container-max": "1440px", "section-gap": "160px", "margin-desktop": "64px", gutter: "32px", unit: "8px", "margin-mobile": "24px"}, fontFamily: {"headline-md": ["Hanken Grotesk"], "label-mono": ["JetBrains Mono"], "body-lg": ["Hanken Grotesk"], "headline-lg-mobile": ["Hanken Grotesk"], "display-xl": ["Hanken Grotesk"], "headline-lg": ["Hanken Grotesk"], "display-xl-mobile": ["Hanken Grotesk"], "body-md": ["Hanken Grotesk"], headline: ["Hanken Grotesk"], display: ["Hanken Grotesk"], body: ["Hanken Grotesk"], label: ["Archivo Narrow"]}, fontSize: {"headline-md": ["32px", {lineHeight: "40px", fontWeight: "600"}], "label-mono": ["12px", {lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "500"}], "body-lg": ["20px", {lineHeight: "32px", fontWeight: "400"}], "headline-lg-mobile": ["32px", {lineHeight: "40px", fontWeight: "700"}], "display-xl": ["120px", {lineHeight: "110px", letterSpacing: "-0.04em", fontWeight: "800"}], "headline-lg": ["64px", {lineHeight: "72px", letterSpacing: "-0.02em", fontWeight: "700"}], "display-xl-mobile": ["56px", {lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "800"}], "body-md": ["16px", {lineHeight: "24px", fontWeight: "400"}]}}}};</script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            -webkit-font-smoothing: antialiased;
+        }
+        .architectural-border {
+            border-color: rgba(253, 252, 251, 0.1);
+        }
+        .mask-overlay {
+            background: linear-gradient(to bottom, rgba(19, 19, 19, 0.4) 0%, rgba(19, 19, 19, 0.8) 100%);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .parallax-section {
+            background-attachment: fixed;
+        }
+
+        /* Entrance Animations */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUpFade 1.2s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.2, 1, 0.3, 1), transform 1s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .animate-slide-up, .reveal-on-scroll {
+                animation: none !important;
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-md dark:bg-background/90 border-b border-on-surface/10">
+<div class="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md font-bold tracking-tighter text-on-surface">CHISEL ARCHITECTURAL</div>
+<!-- Desktop Links -->
+<div class="hidden md:flex gap-gutter items-center">
+<a class="font-label-mono text-label-mono uppercase tracking-widest text-architectural-orange relative after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-architectural-orange after:rounded-full cursor-pointer transition-transform active:scale-95" href="#">Solutions</a>
+<a class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface hover:text-architectural-orange transition-colors duration-200 cursor-pointer transition-transform active:scale-95" href="#">Projects</a>
+<a class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface hover:text-architectural-orange transition-colors duration-200 cursor-pointer transition-transform active:scale-95" href="#">Contact</a>
+</div>
+<button class="bg-architectural-orange text-background px-6 py-2 font-label-mono text-label-mono uppercase tracking-widest hover:bg-white transition-colors duration-300">
+            Get Quote
+        </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative h-screen flex items-end pt-32 pb-24 px-margin-mobile md:px-margin-desktop">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center parallax-section" data-alt="A sprawling, ultra-modern luxury villa at sunset with clean architectural lines." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCt2NgiF8uJMcEvE7FS2fXfTYPuRvbdM0aamrZCr1stGXoAm8RMjFBuDblYxyD1jjKf45BgxlJzAw8RrnyKjj7hWc7my1D9YF5bdTiLn9GFoHfn0tnJl3l8aGmIAYXmEyySRlUI3Ev62bExwpucksphUV3encUTOINcCYrm5QquTHA1Mc2kPHCMKtjfSu3Cx1yxAuJcgI3bRuX7Jxdn_t4r7lLSXDqQGo8sOmmFN30XQJlJsJm7bkKDIGiB2_AESMRu7PzukKrH0Av')">
+</div>
+<div class="absolute inset-0 mask-overlay"></div>
+</div>
+<div class="relative z-10 max-w-container-max mx-auto w-full">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-10">
+<h1 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl uppercase mb-8">
+<span class="block animate-slide-up">Shaping</span>
+<span class="block animate-slide-up delay-200"><span class="text-architectural-orange">Light</span> and Shade</span>
+</h1>
+<div class="h-px w-24 bg-architectural-orange mb-8 animate-slide-up delay-300"></div>
+<p class="font-body-lg text-body-lg max-w-xl text-on-surface-variant animate-slide-up delay-300">
+                    Архитектурные системы затенения для пространств, где форма встречается с функцией. Немецкая инженерия в каждой детали.
+                </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Catalog: THE COLLECTION -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-background overflow-hidden">
+<div class="max-w-container-max mx-auto">
+<div class="flex justify-between items-baseline mb-16 border-b border-on-surface/10 pb-4">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase tracking-tighter reveal-on-scroll">THE COLLECTION</h2>
+<span class="font-label-mono text-label-mono uppercase text-on-surface-variant">2024 Series</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Product 1 -->
+<div class="md:col-span-8 group cursor-pointer">
+<div class="aspect-[21/9] overflow-hidden mb-6 relative border border-on-surface/10">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzUNwRxFP4GfYnVAiQbsxTQw54FxAPMPK7t4piQdYYnKrk7Dr71n2hY3ePyX9My-UDE-OTPjflGiVhxSZXLQzPEoum5LOD7OA3oFeo-JhBCvVzCrrFsSaxQ2dshp_dmztrNwgFhgB26lIoE_nDTzSw739Bvt7s4IKlmeG1nKBeKhB6ZInwfEjbgiaCNIDZtaVsFSA4Xmr6deAxwjv9y_VqsQOMDC1AJ9vPZR-HB1RUwlA_bq-ATTRkH9extKx1wDrJJLETV2Pwtsry"/>
+<div class="absolute bottom-4 left-4 bg-background/80 backdrop-blur-md px-4 py-2 border border-on-surface/10">
+<span class="font-label-mono text-label-mono uppercase">01 / RETRACTABLES</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md uppercase">Architectural Retractables</h3>
+<span class="material-symbols-outlined text-architectural-orange group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="md:col-span-4 group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden mb-6 relative border border-on-surface/10">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmXr_JRwjZGv4U6LdzXkfTuNedR-wbll7sFb3dN9KCcGsWJsDXhTWUIN82wvPvl-vA1Ylpef6yP5ahbziUoZX23YI1x_JCoFS8y4dScazlCAbvVh3OPIQjggbe7X7nwvlSoKNXBz6XVvYCoRAGXee9hCM_wA6BDZrkjI5VQYJRvNBzdUxXbdrFBcaMuTJRqWi8JNVOsl4RTd55Xa0XNYx1Q8vqoEhu6xF_QQ-Mz9_GAiyNC4nyu-RDxsOFsc2dXjt7hrSXP8o4A4gr"/>
+<div class="absolute bottom-4 left-4 bg-background/80 backdrop-blur-md px-4 py-2 border border-on-surface/10">
+<span class="font-label-mono text-label-mono uppercase">02 / PERGOLAS</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase">Linear Pergolas</h3>
+</div>
+<!-- Product 3 -->
+<div class="md:col-span-12 group cursor-pointer">
+<div class="aspect-[21/7] overflow-hidden mb-6 relative border border-on-surface/10">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZxDWrExpXNr00LKwULhWylGiFJbGPIrMOwLAj7Ir0uDslMUpuN6AUBOWwzycUrPMoR2MkLHAmuPiUWB-kIFKjyxc1PrNEH1FTq2FK7FeM2Q7YwlbijCEbaE3_H1xHIhtFrf8A56jqhtVvR-vWj1mRd48vIsoUJcSXe13wHwuM8SKAtzOEkdTkUJ9F2qy6yblQHsw9AHyDmr-PD9YnzHJhsqyG1PF2xPWEpLc8aCfHV78C6XYVeH9XvN-F2EQ9XPXeDU9kOmt_dVxn"/>
+<div class="absolute bottom-4 left-4 bg-background/80 backdrop-blur-md px-4 py-2 border border-on-surface/10">
+<span class="font-label-mono text-label-mono uppercase">03 / SCREENS</span>
+</div>
+</div>
+<div class="flex justify-between items-center max-w-2xl">
+<h3 class="font-headline-md text-headline-md uppercase">Vertical Solar Screens</h3>
+<p class="font-label-mono text-label-mono uppercase text-on-surface-variant ml-8 border-l border-on-surface/20 pl-8">Автоматизированное управление микроклиматом</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Values/Tech: ENGINEERED PRECISION -->
+<section class="py-section-gap bg-surface-container-lowest relative overflow-hidden">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+<div class="md:col-span-5 mb-12 md:mb-0">
+<span class="font-label-mono text-label-mono uppercase text-architectural-orange mb-4 block">Техническое совершенство</span>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase mb-8 leading-none reveal-on-scroll">Engineered Precision</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-12">
+                    Каждая деталь системы CHISEL спроектирована с учетом экстремальных ветровых нагрузок и эстетической безупречности. Мы используем авиационный алюминий и ткани с нано-покрытием.
+                </p>
+<ul class="space-y-6">
+<li class="flex items-center gap-4 border-b border-on-surface/10 pb-4">
+<span class="font-label-mono text-label-mono text-architectural-orange">01</span>
+<span class="font-label-mono text-label-mono uppercase">Smart Motion Automation</span>
+</li>
+<li class="flex items-center gap-4 border-b border-on-surface/10 pb-4">
+<span class="font-label-mono text-label-mono text-architectural-orange">02</span>
+<span class="font-label-mono text-label-mono uppercase">Aeronautical Grade Alloy</span>
+</li>
+<li class="flex items-center gap-4 border-b border-on-surface/10 pb-4">
+<span class="font-label-mono text-label-mono text-architectural-orange">03</span>
+<span class="font-label-mono text-label-mono uppercase">Invisible Mounting Tech</span>
+</li>
+</ul>
+</div>
+<div class="md:col-span-7 relative">
+<div class="aspect-square bg-background border border-on-surface/10 p-12 relative">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle, #FF5C00 1px, transparent 1px); background-size: 32px 32px;"></div>
+<img class="w-full h-full object-contain mix-blend-lighten opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACn2SlckuhGA6dtwHbm4PRaJj3uG9k_DVptYElpB6ZHVMxRvpWrXA-hXtFSAf_K_Qp4Rcpaiv5e8exxIortQIk1WTb2ibqd25KYobtRR1aLnzrY_A95t1hEZ5uZApf8BRAel5HOPjZ4go-9q3zdL0-fMYmrsx2e_byLSJGG8eR1b9nqaE2ldJTn6xIQLj2FgjuTjRw8tb0yCblsQ0wX8OiuUhIbIumybZx_sQj9qIfAWfFltAoODeXpkUah0Up9BPSeM74COb7COgL"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Project Gallery: MASONRY / GRID -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-background">
+<div class="max-w-container-max mx-auto mb-16">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase text-center mb-4 reveal-on-scroll">Selected Works</h2>
+<p class="font-label-mono text-label-mono uppercase text-center text-on-surface-variant">Архитектурные проекты по всему миру</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter h-[800px] md:h-[600px]">
+<div class="relative group overflow-hidden border border-on-surface/10 h-full">
+<img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJk-mBUjOJ2Vu7E9bN1br8Oj1NyQIZtGQ7phqRqY2YbGx_Slj9l5ogPwmJuXb-NGLfaLEHo6g7LN27seJbjvKcF2cuSR_fz6DWIHzhufkvrUX2guYVKJMnTo9pYSbOCKJOE8rW7W2Ua2ohhjCMJoNXjmhT4CpM7qp5IpVsSXFE0PRLuI9fcH7JRNnx9tm0AxVQ98n4Dy1Eunfqf_qMNwISpUv2K_oMnGbdGdqtkSq33FMGGE5UWSA54lPgXmcFqU_qceXcEOqNku68"/>
+<div class="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+<span class="font-label-mono text-label-mono uppercase text-architectural-orange">Hospitality</span>
+<h4 class="font-headline-md text-headline-md uppercase">Hotel Azure, Nice</h4>
+</div>
+</div>
+<div class="grid grid-rows-2 gap-gutter h-full">
+<div class="relative group overflow-hidden border border-on-surface/10">
+<img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwvTT1jIo7qAsbi3Absu5r3JNN8szuFyrEPm0SlXPcjOOyXeqFNlb89HzlJMdabTy6-x5ra9DTsujkYpz5Qig3ZTFezoUemyIl-xUdSyMpHGc_PhOYxDyt30NsY2BWmAFHnq9NnAe8vdlgiEM7tnEwBp12l9dngPE6wMGBpQhi8BYzKNE4UlCb0-9D2gE-XRxSKoiROKPiHYf9E4cpFNGzJTl0wWLaRm-gF67_Q_aIxbL-sV02g6CwoDc1cchoz6aF6MCAgw-hF1rM"/>
+<div class="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+<span class="font-label-mono text-label-mono uppercase text-architectural-orange">Residential</span>
+<h4 class="font-headline-md text-headline-md uppercase">Alpine Retreat</h4>
+</div>
+</div>
+<div class="relative group overflow-hidden border border-on-surface/10">
+<img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcHC5mrDtQAfgMz4lNzYlFDHWlHSQMb1J6nlwxcp-MS2xKKJIEVcw5IhX98HPG--oG6swNXQMETqRBaNnsJBgYloqh_u1NGUZgdQSWwUxI0XLzhUgm5EeRM69XQbc39-Yct-3kpjD859Shw2X3Bs5X2e45BOFszYGtJf8Dmy4KNdJcDKV3_MQoFsW5WSIvVwmCEJ-dCCD4Go7KZUDtwpa5WWB9mk1gRTv_LmLCo7HTFk_P6LLEp-OmvMVlvH4LqSnLtECciuk9Efod"/>
+<div class="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+<span class="font-label-mono text-label-mono uppercase text-architectural-orange">Corporate</span>
+<h4 class="font-headline-md text-headline-md uppercase">Skyline Offices</h4>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden border border-on-surface/10 h-full">
+<img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJliX44Ok4cqPOissNJeju6xQRAWm7Rm209wZmT0IxcIXKsRMPY-I_T0_C-ig6BsKOo68GlygFokicqj964ihRbQ3yoV4SRuXLkW3D4U8Iti5FMRjB0gu8RlPxQ-_U7nzIeq4sIAV9_iFE_npTEOzF1gZHMIjYpd_4gNriBKWFUbCiH-bZ-_GHSYsDkQcBfMzc8XTC4BJylPQoYCqtHPPfYda6CAH2O--PDKY59eswnOOOxE5-4iPesEo1u8vPs6oSAmL1F7_RB6cf"/>
+<div class="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+<span class="font-label-mono text-label-mono uppercase text-architectural-orange">Landscape</span>
+<h4 class="font-headline-md text-headline-md uppercase">Zen Pavilion</h4>
+</div>
+</div>
+</div>
+</section>
+<!-- Call to Action -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop relative">
+<div class="max-w-container-max mx-auto border-y border-on-surface/10 py-24 flex flex-col items-center text-center">
+<h2 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl uppercase mb-12 reveal-on-scroll">
+            Request a<br/>Specification
+        </h2>
+<div class="flex flex-col md:flex-row gap-6 w-full max-w-2xl">
+<input class="flex-grow bg-transparent border-0 border-b border-on-surface/20 focus:ring-0 focus:border-architectural-orange font-label-mono text-label-mono uppercase p-4 transition-all" placeholder="YOUR EMAIL ADDRESS" type="email"/>
+<button class="bg-architectural-orange text-background px-12 py-5 font-label-mono text-label-mono uppercase tracking-widest hover:bg-white transition-all duration-300">
+                Submit Request
+            </button>
+</div>
+<p class="mt-8 font-label-mono text-label-mono uppercase text-on-surface-variant max-w-sm">
+            Наши инженеры подготовят техническое задание для вашего проекта в течение 24 часов.
+        </p>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-20 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-on-surface/10">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter max-w-container-max mx-auto">
+<div class="md:col-span-6 mb-12 md:mb-0">
+<div class="font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-on-surface opacity-10 mb-8">CHISEL ARCHITECTURAL</div>
+<div class="flex flex-wrap gap-8">
+<a class="font-label-mono text-label-mono uppercase text-on-surface-variant hover:text-on-surface transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="font-label-mono text-label-mono uppercase text-on-surface-variant hover:text-on-surface transition-colors duration-200" href="#">Terms of Service</a>
+<a class="font-label-mono text-label-mono uppercase text-on-surface-variant hover:text-on-surface transition-colors duration-200" href="#">Installation</a>
+<a class="font-label-mono text-label-mono uppercase text-on-surface-variant hover:text-on-surface transition-colors duration-200" href="#">Maintenance</a>
+</div>
+</div>
+<div class="md:col-span-6 md:text-right flex flex-col justify-between">
+<div class="mb-12">
+<p class="font-label-mono text-label-mono uppercase text-architectural-orange mb-4">Contact us</p>
+<p class="font-headline-md text-headline-md text-on-surface">hq@chisel-arch.com</p>
+</div>
+<p class="font-label-mono text-label-mono uppercase text-on-surface/40">
+                © 2024 CHISEL ARCHITECTURAL SYSTEMS. ALL RIGHTS RESERVED.
+            </p>
+</div>
+</div>
+</footer>
+<script>
+    // Simple parallax effect for the hero image
+    window.addEventListener('scroll', () => {
+        const parallax = document.querySelector('.parallax-section');
+        let offset = window.pageYOffset;
+        parallax.style.backgroundPositionY = offset * 0.7 + "px";
+    });
+
+    // Hover interactions for architectural precision items
+    const techItems = document.querySelectorAll('li.border-b');
+    techItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            item.style.borderColor = '#FF5C00';
+            item.style.paddingLeft = '1rem';
+            item.style.transition = 'all 0.3s ease-out';
+        });
+        item.addEventListener('mouseleave', () => {
+            item.style.borderColor = 'rgba(229, 226, 225, 0.1)';
+            item.style.paddingLeft = '0';
+        });
+    });
+
+    // Intersection Observer for scroll animations
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+        revealObserver.observe(el);
+    });
+</script>
+</body></html>
