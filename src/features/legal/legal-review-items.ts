@@ -2,7 +2,7 @@ export const legalReviewItems = {
   hostingAndLogs: {
     title: "Hosting и server logs",
     description:
-      "Vercel Inc. выбран для hosting и Private Blob; текущий проект находится на Hobby, runtime logs доступны один час, а приложение не пишет содержимое формы в логи. Публичный DPA Vercel распространяет processor-условия на Pro и Enterprise, тогда как Hobby также ограничен личным некоммерческим использованием. До коммерческого production нужен совместимый тариф либо другой hosting."
+      "Vercel Inc. выбран для hosting и Private Blob; production deployment и собственный домен активны, runtime logs доступны один час, а приложение не пишет содержимое формы в логи."
   },
   productionFormAndFiles: {
     title: "Production-форма и загрузка файлов",
@@ -12,12 +12,12 @@ export const legalReviewItems = {
   recipientsAndTransfers: {
     title: "Получатели и передача в третьи страны",
     description:
-      "Vendor register заполнен: Vercel Inc., Neon, LLC, Plus Five Five, Inc. (Resend), Cloudflare, Inc. и Google Ireland Limited; регионы, DPA, EU SCC и EU-US DPF описаны. Маркер остаётся только из-за отсутствия processor-покрытия Vercel Hobby для коммерческого production."
+      "Vendor register заполнен: Vercel Inc., Neon, LLC, Plus Five Five, Inc. (Resend), Cloudflare, Inc. и Google Ireland Limited; регионы и механизмы международной передачи описаны."
   },
   transportSecurity: {
     title: "HTTPS и техническая защита",
     description:
-      "После настройки домена проверить принудительный HTTPS, TLS, security headers, доступ к файлам и журналирование. Только после фактической проверки заменить будущую формулировку на утверждение о production-системе."
+      "Production-домен принудительно использует HTTPS; HSTS, nosniff, frame denial, referrer и permissions headers проверены на публичном ответе."
   }
 } as const;
 

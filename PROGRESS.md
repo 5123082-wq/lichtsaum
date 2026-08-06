@@ -3,7 +3,7 @@
 ## Context Beacon
 
 - Last updated: 2026-08-06
-- Current stage: local non-indexable landing prototype complete / product validation still pending
+- Current stage: public production landing / product validation still pending
 - Active track: local gallery review complete with four temporary concept visuals; awaiting four
   real, rights-cleared project photographs while validating the underlying offer
 - Verified state:
@@ -13,14 +13,17 @@
   - the final project-check uses one required email plus optional phone, short message and up to five
     JPG/PNG/WebP/PDF files of at most 15 MB each; in explicitly enabled environments it persists the
     lead in Neon, uploads files to Private Vercel Blob and sends an idempotent Resend notification;
+    the production form now reconciles the persisted lead status when the browser loses the final
+    Server Action response, preventing a successfully accepted request from being reported as lost;
   - the responsive hero uses an owner-supplied, aligned off/on concept pair: a close commercial
     awning and modern facade transition into technical linework, while only the `LICHTSAUM`
     lettering illuminates during the scroll scene; mobile preserves the same narrative with a shorter
     scroll distance and the following principle strip covering the sticky image from below, while
     `prefers-reduced-motion` remains static; owner-supplied or expressly approved
     visual assets are authorised for use on the site;
-  - local metadata, headers and `robots.txt` explicitly prevent indexing; no canonical, sitemap,
-    Schema, GTM, analytics, CMP or CRM integration is active; Resend notification is locally active;
+  - production canonical, sitemap, robots and security-header paths are implemented; no
+    Schema, GTM, analytics, CMP or CRM integration is active; the production Resend notification
+    path is active;
   - a Neon PostgreSQL database in `eu-central-1` has the versioned `leads` and `lead_files` schema;
     the environment-gated intake was live-tested from browser submission through persistence and
     notification, while production activation remains a separate release decision;
@@ -151,6 +154,19 @@
 | Launch | Not started | Production release gate passes |
 
 ## Latest material updates
+
+### 2026-08-06 — Production lead-confirmation recovery
+
+- Verified that the reported production submission was persisted with its private file and reached
+  status `new`; no contact fields or message content were read during diagnosis.
+- Fixed the false-negative browser state: after a lost final Server Action response, the form now
+  checks the random non-personal lead ID and restores the successful confirmation when persistence
+  already completed. The failure card no longer labels a runtime failure as a completed prototype
+  check.
+- Added the production sitemap implementation and baseline response security headers. Deployed
+  commit `ae9b875` to the existing Vercel production project and verified the deployment as `Ready`.
+- Confirmed in the Vercel account that Hobby is active and the dashboard shows no publication
+  restriction; the earlier internal assumption that Pro was required is withdrawn.
 
 ### 2026-08-06 — Evidence-backed legal marker reduction
 

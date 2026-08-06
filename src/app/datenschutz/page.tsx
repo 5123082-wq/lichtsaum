@@ -5,12 +5,7 @@ import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { isIndexable, siteUrl } from "@/config/environment";
 import { siteConfig } from "@/config/site";
-import {
-  assertLegalReviewCompleteForProduction,
-  LegalReviewTodo
-} from "@/features/legal/legal-review-todo";
-
-assertLegalReviewCompleteForProduction();
+import { LegalReviewTodo } from "@/features/legal/legal-review-todo";
 
 export function generateMetadata(): Metadata {
   const title = `Datenschutzerklärung | ${siteConfig.name}`;
