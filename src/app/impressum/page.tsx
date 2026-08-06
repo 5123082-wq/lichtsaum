@@ -3,7 +3,11 @@ import Link from "next/link";
 
 import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { isIndexable, siteUrl } from "@/config/environment";
+import {
+  isIndexable,
+  isPreviewDeployment,
+  siteUrl
+} from "@/config/environment";
 import { siteConfig } from "@/config/site";
 
 export function generateMetadata(): Metadata {
@@ -25,9 +29,9 @@ export function generateMetadata(): Metadata {
             url: "/impressum"
           }
         }
-      : {
-          robots: { index: false, follow: false, nocache: true }
-        })
+      : isPreviewDeployment
+        ? { robots: { index: false, follow: false, nocache: true } }
+        : {})
   };
 }
 

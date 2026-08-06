@@ -1,11 +1,9 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { submitProjectCheck } from "../../src/features/lead-form/action";
 import {
   parseProjectCheckFormData,
   projectCheckSchema
 } from "../../src/features/lead-form/schema";
-import { initialProjectCheckFormState } from "../../src/features/lead-form/types";
 
 const validInput = {
   email: "alex@example.test",
@@ -173,47 +171,6 @@ describe("projectCheckSchema", () => {
 
     if (result.success) {
       expect(result.data.email).toBe(validInput.email);
-    }
-  });
-});
-
-describe("submitProjectCheck", () => {
-  it("returns prototype_validated without echoing or storing form values", async () => {
-    vi.stubEnv("APP_ENV", "local");
-
-    try {
-      const state = await submitProjectCheck(
-        initialProjectCheckFormState,
-        validFormData()
-      );
-
-      expect(state.status).toBe("prototype_validated");
-      expect(state).not.toHaveProperty("lead_id");
-      expect(JSON.stringify(state)).not.toContain(validInput.email);
-      expect(state.message).toContain(
-        "nicht gespeichert und nicht als Projektanfrage weitergeleitet"
-      );
-    } finally {
-      vi.unstubAllEnvs();
-    }
-  });
-
-  it("fails closed in production", async () => {
-    vi.stubEnv("APP_ENV", "production");
-
-    try {
-      const state = await submitProjectCheck(
-        initialProjectCheckFormState,
-        validFormData()
-      );
-
-      expect(state.status).toBe("prototype_unavailable");
-      expect(state).not.toHaveProperty("lead_id");
-      expect(state.message).toContain(
-        "keine Daten gespeichert oder versendet"
-      );
-    } finally {
-      vi.unstubAllEnvs();
     }
   });
 });

@@ -80,7 +80,7 @@ pnpm typecheck
 pnpm lint
 pnpm test:unit
 pnpm test:e2e
-APP_ENV=local pnpm build
+pnpm build
 ```
 
 ## Current next step

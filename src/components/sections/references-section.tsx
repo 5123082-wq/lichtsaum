@@ -1,4 +1,7 @@
-import { appEnvironment, isIndexable } from "@/config/environment";
+import {
+  deploymentEnvironment,
+  isIndexable
+} from "@/config/environment";
 import { referenceGallery } from "@/content/references.de";
 import { ReferenceGallery } from "@/features/references/reference-gallery";
 import {
@@ -9,9 +12,8 @@ import {
 export function ReferencesSection() {
   const visibility = getReferenceGalleryVisibility(
     referenceGallery,
-    appEnvironment,
-    isIndexable,
-    process.env.NODE_ENV === "production"
+    deploymentEnvironment,
+    isIndexable
   );
   if (!visibility.render) {
     return null;

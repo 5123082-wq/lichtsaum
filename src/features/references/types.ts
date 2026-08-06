@@ -1,4 +1,4 @@
-import type { AppEnvironment } from "@/config/environment";
+import type { DeploymentEnvironment } from "@/config/environment";
 
 export const REFERENCE_LAYOUT_SLOTS = [
   "left-tall",
@@ -194,9 +194,8 @@ export function validateReferenceGalleryRegistry(
 
 export function getReferenceGalleryVisibility(
   registry: ReferenceGalleryRegistry,
-  environment: AppEnvironment,
-  siteIsIndexable = false,
-  runtimeIsProduction = false
+  environment: DeploymentEnvironment,
+  siteIsIndexable = false
 ): ReferenceGalleryVisibility {
   const validation = validateReferenceGalleryRegistry(registry);
 
@@ -206,9 +205,7 @@ export function getReferenceGalleryVisibility(
 
   if (registry.status === "review") {
     return {
-      render:
-        environment === "preview" ||
-        (environment === "local" && !runtimeIsProduction),
+      render: environment !== "production",
       indexable: false
     };
   }

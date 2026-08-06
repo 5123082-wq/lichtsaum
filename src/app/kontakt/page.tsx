@@ -4,7 +4,11 @@ import Link from "next/link";
 import { EuropeContactAtlas } from "@/components/contact/europe-contact-atlas";
 import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { isIndexable, siteUrl } from "@/config/environment";
+import {
+  isIndexable,
+  isPreviewDeployment,
+  siteUrl
+} from "@/config/environment";
 import { siteConfig } from "@/config/site";
 
 export function generateMetadata(): Metadata {
@@ -26,9 +30,9 @@ export function generateMetadata(): Metadata {
             url: "/kontakt"
           }
         }
-      : {
-          robots: { index: false, follow: false, nocache: true }
-        })
+      : isPreviewDeployment
+        ? { robots: { index: false, follow: false, nocache: true } }
+        : {})
   };
 }
 

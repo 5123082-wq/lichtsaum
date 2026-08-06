@@ -107,7 +107,7 @@ information architecture.
 - `pnpm lint`: passed
 - `pnpm test:unit`: 7/7 passed
 - `pnpm test:e2e`: 19/19 passed
-- `APP_ENV=local pnpm build`: passed; all routes statically prerendered
+- `pnpm build`: passed; all routes statically prerendered
 - Local indexing boundary: `noindex`, `X-Robots-Tag`, disallowing `robots.txt`, no canonical,
   sitemap or JSON-LD
 

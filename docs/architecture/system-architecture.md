@@ -136,8 +136,6 @@ The enabled lead flow requires these server-only values:
 
 | Variable | Production value / source |
 | --- | --- |
-| `LEAD_INTAKE_ENABLED` | `true` only after release gates pass |
-| `LEAD_ATTACHMENTS_ENABLED` | `true` only after the file-upload gates pass |
 | `LEAD_NOTIFICATION_TO` | `info@lichtsaum.com` |
 | `LEAD_EMAIL_FROM` | `LICHTSAUM Website <info@lichtsaum.com>` |
 | `RESEND_API_KEY` | Resend sending-only key restricted to `lichtsaum.com` |
@@ -149,14 +147,14 @@ The enabled lead flow requires these server-only values:
 | `CRON_SECRET` | Independent secret for the retention endpoint |
 | `SITE_URL` | Absolute deployed origin used in signed notification links |
 
-No variable in this contract may use the `NEXT_PUBLIC_` prefix. `APP_ENV=production` remains
-separate from enabling lead intake and is permitted only after the indexing/legal release gate.
+No variable in this contract may use the `NEXT_PUBLIC_` prefix. Deployment classification uses
+Vercel's system-provided `VERCEL_ENV`; no custom environment selector is required.
 
 ### Local
 
 - No production IDs.
 - Mock/stub integrations.
-- Never indexed.
+- No deployment-specific SEO headers or metadata; localhost is not a public deployment.
 
 ### Preview/staging
 

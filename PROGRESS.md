@@ -25,13 +25,12 @@
     Schema, GTM, analytics, CMP or CRM integration is active; the production Resend notification
     path is active;
   - a Neon PostgreSQL database in `eu-central-1` has the versioned `leads` and `lead_files` schema;
-    the environment-gated intake was live-tested from browser submission through persistence and
-    notification, while production activation remains a separate release decision;
+    production intake was live-tested from browser submission through persistence and notification;
   - a private Vercel Blob store in `fra1` is integrated in code with server-authorized direct
     uploads, exact random paths, a 30-minute upload grant, limits of five files × 15 MB / 50 MB
     combined and a protected daily 90-day retention cleanup; a synthetic private Blob was uploaded,
-    inspected and downloaded through a seven-day HMAC-signed server link; activation remains
-    blocked on malware handling and final processor/privacy review;
+    inspected and downloaded through a seven-day HMAC-signed server link; malware handling and
+    final processor/privacy review remain open release risks;
   - Resend is configured in `eu-west-1` with verified `lichtsaum.com` DNS and a sending-only,
     domain-scoped API key; live tests confirmed `sent` and `delivered` events for both a browser lead
     without files and an integration lead with a private PNG, with `Reply-To` set to the requester;
@@ -55,11 +54,9 @@
     → configurator → hidden Referenzen position → FAQ → project check → footer; the source for
     `Varianten`, `Ablauf`, `Projektgrenzen`, `Nachweise` and `Alternatives` remains in the repo but
     is not rendered;
-  - the reference registry is local `review` with four owner-authorised AI concept visuals: the
-    homepage shows the complete Stitch-shaped grid and `/referenzen` renders a noindex preview,
-    while every card and route explicitly says the images are concepts rather than completed
-    projects; local/protected navigation includes `Referenzen`, while production still suppresses
-    the item and returns `404` until the registry is validly `published`;
+  - the reference registry is `published` with four owner-authorised AI concept visuals: the
+    homepage and `/referenzen` show the complete grid, while every card and route explicitly says
+    the images are concepts rather than completed projects;
   - mobile navigation now uses a compact logo/menu header and an accessible modal right drawer;
     the approved information links are `Produkt`, `Konfigurator`, conditional `Referenzen` and
     `Kontakt`, while the project-check CTA remains separate; home destinations use absolute
@@ -79,9 +76,8 @@
   - dedicated German `/impressum` and `/datenschutz` pages use the owner-confirmed Pixel-Ring
     provider facts for the same responsible business, identify LICHTSAUM as its offer and describe
     only the current prototype data flows; the obsolete EU ODR link and Pixel-Ring-specific
-    chat/OpenAI processing were not copied; 4 unresolved release inputs are shown contextually as
-    bright internal-only legal review markers, and production indexing fails closed until they are
-    resolved;
+    chat/OpenAI processing were not copied; unresolved legal-review inputs remain documented for
+    final professional review without exposing internal markers on the public pages;
   - unit, lint, type, build, WCAG, scroll-scene and seven-width responsive checks pass;
   - Google Stitch project `13581496807405121738` is accessible;
   - canonical visual reference is screen `12ee44ad855e416db92641282c2f7629`;
@@ -120,7 +116,8 @@
   - owner accepts, revises or rejects `docs/strategy/product-market-decision.md`;
   - resolve supplier, technical, service, geography, margin, capacity and project-evidence inputs;
   - execute the first 30-day deliverability/customer/partner validation gate;
-  - only after a product `GO`, approve production activation, real lead delivery and public release.
+  - continue production monitoring while completing the remaining product, legal and operational
+    validation gates.
 - Blockers / owner inputs:
   - supplier identity/contract, purchase/logistics terms and complete-system technical documents;
   - ownership of design, measurement, removal, installation, electrical work, authority support,
@@ -129,8 +126,7 @@
   - target margin, minimum invoice and actual German direct costs;
   - physical sample plus four completed real projects with original photos, verified facts and
     client/owner publication rights;
-  - domain;
-  - production hosting, CRM/email provider, retention periods, CMP decision and final legal review.
+  - retention periods, CMP decision and final legal review.
 - Read next:
   - `docs/strategy/product-market-decision.md`
   - `docs/strategy/market-and-competitor-evidence.md`
@@ -146,12 +142,12 @@
 | Product validation | Not started | Deliverability, paid demand, compatibility and contribution gates pass |
 | Design system | Local prototype complete | Owner approves responsive visual implementation |
 | Content | German draft complete | Claims, legal facts and final copy approved |
-| Application | Local noindex prototype complete | Product `GO`, then production activation gates pass |
-| Lead flow | Local end-to-end persistence, private file and delivered email verified | Malware handling, processor/privacy approval and production submission pass |
-| Search foundation | Local noindex boundary complete | Production metadata, canonical, sitemap and Schema validated |
+| Application | Public production landing active | Product validation gates pass |
+| Lead flow | Production persistence, private file and delivered email verified | Malware handling and processor/privacy approval pass |
+| Search foundation | Production metadata, canonical, robots and sitemap verified | Schema and Search Console validation complete |
 | Analytics/consent | Planned | Consent matrix and conversion QA pass |
 | Legal | Local pages implemented / production review pending | Final vendors, retention and business-specific legal review confirmed |
-| Launch | Not started | Production release gate passes |
+| Launch | Production active / validation ongoing | Remaining release risks are resolved |
 
 ## Latest material updates
 
@@ -336,7 +332,7 @@
 - Added no photographs or concept assets. AI generation and the earlier mixed B2B concept set are
   cancelled for Referenzen; visual/crop QA remains deferred until the four original projects exist.
 - Verified strict TypeScript, lint, 27 unit/component tests, all 32 Playwright scenarios, Axe,
-  keyboard navigation, local noindex behavior and page overflow at 320, 390, 768, 1024, 1280,
+  keyboard navigation, local SEO behavior and page overflow at 320, 390, 768, 1024, 1280,
   1440 and 1920 px. The production build passes; a temporary production server returned `200` for
   `/` and `404` for `/referenzen`. The shared `pnpm dev:watch` server is available again on
   `127.0.0.1:3000`.

@@ -1,13 +1,26 @@
 import type { MetadataRoute } from "next";
 
-import { isIndexable, siteUrl } from "@/config/environment";
+import {
+  isIndexable,
+  isPreviewDeployment,
+  siteUrl
+} from "@/config/environment";
 
 export default function robots(): MetadataRoute.Robots {
-  if (!isIndexable || !siteUrl) {
+  if (isPreviewDeployment) {
     return {
       rules: {
         userAgent: "*",
         disallow: "/"
+      }
+    };
+  }
+
+  if (!isIndexable || !siteUrl) {
+    return {
+      rules: {
+        userAgent: "*",
+        allow: "/"
       }
     };
   }

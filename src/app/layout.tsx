@@ -5,7 +5,11 @@ import "@fontsource-variable/jetbrains-mono/wght.css";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-import { isIndexable, siteUrl } from "@/config/environment";
+import {
+  isIndexable,
+  isPreviewDeployment,
+  siteUrl
+} from "@/config/environment";
 import { siteConfig } from "@/config/site";
 
 import "./globals.css";
@@ -27,18 +31,22 @@ export const metadata: Metadata = {
         }
       }
     : {}),
-  robots: isIndexable
-    ? { index: true, follow: true }
-    : {
-        index: false,
-        follow: false,
-        nocache: true,
-        googleBot: {
-          index: false,
-          follow: false,
-          noimageindex: true
+  ...(isIndexable
+    ? { robots: { index: true, follow: true } }
+    : isPreviewDeployment
+      ? {
+          robots: {
+            index: false,
+            follow: false,
+            nocache: true,
+            googleBot: {
+              index: false,
+              follow: false,
+              noimageindex: true
+            }
+          }
         }
-      }
+      : {})
 };
 
 export const viewport: Viewport = {

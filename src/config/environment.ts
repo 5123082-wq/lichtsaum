@@ -1,18 +1,26 @@
-const knownEnvironments = ["local", "preview", "production"] as const;
+const knownDeploymentEnvironments = [
+  "development",
+  "preview",
+  "production"
+] as const;
 
-export type AppEnvironment = (typeof knownEnvironments)[number];
+export type DeploymentEnvironment =
+  (typeof knownDeploymentEnvironments)[number];
 
-const requestedEnvironment = process.env.APP_ENV ?? "local";
+const vercelEnvironment = process.env.VERCEL_ENV;
 
-export const appEnvironment: AppEnvironment = knownEnvironments.includes(
-  requestedEnvironment as AppEnvironment
-)
-  ? (requestedEnvironment as AppEnvironment)
-  : "local";
+export const deploymentEnvironment: DeploymentEnvironment =
+  knownDeploymentEnvironments.includes(
+    vercelEnvironment as DeploymentEnvironment
+  )
+    ? (vercelEnvironment as DeploymentEnvironment)
+    : "development";
+
+export const isProductionDeployment =
+  deploymentEnvironment === "production";
+export const isPreviewDeployment = deploymentEnvironment === "preview";
+export const acceptsProductionLeads = isProductionDeployment;
 
 export const siteUrl = process.env.SITE_URL?.trim() || null;
 
-export const isIndexable =
-  appEnvironment === "production" && siteUrl !== null;
-
-export const isPrototype = !isIndexable;
+export const isIndexable = isProductionDeployment && siteUrl !== null;

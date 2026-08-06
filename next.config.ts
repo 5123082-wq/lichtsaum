@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
-const appEnvironment = process.env.APP_ENV ?? "local";
-const isIndexable =
-  appEnvironment === "production" && Boolean(process.env.SITE_URL);
+const isPreviewDeployment = process.env.VERCEL_ENV === "preview";
 
 const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -23,7 +21,7 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: [
           ...securityHeaders,
-          ...(!isIndexable
+          ...(isPreviewDeployment
             ? [
                 {
                   key: "X-Robots-Tag",

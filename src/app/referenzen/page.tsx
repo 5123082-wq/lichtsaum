@@ -6,8 +6,9 @@ import { notFound } from "next/navigation";
 import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import {
-  appEnvironment,
+  deploymentEnvironment,
   isIndexable,
+  isPreviewDeployment,
   siteUrl
 } from "@/config/environment";
 import { siteConfig } from "@/config/site";
@@ -19,9 +20,8 @@ import {
 
 const visibility = getReferenceGalleryVisibility(
   referenceGallery,
-  appEnvironment,
-  isIndexable,
-  process.env.NODE_ENV === "production"
+  deploymentEnvironment,
+  isIndexable
 );
 
 const orderedReferences = orderReferenceProjects(referenceGallery.items);
@@ -37,16 +37,20 @@ export function generateMetadata(): Metadata {
       description,
       alternates: { canonical: null },
       openGraph: null,
-      robots: {
-        index: false,
-        follow: false,
-        nocache: true,
-        googleBot: {
-          index: false,
-          follow: false,
-          noimageindex: true
-        }
-      }
+      ...(isPreviewDeployment
+        ? {
+            robots: {
+              index: false,
+              follow: false,
+              nocache: true,
+              googleBot: {
+                index: false,
+                follow: false,
+                noimageindex: true
+              }
+            }
+          }
+        : {})
     };
   }
 

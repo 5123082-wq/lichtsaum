@@ -78,22 +78,19 @@ describe("reference gallery registry", () => {
       issues: []
     });
     expect(
-      getReferenceGalleryVisibility(registry, "local", false, false)
+      getReferenceGalleryVisibility(registry, "development", false)
     ).toEqual({ render: false, indexable: false });
   });
 
-  it("shows review data only in development local or preview environments", () => {
+  it("shows review data only in development or preview environments", () => {
     expect(
-      getReferenceGalleryVisibility(reviewRegistry, "local", false, false)
+      getReferenceGalleryVisibility(reviewRegistry, "development", false)
     ).toEqual({ render: true, indexable: false });
     expect(
-      getReferenceGalleryVisibility(reviewRegistry, "local", false, true)
-    ).toEqual({ render: false, indexable: false });
-    expect(
-      getReferenceGalleryVisibility(reviewRegistry, "preview", false, true)
+      getReferenceGalleryVisibility(reviewRegistry, "preview", false)
     ).toEqual({ render: true, indexable: false });
     expect(
-      getReferenceGalleryVisibility(reviewRegistry, "production", true, true)
+      getReferenceGalleryVisibility(reviewRegistry, "production", true)
     ).toEqual({ render: false, indexable: false });
     expect(validateReferenceGalleryRegistry(conceptReviewRegistry).valid).toBe(
       true
@@ -101,8 +98,7 @@ describe("reference gallery registry", () => {
     expect(
       getReferenceGalleryVisibility(
         conceptReviewRegistry,
-        "local",
-        false,
+        "development",
         false
       )
     ).toEqual({ render: true, indexable: false });
@@ -111,7 +107,7 @@ describe("reference gallery registry", () => {
   it("publishes only a valid, fully approved four-slot registry", () => {
     expect(validateReferenceGalleryRegistry(publishedRegistry).valid).toBe(true);
     expect(
-      getReferenceGalleryVisibility(publishedRegistry, "production", true, true)
+      getReferenceGalleryVisibility(publishedRegistry, "production", true)
     ).toEqual({ render: true, indexable: true });
 
     const unapproved = {
@@ -129,7 +125,7 @@ describe("reference gallery registry", () => {
       valid: false
     });
     expect(
-      getReferenceGalleryVisibility(unapproved, "production", true, true)
+      getReferenceGalleryVisibility(unapproved, "production", true)
     ).toEqual({ render: false, indexable: false });
 
     const publishedConcepts = {
@@ -144,7 +140,6 @@ describe("reference gallery registry", () => {
       getReferenceGalleryVisibility(
         publishedConcepts,
         "production",
-        true,
         true
       )
     ).toEqual({ render: true, indexable: true });
@@ -209,11 +204,11 @@ describe("reference gallery registry", () => {
 
     expect(validateReferenceGalleryRegistry(unknownStatus).valid).toBe(false);
     expect(
-      getReferenceGalleryVisibility(unknownStatus, "production", true, true)
+      getReferenceGalleryVisibility(unknownStatus, "production", true)
     ).toEqual({ render: false, indexable: false });
     expect(validateReferenceGalleryRegistry(unsafeImage).valid).toBe(false);
     expect(
-      getReferenceGalleryVisibility(unsafeImage, "preview", false, true)
+      getReferenceGalleryVisibility(unsafeImage, "preview", false)
     ).toEqual({ render: false, indexable: false });
   });
 });

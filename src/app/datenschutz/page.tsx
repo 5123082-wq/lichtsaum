@@ -3,7 +3,12 @@ import Link from "next/link";
 
 import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { isIndexable, siteUrl } from "@/config/environment";
+import {
+  acceptsProductionLeads,
+  isIndexable,
+  isPreviewDeployment,
+  siteUrl
+} from "@/config/environment";
 import { siteConfig } from "@/config/site";
 import { LegalReviewTodo } from "@/features/legal/legal-review-todo";
 
@@ -26,17 +31,15 @@ export function generateMetadata(): Metadata {
             url: "/datenschutz"
           }
         }
-      : {
-          robots: { index: false, follow: false, nocache: true }
-        })
+      : isPreviewDeployment
+        ? { robots: { index: false, follow: false, nocache: true } }
+        : {})
   };
 }
 
 export default function DatenschutzPage() {
   const { legal } = siteConfig;
-  const leadIntakeEnabled =
-    process.env.LEAD_INTAKE_ENABLED === "true" &&
-    process.env.LEAD_ATTACHMENTS_ENABLED === "true";
+  const leadIntakeEnabled = acceptsProductionLeads;
 
   return (
     <>

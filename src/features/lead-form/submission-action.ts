@@ -3,6 +3,7 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { acceptsProductionLeads } from "@/config/environment";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
 
@@ -80,10 +81,7 @@ export async function prepareProjectCheckSubmission(
     };
   }
 
-  if (
-    process.env.LEAD_INTAKE_ENABLED !== "true" ||
-    process.env.LEAD_ATTACHMENTS_ENABLED !== "true"
-  ) {
+  if (!acceptsProductionLeads) {
     return {
       kind: "result",
       state: {
