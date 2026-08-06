@@ -25,6 +25,7 @@ import {
 import {
   confirmProjectFileUpload,
   finalizeProjectCheckSubmission,
+  getProjectCheckSubmissionStatus,
   prepareProjectCheckSubmission
 } from "./submission-action";
 import {
@@ -323,6 +324,8 @@ export function LeadForm() {
     const formData = new FormData(form);
 
     startTransition(async () => {
+      let leadIdForRecovery: string | null = null;
+
       try {
         const prepared = await prepareProjectCheckSubmission({
           email: String(formData.get("email") ?? ""),
@@ -341,6 +344,8 @@ export function LeadForm() {
           setState(prepared.state);
           return;
         }
+
+        leadIdForRecovery = prepared.plan.leadId;
 
         setState({
           status: "uploading",
@@ -381,6 +386,27 @@ export function LeadForm() {
           )
         );
       } catch {
+        if (leadIdForRecovery) {
+          try {
+            const recoveredStatus = await getProjectCheckSubmissionStatus(
+              leadIdForRecovery
+            );
+
+            if (recoveredStatus === "submitted") {
+              setState({
+                status: "submitted",
+                message:
+                  "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über die angegebene Kontaktmöglichkeit.",
+                fieldErrors: {},
+                leadId: leadIdForRecovery
+              });
+              return;
+            }
+          } catch {
+            // Keep the public fallback generic and free of technical details.
+          }
+        }
+
         setState({
           status: "prototype_unavailable",
           message:
@@ -423,7 +449,9 @@ export function LeadForm() {
                   <h3 className="m-0 text-lg font-bold text-[var(--text-primary)]">
                     {state.status === "submitted"
                       ? "Projektanfrage übermittelt"
-                      : "Prototyp-Prüfung abgeschlossen"}
+                      : state.status === "prototype_validated"
+                        ? "Prototyp-Prüfung abgeschlossen"
+                        : "Übermittlung nicht bestätigt"}
                   </h3>
                   <p className="mt-2 text-sm text-[var(--text-muted)]">
                     {state.message}

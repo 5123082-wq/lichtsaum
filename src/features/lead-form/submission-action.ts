@@ -1,6 +1,10 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { z } from "zod";
+
+import { getDb } from "@/db";
+import { leads } from "@/db/schema";
 
 import { projectCheckContactSchema } from "./schema";
 import {
@@ -127,4 +131,27 @@ export async function finalizeProjectCheckSubmission(
     fieldErrors: {},
     leadId
   };
+}
+
+export async function getProjectCheckSubmissionStatus(
+  leadIdInput: string
+): Promise<"submitted" | "pending" | "unknown"> {
+  const parsedLeadId = z.string().uuid().safeParse(leadIdInput);
+
+  if (!parsedLeadId.success) {
+    return "unknown";
+  }
+
+  const db = getDb();
+  const [lead] = await db
+    .select({ status: leads.status })
+    .from(leads)
+    .where(eq(leads.leadId, parsedLeadId.data))
+    .limit(1);
+
+  if (lead?.status === "new") {
+    return "submitted";
+  }
+
+  return lead ? "pending" : "unknown";
 }
