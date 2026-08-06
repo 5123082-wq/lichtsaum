@@ -1,7 +1,7 @@
 # Project Documentation
 
 Status: `Decision`  
-Last reviewed: 2026-08-02
+Last reviewed: 2026-08-06
 
 Документация организована по принципу «один факт — один источник истины». Не копировать
 требования между файлами; ссылаться на владеющий документ.
@@ -14,6 +14,7 @@ Last reviewed: 2026-08-02
 | UI, responsive, components | `../DESIGN.md` |
 | Стек, routes, forms, environments | `architecture/system-architecture.md` |
 | Главная, меню, конфигуратор, галерея и modal routing | `architecture/landing-page-and-route-expansion.md` |
+| Ограничения конфигуратора и внутренние стоимости | `architecture/configurator-calculation.md` |
 | Порядок реализации и phase gates | `architecture/implementation-roadmap.md` |
 | Причины архитектурных решений | `architecture/decision-log.md` |
 | Product/market choice и validation gates | `strategy/product-market-decision.md` |
@@ -37,6 +38,7 @@ Last reviewed: 2026-08-02
 | Visual system | `../DESIGN.md` |
 | Application architecture | `architecture/system-architecture.md` |
 | Proposed landing and route expansion brief | `architecture/landing-page-and-route-expansion.md` |
+| Configurator constraints and internal component costs | `architecture/configurator-calculation.md` |
 | Build sequence and phase exits | `architecture/implementation-roadmap.md` |
 | Product, segment, positioning and validation decision | `strategy/product-market-decision.md` |
 | Market model and external evidence ledger | `strategy/market-and-competitor-evidence.md` |

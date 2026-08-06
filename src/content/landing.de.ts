@@ -390,6 +390,12 @@ export const faqItems = [
       "Für den ersten Kontakt genügt eine E-Mail-Adresse. Falls vorhanden, helfen Fotos der Markise und der Volantbefestigung, bekannte Maße, eine Logo- oder Schriftzugvorlage sowie Angaben zu Stromversorgung, Zugang und zum Zustimmungsstatus am Objekt."
   },
   {
+    id: "dimensions",
+    question: "Welche Maße sind für Volant und Schriftzug möglich?",
+    answer:
+      "Im aktuellen Konfigurator kann die Volanthöhe zwischen 200 und 300 mm gewählt werden. Die Buchstabenhöhe ist auf maximal 180 mm begrenzt. Ob der gesamte Schriftzug bei der gewählten Schriftart und Höhe in die verfügbare Breite passt, wird anhand seiner tatsächlich gemessenen Länge geprüft. Die finale technische Ausführung bleibt objektbezogen."
+  },
+  {
     id: "permission",
     question: "Brauche ich eine Genehmigung oder Zustimmung?",
     answer:

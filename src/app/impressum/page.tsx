@@ -5,10 +5,7 @@ import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { isIndexable, siteUrl } from "@/config/environment";
 import { siteConfig } from "@/config/site";
-import {
-  assertLegalReviewCompleteForProduction,
-  LegalReviewTodo
-} from "@/features/legal/legal-review-todo";
+import { assertLegalReviewCompleteForProduction } from "@/features/legal/legal-review-todo";
 
 assertLegalReviewCompleteForProduction();
 
@@ -65,7 +62,6 @@ export default function ImpressumPage() {
               </span>
               <span>{legal.country}</span>
             </address>
-            <LegalReviewTodo item="providerDesignation" />
           </section>
 
           <section aria-labelledby="kontakt">
@@ -97,8 +93,6 @@ export default function ImpressumPage() {
               Umsatzsteuer-Identifikationsnummer gemäß § 27a
               Umsatzsteuergesetz: {legal.vatId}
             </p>
-            <LegalReviewTodo item="registerDetails" />
-            <LegalReviewTodo item="regulatedActivity" />
           </section>
 
           <section aria-labelledby="streitbeilegung">
@@ -108,7 +102,6 @@ export default function ImpressumPage() {
               Streitbeilegungsverfahren vor einer
               Verbraucherschlichtungsstelle teilzunehmen.
             </p>
-            <LegalReviewTodo item="disputeResolution" />
           </section>
 
           <section aria-labelledby="inhalte">
@@ -168,7 +161,6 @@ export default function ImpressumPage() {
               von Rechtsverletzungen werden wir derartige Inhalte umgehend
               entfernen.
             </p>
-            <LegalReviewTodo item="editorialResponsibility" />
           </section>
 
           <Link className="legal-document__back" href="/">

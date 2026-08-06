@@ -11,6 +11,10 @@ import {
 } from "react";
 import { CaretDown, Check, Diamond } from "@phosphor-icons/react";
 
+import {
+  MINI_CONFIGURATOR_CONSTRAINTS,
+  isWithinMiniConfiguratorConstraint
+} from "@/features/mini-configurator/constraints";
 import { measureMiniConfiguratorText } from "@/features/mini-configurator/font-metrics";
 import { evaluateMiniConfiguratorGeometry } from "@/features/mini-configurator/geometry";
 import { MiniConfiguratorPreview } from "@/features/mini-configurator/mini-configurator-preview";
@@ -61,6 +65,8 @@ type NumberFieldProps = Readonly<{
   onChange: (value: NumericDraft) => void;
   describedBy?: string;
   invalid?: boolean;
+  min?: number;
+  max?: number;
 }>;
 
 type CompositionDiagramProps = Readonly<{
@@ -94,7 +100,9 @@ function NumberField({
   value,
   onChange,
   describedBy,
-  invalid = false
+  invalid = false,
+  min = 1,
+  max
 }: NumberFieldProps) {
   return (
     <div className="configurator-number-field">
@@ -105,7 +113,8 @@ function NumberField({
           aria-invalid={invalid || undefined}
           id={id}
           inputMode="decimal"
-          min="1"
+          max={max}
+          min={min}
           onChange={(event) => {
             const nextValue = event.target.value;
             onChange(nextValue === "" ? "" : Number(nextValue));
@@ -186,6 +195,7 @@ export function MiniConfigurator() {
   const awningColorTriggerRef = useRef<HTMLButtonElement>(null);
   const lightColorPickerRef = useRef<HTMLDivElement>(null);
   const lightColorTriggerRef = useRef<HTMLButtonElement>(null);
+  const userHasInteractedRef = useRef(false);
   const deferredText = useDeferredValue(draft.text);
   const configuration = useMemo(() => configurationFromDraft(draft), [draft]);
   const previewConfiguration = useMemo(
@@ -210,6 +220,14 @@ export function MiniConfigurator() {
   const letterHeightMm = configuration?.letterHeightMm ?? null;
   const textIsSupported = SUPPORTED_MINI_CONFIGURATOR_TEXT.test(draft.text);
   const textIsEmpty = draft.text.trim().length === 0;
+  const valanceHeightIsValid = isWithinMiniConfiguratorConstraint(
+    draft.valanceHeightMm,
+    MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm
+  );
+  const letterHeightIsValid = isWithinMiniConfiguratorConstraint(
+    draft.letterHeightMm,
+    MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm
+  );
 
   useEffect(() => {
     let storedConfiguration: MiniConfiguratorConfig | null = null;
@@ -231,7 +249,7 @@ export function MiniConfigurator() {
   }, []);
 
   useEffect(() => {
-    if (!storageIsReady || !configuration) {
+    if (!storageIsReady || !configuration || !userHasInteractedRef.current) {
       return;
     }
 
@@ -446,19 +464,29 @@ export function MiniConfigurator() {
 
     return evaluateMiniConfiguratorGeometry(configuration, matchingMeasurement);
   }, [configuration, matchingMeasurement]);
-  const lettersTooTall =
-    geometry?.issues.includes("LETTERS_TOO_TALL") ?? false;
+  const valanceHeightOutOfRange =
+    draft.valanceHeightMm !== "" && !valanceHeightIsValid;
+  const letterHeightOutOfRange =
+    draft.letterHeightMm !== "" && !letterHeightIsValid;
   const compositionTooWide =
     geometry?.issues.includes("COMPOSITION_TOO_WIDE") ?? false;
   const numericValuesAreValid = configuration !== null;
   const isMeasuring =
-    Boolean(configuration && !textIsEmpty && textIsSupported) &&
+    Boolean(
+      configuration &&
+        !textIsEmpty &&
+        textIsSupported &&
+        valanceHeightIsValid &&
+        letterHeightIsValid
+    ) &&
     !matchingMeasurement &&
     measurementState.status !== "error";
   const canContinue =
     numericValuesAreValid &&
     !textIsEmpty &&
     textIsSupported &&
+    valanceHeightIsValid &&
+    letterHeightIsValid &&
     measurementState.status === "ready" &&
     geometry !== null &&
     geometry.issues.length === 0;
@@ -475,7 +503,8 @@ export function MiniConfigurator() {
   } else if (
     !numericValuesAreValid ||
     !textIsSupported ||
-    lettersTooTall ||
+    !valanceHeightIsValid ||
+    !letterHeightIsValid ||
     compositionTooWide
   ) {
     statusState = "error";
@@ -489,6 +518,7 @@ export function MiniConfigurator() {
     key: Key,
     value: MiniConfiguratorDraft[Key]
   ) {
+    userHasInteractedRef.current = true;
     setContinuationMessage("");
     setDraft((currentDraft) => ({ ...currentDraft, [key]: value }));
   }
@@ -762,37 +792,53 @@ export function MiniConfigurator() {
               id="configurator-width"
               invalid={!isPositiveNumber(draft.valanceWidthMm)}
               label="Volantbreite"
+              min={MINI_CONFIGURATOR_CONSTRAINTS.valanceWidthMm.min}
               onChange={(value) => updateDraft("valanceWidthMm", value)}
               value={draft.valanceWidthMm}
             />
             <NumberField
+              describedBy={
+                valanceHeightOutOfRange
+                  ? "configurator-valance-height-error"
+                  : undefined
+              }
               id="configurator-height"
-              invalid={!isPositiveNumber(draft.valanceHeightMm)}
+              invalid={!valanceHeightIsValid}
               label="Volanthöhe"
+              max={MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm.max}
+              min={MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm.min}
               onChange={(value) => updateDraft("valanceHeightMm", value)}
               value={draft.valanceHeightMm}
             />
             <NumberField
               describedBy={
-                lettersTooTall
+                letterHeightOutOfRange
                   ? "configurator-letter-height-error"
                   : undefined
               }
               id="configurator-letter-height"
-              invalid={
-                !isPositiveNumber(draft.letterHeightMm) || lettersTooTall
-              }
+              invalid={!letterHeightIsValid}
               label="Buchstabenhöhe"
+              max={MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm.max}
+              min={MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm.min}
               onChange={(value) => updateDraft("letterHeightMm", value)}
               value={draft.letterHeightMm}
             />
           </div>
-          {lettersTooTall ? (
+          {valanceHeightOutOfRange ? (
+            <p
+              className="configurator-field-error"
+              id="configurator-valance-height-error"
+            >
+              Die Volanthöhe muss zwischen 200 und 300 mm liegen.
+            </p>
+          ) : null}
+          {letterHeightOutOfRange ? (
             <p
               className="configurator-field-error"
               id="configurator-letter-height-error"
             >
-              Die Buchstabenhöhe darf die Volanthöhe nicht überschreiten.
+              Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.
             </p>
           ) : null}
           {compositionTooWide ? (

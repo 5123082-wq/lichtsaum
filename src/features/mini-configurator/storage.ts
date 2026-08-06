@@ -1,4 +1,8 @@
 import {
+  MINI_CONFIGURATOR_CONSTRAINTS,
+  isWithinMiniConfiguratorConstraint
+} from "@/features/mini-configurator/constraints";
+import {
   MINI_CONFIGURATOR_AWNING_COLORS,
   MINI_CONFIGURATOR_COMPOSITION_MODES,
   MINI_CONFIGURATOR_FONTS,
@@ -30,10 +34,6 @@ const previewModeIds = new Set<string>(
   MINI_CONFIGURATOR_PREVIEW_MODES.map((option) => option.id)
 );
 
-function isPositiveFiniteNumber(value: unknown): value is number {
-  return typeof value === "number" && Number.isFinite(value) && value > 0;
-}
-
 export function isMiniConfiguratorConfig(
   value: unknown
 ): value is MiniConfiguratorConfig {
@@ -52,9 +52,18 @@ export function isMiniConfiguratorConfig(
     ) &&
     typeof candidate.fontId === "string" &&
     fontIds.has(candidate.fontId) &&
-    isPositiveFiniteNumber(candidate.valanceWidthMm) &&
-    isPositiveFiniteNumber(candidate.valanceHeightMm) &&
-    isPositiveFiniteNumber(candidate.letterHeightMm) &&
+    isWithinMiniConfiguratorConstraint(
+      candidate.valanceWidthMm,
+      MINI_CONFIGURATOR_CONSTRAINTS.valanceWidthMm
+    ) &&
+    isWithinMiniConfiguratorConstraint(
+      candidate.valanceHeightMm,
+      MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm
+    ) &&
+    isWithinMiniConfiguratorConstraint(
+      candidate.letterHeightMm,
+      MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm
+    ) &&
     typeof candidate.awningColorId === "string" &&
     awningColorIds.has(candidate.awningColorId) &&
     typeof candidate.lightColorId === "string" &&

@@ -1,7 +1,8 @@
 # Landing Page and Route Expansion Brief
 
 Status: `Decision` with local references-gallery review implemented  
-Last reviewed: 2026-08-04  
+Last reviewed: 2026-08-06
+
 Scope: homepage information architecture, navigation, compact configurator, application gallery,
 modal routing and Search boundaries
 
@@ -81,7 +82,7 @@ modal routing and Search boundaries
 | Mini configurator | Интерактивный визуальный выбор оформления | Дать сравнить надпись без logo, с logo слева или с одинаковыми logo по краям | «Я вижу подходящее направление для своего объекта» |
 | Mini assessment | Небольшая предварительная классификация без неподтверждённой цены | Показать, достаточно ли данных для первого review | «Я понимаю следующий шаг, но не получаю ложного расчёта» |
 | `Ausgewählte Referenzen` | Небольшой набор подтверждённых реализованных проектов | Показать сопоставимые реальные объекты, их размещение и согласованный scope | «Я вижу, что решение уже реализовано в похожем контексте» |
-| `Fragen.` | Короткий FAQ о совместимости, Stromweg (кабельный/электрический путь), согласованиях и нужных материалах | Закрыть оставшиеся возражения | «Основные риски предусмотрены без необоснованных обещаний» |
+| `Fragen.` | Короткий FAQ о совместимости, размерах, Stromweg (кабельный/электрический путь), согласованиях и нужных материалах | Закрыть оставшиеся возражения | «Основные риски предусмотрены без необоснованных обещаний» |
 | `Projekt prüfen lassen` | Предельно короткий первый контакт без анкеты | Дать начать диалог, не превращая интерес в технический бриф | «Оставить заявку легко; детали можно уточнить позже» |
 | Footer | Двухчастное завершение: световая бренд-полоса и служебная строка | Завершить страницу, закрепить образ бренда и дать обязательные ссылки | «Сайт завершённый, продуманный и ответственный» |
 
@@ -195,10 +196,12 @@ Answer one question: `Wie könnte es an meiner Fassade aussehen?` — «Как �
   are designed for the full configurator;
 - eight locally hosted OFL typefaces, including narrow, serif, humanist and conceptual directions;
 - real `Volantbreite`, `Volanthöhe` and `Buchstabenhöhe` values in millimetres;
+- hard local-prototype limits of `200–300 mm` inclusive for `Volanthöhe` and `1–180 mm` inclusive
+  for `Buchstabenhöhe`;
 - six awning colours, two light colours and one fixed `Nacht` preview state without a view selector;
 - exact selected-font measurement in the browser, followed by pure millimetre geometry;
-- explicit errors when the letter height exceeds the valance height or the complete composition
-  crosses the horizontal safe area; no hidden auto-fit;
+- explicit errors when a physical height crosses its configured range or the complete composition
+  crosses the horizontal safe area; no hidden clamping or auto-fit;
 - short preliminary state `Bereit für die ausführliche Konfiguration` only after valid geometry;
 - continuation action `Ausführlich konfigurieren`; in phase 1 it persists the transferable state
   and honestly reports that the full route follows after module approval;
@@ -242,6 +245,10 @@ The homepage writes only a versioned non-personal configuration object to `sessi
 measurements, colour ids and the fixed `night` preview mode. It contains no contact details, uploaded media, URL
 parameters or analytics data. A future full configurator may read and migrate this contract, but
 phase 1 does not create the route or claim that a calculation has occurred.
+
+The implemented constraints and owner-supplied internal component-cost inputs are defined only in
+[`configurator-calculation.md`](configurator-calculation.md). The current mini-configurator does not
+execute or display that future cost model.
 
 ## Full configurator route
 
@@ -432,6 +439,8 @@ To preserve a short marketing flow:
 - move construction details already covered by Eignung out of a separate `Projektgrenzen` block;
 - use the short visible heading `Fragen.` rather than `Häufige Fragen vor der Projektprüfung.`;
 - move Strom, permission and responsibility objections into `Fragen.` and concise form guidance;
+- state the local 200–300 mm valance-height and 180 mm maximum letter-height limits, including
+  that fit uses the measured length of the selected typeface and inscription;
 - remove the public empty `Nachweise` placeholder until real evidence exists;
 - fold the decision value of `Alternatives` into one FAQ such as
   `Wann ist ein Leuchtvolant nicht die passende Lösung?`;
@@ -447,14 +456,14 @@ contains only:
 - submit button and the required concise privacy notice/link.
 
 Do not require dimensions, object type, a file, a multi-step wizard or marketing consent to send
-the first request. The local prototype may validate up to five optional JPG, PNG, WebP or PDF files,
-each up to 15 MB. On test submit they may reach the application runtime only for validation but
-must not be persisted, accepted as a lead or forwarded to third parties. Image attachments receive local
+the first request. The form validates up to five optional JPG, PNG, WebP or PDF files, each up to
+15 MB and 50 MB combined. Image attachments receive local
 thumbnails; PDFs receive a labelled file tile; every selected item can be removed before submit.
 The selected items remain inside the same bordered selector surface, which replaces its empty state
-with a compact responsive tile grid and one `Weitere Dateien` tile. Activating a production
-upload remains blocked on the storage, retention, access-control, malware-handling and privacy
-gates. Further materials may also
+with a compact responsive tile grid and one `Weitere Dateien` tile. The implemented but disabled
+production path uses server-authorized direct uploads to Private Vercel Blob and stores metadata in
+Neon; activation remains blocked on malware, abuse, processor, email and final privacy gates.
+Further materials may also
 be requested after contact. The final production validation, anti-spam controls and privacy
 wording remain subject to the existing form and compliance gates.
 

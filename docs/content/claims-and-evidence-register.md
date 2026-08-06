@@ -1,7 +1,7 @@
 # Claims and Evidence Register
 
 Status: `TBD` — product, technical and owner approvals required  
-Last reviewed: 2026-07-31
+Last reviewed: 2026-08-06
 
 Это единственный источник истины для объективных публичных утверждений. Copy, Google Ads,
 structured data и sales assets могут использовать claim только со статусом `Approved`.
@@ -46,6 +46,7 @@ structured data и sales assets могут использовать claim тол
 | CLM-025 | `Deutschlandweiter Full Service` | Полный сервис по Германии | Geography/service | Rejected | Current installation/electrical network not verified; reconsider only for a materially different operating model | None | 2026-07-30 |
 | CLM-026 | `Für den Außeneinsatz geeignet` | Подходит для наружной эксплуатации | Technical/safety | TBD | Complete-system declarations, enclosure, installation method and operating limits | None | — |
 | CLM-027 | `Größe und Anzahl der Lichtfelder beeinflussen die Projektkosten.` | Размер и количество световых элементов влияют на стоимость проекта | Price driver | Approved | Owner confirmation for the local prototype; no public price or price range implied | Landing: Engineered Precision | 2026-07-31 |
+| CLM-028 | `Volanthöhe 200–300 mm; Buchstabenhöhe max. 180 mm` | Рабочие ограничения текущего конфигуратора | Technical | Restricted | Owner confirmation 2026-08-06; must be reconciled with the supplier-specific 150 mm fact in CLM-016 and the contracted technical file | Local noindex configurator and FAQ only | 2026-08-06 |
 
 ## Approval record template
 

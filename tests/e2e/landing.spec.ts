@@ -708,10 +708,11 @@ test("renders the concise object-specific FAQ with the approved marker treatment
   ).toBeVisible();
   await expect(section.locator(".eyebrow--marker-loop")).toHaveText("FAQ");
   await expect(section.locator(".section-heading__intro")).toHaveCount(0);
-  await expect(details).toHaveCount(5);
+  await expect(details).toHaveCount(6);
   await expect(summaries).toHaveText([
     "Passt ein Leuchtvolant an jede Markise?",
     "Welche Unterlagen helfen bei der ersten Prüfung?",
+    "Welche Maße sind für Volant und Schriftzug möglich?",
     "Brauche ich eine Genehmigung oder Zustimmung?",
     "Wie werden Stromversorgung und elektrischer Anschluss geklärt?",
     "Wann ist ein Leuchtvolant nicht die passende Lösung?"
@@ -721,6 +722,7 @@ test("renders the concise object-specific FAQ with the approved marker treatment
   ).toHaveText([
     "Nein. Vorgesehen ist der Austausch des vorhandenen Volants nur bei einer geeigneten bestehenden Gewerbemarkise. Entscheidend sind die Austauschbarkeit des Volants, Befestigungsart und Maße, ein ungehinderter Bewegungsablauf sowie ein sicher planbarer Kabelweg und eine geeignete Stromversorgung. Die Eignung wird am konkreten Objekt geprüft.",
     "Für den ersten Kontakt genügt eine E-Mail-Adresse. Falls vorhanden, helfen Fotos der Markise und der Volantbefestigung, bekannte Maße, eine Logo- oder Schriftzugvorlage sowie Angaben zu Stromversorgung, Zugang und zum Zustimmungsstatus am Objekt.",
+    "Im aktuellen Konfigurator kann die Volanthöhe zwischen 200 und 300 mm gewählt werden. Die Buchstabenhöhe ist auf maximal 180 mm begrenzt. Ob der gesamte Schriftzug bei der gewählten Schriftart und Höhe in die verfügbare Breite passt, wird anhand seiner tatsächlich gemessenen Länge geprüft. Die finale technische Ausführung bleibt objektbezogen.",
     "Das ist objekt- und standortabhängig. Zu prüfen sind insbesondere die erforderlichen Zustimmungen am Objekt sowie örtliche Vorgaben für Werbeanlagen. Bei denkmalgeschützten Gebäuden oder in geschützten Bereichen können zusätzliche denkmalrechtliche Anforderungen gelten.",
     "Vor der Ausführung müssen Kabelweg, Einbauort und erforderlicher Schutz des Netzteils beziehungsweise LED-Treibers, Anschlussart sowie die Verantwortung für erforderliche Elektroarbeiten am konkreten Objekt festgelegt werden.",
     "Nicht passend ist ein Leuchtvolant insbesondere, wenn der vorhandene Volant nicht separat austauschbar ist, die Markise beschädigt oder mechanisch ungeeignet ist oder kein sicherer Kabelweg möglich ist. Solange notwendige Zustimmungen oder örtliche Anforderungen ungeklärt sind, kann die Ausführung nicht freigegeben werden. Wenn keine Beleuchtung benötigt wird, kann ein bedruckter Volant genügen; muss die Markise selbst ersetzt werden, ist ein neues Markisensystem zu prüfen."
@@ -796,7 +798,7 @@ test("shows the public gallery on the homepage and dedicated route", async ({
   expect(html).toMatch(/noindex/i);
 });
 
-test("configures the physical SVG valance and reports invalid letter height", async ({
+test("configures the physical SVG valance and enforces its height limits", async ({
   page
 }) => {
   const section = page.locator("#konfigurator");
@@ -888,7 +890,7 @@ test("configures the physical SVG valance and reports invalid letter height", as
   await expect(compositionTrigger).toBeFocused();
   await section.getByLabel("Text auf dem Volant").fill("ABENDLICHT");
   await section.getByLabel("Volantbreite").fill("2600");
-  await section.getByLabel("Volanthöhe").fill("320");
+  await section.getByLabel("Volanthöhe").fill("300");
   await section.getByLabel("Buchstabenhöhe").fill("140");
   await fontTrigger.click();
   await section
@@ -939,7 +941,7 @@ test("configures the physical SVG valance and reports invalid letter height", as
   );
   await expect(preview.locator("svg svg")).toHaveAttribute(
     "viewBox",
-    "0 0 2600 320"
+    "0 0 2600 300"
   );
   await expect(preview.locator("svg svg text").last()).toContainText(
     "ABENDLICHT"
@@ -963,7 +965,7 @@ test("configures the physical SVG valance and reports invalid letter height", as
       text: "ABENDLICHT",
       fontId: "oswald",
       valanceWidthMm: 2600,
-      valanceHeightMm: 320,
+      valanceHeightMm: 300,
       letterHeightMm: 140,
       awningColorId: "sand",
       lightColorId: "neutral-white",
@@ -977,14 +979,47 @@ test("configures the physical SVG valance and reports invalid letter height", as
   ).toBeVisible();
   await expect(preview.locator("[data-configurator-logo]")).toHaveCount(2);
 
-  await section.getByLabel("Buchstabenhöhe").fill("400");
+  const valanceHeightInput = section.getByLabel("Volanthöhe");
+  const letterHeightInput = section.getByLabel("Buchstabenhöhe");
+
+  await expect(valanceHeightInput).toHaveAttribute("min", "200");
+  await expect(valanceHeightInput).toHaveAttribute("max", "300");
+  await expect(letterHeightInput).toHaveAttribute("min", "1");
+  await expect(letterHeightInput).toHaveAttribute("max", "180");
+
+  await valanceHeightInput.fill("199");
   await expect(
-    section.getByText(
-      "Die Buchstabenhöhe darf die Volanthöhe nicht überschreiten."
-    )
+    section.getByText("Die Volanthöhe muss zwischen 200 und 300 mm liegen.")
   ).toBeVisible();
+  await expect(valanceHeightInput).toHaveAttribute("aria-invalid", "true");
   await expect(continuationButton).toBeDisabled();
   await expect(preview).toHaveAttribute("data-error", "true");
+
+  await valanceHeightInput.fill("301");
+  await expect(
+    section.getByText("Die Volanthöhe muss zwischen 200 und 300 mm liegen.")
+  ).toBeVisible();
+
+  await valanceHeightInput.fill("300");
+  await expect(
+    section.getByText("Die Volanthöhe muss zwischen 200 und 300 mm liegen.")
+  ).toHaveCount(0);
+
+  await letterHeightInput.fill("181");
+  await expect(
+    section.getByText(
+      "Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen."
+    )
+  ).toBeVisible();
+  await expect(letterHeightInput).toHaveAttribute("aria-invalid", "true");
+  await expect(continuationButton).toBeDisabled();
+  await expect(preview).toHaveAttribute("data-error", "true");
+
+  await letterHeightInput.fill("180");
+  await expect(
+    section.getByText("Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.")
+  ).toHaveCount(0);
+  await expect(continuationButton).toBeEnabled();
 });
 
 test("opens an accessible mobile navigation drawer", async ({ page }) => {

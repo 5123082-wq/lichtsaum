@@ -36,7 +36,9 @@ Last reviewed: 2026-07-30
 | Tag management | One GTM web container; test/production configuration separated |
 | Testing | Vitest + Testing Library; Playwright E2E + accessibility/performance checks |
 | Hosting | `TBD`; must support HTTPS, preview isolation, EU-sensitive data handling |
-| Lead system of record | Existing CRM if selected; otherwise `TBD` EU-capable persistence |
+| Lead system of record | Neon PostgreSQL in `eu-central-1`; `leads` and `lead_files` schema migrated; intake is environment-gated |
+| Lead file storage | Private Vercel Blob in `fra1`; direct client upload with server-authorized per-file paths, 5 × 15 MB and 50 MB combined limit |
+| Lead notification | Resend Email API in `eu-west-1`; sending-only domain-scoped key, per-lead idempotency and `Reply-To` customer address |
 | CMP | `TBD`; must support granular consent and Consent Mode v2 |
 
 Next.js provides App Router conventions for metadata, `robots.ts`, `sitemap.ts`, images and
@@ -102,6 +104,15 @@ Rules:
 - Form submission works when analytics and marketing consent are denied.
 - Vendor failure produces a safe user state and observable server-side error without logging
   PII.
+- File content goes directly to Private Blob after the server reserves a `lead_files` row and
+  authorizes its exact random pathname. PostgreSQL stores metadata, never the binary content.
+- Upload grants expire after 30 minutes. Accepted leads and their private files have a 90-day
+  retention deadline enforced by the protected daily retention job.
+- Notification file links are HMAC-signed, contain only random lead/file identifiers and expire
+  after seven days; downloads stream private Blob content through a no-store server route.
+- The form combines a honeypot with an email-based three-attempts-per-15-minute application limit.
+  Production intake remains fail-closed until malware handling, processor onboarding and final
+  privacy review pass their release gates.
 
 ## Consent and tag boot sequence
 
@@ -118,6 +129,28 @@ Basic versus Advanced Consent Mode remains `TBD` pending legal/privacy review. A
 not hardwire a choice that cannot be changed.
 
 ## Environment policy
+
+### Lead runtime contract
+
+The enabled lead flow requires these server-only values:
+
+| Variable | Production value / source |
+| --- | --- |
+| `LEAD_INTAKE_ENABLED` | `true` only after release gates pass |
+| `LEAD_ATTACHMENTS_ENABLED` | `true` only after the file-upload gates pass |
+| `LEAD_NOTIFICATION_TO` | `info@lichtsaum.com` |
+| `LEAD_EMAIL_FROM` | `LICHTSAUM Website <info@lichtsaum.com>` |
+| `RESEND_API_KEY` | Resend sending-only key restricted to `lichtsaum.com` |
+| `LEAD_DOWNLOAD_SECRET` | Independent random secret of at least 32 characters |
+| `DATABASE_URL` | Neon pooled runtime URL |
+| `DATABASE_URL_UNPOOLED` | Neon direct URL for migrations only |
+| `BLOB_STORE_ID` | Private Vercel Blob store ID |
+| `BLOB_READ_WRITE_TOKEN` | Local/non-OIDC Blob credential; server-only |
+| `CRON_SECRET` | Independent secret for the retention endpoint |
+| `SITE_URL` | Absolute deployed origin used in signed notification links |
+
+No variable in this contract may use the `NEXT_PUBLIC_` prefix. `APP_ENV=production` remains
+separate from enabling lead intake and is permitted only after the indexing/legal release gate.
 
 ### Local
 
@@ -168,8 +201,8 @@ seeing `noindex`.
 ## Open decisions
 
 - Hosting and data region.
-- CRM/system of record.
-- Transactional email.
+- Operational access policy for the Neon lead store and Private Blob files.
+- Final legal/processor approval for Resend transactional email.
 - CMP and Consent Mode implementation.
 - Retention periods.
 - Exact route set after keyword/product research.

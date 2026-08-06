@@ -1,7 +1,7 @@
 # DESIGN.md — CHISEL Architectural
 
 Status: `Decision` with `TBD` brand/content inputs  
-Last reviewed: 2026-08-04
+Last reviewed: 2026-08-06
 
 Этот файл — единственный источник истины по визуальной системе. Production UI может отклоняться
 от Stitch только ради responsive behavior, accessibility, performance, content truth или
@@ -72,6 +72,20 @@ production foundation, абсолютные desktop-размеры, чернов
 
 Реализация использует fluid `clamp()`, а не фиксированное копирование размеров Stitch.
 Длинные немецкие слова должны переноситься без разрушения layout.
+
+### Brand mark
+
+Status: `Proposed` pending owner acceptance and trademark review.
+
+- The compact mark combines a geometric `L`, an architectural projection and one orange light
+  seam; it contains no separate claim or product specification.
+- Its master geometry is stored in `public/brand/lichtsaum-mark.svg` and uses only `background`,
+  `text-primary` and `architectural-orange`.
+- The square composition keeps generous outer space for a circular social-avatar crop and remains
+  legible at 16 × 16 px. The full `LICHTSAUM` wordmark remains the preferred form where horizontal
+  space permits.
+- The mark is approved only for local prototype use until the owner accepts the identity and the
+  requested brand name passes a separate availability review.
 
 ### Spacing and grid
 
@@ -235,6 +249,9 @@ production foundation, абсолютные desktop-размеры, чернов
   наклонного полотна маркизы.
 - Внешний SVG сохраняет композицию сцены, внутренний physical SVG использует реальные ширину и
   высоту волана в миллиметрах. Пропорции не подменяются декоративной растяжкой.
+- `Volanthöhe` принимает `200–300 mm` включительно, `Buchstabenhöhe` — `1–180 mm` включительно.
+  Введённое невалидное значение остаётся видимым: интерфейс показывает короткую ошибку,
+  `aria-invalid` и блокирует continuation CTA без автоматического исправления.
 - На desktop controls образуют три равноправные колонки; на mobile они переходят в одну колонку
   без горизонтальной прокрутки. Минимальная ширина проверки — 320px. Порядок и смысл колонок:
   `01 Gestaltung` содержит композицию, текст и выбор шрифта; `02 Maße` — только физические
@@ -269,7 +286,8 @@ production foundation, абсолютные desktop-размеры, чернов
   индикатор; меню поддерживают Escape, Home/End, Arrow Up/Down, закрытие при уходе focus, видимый
   focus и пункты высотой не менее `44px`.
 - Невалидная физическая композиция получает текстовую ошибку, `aria-invalid`, error border и
-  недоступный continuation CTA; интерфейс не уменьшает буквы молча.
+  недоступный continuation CTA; интерфейс не уменьшает буквы и не ограничивает введённое значение
+  молча.
 - Preview всегда показывает ночную сцену со световым краем и glow-эффектом; пользователь не
   выбирает дневной/ночной режим. Glow не заменяет читаемый контур.
 - Preview не использует отдельную фотографию, иллюстрацию, сплошную подложку или замкнутую рамку.

@@ -16,12 +16,15 @@ export type ProjectCheckFormStatus =
   | "idle"
   | "invalid"
   | "prototype_validated"
-  | "prototype_unavailable";
+  | "prototype_unavailable"
+  | "uploading"
+  | "submitted";
 
 export interface ProjectCheckFormState {
   status: ProjectCheckFormStatus;
   message: string;
   fieldErrors: ProjectCheckFieldErrors;
+  leadId?: string;
 }
 
 export const initialProjectCheckFormState: ProjectCheckFormState = {

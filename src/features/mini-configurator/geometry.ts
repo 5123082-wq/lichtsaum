@@ -1,3 +1,7 @@
+import {
+  MINI_CONFIGURATOR_CONSTRAINTS,
+  isWithinMiniConfiguratorConstraint
+} from "@/features/mini-configurator/constraints";
 import type {
   MiniConfiguratorConfig,
   MiniConfiguratorGeometry,
@@ -50,7 +54,21 @@ export function evaluateMiniConfiguratorGeometry(
   const compositionWidthMm = compositionEndMm - compositionStartMm;
   const issues: MiniConfiguratorGeometryIssue[] = [];
 
-  if (configuration.letterHeightMm > configuration.valanceHeightMm) {
+  if (
+    !isWithinMiniConfiguratorConstraint(
+      configuration.valanceHeightMm,
+      MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm
+    )
+  ) {
+    issues.push("VALANCE_HEIGHT_OUT_OF_RANGE");
+  }
+
+  if (
+    !isWithinMiniConfiguratorConstraint(
+      configuration.letterHeightMm,
+      MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm
+    )
+  ) {
     issues.push("LETTERS_TOO_TALL");
   }
 

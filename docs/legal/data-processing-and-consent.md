@@ -1,7 +1,7 @@
 # Data Processing and Consent
 
-Status: `Proposed`; current prototype flows verified, production vendors and retention are `TBD`  
-Last reviewed: 2026-08-04
+Status: `Proposed`; local lead/email flow verified, production legal approval remains `TBD`
+Last reviewed: 2026-08-06
 
 Этот файл — источник истины для planned/actual data flows. Обновлять до подключения каждого
 vendor.
@@ -10,21 +10,48 @@ vendor.
 
 | Processing | Data | Purpose | Basis/status | Consent category | Processor | Retention |
 | --- | --- | --- | --- | --- | --- | --- |
-| Server/security logs | IP, time, request metadata | Delivery, abuse/security | TBD assessment | Necessary | Hosting TBD | TBD |
-| Direct email/phone contact | Contact data and request content | Respond/pre-contract steps | Art. 6(1)(b) or (f), case-dependent | Not marketing consent | Email/telecom provider TBD | Purpose and statutory duties |
-| Prototype form validation | Email; optional phone, message and selected files | Validate format/size rules without accepting a lead | Current local prototype only; final legal assessment before activation | Necessary prototype function | Application runtime only | No persistent storage |
-| Mini-configurator session state | Inscription, dimensions, design and color choices | Preserve configuration during the browser session | Browser-local; § 25 TDDDG classification is TBD because the current implementation writes automatically on load | TBD | None; browser `sessionStorage` | Browser session |
-| Production lead request | Contact, request details and optional files | Respond/pre-contract steps | Disabled; TBD legal confirmation | Not marketing consent | CRM/store TBD | TBD |
-| Lead notification | Lead/contact data | Operational response | Disabled; TBD legal confirmation | Not marketing consent | Email TBD | TBD |
+| Server/security logs | IP, time, request metadata; no form body logged by the application | Delivery, abuse/security | Art. 6(1)(f), legitimate security and delivery interest | Necessary | Vercel Inc.; current Hobby runtime-log access is 1 hour | 1 hour for runtime logs; build/deployment records follow Vercel account retention |
+| Direct email/phone contact | Contact data and request content | Respond/pre-contract steps | Art. 6(1)(b) or (f), case-dependent | Not marketing consent | Cloudflare, Inc. Email Routing; Google Ireland Limited Gmail; telecom provider | Normally 90 days after the request; longer only for active handling, legal claims or statutory duties |
+| Disabled-environment form validation | Email; optional phone, message and selected files | Validate format/size rules without accepting a lead | Used whenever lead feature flags are off | Necessary prototype function | Application runtime only | No persistent storage |
+| Mini-configurator session state | Inscription, dimensions, design and color choices | Preserve configuration during the browser session | Browser-local; writing starts only after the visitor operates the requested configurator function | Necessary | None; browser `sessionStorage` | Browser session |
+| Enabled lead request | Contact, request details and optional file metadata | Respond/pre-contract steps | Implemented and live-tested locally; production legal confirmation TBD | Not marketing consent | Neon PostgreSQL (`eu-central-1`), onboarding/DPA review pending | 90 days approved as technical default; statutory exceptions TBD |
+| Enabled lead files | Up to five JPG/PNG/WebP/PDF files, 15 MB each and 50 MB combined | Object-specific project review | Implemented and live-tested locally; production malware/legal gates remain | Necessary form function; final assessment pending | Private Vercel Blob (`fra1`), onboarding/DPA review pending | 90 days |
+| Lead notification | Contact/request content and signed file links | Operational response | Implemented and delivery-tested locally | Not marketing consent | Plus Five Five, Inc. (Resend), sending region `eu-west-1`; Cloudflare, Inc.; Google Ireland Limited | Operational mailbox policy: 90 days; Resend processes while the agreement is active and states deletion within 90 days after account termination |
 | CMP | Consent choice/version/time | Prove and respect choice | TBD | Necessary | CMP TBD | TBD |
 | GA4 | Pseudonymous usage events | Analytics | Consent required in project policy | Analytics | Google | GA setting TBD |
 | Google Ads | Conversion/ad signals | Measurement/advertising | Consent required in project policy | Marketing | Google | Account setting TBD |
 | Enhanced Conversions | Hashed first-party data | Ads matching/measurement | Disabled; separate review | Marketing/ad user data | Google | TBD |
 | Local fonts | Font files | Rendering | No external request | Necessary | Hosting | Cache policy |
 
-The current prototype has no CMP, GA4, Google Ads, GTM, Enhanced Conversions, CRM, chat, AI service
-or external-media embed active. Rows describing those systems are planning inventory, not current
-processing.
+The current project has no CMP, GA4, Google Ads, GTM, Enhanced Conversions, CRM, chat, AI service
+or external-media embed active. Neon, Private Vercel Blob and Resend are active only in explicitly
+enabled environments; production release remains fail-closed through environment flags and legal
+review markers.
+
+## Resolved release facts
+
+- The confirmed provider designation is centralized in `siteConfig` and shown in the Impressum.
+- The current product site contains no journalistic-editorial section. Reassess before adding a
+  blog, news or comparable editorial publication.
+- No analytics, advertising, CMP or external-media technology is active in the current codebase.
+  Adding one reopens the consent and disclosure review.
+- The mini-configurator starts browser-local session storage only after user interaction.
+- The application performs no solely automated decision-making or profiling under Art. 22 DSGVO.
+- The public privacy page contains a separate Art. 21 DSGVO objection notice and contact route.
+- The owner confirmed there is no separately appointed data-protection officer; the responsible
+  company is the privacy contact shown on the page.
+- File selection includes a concise instruction to upload only project-related files the sender is
+  permitted to provide. This does not replace access control, security or deletion duties after
+  receipt.
+- Current processors and routing providers are identified by legal entity: Vercel Inc., Neon, LLC,
+  Plus Five Five, Inc. (Resend), Cloudflare, Inc. and Google Ireland Limited. Resend and Cloudflare
+  incorporate DPAs and EU SCC mechanisms into their service terms; Neon publishes a DPA and
+  subprocessor register. Vercel's published DPA currently states that processor coverage applies to
+  Pro and Enterprise, not the project's current Hobby plan; this remains a production blocker.
+- Current Vercel Hobby runtime logs are retained for one hour. The application does not log request
+  bodies, contact fields, tokens or uploaded content.
+- Operational lead, file and mailbox retention is 90 days, with seven-day signed file links and
+  narrowly stated legal/active-case exceptions. No CRM or consent records exist in the current flow.
 
 Do not mark a `TBD` lawful basis as final legal advice.
 
@@ -67,12 +94,17 @@ storage is denied; choose only after German legal/privacy review and accurate di
 - Marketing/newsletter opt-in is separate, optional and unchecked.
 - No contact data in URL or thank-you route.
 - No form values in `dataLayer`, GA4 parameters, page titles or server logs.
-- The local prototype may expose optional selection and removable local previews for up to five
-  files of at most 15 MB each. On test submission, files are transmitted to the application runtime
-  only for validation and are not persisted, accepted as a lead or forwarded to third parties.
-  Production file upload is still out of v1 scope; activating it requires content warnings,
-  storage/retention/access-control design and malware handling.
+- The form accepts optional selection and removable local previews for up to five JPG, PNG, WebP
+  or PDF files of at most 15 MB each and 50 MB combined. The implemented production path reserves
+  exact random file records in Neon and uploads content directly to Private Vercel Blob; no public
+  Blob URL is exposed. Upload authorization expires after 30 minutes and the approved technical
+  retention deadline is 90 days. Notification links are HMAC-signed, contain no contact data and
+  expire after seven days. Delivery through Resend and an email-based three-attempts-per-15-minute
+  application limit were live-tested locally. Production activation remains blocked on malware
+  handling, processor onboarding and final privacy review.
 - CRM/email failure must not leak technical or personal detail to the visitor.
+- Resend sends with a per-lead idempotency key so a retry within the provider window does not create
+  a duplicate operational notification.
 
 ## Analytics PII boundary
 

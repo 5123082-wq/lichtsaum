@@ -6,15 +6,27 @@ import {
   Paperclip,
   Trash
 } from "@phosphor-icons/react";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { upload } from "@vercel/blob/client";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+  type FormEvent
+} from "react";
 
-import { submitProjectCheck } from "./action";
 import {
   isAcceptedProjectFileType,
   MAX_PROJECT_FILES,
   MAX_PROJECT_FILE_SIZE,
+  MAX_PROJECT_FILES_TOTAL_SIZE,
   PROJECT_FILE_ACCEPT
 } from "./file-rules";
+import {
+  confirmProjectFileUpload,
+  finalizeProjectCheckSubmission,
+  prepareProjectCheckSubmission
+} from "./submission-action";
 import {
   initialProjectCheckFormState,
   type ProjectCheckFieldName,
@@ -164,10 +176,8 @@ function ErrorSummary({ state }: { state: ProjectCheckFormState }) {
 }
 
 export function LeadForm() {
-  const [state, formAction, isPending] = useActionState(
-    submitProjectCheck,
-    initialProjectCheckFormState
-  );
+  const [state, setState] = useState(initialProjectCheckFormState);
+  const [isPending, startTransition] = useTransition();
   const [attachments, setAttachments] = useState<ProjectAttachment[]>([]);
   const [fileSelectionError, setFileSelectionError] = useState("");
   const resultRef = useRef<HTMLDivElement>(null);
@@ -210,8 +220,27 @@ export function LeadForm() {
       0,
       MAX_PROJECT_FILES - attachments.length
     );
-    const addedAttachments = acceptedFiles
+    const availableBytes = Math.max(
+      0,
+      MAX_PROJECT_FILES_TOTAL_SIZE -
+        attachments.reduce((total, attachment) => total + attachment.file.size, 0)
+    );
+    let selectedBytes = 0;
+    const filesWithinTotalLimit = acceptedFiles
       .slice(0, availableSlots)
+      .filter((file) => {
+        if (selectedBytes + file.size > availableBytes) {
+          return false;
+        }
+
+        selectedBytes += file.size;
+        return true;
+      });
+    const rejectedTotalSize = filesWithinTotalLimit.length < Math.min(
+      acceptedFiles.length,
+      availableSlots
+    );
+    const addedAttachments = filesWithinTotalLimit
       .map((file) => {
         const previewUrl = file.type.startsWith("image/")
           ? URL.createObjectURL(file)
@@ -226,7 +255,11 @@ export function LeadForm() {
     const nextAttachments = [...attachments, ...addedAttachments];
     const nextFiles = nextAttachments.map((attachment) => attachment.file);
 
-    if (rejectedSize) {
+    if (rejectedTotalSize) {
+      setFileSelectionError(
+        "Alle Dateien zusammen dürfen höchstens 50 MB groß sein."
+      );
+    } else if (rejectedSize) {
       setFileSelectionError(
         "Dateien über 15 MB wurden nicht hinzugefügt."
       );
@@ -281,14 +314,89 @@ export function LeadForm() {
 
   const hasResult =
     state.status === "prototype_validated" ||
-    state.status === "prototype_unavailable";
+    state.status === "prototype_unavailable" ||
+    state.status === "submitted";
+
+  function submitForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    startTransition(async () => {
+      try {
+        const prepared = await prepareProjectCheckSubmission({
+          email: String(formData.get("email") ?? ""),
+          phone: String(formData.get("phone") ?? ""),
+          projectContext: String(formData.get("projectContext") ?? ""),
+          website: String(formData.get("website") ?? ""),
+          sourcePath: window.location.pathname,
+          files: attachments.map((attachment) => ({
+            name: attachment.file.name,
+            type: attachment.file.type,
+            size: attachment.file.size
+          }))
+        });
+
+        if (prepared.kind === "result") {
+          setState(prepared.state);
+          return;
+        }
+
+        setState({
+          status: "uploading",
+          message: "Ihre Dateien werden sicher übertragen.",
+          fieldErrors: {}
+        });
+
+        for (const [index, plannedFile] of prepared.plan.files.entries()) {
+          const attachment = attachments[index];
+
+          if (!attachment) {
+            throw new Error("The local file selection changed during upload.");
+          }
+
+          const blob = await upload(plannedFile.pathname, attachment.file, {
+            access: "private",
+            handleUploadUrl: "/api/lead-files/upload",
+            clientPayload: JSON.stringify({
+              leadId: prepared.plan.leadId,
+              fileId: plannedFile.fileId,
+              uploadToken: prepared.plan.uploadToken
+            })
+          });
+
+          await confirmProjectFileUpload({
+            leadId: prepared.plan.leadId,
+            fileId: plannedFile.fileId,
+            uploadToken: prepared.plan.uploadToken,
+            pathname: blob.pathname,
+            contentType: blob.contentType
+          });
+        }
+
+        setState(
+          await finalizeProjectCheckSubmission(
+            prepared.plan.leadId,
+            prepared.plan.uploadToken
+          )
+        );
+      } catch {
+        setState({
+          status: "prototype_unavailable",
+          message:
+            "Die Projektanfrage konnte nicht sicher gespeichert werden. Bitte versuchen Sie es später erneut.",
+          fieldErrors: {}
+        });
+      }
+    });
+  }
 
   return (
     <form
       className="border-y border-[var(--border)]"
       id="project-check-form"
       name="project-check-form"
-      action={formAction}
+      onSubmit={submitForm}
       aria-labelledby="project-check-title"
       noValidate
     >
@@ -313,7 +421,9 @@ export function LeadForm() {
                   aria-live="polite"
                 >
                   <h3 className="m-0 text-lg font-bold text-[var(--text-primary)]">
-                    Prototyp-Prüfung abgeschlossen
+                    {state.status === "submitted"
+                      ? "Projektanfrage übermittelt"
+                      : "Prototyp-Prüfung abgeschlossen"}
                   </h3>
                   <p className="mt-2 text-sm text-[var(--text-muted)]">
                     {state.message}
@@ -451,7 +561,7 @@ export function LeadForm() {
                     id="projectFiles-hint"
                   >
                     JPG, PNG, WebP oder PDF · maximal 15 MB je Datei · bis zu 5
-                    Dateien · optional
+                    Dateien · zusammen maximal 50 MB · optional
                   </span>
                 </label>
               ) : (
@@ -518,7 +628,8 @@ export function LeadForm() {
                     className="mb-0 mt-3 text-center text-xs leading-5 text-[var(--text-muted)]"
                     id="projectFiles-hint"
                   >
-                    {attachments.length}/5 Dateien · maximal 15 MB je Datei
+                    {attachments.length}/5 Dateien · maximal 15 MB je Datei ·
+                    zusammen maximal 50 MB
                   </p>
                 </div>
               )}
@@ -533,6 +644,10 @@ export function LeadForm() {
               </p>
             ) : null}
             <FieldError field="projectFiles" state={state} />
+            <p className="mt-2 text-xs leading-5 text-[var(--text-muted)]">
+              Bitte laden Sie nur projektbezogene Dateien hoch, die Sie uns
+              zur Bearbeitung Ihrer Anfrage übermitteln dürfen.
+            </p>
           </div>
 
         </div>
@@ -569,11 +684,19 @@ export function LeadForm() {
             type="submit"
             disabled={isPending}
           >
-            {isPending ? "Formular wird geprüft…" : "Projekt prüfen lassen"}
+            {state.status === "uploading"
+              ? "Dateien werden übertragen…"
+              : isPending
+                ? "Formular wird geprüft…"
+                : "Projekt prüfen lassen"}
           </button>
         </div>
         <p className="sr-only" aria-live="polite">
-          {isPending ? "Formular wird geprüft." : ""}
+          {state.status === "uploading"
+            ? "Dateien werden sicher übertragen."
+            : isPending
+              ? "Formular wird geprüft."
+              : ""}
         </p>
       </div>
     </form>

@@ -13,8 +13,10 @@ Last verified against official sources: 2026-08-04
 - Lead generation / project compatibility review and later non-binding quote request.
 - No online checkout or contract conclusion in v1.
 - Personal data: contact/project-review form, server logs and later CRM/email.
-- Project-photo/file upload is proposed but not approved; storage, metadata, access, retention and
-  processor scope must be documented before implementation.
+- Project-photo/file upload and Resend notification are implemented and live-tested in an enabled
+  local environment with Neon metadata, Private Vercel Blob and a 90-day technical retention
+  deadline; malware handling, processor review and final privacy approval remain open before
+  production activation.
 - Analytics/advertising only through consent-aware implementation.
 
 Any change to booking, payment, binding ordering, newsletter, approved upload design, chat, maps or
@@ -24,11 +26,11 @@ video changes the legal/data scope and requires this document to be updated firs
 
 | Area | Requirement / risk | Current status | Release gate |
 | --- | --- | --- | --- |
-| `Impressum` | Provider information must be easily reachable and continuously available | Local page implemented; five unresolved checks are marked contextually | Resolve every internal marker and complete legal review |
-| `Datenschutzerklärung` | Describe all actual processing, processors, transfers, retention and rights | Local page matches the current prototype; eleven production inputs are marked contextually | Update against final deployment, remove markers and obtain legal review |
-| TDDDG / cookies | Non-essential storage/access generally requires informed consent | Architecture decided | Consent QA passes |
+| `Impressum` | Provider information must be easily reachable and continuously available | Confirmed provider designation is published; three company-specific checks remain | Resolve every internal marker and complete legal review |
+| `Datenschutzerklärung` | Describe all actual processing, processors, transfers, retention and rights | Local page describes environment-gated Neon, Vercel Blob and Resend flows; unresolved production inputs remain marked | Update against final deployment, remove markers and obtain legal review |
+| TDDDG / cookies | Non-essential storage/access generally requires informed consent | No cookies or optional technologies; configurator session storage starts only after user action | Reassess before adding optional technology |
 | GDPR form processing | Purpose, lawful basis, minimization, transparency and security | Planned | Form/data inventory reviewed |
-| Processor contracts | DPA/Art. 28 assessment for hosting, CRM, email, CMP and vendors | TBD | Vendor register complete |
+| Processor contracts | DPA/Art. 28 assessment for hosting and lead vendors | Resend, Cloudflare and Neon publish applicable DPA/SCC terms; Vercel's published DPA covers Pro/Enterprise while this project is on Hobby | Resolve Vercel commercial-plan/DPA mismatch before public production |
 | Advertising claims | No misleading price, origin, guarantee, certification or availability claims | Register created | Only Approved claims |
 | VSBG | Consumer dispute information may apply; employee threshold/participation facts needed | TBD | Legal/company input |
 | EU ODR | Old OS-platform link is obsolete after platform closure in 2025 | Decision | Do not include |
@@ -62,6 +64,11 @@ Pixel-Ring and authorized adapting the supplied legal pages:
 - `info@nvkv.de` and the two telephone numbers published in the source Impressum;
 - VAT ID `DE367887602`;
 - no willingness or obligation to participate in consumer dispute resolution.
+- no register entry or separate register information to publish;
+- no separately appointed data-protection officer; the responsible company remains the contact;
+- NVKV provides and coordinates the result; no regulated professional designation, chamber or
+  supervisory authority is claimed for the current offer. Reassess if NVKV itself later undertakes
+  regulated installation or electrical work.
 
 Source pages checked on 2026-08-04:
 
@@ -72,11 +79,10 @@ The obsolete EU ODR/OS-platform link present in the source Impressum was deliber
 
 ## Remaining company and deployment inputs
 
-- Chamber, professional title/rules and supervisory authority, if applicable.
-- Employee count relevant to VSBG.
-- Register and Wirtschafts-ID details, if applicable.
-- Data-protection-officer contact, if one is required.
-- Production hosting, email/CRM provider, recipients and exact retention periods.
+- Vercel production hosting: the current Hobby plan is documented as personal/non-commercial and
+  Vercel's published processor DPA applies to Pro and Enterprise. A commercial public launch on the
+  current plan is therefore not approved by this engineering review.
+- Production domain HTTPS/security verification and malware handling for uploaded files.
 - Service/product contract classification and business model.
 
 ## Official sources

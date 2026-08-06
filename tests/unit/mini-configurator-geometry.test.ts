@@ -60,14 +60,45 @@ describe("mini configurator geometry", () => {
     expect(geometry.textCenterMm).toBe(1500);
   });
 
-  it("reports a letter height larger than the valance height", () => {
+  it.each([200, 300])(
+    "accepts the %i mm valance-height boundary",
+    (valanceHeightMm) => {
+      const geometry = evaluateMiniConfiguratorGeometry(
+        {
+          ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
+          valanceHeightMm,
+          letterHeightMm: 180
+        },
+        { ...measurement, visibleHeightMm: 180 }
+      );
+
+      expect(geometry.issues).not.toContain("VALANCE_HEIGHT_OUT_OF_RANGE");
+      expect(geometry.issues).not.toContain("LETTERS_TOO_TALL");
+    }
+  );
+
+  it.each([199, 301])(
+    "reports the out-of-range %i mm valance height",
+    (valanceHeightMm) => {
+      const geometry = evaluateMiniConfiguratorGeometry(
+        {
+          ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
+          valanceHeightMm
+        },
+        measurement
+      );
+
+      expect(geometry.issues).toContain("VALANCE_HEIGHT_OUT_OF_RANGE");
+    }
+  );
+
+  it("reports a letter height above 180 mm", () => {
     const geometry = evaluateMiniConfiguratorGeometry(
       {
         ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
-        valanceHeightMm: 200,
-        letterHeightMm: 240
+        letterHeightMm: 181
       },
-      { ...measurement, visibleHeightMm: 240 }
+      { ...measurement, visibleHeightMm: 181 }
     );
 
     expect(geometry.issues).toContain("LETTERS_TOO_TALL");
