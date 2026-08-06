@@ -2,7 +2,7 @@
 
 ## Context Beacon
 
-- Last updated: 2026-08-04
+- Last updated: 2026-08-06
 - Current stage: local non-indexable landing prototype complete / product validation still pending
 - Active track: local gallery review complete with four temporary concept visuals; awaiting four
   real, rights-cleared project photographs while validating the underlying offer
@@ -10,10 +10,9 @@
   - a Next.js 16 App Router prototype is initialized with pinned dependencies and strict TypeScript;
   - the responsive German landing is implemented locally for the exact-category B2B retrofit offer,
     with restaurants/cafés as the primary segment and `Projekt prüfen lassen` as the CTA;
-  - the final project-check is reduced to one required email plus optional phone, short message and
-    up to five JPG/PNG/WebP/PDF files of at most 15 MB each; image thumbnails, labelled PDF items
-    and per-file removal work locally, while the prototype deliberately does not store or send the
-    selected files, track, persist or create a lead;
+  - the final project-check uses one required email plus optional phone, short message and up to five
+    JPG/PNG/WebP/PDF files of at most 15 MB each; in explicitly enabled environments it persists the
+    lead in Neon, uploads files to Private Vercel Blob and sends an idempotent Resend notification;
   - the responsive hero uses an owner-supplied, aligned off/on concept pair: a close commercial
     awning and modern facade transition into technical linework, while only the `LICHTSAUM`
     lettering illuminates during the scroll scene; mobile preserves the same narrative with a shorter
@@ -21,7 +20,18 @@
     `prefers-reduced-motion` remains static; owner-supplied or expressly approved
     visual assets are authorised for use on the site;
   - local metadata, headers and `robots.txt` explicitly prevent indexing; no canonical, sitemap,
-    Schema, GTM, analytics, CMP, CRM or email integration is active;
+    Schema, GTM, analytics, CMP or CRM integration is active; Resend notification is locally active;
+  - a Neon PostgreSQL database in `eu-central-1` has the versioned `leads` and `lead_files` schema;
+    the environment-gated intake was live-tested from browser submission through persistence and
+    notification, while production activation remains a separate release decision;
+  - a private Vercel Blob store in `fra1` is integrated in code with server-authorized direct
+    uploads, exact random paths, a 30-minute upload grant, limits of five files × 15 MB / 50 MB
+    combined and a protected daily 90-day retention cleanup; a synthetic private Blob was uploaded,
+    inspected and downloaded through a seven-day HMAC-signed server link; activation remains
+    blocked on malware handling and final processor/privacy review;
+  - Resend is configured in `eu-west-1` with verified `lichtsaum.com` DNS and a sending-only,
+    domain-scoped API key; live tests confirmed `sent` and `delivered` events for both a browser lead
+    without files and an integration lead with a private PNG, with `Reply-To` set to the requester;
   - all three `#wirkung` cards use owner-supplied night images, monochrome by default and colour
     on hover, focus or activation;
   - the new `#praezision` section presents three interactive, explicitly schematic views for
@@ -31,8 +41,10 @@
     a responsive front-view SVG uses real valance and letter dimensions in millimetres, exact
     selected-font measurement, eight self-hosted fonts, three explicit composition modes, colour controls and a
     compact fixed night preview below a single horizontal rule with a softly fading gray atmosphere layer, explicit fit errors and a versioned non-personal `sessionStorage` transfer
-    contract;
-    no price, formula, upload, AI render or full configurator route is implemented;
+    contract that starts writing only after user interaction; local validation now limits valance height to 200–300 mm and letter height to
+    1–180 mm without silently changing entered values;
+    no price, formula, upload, AI render or full configurator route is implemented; the
+    owner-supplied component costs are documented as an internal future calculation contract only;
   - the accepted three-pass marker system is applied to the HTML/Caveat transformation slogan and
     individually approved compact section eyebrows, including the new `FAQ` treatment; the
     superseded `RETROFIT` loop is retired;
@@ -58,10 +70,13 @@
   - the footer closes with a restrained illuminated `LICHTSAUM` signature: it gently brightens once
     on viewport entry with a cold white-blue light, respects reduced motion, and sits above only the
     quiet `Impressum` and `Datenschutz` links;
+  - a proposed compact `LICHTSAUM` mark now has one vector master plus local favicon, Apple icon and
+    Instagram exports; the local prototype uses it as its browser icon, while identity acceptance
+    and trademark availability remain pending owner review;
   - dedicated German `/impressum` and `/datenschutz` pages use the owner-confirmed Pixel-Ring
     provider facts for the same responsible business, identify LICHTSAUM as its offer and describe
     only the current prototype data flows; the obsolete EU ODR link and Pixel-Ring-specific
-    chat/OpenAI processing were not copied; 16 unresolved release inputs are shown contextually as
+    chat/OpenAI processing were not copied; 4 unresolved release inputs are shown contextually as
     bright internal-only legal review markers, and production indexing fails closed until they are
     resolved;
   - unit, lint, type, build, WCAG, scroll-scene and seven-width responsive checks pass;
@@ -129,13 +144,38 @@
 | Design system | Local prototype complete | Owner approves responsive visual implementation |
 | Content | German draft complete | Claims, legal facts and final copy approved |
 | Application | Local noindex prototype complete | Product `GO`, then production activation gates pass |
-| Lead flow | Validation-only prototype | Provider selected; protected persistence and delivery tested |
+| Lead flow | Local end-to-end persistence, private file and delivered email verified | Malware handling, processor/privacy approval and production submission pass |
 | Search foundation | Local noindex boundary complete | Production metadata, canonical, sitemap and Schema validated |
 | Analytics/consent | Planned | Consent matrix and conversion QA pass |
 | Legal | Local pages implemented / production review pending | Final vendors, retention and business-specific legal review confirmed |
 | Launch | Not started | Production release gate passes |
 
 ## Latest material updates
+
+### 2026-08-06 — Evidence-backed legal marker reduction
+
+- Closed seven release markers from existing owner-confirmed facts and verified code: provider
+  designation, current absence of editorial publishing and optional tracking, user-initiated
+  configurator storage, absence of automated decisions/profiling, and an explicit Art. 21 DSGVO
+  objection notice.
+- Closed the remaining company-specific prompts after the owner confirmed no register entry and no
+  separately appointed data-protection officer; employee count is neither requested nor published,
+  because the existing VSBG statement already records the confirmed participation position.
+- Filled the vendor register with the known legal entities, regions, transfer mechanisms and
+  retention criteria; closed the email-provider and retention markers.
+- Kept four deployment/security-specific legal inputs open; production indexing remains
+  fail-closed until they are resolved.
+
+### 2026-08-06 — Mini-configurator physical limits and internal cost contract
+
+- Centralized the local mini-configurator limits at 200–300 mm inclusive for valance height and
+  1–180 mm inclusive for letter height; out-of-range values remain visible, receive an accessible
+  German error and block continuation without automatic clamping.
+- Kept the version-2 non-personal `sessionStorage` shape and key unchanged while rejecting stored
+  configurations outside the new limits on restore.
+- Recorded the owner-supplied electrical, running-metre and 600/1000/1200 mm panel inputs as
+  internal net component costs only. No price or panel allocation appears in the UI; public
+  pricing, maximum panel count and mounting gaps remain gated.
 
 ### 2026-08-04 — Approved compact navigation and Kontakt entry
 

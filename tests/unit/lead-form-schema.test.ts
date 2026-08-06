@@ -134,6 +134,29 @@ describe("projectCheckSchema", () => {
     }
   });
 
+  it("rejects project files larger than 50 MB in total", () => {
+    const projectFiles = Array.from(
+      { length: 4 },
+      (_, index) =>
+        new File(
+          [new Uint8Array(13 * 1024 * 1024)],
+          "markise-" + index + ".jpg",
+          { type: "image/jpeg" }
+        )
+    );
+    const result = projectCheckSchema.safeParse({
+      ...validInput,
+      projectFiles
+    });
+
+    expect(result.success).toBe(false);
+
+    if (!result.success) {
+      expect(result.error.issues[0]?.path[0]).toBe("projectFiles");
+      expect(result.error.issues[0]?.message).toContain("50 MB");
+    }
+  });
+
   it("rejects a completed honeypot", () => {
     const result = projectCheckSchema.safeParse({
       ...validInput,

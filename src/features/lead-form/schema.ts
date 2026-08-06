@@ -3,7 +3,8 @@ import { z } from "zod";
 import {
   isAcceptedProjectFileType,
   MAX_PROJECT_FILES,
-  MAX_PROJECT_FILE_SIZE
+  MAX_PROJECT_FILE_SIZE,
+  MAX_PROJECT_FILES_TOTAL_SIZE
 } from "./file-rules";
 
 const optionalTrimmedText = (maximum: number, message: string) =>
@@ -30,7 +31,7 @@ const projectFile = z
     "Eine Datei darf höchstens 15 MB groß sein."
   );
 
-export const projectCheckSchema = z.object({
+export const projectCheckContactSchema = z.object({
   email: z
     .string()
     .trim()
@@ -45,13 +46,22 @@ export const projectCheckSchema = z.object({
     1000,
     "Die Nachricht darf höchstens 1.000 Zeichen lang sein."
   ),
-  projectFiles: z
-    .array(projectFile)
-    .max(MAX_PROJECT_FILES, "Sie können höchstens fünf Dateien auswählen."),
   website: z
     .string()
     .max(0, "Die Anfrage konnte nicht geprüft werden.")
     .default("")
+});
+
+export const projectCheckSchema = projectCheckContactSchema.extend({
+  projectFiles: z
+    .array(projectFile)
+    .max(MAX_PROJECT_FILES, "Sie können höchstens fünf Dateien auswählen.")
+    .refine(
+      (files) =>
+        files.reduce((total, file) => total + file.size, 0) <=
+        MAX_PROJECT_FILES_TOTAL_SIZE,
+      "Alle Dateien zusammen dürfen höchstens 50 MB groß sein."
+    )
 });
 
 export type ProjectCheckInput = z.infer<typeof projectCheckSchema>;

@@ -39,6 +39,9 @@ export function generateMetadata(): Metadata {
 
 export default function DatenschutzPage() {
   const { legal } = siteConfig;
+  const leadIntakeEnabled =
+    process.env.LEAD_INTAKE_ENABLED === "true" &&
+    process.env.LEAD_ATTACHMENTS_ENABLED === "true";
 
   return (
     <>
@@ -65,6 +68,7 @@ export default function DatenschutzPage() {
               den geltenden Datenschutzvorschriften, insbesondere der DSGVO und
               dem Bundesdatenschutzgesetz (BDSG).
             </p>
+            <LegalReviewTodo item="hostingAndLogs" />
             <p>
               Personenbezogene Daten sind alle Informationen, mit denen eine
               Person direkt oder indirekt identifiziert werden kann. Welche
@@ -87,7 +91,6 @@ export default function DatenschutzPage() {
               </span>
             </address>
             <p>{legal.brandRelationship}</p>
-            <LegalReviewTodo item="dataProtectionOfficer" />
           </section>
 
           <section aria-labelledby="zwecke-rechtsgrundlagen">
@@ -116,7 +119,6 @@ export default function DatenschutzPage() {
               zu gewährleisten und Missbrauch abzuwehren. Rechtsgrundlage ist
               Art. 6 Abs. 1 lit. f DSGVO.
             </p>
-            <LegalReviewTodo item="hostingAndLogs" />
           </section>
 
           <section aria-labelledby="speichertechnologien">
@@ -129,7 +131,7 @@ export default function DatenschutzPage() {
               Tag-Manager und externe Medien sind nicht eingebunden.
             </p>
             <p>
-              Der Mini-Konfigurator speichert seine aktuelle Konfiguration –
+              Sobald Sie den Mini-Konfigurator bedienen, speichert er seine aktuelle Konfiguration –
               zum Beispiel Beschriftung, Maße, Farben und Gestaltungswahl – im
               <code>sessionStorage</code> Ihres Browsers. Diese Daten bleiben auf
               Ihrem Gerät, werden nicht an uns übertragen und werden in der
@@ -138,8 +140,6 @@ export default function DatenschutzPage() {
               Konfiguratorfunktion innerhalb der Sitzung bereitzustellen. Sie
               wird ausschließlich im Browser gespeichert.
             </p>
-            <LegalReviewTodo item="sessionStorage" />
-            <LegalReviewTodo item="optionalTechnologies" />
           </section>
 
           <section aria-labelledby="projektanfragen">
@@ -152,17 +152,28 @@ export default function DatenschutzPage() {
               um vorvertragliche Maßnahmen geht, andernfalls Art. 6 Abs. 1 lit.
               f DSGVO.
             </p>
-            <p>
-              Das Projektformular ist derzeit eine Prototypfunktion. Bei einer
-              Testübermittlung verarbeitet der Anwendungsserver die eingegebene
-              E-Mail-Adresse sowie optional Telefonnummer, Nachricht und
-              ausgewählte Dateien vorübergehend, um Format- und Größenregeln zu
-              prüfen. Die Angaben werden nicht dauerhaft gespeichert, nicht als
-              Anfrage angenommen und nicht an Dritte weitergegeben. Lokale
-              Bildvorschauen werden zusätzlich nur im Browser erzeugt und beim
-              Entfernen der Datei oder Verlassen der Seite verworfen.
-            </p>
-            <LegalReviewTodo item="contactProviders" />
+            {leadIntakeEnabled ? (
+              <p>
+                Wenn das Projektformular eine erfolgreiche Übermittlung
+                bestätigt, speichern wir die eingegebene E-Mail-Adresse sowie
+                optional Telefonnummer, Nachricht und Dateimetadaten in einer
+                Datenbank. Ausgewählte Dateien werden in einen privaten
+                Dateispeicher übertragen. Zur Bearbeitung erhalten wir eine
+                E-Mail-Benachrichtigung über Resend; darin enthaltene
+                Dateilinks sind signiert und sieben Tage gültig. Lokale
+                Bildvorschauen werden nur im Browser erzeugt und beim Entfernen
+                der Datei oder Verlassen der Seite verworfen.
+              </p>
+            ) : (
+              <p>
+                Das Projektformular ist in dieser Umgebung eine
+                Prototypfunktion. Eingaben werden nur auf Format- und
+                Größenregeln geprüft, nicht dauerhaft gespeichert und nicht als
+                Anfrage weitergeleitet. Lokale Bildvorschauen werden nur im
+                Browser erzeugt und beim Entfernen der Datei oder Verlassen der
+                Seite verworfen.
+              </p>
+            )}
             <LegalReviewTodo item="productionFormAndFiles" />
           </section>
 
@@ -178,14 +189,32 @@ export default function DatenschutzPage() {
               vertraglicher und datenschutzrechtlicher Vereinbarungen,
               insbesondere eines Vertrags nach Art. 28 DSGVO, verarbeiten.
             </p>
-            <p>
-              Im aktuellen Prototyp werden keine Formularinhalte an CRM-,
-              Analyse-, Werbe-, Chat- oder KI-Dienste übermittelt. Eine
-              Übermittlung in Drittländer findet über diese Website derzeit
-              nicht statt.
-            </p>
             <LegalReviewTodo item="recipientsAndTransfers" />
-            <LegalReviewTodo item="automatedDecisionMaking" />
+            <p>
+              Für aktivierte Projektanfragen nutzen wir Neon, LLC für die
+              Datenbank in der AWS-Region Frankfurt (eu-central-1), Vercel Inc.
+              für Hosting und privaten Dateispeicher in der Region Frankfurt
+              (fra1) sowie Plus Five Five, Inc. (Resend) für die operative
+              E-Mail-Benachrichtigung aus der EU-Senderegion eu-west-1.
+              Eingehende Nachrichten an info@lichtsaum.com werden durch
+              Cloudflare, Inc. an ein Postfach von Google Ireland Limited
+              weitergeleitet. Formularinhalte werden nicht an Analyse-, Werbe-,
+              Chat- oder KI-Dienste übermittelt.
+            </p>
+            <LegalReviewTodo item="transportSecurity" />
+            <p>
+              Soweit dabei Daten außerhalb der EU oder des EWR verarbeitet
+              werden, stützen die Anbieter die Übermittlung insbesondere auf
+              Angemessenheitsbeschlüsse, das EU-US Data Privacy Framework oder
+              Standardvertragsklauseln der Europäischen Kommission. Die
+              eingesetzten Anbieter veröffentlichen Vereinbarungen zur
+              Auftragsverarbeitung und Listen ihrer Unterauftragnehmer.
+            </p>
+            <p>
+              Eine ausschließlich automatisierte Entscheidungsfindung
+              einschließlich Profiling im Sinne von Art. 22 DSGVO findet nicht
+              statt.
+            </p>
           </section>
 
           <section aria-labelledby="speicherdauer">
@@ -193,13 +222,19 @@ export default function DatenschutzPage() {
             <p>
               Wir speichern personenbezogene Daten nur so lange, wie es für den
               jeweiligen Zweck erforderlich ist oder gesetzliche
-              Aufbewahrungspflichten bestehen. Testeingaben des aktuellen
-              Projektformulars werden nicht persistent gespeichert. Daten aus
+              Aufbewahrungspflichten bestehen. Gespeicherte Projektanfragen,
+              private Dateien und die zugehörigen operativen E-Mail-Nachrichten
+              werden grundsätzlich nach 90 Tagen gelöscht. Signierte
+              Dateilinks sind sieben Tage gültig. Technische Runtime-Logs des
+              derzeitigen Vercel-Tarifs sind eine Stunde abrufbar; die
+              Anwendung schreibt keine Formularinhalte in diese Logs. Eine
+              längere Aufbewahrung erfolgt nur, soweit sie zur weiteren
+              Bearbeitung einer konkreten Anfrage, zur Rechtsverteidigung oder
+              aufgrund gesetzlicher Pflichten erforderlich ist. Daten aus
               direkten E-Mail- oder Telefonanfragen werden gelöscht, sobald die
-              Anfrage abschließend bearbeitet ist und keine gesetzlichen oder
-              berechtigten Gründe für eine weitere Aufbewahrung bestehen.
+              Anfrage abschließend bearbeitet ist und keine solchen Gründe für
+              eine weitere Aufbewahrung bestehen.
             </p>
-            <LegalReviewTodo item="retentionPeriods" />
           </section>
 
           <section aria-labelledby="betroffenenrechte">
@@ -218,7 +253,16 @@ export default function DatenschutzPage() {
               die Zukunft widerrufen. Zur Ausübung Ihrer Rechte genügt eine
               Nachricht an <a href={`mailto:${legal.email}`}>{legal.email}</a>.
             </p>
-            <LegalReviewTodo item="rightToObject" />
+            <aside aria-labelledby="widerspruchsrecht">
+              <h3 id="widerspruchsrecht">Hinweis zum Widerspruchsrecht</h3>
+              <p>
+                Soweit wir Ihre personenbezogenen Daten auf Grundlage von Art.
+                6 Abs. 1 lit. f DSGVO verarbeiten, können Sie aus Gründen, die
+                sich aus Ihrer besonderen Situation ergeben, jederzeit nach
+                Art. 21 DSGVO widersprechen. Eine formlose Nachricht an{" "}
+                <a href={`mailto:${legal.email}`}>{legal.email}</a> genügt.
+              </p>
+            </aside>
           </section>
 
           <section aria-labelledby="beschwerderecht">
@@ -261,7 +305,6 @@ export default function DatenschutzPage() {
               unberechtigtem Zugriff zu schützen. Im öffentlichen Betrieb wird
               die Übertragung über TLS/SSL verschlüsselt.
             </p>
-            <LegalReviewTodo item="transportSecurity" />
           </section>
 
           <section aria-labelledby="aktualisierung">

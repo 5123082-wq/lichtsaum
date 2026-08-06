@@ -43,6 +43,7 @@ export type MiniConfiguratorTextMeasurement = Readonly<{
 }>;
 
 export type MiniConfiguratorGeometryIssue =
+  | "VALANCE_HEIGHT_OUT_OF_RANGE"
   | "LETTERS_TOO_TALL"
   | "COMPOSITION_TOO_WIDE";
 

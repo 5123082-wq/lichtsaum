@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" role="img" aria-labelledby="title desc">
+  <title id="title">LICHT mit vertikalem SAUM</title>
+  <desc id="desc">Das Wort LICHT, dessen I als orangefarbene Säule mit vertikal gesetztem SAUM gestaltet ist.</desc>
+  <rect width="1080" height="1080" fill="#131313"/>
+  <g fill="#E5E2E1" font-family="Hanken Grotesk, Arial, sans-serif" font-size="240" font-weight="800">
+    <text x="116" y="650">L</text>
+    <text x="400" y="650">C</text>
+    <text x="615" y="650">H</text>
+    <text x="850" y="650">T</text>
+  </g>
+  <rect x="314" y="318" width="70" height="392" fill="#FF5C00"/>
+  <g fill="#131313" font-family="JetBrains Mono, Menlo, monospace" font-size="46" font-weight="700" text-anchor="middle">
+    <text x="349" y="392">S</text>
+    <text x="349" y="476">A</text>
+    <text x="349" y="560">U</text>
+    <text x="349" y="644">M</text>
+  </g>
+  <path d="M116 750h848" stroke="#FF5C00" stroke-width="14"/>
+</svg>

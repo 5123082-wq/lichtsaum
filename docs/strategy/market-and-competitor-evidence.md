@@ -3,7 +3,8 @@
 Status: `Verified`  
 Scope: dated source ledger and derived calculations  
 Model status: `Proposed`; every non-source input is labelled  
-Last reviewed: 2026-07-30  
+Last reviewed: 2026-08-06
+
 Geography: Germany, with Berlin/Brandenburg pilot detail and French supply benchmarks  
 Legal note: this is product and engineering research, not legal advice
 
@@ -264,6 +265,10 @@ radio option and projects up to 16 m. The 2026 catalogue controls current intern
 the two sources overlap (E-001, E-002).
 
 ## Internal pricing and unit economics
+
+The owner-supplied component inputs for a possible future configurator are maintained separately
+in [`../architecture/configurator-calculation.md`](../architecture/configurator-calculation.md).
+They do not replace the complete-project planning scenarios below.
 
 ### Direct-cost scenario
 

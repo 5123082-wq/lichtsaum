@@ -33,7 +33,7 @@ describe("mini configurator storage", () => {
     }
   );
 
-  it("rejects unknown versions and invalid physical values", () => {
+  it("rejects unknown versions", () => {
     expect(
       parseMiniConfiguratorStoredState(
         JSON.stringify({
@@ -42,17 +42,42 @@ describe("mini configurator storage", () => {
         })
       )
     ).toBeNull();
+  });
+
+  it.each([
+    ["valanceWidthMm", 0],
+    ["valanceHeightMm", 199],
+    ["valanceHeightMm", 301],
+    ["letterHeightMm", 0],
+    ["letterHeightMm", 181]
+  ] as const)("rejects %s=%i from version 2 storage", (key, value) => {
     expect(
       parseMiniConfiguratorStoredState(
         JSON.stringify({
-          version: 1,
+          version: 2,
           configuration: {
             ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
-            valanceWidthMm: 0
+            [key]: value
           }
         })
       )
     ).toBeNull();
+  });
+
+  it.each([
+    { valanceHeightMm: 200, letterHeightMm: 1 },
+    { valanceHeightMm: 300, letterHeightMm: 180 }
+  ])("accepts the inclusive physical boundaries: %o", (boundaries) => {
+    const configuration = {
+      ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
+      ...boundaries
+    };
+
+    expect(
+      parseMiniConfiguratorStoredState(
+        JSON.stringify({ version: 2, configuration })
+      )
+    ).toEqual(configuration);
   });
 
   it("rejects legacy and unknown composition modes", () => {
