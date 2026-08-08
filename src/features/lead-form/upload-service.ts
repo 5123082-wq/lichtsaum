@@ -23,6 +23,7 @@ import {
   hashUploadToken,
   uploadTokenMatches
 } from "./upload-security";
+import { LeadUploadDiagnosticError } from "./upload-diagnostics";
 import { sendLeadNotification } from "./notification-service";
 
 const LEAD_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
@@ -51,7 +52,7 @@ export async function createLeadUploadPlan(
   manifestInput: unknown
 ): Promise<LeadUploadPlan> {
   if (!attachmentsAreEnabled()) {
-    throw new Error("Lead attachment intake is disabled.");
+    throw new LeadUploadDiagnosticError("LeadUploadIntakeDisabled");
   }
 
   const manifest = uploadManifestSchema.parse(manifestInput);
@@ -134,7 +135,7 @@ export async function authorizeLeadFileUpload(
   payloadInput: string | null
 ) {
   if (!attachmentsAreEnabled() || !payloadInput) {
-    throw new Error("Lead attachment intake is disabled.");
+    throw new LeadUploadDiagnosticError("LeadUploadIntakeDisabled");
   }
 
   const payload = blobUploadPayloadSchema.parse(JSON.parse(payloadInput));
@@ -164,7 +165,7 @@ export async function authorizeLeadFileUpload(
     record.storageKey !== pathname ||
     !uploadTokenMatches(payload.uploadToken, record.uploadTokenHash)
   ) {
-    throw new Error("The upload plan is invalid or expired.");
+    throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
   }
 
   return {
@@ -211,7 +212,7 @@ export async function recordCompletedLeadFileUpload(
     record.mediaType !== contentType
   ) {
     await deletePrivateBlob(pathname);
-    throw new Error("The completed Blob does not match an upload plan.");
+    throw new LeadUploadDiagnosticError("LeadUploadCompletionMismatch");
   }
 
   if (record.status === "uploaded") {
@@ -219,7 +220,7 @@ export async function recordCompletedLeadFileUpload(
   }
 
   if (record.status !== "pending") {
-    throw new Error("The file is no longer awaiting upload.");
+    throw new LeadUploadDiagnosticError("LeadUploadCompletionNotPending");
   }
 
   const blob = await inspectPrivateBlob(pathname);
@@ -230,7 +231,7 @@ export async function recordCompletedLeadFileUpload(
       .update(leadFiles)
       .set({ status: "rejected", deletedAt: new Date() })
       .where(eq(leadFiles.id, record.id));
-    throw new Error("The completed Blob metadata does not match the plan.");
+    throw new LeadUploadDiagnosticError("LeadUploadMetadataMismatch");
   }
 
   await db
@@ -281,7 +282,7 @@ export async function finalizeLeadUploadPlan(
     lead.uploadExpiresAt <= new Date() ||
     !uploadTokenMatches(uploadToken, lead.uploadTokenHash)
   ) {
-    throw new Error("The upload plan is invalid or expired.");
+    throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
   }
 
   const files = await db
@@ -290,7 +291,7 @@ export async function finalizeLeadUploadPlan(
     .where(eq(leadFiles.leadId, lead.id));
 
   if (files.some((file) => file.status !== "uploaded")) {
-    throw new Error("Not all planned files were uploaded successfully.");
+    throw new LeadUploadDiagnosticError("LeadUploadFilesIncomplete");
   }
 
   await sendLeadNotification(leadId);

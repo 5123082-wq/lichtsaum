@@ -5,13 +5,19 @@ import {
   authorizeLeadFileUpload,
   recordCompletedLeadFileUpload
 } from "@/features/lead-form/upload-service";
+import {
+  leadUploadRequestType,
+  logLeadUploadFailure
+} from "@/features/lead-form/upload-diagnostics";
 import { blobCallbackPayloadSchema } from "@/features/lead-form/upload-contract";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  let body: HandleUploadBody | null = null;
+
   try {
-    const body = (await request.json()) as HandleUploadBody;
+    body = (await request.json()) as HandleUploadBody;
     const result = await handleUpload({
       request,
       body,
@@ -30,7 +36,12 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(result);
-  } catch {
+  } catch (error) {
+    logLeadUploadFailure({
+      error,
+      requestType: leadUploadRequestType(body)
+    });
+
     return NextResponse.json(
       { error: "Die Datei konnte nicht sicher hochgeladen werden." },
       { status: 400 }
