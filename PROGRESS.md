@@ -2,7 +2,7 @@
 
 ## Context Beacon
 
-- Last updated: 2026-08-06
+- Last updated: 2026-08-08
 - Current stage: public production landing / product validation still pending
 - Active track: local gallery review complete with four temporary concept visuals; awaiting four
   real, rights-cleared project photographs while validating the underlying offer
@@ -150,6 +150,22 @@
 | Launch | Production active / validation ongoing | Remaining release risks are resolved |
 
 ## Latest material updates
+
+### 2026-08-08 — Production lead file flow repaired and reverified
+
+- Reproduced the production attachment failure and added bounded structured diagnostics that log
+  only the Vercel Blob request phase and a redacted error classification, never contact fields,
+  filenames, request payloads or credentials.
+- Replaced malformed production Blob and Resend credentials with the already verified local
+  server-only values, normalized the Blob read-write token at the application boundary and kept
+  direct browser-to-Private-Blob uploads for the documented 15 MB per-file limit.
+- Fixed the callback/client-confirmation race: a Vercel completion callback may mark a file as
+  uploaded before the browser confirms it, and that repeated confirmation is now idempotent while
+  still requiring the active random upload token.
+- Reverified the current production deployment through browser submission with a JPEG: the private
+  upload completed, the lead reached the accepted state, Resend accepted the operational
+  notification and the visitor received the successful confirmation. Malware handling remains the
+  separate open release risk.
 
 ### 2026-08-06 — Production lead-confirmation recovery
 
