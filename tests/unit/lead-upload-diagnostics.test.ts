@@ -24,7 +24,7 @@ describe("lead upload diagnostics", () => {
     expect(leadUploadRequestType(null)).toBe("invalid");
   });
 
-  it("logs a bounded diagnostic without the error message or submitted data", () => {
+  it("redacts submitted data and credentials from the bounded error detail", () => {
     const consoleError = vi
       .spyOn(console, "error")
       .mockImplementation(() => undefined);
@@ -38,12 +38,11 @@ describe("lead upload diagnostics", () => {
     });
 
     expect(consoleError).toHaveBeenCalledWith("lead_file_upload_failed", {
+      errorDetail: "[email] [filename] [blob-token]",
       errorKind: "Error",
       requestType: "blob.generate-client-token"
     });
-    expect(JSON.stringify(consoleError.mock.calls)).not.toContain(
-      "customer@example.com"
-    );
+    expect(JSON.stringify(consoleError.mock.calls)).not.toContain("customer@example.com");
     expect(JSON.stringify(consoleError.mock.calls)).not.toContain(
       "filename.jpg"
     );
@@ -63,6 +62,7 @@ describe("lead upload diagnostics", () => {
     });
 
     expect(consoleError).toHaveBeenCalledWith("lead_file_upload_failed", {
+      errorDetail: "payload contents",
       errorKind: "invalid_json",
       requestType: "invalid"
     });
@@ -79,7 +79,27 @@ describe("lead upload diagnostics", () => {
     });
 
     expect(consoleError).toHaveBeenCalledWith("lead_file_upload_failed", {
+      errorDetail: "Lead file upload failed.",
       errorKind: "LeadUploadPlanNotAuthorized",
+      requestType: "blob.generate-client-token"
+    });
+  });
+
+  it("redacts URLs, UUIDs and normalizes multiline details", () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+
+    logLeadUploadFailure({
+      error: new Error(
+        "Callback https://example.com/api/upload\nlead d9428888-122b-4f1b-b371-20c56a916459"
+      ),
+      requestType: "blob.generate-client-token"
+    });
+
+    expect(consoleError).toHaveBeenCalledWith("lead_file_upload_failed", {
+      errorDetail: "Callback [url] lead [uuid]",
+      errorKind: "Error",
       requestType: "blob.generate-client-token"
     });
   });
