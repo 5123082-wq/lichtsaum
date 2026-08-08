@@ -247,28 +247,20 @@ export async function confirmLeadFileUpload(input: {
   pathname: string;
   contentType: string;
 }) {
-  await authorizeLeadFileUpload(
-    input.pathname,
-    JSON.stringify({
-      leadId: input.leadId,
-      fileId: input.fileId,
-      uploadToken: input.uploadToken
-    })
-  );
+  await assertActiveLeadUploadPlan(input.leadId, input.uploadToken);
   await recordCompletedLeadFileUpload(input.pathname, input.contentType, {
     leadId: input.leadId,
     fileId: input.fileId
   });
 }
 
-export async function finalizeLeadUploadPlan(
+async function assertActiveLeadUploadPlan(
   leadId: string,
   uploadToken: string
 ) {
   const db = getDb();
   const [lead] = await db
     .select({
-      id: leads.id,
       uploadTokenHash: leads.uploadTokenHash,
       uploadExpiresAt: leads.uploadExpiresAt
     })
@@ -282,6 +274,26 @@ export async function finalizeLeadUploadPlan(
     lead.uploadExpiresAt <= new Date() ||
     !uploadTokenMatches(uploadToken, lead.uploadTokenHash)
   ) {
+    throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
+  }
+}
+
+export async function finalizeLeadUploadPlan(
+  leadId: string,
+  uploadToken: string
+) {
+  await assertActiveLeadUploadPlan(leadId, uploadToken);
+
+  const db = getDb();
+  const [lead] = await db
+    .select({
+      id: leads.id
+    })
+    .from(leads)
+    .where(and(eq(leads.leadId, leadId), eq(leads.status, "uploading")))
+    .limit(1);
+
+  if (!lead) {
     throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
   }
 
