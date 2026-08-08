@@ -5,6 +5,7 @@ import {
   authorizeLeadFileUpload,
   recordCompletedLeadFileUpload
 } from "@/features/lead-form/upload-service";
+import { getBlobReadWriteToken } from "@/features/lead-form/blob-credentials";
 import {
   leadUploadRequestType,
   logLeadUploadFailure
@@ -19,6 +20,7 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as HandleUploadBody;
     const result = await handleUpload({
+      token: getBlobReadWriteToken(),
       request,
       body,
       onBeforeGenerateToken: authorizeLeadFileUpload,
