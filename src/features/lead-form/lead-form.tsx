@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Check,
   FilePdf,
   ImageSquare,
   Paperclip,
@@ -181,7 +182,10 @@ export function LeadForm() {
   const [isPending, startTransition] = useTransition();
   const [attachments, setAttachments] = useState<ProjectAttachment[]>([]);
   const [fileSelectionError, setFileSelectionError] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewUrlsRef = useRef(new Set<string>());
 
@@ -308,15 +312,31 @@ export function LeadForm() {
   }, []);
 
   useEffect(() => {
-    if (state.status !== "idle") {
+    if (state.status === "submitted") {
+      successRef.current?.focus();
+    } else if (state.status !== "idle") {
       resultRef.current?.focus();
     }
   }, [state.status]);
 
   const hasResult =
     state.status === "prototype_validated" ||
-    state.status === "prototype_unavailable" ||
-    state.status === "submitted";
+    state.status === "prototype_unavailable";
+  const isSubmitted = state.status === "submitted";
+
+  function resetForm() {
+    for (const previewUrl of previewUrlsRef.current) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    previewUrlsRef.current.clear();
+    formRef.current?.reset();
+    setAttachments([]);
+    setFileSelectionError("");
+    setState(initialProjectCheckFormState);
+
+    requestAnimationFrame(() => emailInputRef.current?.focus());
+  }
 
   function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -419,13 +439,20 @@ export function LeadForm() {
 
   return (
     <form
-      className="border-y border-[var(--border)]"
+      className="lead-form border-y border-[var(--border)]"
       id="project-check-form"
       name="project-check-form"
+      ref={formRef}
       onSubmit={submitForm}
       aria-labelledby="project-check-title"
       noValidate
     >
+      <div className="lead-form__stage" data-submitted={isSubmitted}>
+        <div
+          className="lead-form__entry"
+          aria-hidden={isSubmitted}
+          inert={isSubmitted}
+        >
       <div className="grid desktop:grid-cols-2">
         <div className="grid content-start gap-6 border-b border-[var(--border)] py-8 desktop:border-b-0 desktop:border-r desktop:py-10 desktop:pr-10">
           <div>
@@ -472,6 +499,7 @@ export function LeadForm() {
               className={fieldClassName}
               id="email"
               name="email"
+              ref={emailInputRef}
               type="email"
               autoComplete="email"
               inputMode="email"
@@ -726,6 +754,43 @@ export function LeadForm() {
               ? "Formular wird geprüft."
               : ""}
         </p>
+      </div>
+        </div>
+
+        <div
+          className="lead-form__success"
+          ref={successRef}
+          role="status"
+          aria-live="polite"
+          aria-hidden={!isSubmitted}
+          inert={!isSubmitted}
+          tabIndex={-1}
+        >
+          {isSubmitted ? (
+            <>
+              <div className="lead-form__success-icon" aria-hidden="true">
+                <Check size={64} weight="light" />
+              </div>
+              <p className="lead-form__success-eyebrow">Projekt-Check</p>
+              <h3 className="lead-form__success-title">
+                Anfrage übermittelt.
+              </h3>
+              <p className="lead-form__success-copy">
+                Vielen Dank für Ihre Anfrage. Ihre Angaben
+                {attachments.length > 0 ? " und Dateien" : ""} wurden sicher
+                übermittelt. Wir melden uns über die angegebene
+                Kontaktmöglichkeit.
+              </p>
+              <button
+                className="button button--secondary lead-form__success-reset"
+                type="button"
+                onClick={resetForm}
+              >
+                Weitere Anfrage senden
+              </button>
+            </>
+          ) : null}
+        </div>
       </div>
     </form>
   );

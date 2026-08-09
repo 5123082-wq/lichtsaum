@@ -377,6 +377,66 @@ passed
 
 final result: passed
 
+## Animated lead acknowledgement — 2026-08-09
+
+- Source visual truth:
+  `/Users/macbookaleks/.codex/generated_images/019fdddc-d568-7c63-95c5-c4a478f5b66b/exec-27cd9ee5-030a-4ea8-975e-ad9332650468.png`,
+  the first owner-selected ideation result, 1455 × 1081 px. The generated reference represents a
+  1159 × 861 desktop composition at approximately 1.26× raster density.
+- Final implementation evidence: `/tmp/lichtsaum-lead-success-1159x861-v2.png`, 1159 × 1116 px at
+  a 1159 × 861 CSS viewport and 1× output density. The taller capture retains the real homepage
+  `Ihr Projekt.` section header and the form's existing footprint rather than compressing them to
+  the generated reference canvas.
+- Mobile focused evidence: `/tmp/lichtsaum-lead-success-390x844-detail.png`, 390 × 844 px at 1×.
+  It makes the check, heading, German copy and repeat action legible without a separate crop.
+- State: server-confirmed `submitted`, without transmitting a new production lead. A temporary
+  local-only QA entry rendered the exact production component state for capture and was removed
+  before the final build.
+- Same-input comparison: the source visual and final desktop implementation were opened together
+  before judgment. Comparison was normalized by the visible confirmation panel because the source
+  invents a compressed page frame and retains an obsolete orange submit action after success.
+- Fonts and typography: the implementation uses the project's self-hosted Hanken Grotesk display
+  and JetBrains Mono system labels/actions. The desktop acknowledgement remains on one line; the
+  390 px view wraps at semantic word boundaries without overflow.
+- Spacing and layout rhythm: the form and confirmation share one CSS grid area, so the surrounding
+  section does not collapse during the transition. The full-width centered composition preserves
+  the selected reference hierarchy and the existing mobile-first gutters.
+- Colours and visual tokens: only the established near-black surfaces, warm-white copy, hairline
+  borders and architectural orange signal are used. No shadow, gradient, card radius or new token
+  was introduced.
+- Image and icon fidelity: the success mark uses the installed Phosphor `Check` icon inside a
+  native border treatment; no generated asset, handcrafted SVG, CSS drawing, emoji or text glyph
+  replaces it.
+- Copy and content: `Anfrage übermittelt.`, the thank-you text and `Weitere Anfrage senden` match
+  the selected direction. File confirmation is conditional, so a file-free submission does not
+  claim that files were received.
+- Interaction and accessibility: focus moves to the polite status after confirmed persistence.
+  The hidden form is inert and removed from the accessibility tree. The repeat action revokes
+  object URLs, clears every field/file, restores the idle state and returns focus to e-mail. Browser
+  verification found no horizontal overflow at 390 px and no console warnings/errors.
+- Comparison history: pass 1 exposed the programmatic status focus as an unintended orange frame
+  and wrapped the desktop headline (P2). Removing the decorative focus shadow on the non-interactive
+  status and widening the headline measure resolved both. Pass 2 exposed success copy in idle DOM,
+  conflicting with the existing no-false-success E2E assertion (P1); success content now mounts only
+  for `submitted`, with `@starting-style` preserving the intended entrance. No actionable P0/P1/P2
+  finding remains.
+- Technical verification: `pnpm typecheck`, `pnpm lint`, 66 unit tests and the focused prototype
+  lead-form E2E pass. The production build passes. A broader pre-fix 41-test E2E run passed 37
+  scenarios; the focused follow-up resolved the one lead-form failure. Three unrelated, pre-existing
+  expectations for gallery noindex and local legal-review marker counts remain stale against the
+  current project state.
+
+### Animation review
+
+| Before | After | Why |
+| --- | --- | --- |
+| — | Approved as implemented | All new motion is justified state feedback, uses 160–240 ms custom ease-out transitions on transform/opacity only, remains interruptible, staggers content by 40 ms and removes movement under `prefers-reduced-motion` |
+
+Verdict: **Approve** — no feel-breaking, performance, timing, cohesion or accessibility finding
+remains in the new lead-confirmation motion.
+
+final result: passed
+
 ## References gallery concept review — 2026-08-04
 
 - Four independent built-in image-generation runs produced one temporary visual for each gallery
@@ -804,10 +864,10 @@ under `artifacts/design-qa/mini-configurator-compact-controls/`.
 
 passed
 
-## Current handoff target — Kontakt Europe atlas, 2026-08-04
+## Current handoff target — Animated lead acknowledgement, 2026-08-09
 
 The complete current comparison inputs, required fidelity review, responsive evidence, comparison
-history, interaction checks and technical checks are recorded above under `Kontakt Europe atlas —
-2026-08-04`.
+history, interaction checks and technical checks are recorded above under `Animated lead
+acknowledgement — 2026-08-09`.
 
 final result: passed

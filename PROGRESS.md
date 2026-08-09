@@ -2,7 +2,7 @@
 
 ## Context Beacon
 
-- Last updated: 2026-08-08
+- Last updated: 2026-08-09
 - Current stage: public production landing / product validation still pending
 - Active track: local gallery review complete with four temporary concept visuals; awaiting four
   real, rights-cleared project photographs while validating the underlying offer
@@ -15,6 +15,8 @@
     lead in Neon, uploads files to Private Vercel Blob and sends an idempotent Resend notification;
     the production form now reconciles the persisted lead status when the browser loses the final
     Server Action response, preventing a successfully accepted request from being reported as lost;
+    confirmed submissions replace the form with an accessible animated acknowledgement, while a
+    repeat action clears the previous fields/files and restores focus to the e-mail input;
   - the responsive hero uses an owner-supplied, aligned off/on concept pair: a close commercial
     awning and modern facade transition into technical linework, while only the `LICHTSAUM`
     lettering illuminates during the scroll scene; mobile preserves the same narrative with a shorter
@@ -150,6 +152,19 @@
 | Launch | Production active / validation ongoing | Remaining release risks are resolved |
 
 ## Latest material updates
+
+### 2026-08-09 — Animated lead acknowledgement implemented
+
+- Replaced the small inline submitted notice with the owner-selected full-width confirmation state:
+  the contact/file controls leave the stage, a restrained check and acknowledgement enter, and the
+  original submit action is no longer present after a confirmed server result.
+- Added a `Weitere Anfrage senden` action that revokes local file previews, clears the form and
+  returns keyboard focus to the required e-mail field. The acknowledgement copy mentions files only
+  when the visitor actually attached them.
+- Kept every motion segment at 160–240 ms with strong project easing, transform/opacity-only
+  transitions, a 40 ms content stagger, pointer-gated hover feedback and a no-movement reduced-motion
+  state. Desktop/mobile browser captures, the reset interaction, focused E2E, unit suite, lint,
+  typecheck and production build pass.
 
 ### 2026-08-08 — Production lead file flow repaired and reverified
 

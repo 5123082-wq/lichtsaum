@@ -243,6 +243,165 @@ textarea {
   background: rgb(229 226 225 / 8%);
 }
 
+.lead-form__stage {
+  display: grid;
+}
+
+.lead-form__entry,
+.lead-form__success {
+  grid-area: 1 / 1;
+}
+
+.lead-form__entry {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 220ms var(--ease-out) 80ms,
+    transform 220ms var(--ease-out) 80ms;
+}
+
+.lead-form__stage[data-submitted="true"] .lead-form__entry {
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(0, -0.75rem, 0);
+  transition-delay: 0ms;
+}
+
+.lead-form__success {
+  display: grid;
+  min-height: 100%;
+  place-content: center;
+  justify-items: center;
+  padding: clamp(3.5rem, 8vw, 7rem) var(--page-gutter);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(0, 0.75rem, 0) scale(0.99);
+  transition:
+    opacity 160ms var(--ease-out),
+    transform 160ms var(--ease-out);
+}
+
+.lead-form__success:focus-visible {
+  box-shadow: none;
+}
+
+.lead-form__stage[data-submitted="true"] .lead-form__success {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  transition-duration: 240ms;
+  transition-delay: 80ms;
+}
+
+.lead-form__success > :not(.lead-form__success-reset) {
+  opacity: 0;
+  transform: translate3d(0, 0.5rem, 0);
+  transition:
+    opacity 220ms var(--ease-out),
+    transform 220ms var(--ease-out);
+}
+
+.lead-form__stage[data-submitted="true"]
+  .lead-form__success
+  > :not(.lead-form__success-reset) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@starting-style {
+  .lead-form__stage[data-submitted="true"]
+    .lead-form__success
+    > :not(.lead-form__success-reset) {
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0);
+  }
+}
+
+.lead-form__stage[data-submitted="true"] .lead-form__success-icon {
+  transition-delay: 120ms;
+}
+
+.lead-form__stage[data-submitted="true"] .lead-form__success-eyebrow {
+  transition-delay: 160ms;
+}
+
+.lead-form__stage[data-submitted="true"] .lead-form__success-title {
+  transition-delay: 200ms;
+}
+
+.lead-form__stage[data-submitted="true"] .lead-form__success-copy {
+  transition-delay: 240ms;
+}
+
+.lead-form__success-icon {
+  display: grid;
+  width: clamp(5.5rem, 8vw, 7.5rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  color: var(--accent);
+  transform: translate3d(0, 0.5rem, 0) scale(0.95);
+}
+
+.lead-form__success-icon svg {
+  width: 52%;
+  height: 52%;
+}
+
+.lead-form__success-eyebrow {
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+  color: var(--accent);
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lead-form__success-title {
+  max-width: 24ch;
+  margin: 0.8rem 0 0;
+  font-size: clamp(2.25rem, 5.5vw, 4.75rem);
+  font-weight: 780;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.lead-form__success-copy {
+  max-width: 43rem;
+  margin: clamp(1.25rem, 2.5vw, 1.75rem) 0 0;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.lead-form__success-reset {
+  min-width: min(100%, 18rem);
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  transition:
+    background-color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    color 180ms var(--ease-out),
+    transform 160ms var(--ease-out);
+}
+
+.lead-form__success-reset:hover {
+  transform: none;
+}
+
+.lead-form__success-reset:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lead-form__success-reset:hover {
+    transform: translate3d(0, -0.125rem, 0);
+  }
+}
+
 .site-header__cta {
   display: none;
   grid-column: 2;
@@ -3644,6 +3803,13 @@ textarea {
   .engineered-precision__image {
     transform: none !important;
     transition: opacity 160ms ease !important;
+  }
+
+  .lead-form__entry,
+  .lead-form__success,
+  .lead-form__success > :not(.lead-form__success-reset) {
+    transform: none !important;
+    transition-delay: 0ms !important;
   }
 
   .hero__stage {
