@@ -93,7 +93,7 @@ export default function ReferencesPage() {
         </header>
 
         <div className="references-page__list container">
-          {orderedReferences.map((item, index) => (
+          {orderedReferences.map((item) => (
             <article
               className="references-page__item"
               id={item.id}
@@ -113,11 +113,15 @@ export default function ReferencesPage() {
                 />
               </div>
               <div className="references-page__copy">
-                <p>
-                  {String(index + 1).padStart(2, "0")} /{" "}
-                  {item.context}
+                <p className="references-page__context eyebrow eyebrow--marker-loop">
+                  <span>{item.context}</span>
                 </p>
                 <h2>{item.title}</h2>
+                {item.assetKind === "concept-visual" ? (
+                  <p className="references-page__disclosure">
+                    Konzeptvisualisierung · kein abgeschlossenes LICHTSAUM-Projekt.
+                  </p>
+                ) : null}
                 <p>{item.caption}</p>
               </div>
             </article>

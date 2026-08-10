@@ -38,7 +38,7 @@ Last reviewed: 2026-07-30
 | Hosting | `TBD`; must support HTTPS, preview isolation, EU-sensitive data handling |
 | Lead system of record | Neon PostgreSQL in `eu-central-1`; `leads` and `lead_files` schema migrated; intake is environment-gated |
 | Lead file storage | Private Vercel Blob in `fra1`; direct client upload with server-authorized per-file paths, 5 × 15 MB and 50 MB combined limit |
-| Lead notification | Resend Email API in `eu-west-1`; sending-only domain-scoped key, per-lead idempotency and `Reply-To` customer address |
+| Lead notification | Resend Email API in `eu-west-1`; sending-only domain-scoped key, separate idempotent internal notification and customer receipt |
 | CMP | `TBD`; must support granular consent and Consent Mode v2 |
 
 Next.js provides App Router conventions for metadata, `robots.ts`, `sitemap.ts`, images and
@@ -104,6 +104,8 @@ Rules:
 - Form submission works when analytics and marketing consent are denied.
 - Vendor failure produces a safe user state and observable server-side error without logging
   PII.
+- The customer receipt contains only the public request number and service copy. Its delivery
+  failure is logged without contact data and does not reverse an already accepted lead.
 - File content goes directly to Private Blob after the server reserves a `lead_files` row and
   authorizes its exact random pathname. PostgreSQL stores metadata, never the binary content.
 - Upload grants expire after 30 minutes. Accepted leads and their private files have a 90-day

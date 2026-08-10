@@ -134,6 +134,11 @@ export function ReferenceGallery({ items }: ReferenceGalleryProps) {
               }}
               width={item.image.width}
             />
+            {item.assetKind === "concept-visual" ? (
+              <span className="reference-card__badge">
+                Konzeptvisualisierung
+              </span>
+            ) : null}
             <span className="reference-card__overlay">
               <span className="reference-card__context">{item.context}</span>
               <span className="reference-card__title">{item.title}</span>
@@ -167,6 +172,9 @@ export function ReferenceGallery({ items }: ReferenceGalleryProps) {
             <header className="reference-modal__header">
               <p>
                 {activeItem.context}
+                {activeItem.assetKind === "concept-visual"
+                  ? " · Konzeptvisualisierung"
+                  : ""}
               </p>
               <button
                 aria-label="Galeriebild schließen"

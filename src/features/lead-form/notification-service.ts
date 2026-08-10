@@ -7,6 +7,7 @@ import { getDb } from "@/db";
 import { leadFiles, leads } from "@/db/schema";
 
 import { buildLeadFileDownloadUrl } from "./download-security";
+import { formatPublicLeadNumber } from "./public-lead-number";
 
 function requiredEnv(name: string) {
   const value = process.env[name]?.trim();
@@ -109,13 +110,14 @@ export async function sendLeadNotification(leadId: string) {
     <p>Download-Links sind 7 Tage gültig.</p>
     ${htmlFiles}
   `;
+  const publicLeadNumber = formatPublicLeadNumber(lead.id, lead.createdAt);
   const resend = new Resend(requiredEnv("RESEND_API_KEY"));
   const { data, error } = await resend.emails.send(
     {
       from: requiredEnv("LEAD_EMAIL_FROM"),
       to: requiredEnv("LEAD_NOTIFICATION_TO"),
       replyTo: lead.email,
-      subject: `Neue LICHTSAUM Projektanfrage · ${lead.leadId}`,
+      subject: `Neue LICHTSAUM Projektanfrage · ${publicLeadNumber}`,
       text,
       html
     },
@@ -124,6 +126,64 @@ export async function sendLeadNotification(leadId: string) {
 
   if (error || !data?.id) {
     throw new Error("Lead notification could not be delivered to Resend.");
+  }
+
+  return data.id;
+}
+
+export async function sendLeadCustomerConfirmation(leadId: string) {
+  const db = getDb();
+  const [lead] = await db
+    .select({
+      id: leads.id,
+      email: leads.email,
+      idempotencyKey: leads.idempotencyKey,
+      createdAt: leads.createdAt
+    })
+    .from(leads)
+    .where(eq(leads.leadId, leadId))
+    .limit(1);
+
+  if (!lead) {
+    throw new Error("Lead confirmation data was not found.");
+  }
+
+  const publicLeadNumber = formatPublicLeadNumber(lead.id, lead.createdAt);
+  const text = [
+    "Vielen Dank für Ihre Projektanfrage.",
+    "",
+    "Wir haben Ihre Anfrage erhalten.",
+    `Ihre Anfragenummer: ${publicLeadNumber}`,
+    "",
+    "Bitte geben Sie diese Nummer bei Rückfragen an.",
+    "Wir melden uns über die von Ihnen angegebene Kontaktmöglichkeit.",
+    "",
+    "Freundliche Grüße",
+    "LICHTSAUM"
+  ].join("\n");
+  const html = `
+    <h1>Vielen Dank für Ihre Projektanfrage.</h1>
+    <p>Wir haben Ihre Anfrage erhalten.</p>
+    <p><strong>Ihre Anfragenummer: ${escapeHtml(publicLeadNumber)}</strong></p>
+    <p>Bitte geben Sie diese Nummer bei Rückfragen an.</p>
+    <p>Wir melden uns über die von Ihnen angegebene Kontaktmöglichkeit.</p>
+    <p>Freundliche Grüße<br>LICHTSAUM</p>
+  `;
+  const resend = new Resend(requiredEnv("RESEND_API_KEY"));
+  const { data, error } = await resend.emails.send(
+    {
+      from: requiredEnv("LEAD_EMAIL_FROM"),
+      to: lead.email,
+      replyTo: requiredEnv("LEAD_NOTIFICATION_TO"),
+      subject: `Ihre Projektanfrage ${publicLeadNumber} ist eingegangen`,
+      text,
+      html
+    },
+    { idempotencyKey: `lead-customer-confirmation/${lead.idempotencyKey}` }
+  );
+
+  if (error || !data?.id) {
+    throw new Error("Lead customer confirmation could not be delivered to Resend.");
   }
 
   return data.id;

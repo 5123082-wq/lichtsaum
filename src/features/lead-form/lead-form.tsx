@@ -412,13 +412,14 @@ export function LeadForm() {
               leadIdForRecovery
             );
 
-            if (recoveredStatus === "submitted") {
+            if (recoveredStatus.status === "submitted") {
               setState({
                 status: "submitted",
                 message:
                   "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über die angegebene Kontaktmöglichkeit.",
                 fieldErrors: {},
-                leadId: leadIdForRecovery
+                leadId: leadIdForRecovery,
+                publicLeadNumber: recoveredStatus.publicLeadNumber
               });
               return;
             }
@@ -781,6 +782,11 @@ export function LeadForm() {
                 übermittelt. Wir melden uns über die angegebene
                 Kontaktmöglichkeit.
               </p>
+              {state.publicLeadNumber ? (
+                <p className="font-mono text-sm font-bold uppercase tracking-[0.08em] text-[var(--text-primary)]">
+                  Anfragenummer: {state.publicLeadNumber}
+                </p>
+              ) : null}
               <button
                 className="button button--secondary lead-form__success-reset"
                 type="button"

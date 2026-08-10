@@ -157,8 +157,11 @@ export default function DatenschutzPage() {
                 optional Telefonnummer, Nachricht und Dateimetadaten in einer
                 Datenbank. Ausgewählte Dateien werden in einen privaten
                 Dateispeicher übertragen. Zur Bearbeitung erhalten wir eine
-                E-Mail-Benachrichtigung über Resend; darin enthaltene
-                Dateilinks sind signiert und sieben Tage gültig. Lokale
+                E-Mail-Benachrichtigung über Resend. An die angegebene
+                E-Mail-Adresse senden wir über Resend eine Eingangsbestätigung
+                mit der Anfragenummer; sie enthält weder den Nachrichtentext
+                noch Dateilinks. Die Dateilinks in unserer internen
+                Benachrichtigung sind signiert und sieben Tage gültig. Lokale
                 Bildvorschauen werden nur im Browser erzeugt und beim Entfernen
                 der Datei oder Verlassen der Seite verworfen.
               </p>
