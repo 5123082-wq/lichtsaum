@@ -8,6 +8,7 @@ import { getDb } from "@/db";
 import { leads } from "@/db/schema";
 
 import { projectCheckContactSchema } from "./schema";
+import { formatPublicLeadNumber } from "./public-lead-number";
 import {
   confirmLeadFileUpload,
   createLeadUploadPlan,
@@ -120,36 +121,51 @@ export async function finalizeProjectCheckSubmission(
   leadId: string,
   uploadToken: string
 ): Promise<ProjectCheckFormState> {
-  await finalizeLeadUploadPlan(leadId, uploadToken);
+  const { publicLeadNumber } = await finalizeLeadUploadPlan(
+    leadId,
+    uploadToken
+  );
 
   return {
     status: "submitted",
     message:
       "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über die angegebene Kontaktmöglichkeit.",
     fieldErrors: {},
-    leadId
+    leadId,
+    publicLeadNumber
   };
 }
 
+export type ProjectCheckSubmissionStatus =
+  | { status: "submitted"; publicLeadNumber: string }
+  | { status: "pending" | "unknown" };
+
 export async function getProjectCheckSubmissionStatus(
   leadIdInput: string
-): Promise<"submitted" | "pending" | "unknown"> {
+): Promise<ProjectCheckSubmissionStatus> {
   const parsedLeadId = z.string().uuid().safeParse(leadIdInput);
 
   if (!parsedLeadId.success) {
-    return "unknown";
+    return { status: "unknown" };
   }
 
   const db = getDb();
   const [lead] = await db
-    .select({ status: leads.status })
+    .select({
+      id: leads.id,
+      status: leads.status,
+      createdAt: leads.createdAt
+    })
     .from(leads)
     .where(eq(leads.leadId, parsedLeadId.data))
     .limit(1);
 
   if (lead?.status === "new") {
-    return "submitted";
+    return {
+      status: "submitted",
+      publicLeadNumber: formatPublicLeadNumber(lead.id, lead.createdAt)
+    };
   }
 
-  return lead ? "pending" : "unknown";
+  return { status: lead ? "pending" : "unknown" };
 }

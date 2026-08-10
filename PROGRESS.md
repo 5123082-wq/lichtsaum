@@ -2,17 +2,21 @@
 
 ## Context Beacon
 
-- Last updated: 2026-08-09
+- Last updated: 2026-08-10
 - Current stage: public production landing / product validation still pending
-- Active track: local gallery review complete with four temporary concept visuals; awaiting four
-  real, rights-cleared project photographs while validating the underlying offer
+- Active track: local gallery review now contains three supplied real project photographs and one
+  temporary concept visual; awaiting one more rights-cleared project photograph while validating
+  the underlying offer
 - Verified state:
   - a Next.js 16 App Router prototype is initialized with pinned dependencies and strict TypeScript;
   - the responsive German landing is implemented locally for the exact-category B2B retrofit offer,
     with restaurants/cafés as the primary segment and `Projekt prüfen lassen` as the CTA;
   - the final project-check uses one required email plus optional phone, short message and up to five
     JPG/PNG/WebP/PDF files of at most 15 MB each; in explicitly enabled environments it persists the
-    lead in Neon, uploads files to Private Vercel Blob and sends an idempotent Resend notification;
+    lead in Neon, uploads files to Private Vercel Blob and sends an idempotent internal Resend
+    notification; accepted leads now also have a separate idempotent customer receipt implemented
+    locally with a public `LS-YYYY-NNNNNN` request number and no message/file content, while its
+    production delivery test remains pending;
     the production form now reconciles the persisted lead status when the browser loses the final
     Server Action response, preventing a successfully accepted request from being reported as lost;
     confirmed submissions replace the form with an accessible animated acknowledgement, while a
@@ -56,9 +60,10 @@
     → configurator → hidden Referenzen position → FAQ → project check → footer; the source for
     `Varianten`, `Ablauf`, `Projektgrenzen`, `Nachweise` and `Alternatives` remains in the repo but
     is not rendered;
-  - the reference registry is `published` with four owner-authorised AI concept visuals: the
-    homepage and `/referenzen` show the complete grid, while every card and route explicitly says
-    the images are concepts rather than completed projects;
+  - the reference registry is `review` with three real project photographs and one explicitly
+    labelled concept visuals; local development shows the complete four-slot grid while production
+    remains hidden until four real projects, verified captions and publication permissions exist;
+    the supplied photos are stored as original PNG sources plus optimized WebP derivatives;
   - mobile navigation now uses a compact logo/menu header and an accessible modal right drawer;
     the approved information links are `Produkt`, `Konfigurator`, conditional `Referenzen` and
     `Kontakt`, while the project-check CTA remains separate; home destinations use absolute
@@ -107,11 +112,12 @@
   - server-rendered/static-first and production-only indexing;
   - Google Search, Ads, analytics, consent and Schema foundations are project invariants;
   - primary conversion is a server-confirmed valid lead.
-- Next action:
-  - obtain four original photographs tied to four real completed projects, confirm client/owner
-    publication permission and verify each factual German caption;
-  - replace all four concept items inside the protected `review` registry, then repeat the Stitch
-    comparison and desktop/mobile crop and focal-point review before changing it to `published`;
+  - Next action:
+  - obtain one further original photograph tied to one real completed project, confirm
+    client/owner publication permission and verify each factual German caption;
+  - replace the remaining concept item inside the protected `review` registry, then repeat
+    the Stitch comparison and desktop/mobile crop and focal-point review before changing it to
+    `published`;
   - owner reviews and accepts or revises the first homepage mini-configurator before work begins on
     the separate full configurator route;
   - owner reviews the local prototype against the product strategy and confirms requested revisions;
@@ -126,8 +132,9 @@
     maintenance and warranty;
   - actual service geography and installation capacity;
   - target margin, minimum invoice and actual German direct costs;
-  - physical sample plus four completed real projects with original photos, verified facts and
-    client/owner publication rights;
+  - physical sample plus one further completed real project with an original photo, verified facts
+    and client/owner publication rights; the three supplied photos still need their publication-rights
+    and project-fact confirmation;
   - retention periods, CMP decision and final legal review.
 - Read next:
   - `docs/strategy/product-market-decision.md`
@@ -152,6 +159,51 @@
 | Launch | Production active / validation ongoing | Remaining release risks are resolved |
 
 ## Latest material updates
+
+### 2026-08-10 — Public request number and customer receipt implemented locally
+
+- Added a stable public `LS-YYYY-NNNNNN` request number derived from the existing database ID and
+  Berlin calendar year, without a schema migration; the random technical lead ID remains internal.
+- Confirmed submissions show the public number in both the normal and recovered success paths.
+- Added a separate idempotent Resend receipt to the requester after the lead reaches the accepted
+  state. It contains only the public number and service copy; delivery failure is logged without
+  contact data and does not reverse the accepted lead.
+- Updated the live privacy copy and processing register. Unit, type, lint and production-build
+  checks pass; deployment and a controlled production delivery test remain pending.
+
+### 2026-08-09 — Third real reference photo added
+
+- Added the supplied 1448 × 1086 evening photo of a restaurant facade with a terrace and several
+  illuminated awnings to the wide `center-top` gallery slot, replacing the former entrance detail
+  concept.
+- Renamed the asset to `lichtsaum-referenz-restaurant-garten-abend`, kept the original PNG in
+  `DesignPrototip/assets/` and generated the optimized WebP used by the site in
+  `public/images/referenzen/`.
+- Added a factual German `alt` text and caption describing the visible restaurant facade, terrace,
+  awnings and `GARTEN` lettering. The registry remains in local `review` until publication rights
+  and the one remaining real project are confirmed.
+
+### 2026-08-09 — Second real reference photo added
+
+- Added the supplied 1254 × 1254 evening photo of a gastronomy facade with three illuminated
+  awnings to the tall `left-tall` gallery slot, replacing the first temporary restaurant concept.
+- Renamed the asset to `lichtsaum-referenz-gastronomie-bar-abend`, kept the original PNG in
+  `DesignPrototip/assets/` and generated the optimized WebP used by the site in
+  `public/images/referenzen/`.
+- Added a factual German `alt` text and caption describing the visible facade, awnings and
+  lettering only. The registry remains in local `review` until publication rights and the two
+  remaining real projects are confirmed.
+
+### 2026-08-09 — First real reference photo added
+
+- Added the supplied 1457 × 1080 photo of a commercial facade with two illuminated awnings to the
+  wide `center-bottom` gallery slot, replacing the temporary terrace concept.
+- Renamed the asset to `lichtsaum-referenz-gewerbefassade-ahouse-abend`, kept the original PNG in
+  `DesignPrototip/assets/` and generated the optimized WebP used by the site in
+  `public/images/referenzen/`.
+- Added the German `alt` text and factual caption without naming a client, city, manufacturer,
+  installation scope or unverified LICHTSAUM project relationship. The registry stays in local
+  `review` until publication rights and the remaining three real projects are confirmed.
 
 ### 2026-08-09 — Animated lead acknowledgement implemented
 

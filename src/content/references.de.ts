@@ -1,58 +1,58 @@
 import type { ReferenceGalleryRegistry } from "@/features/references/types";
 
 export const referenceGallery: ReferenceGalleryRegistry = {
-  status: "published",
+  status: "review",
   items: [
     {
-      id: "konzept-restaurantfassade",
+      id: "real-gastronomie-bar",
       slot: "left-tall",
-      context: "Gastronomie · Stadtlage",
-      title: "Lichtkante an der Fassade",
+      context: "Gastronomie · Abendansicht",
+      title: "Licht über drei Fenstern.",
       caption:
-        "Eine hohe Galerieansicht mit markanter Lichtwirkung an einer städtischen Fassade.",
+        "Reale Objektaufnahme einer Gastronomiefassade mit drei bordeauxroten Markisen und warm leuchtenden Schriftzügen.",
       image: {
-        src: "/images/referenzen/concept-restaurantfassade-tall.webp",
-        width: 1122,
-        height: 1402,
-        alt: "Grafitfarbene Markise mit warm leuchtender Vorderkante an einer städtischen Restaurantfassade bei Dämmerung.",
-        focalPoint: { x: 52, y: 45 }
+        src: "/images/referenzen/lichtsaum-referenz-gastronomie-bar-abend.webp",
+        width: 1254,
+        height: 1254,
+        alt: "Abendliche Gastronomiefassade mit drei bordeauxroten Markisen und warm leuchtenden Schriftzügen „Bar“ über den Fenstern.",
+        focalPoint: { x: 50, y: 52 }
       },
-      assetKind: "concept-visual",
-      permission: "public-approved"
+      assetKind: "real-project",
+      permission: "review-only"
     },
     {
-      id: "konzept-eingang-detail",
+      id: "real-restaurant-garten",
       slot: "center-top",
-      context: "Eingang · Detail",
-      title: "Präzise Lichtlinie",
+      context: "Restaurant · Abendansicht",
+      title: "Licht entlang der Terrasse.",
       caption:
-        "Ein breiter Detailausschnitt, der Material, Konstruktion und lineare Lichtwirkung betont.",
+        "Reale Objektaufnahme einer Restaurantfassade mit mehreren dunkelgrünen Markisen und warm leuchtenden Schriftzügen über einer Außenterrasse.",
       image: {
-        src: "/images/referenzen/concept-eingang-detail-wide.webp",
-        width: 1586,
-        height: 992,
-        alt: "Detailansicht einer grafitfarbenen Markise mit linear beleuchteter Vorderkante über einem modernen Café-Eingang.",
-        focalPoint: { x: 50, y: 48 }
+        src: "/images/referenzen/lichtsaum-referenz-restaurant-garten-abend.webp",
+        width: 1448,
+        height: 1086,
+        alt: "Restaurantfassade mit mehreren dunkelgrünen Markisen und warm leuchtenden Schriftzügen „GARTEN“ über einer Außenterrasse.",
+        focalPoint: { x: 50, y: 52 }
       },
-      assetKind: "concept-visual",
-      permission: "public-approved"
+      assetKind: "real-project",
+      permission: "review-only"
     },
     {
-      id: "konzept-terrasse",
+      id: "real-gewerbefassade-ahouse",
       slot: "center-bottom",
-      context: "Terrasse · Abendbetrieb",
-      title: "Rhythmus entlang der Front",
+      context: "Gewerbe · Abendansicht",
+      title: "Zwei Lichtfelder. Eine Fassade.",
       caption:
-        "Mehrere Markisen schaffen entlang der Terrasse eine zusammenhängende Abendwirkung.",
+        "Reale Objektaufnahme einer nächtlichen Gewerbefassade mit zwei dunklen Markisen und warm leuchtenden Schriftzügen.",
       image: {
-        src: "/images/referenzen/concept-terrasse-wide.webp",
-        width: 1586,
-        height: 992,
-        alt: "Abendliche Café-Terrasse mit mehreren dunkelblauen Markisen und warm leuchtenden Vorderkanten.",
-        focalPoint: { x: 48, y: 48 }
+        src: "/images/referenzen/lichtsaum-referenz-gewerbefassade-ahouse-abend.webp",
+        width: 1457,
+        height: 1080,
+        alt: "Nächtliche Straßenansicht einer roten Backsteinfassade mit zwei dunklen Markisen und warm leuchtenden Schriftzügen „A-HOUSE“.",
+        focalPoint: { x: 50, y: 54 }
       },
-      assetKind: "concept-visual",
-      permission: "public-approved"
+      assetKind: "real-project",
+      permission: "review-only"
     },
     {
       id: "konzept-ecklage",
@@ -69,7 +69,7 @@ export const referenceGallery: ReferenceGalleryRegistry = {
         focalPoint: { x: 51, y: 44 }
       },
       assetKind: "concept-visual",
-      permission: "public-approved"
+      permission: "review-only"
     }
   ]
 };

@@ -24,7 +24,11 @@ import {
   uploadTokenMatches
 } from "./upload-security";
 import { LeadUploadDiagnosticError } from "./upload-diagnostics";
-import { sendLeadNotification } from "./notification-service";
+import {
+  sendLeadCustomerConfirmation,
+  sendLeadNotification
+} from "./notification-service";
+import { formatPublicLeadNumber } from "./public-lead-number";
 
 const LEAD_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const LEAD_RATE_LIMIT_MAX = 3;
@@ -287,7 +291,8 @@ export async function finalizeLeadUploadPlan(
   const db = getDb();
   const [lead] = await db
     .select({
-      id: leads.id
+      id: leads.id,
+      createdAt: leads.createdAt
     })
     .from(leads)
     .where(and(eq(leads.leadId, leadId), eq(leads.status, "uploading")))
@@ -317,4 +322,14 @@ export async function finalizeLeadUploadPlan(
       updatedAt: new Date()
     })
     .where(and(eq(leads.id, lead.id), eq(leads.status, "uploading")));
+
+  try {
+    await sendLeadCustomerConfirmation(leadId);
+  } catch {
+    console.error("lead_customer_confirmation_failed", { leadId });
+  }
+
+  return {
+    publicLeadNumber: formatPublicLeadNumber(lead.id, lead.createdAt)
+  };
 }

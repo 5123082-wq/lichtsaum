@@ -753,7 +753,7 @@ test("renders the concise object-specific FAQ with the approved marker treatment
   expect(sectionOverflow).toBeLessThanOrEqual(1);
 });
 
-test("shows the public gallery on the homepage and dedicated route", async ({
+test("shows the local reference review gallery on the homepage and dedicated route", async ({
   page,
   request
 }) => {
@@ -764,10 +764,30 @@ test("shows the public gallery on the homepage and dedicated route", async ({
     section.getByRole("heading", { name: "Ausgewählte Ansichten." })
   ).toBeVisible();
   await expect(cards).toHaveCount(4);
-  await expect(section.locator(".reference-card__badge")).toHaveCount(0);
+  await expect(section.locator(".reference-card__badge")).toHaveCount(1);
   await expect(cards.nth(0)).toHaveAttribute(
     "href",
-    "/referenzen#konzept-restaurantfassade"
+    "/referenzen#real-gastronomie-bar"
+  );
+  await expect(cards.nth(0).locator("img")).toHaveAttribute(
+    "alt",
+    "Abendliche Gastronomiefassade mit drei bordeauxroten Markisen und warm leuchtenden Schriftzügen „Bar“ über den Fenstern."
+  );
+  await expect(cards.nth(1)).toHaveAttribute(
+    "href",
+    "/referenzen#real-restaurant-garten"
+  );
+  await expect(cards.nth(1).locator("img")).toHaveAttribute(
+    "alt",
+    "Restaurantfassade mit mehreren dunkelgrünen Markisen und warm leuchtenden Schriftzügen „GARTEN“ über einer Außenterrasse."
+  );
+  await expect(cards.nth(2)).toHaveAttribute(
+    "href",
+    "/referenzen#real-gewerbefassade-ahouse"
+  );
+  await expect(cards.nth(2).locator("img")).toHaveAttribute(
+    "alt",
+    "Nächtliche Straßenansicht einer roten Backsteinfassade mit zwei dunklen Markisen und warm leuchtenden Schriftzügen „A-HOUSE“."
   );
 
   const firstCard = cards.first();
@@ -777,12 +797,12 @@ test("shows the public gallery on the homepage and dedicated route", async ({
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await expect(
-    dialog.getByRole("heading", { name: "Lichtkante an der Fassade" })
+    dialog.getByRole("heading", { name: "Licht über drei Fenstern." })
   ).toBeVisible();
 
   await page.keyboard.press("ArrowRight");
   await expect(
-    dialog.getByRole("heading", { name: "Präzise Lichtlinie" })
+    dialog.getByRole("heading", { name: "Licht entlang der Terrasse." })
   ).toBeVisible();
 
   await page.keyboard.press("Escape");
@@ -794,7 +814,13 @@ test("shows the public gallery on the homepage and dedicated route", async ({
 
   expect(response.status()).toBe(200);
   expect(html).toContain("Referenzen.");
-  expect(html).not.toContain("Konzeptvisualisierung");
+  expect(html).toContain("references-page__context");
+  expect(html).not.toContain("01 /");
+  expect(html).not.toContain("02 /");
+  expect(html).not.toContain("03 /");
+  expect(html).not.toContain("04 /");
+  expect(html).toContain("Konzeptvisualisierung");
+  expect(html).toContain("Zwei Lichtfelder. Eine Fassade.");
   expect(html).toMatch(/noindex/i);
 });
 

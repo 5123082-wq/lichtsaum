@@ -23,19 +23,33 @@ describe("getProjectCheckSubmissionStatus", () => {
   it("does not query the database for an invalid lead ID", async () => {
     await expect(
       getProjectCheckSubmissionStatus("not-a-lead-id")
-    ).resolves.toBe("unknown");
+    ).resolves.toEqual({ status: "unknown" });
     expect(database.select).not.toHaveBeenCalled();
   });
 
   it.each([
-    ["new", "submitted"],
-    ["uploading", "pending"],
-    [undefined, "unknown"]
+    ["uploading", { status: "pending" }],
+    [undefined, { status: "unknown" }]
   ] as const)("maps %s to %s", async (status, expected) => {
-    database.limit.mockResolvedValueOnce(status ? [{ status }] : []);
+    database.limit.mockResolvedValueOnce(
+      status ? [{ id: 42, status, createdAt: new Date("2026-08-10T12:00:00Z") }] : []
+    );
 
     await expect(
       getProjectCheckSubmissionStatus("d9428888-122b-4f1b-b371-20c56a916459")
-    ).resolves.toBe(expected);
+    ).resolves.toEqual(expected);
+  });
+
+  it("returns the public number for an accepted lead", async () => {
+    database.limit.mockResolvedValueOnce([
+      { id: 42, status: "new", createdAt: new Date("2026-08-10T12:00:00Z") }
+    ]);
+
+    await expect(
+      getProjectCheckSubmissionStatus("d9428888-122b-4f1b-b371-20c56a916459")
+    ).resolves.toEqual({
+      status: "submitted",
+      publicLeadNumber: "LS-2026-000042"
+    });
   });
 });

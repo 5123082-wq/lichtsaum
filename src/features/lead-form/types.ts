@@ -25,6 +25,7 @@ export interface ProjectCheckFormState {
   message: string;
   fieldErrors: ProjectCheckFieldErrors;
   leadId?: string;
+  publicLeadNumber?: string;
 }
 
 export const initialProjectCheckFormState: ProjectCheckFormState = {

@@ -4194,21 +4194,22 @@ html.reference-modal-open {
   object-fit: cover;
 }
 
-.references-page__copy > p:first-child {
-  margin: 0;
-  color: var(--accent);
-  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
-  font-size: 0.7rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .references-page__copy h2 {
   margin: 0.75rem 0 0;
   font-size: clamp(2rem, 5vw, 3.75rem);
   letter-spacing: -0.045em;
   line-height: 1;
+  text-transform: uppercase;
+}
+
+.references-page__disclosure {
+  margin: 1rem 0 0;
+  color: var(--accent);
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
   text-transform: uppercase;
 }
 

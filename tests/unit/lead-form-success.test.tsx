@@ -22,7 +22,8 @@ vi.mock("@/features/lead-form/submission-action", () => ({
     status: "submitted",
     message: "Die Projektanfrage wurde gespeichert.",
     fieldErrors: {},
-    leadId: "00000000-0000-4000-8000-000000000001"
+    leadId: "00000000-0000-4000-8000-000000000001",
+    publicLeadNumber: "LS-2026-000042"
   }))
 }));
 
@@ -43,6 +44,7 @@ describe("LeadForm success state", () => {
     expect(
       screen.getByText(/Vielen Dank für Ihre Anfrage/)
     ).toBeInTheDocument();
+    expect(screen.getByText("Anfragenummer: LS-2026-000042")).toBeVisible();
 
     fireEvent.click(
       screen.getByRole("button", { name: "Weitere Anfrage senden" })
