@@ -128,7 +128,7 @@ export const engineeredPrecision = {
     eyebrow: "Technische Präzision",
     title: "Engineered Precision.",
     body:
-      "Drei schematische Ansichten zeigen Lichtbild, Gestaltung und die für das Aufmaß benötigten Maße. Die konkrete Ausführung wird objektbezogen geprüft."
+      "Drei schematische Ansichten zeigen Lichtbild, Gestaltung und die für das Aufmaß relevanten Abmessungen. Die konkrete Ausführung wird objektbezogen geprüft."
   },
   views: [
     {
@@ -146,7 +146,7 @@ export const engineeredPrecision = {
       label: "Gestaltung",
       title: "Lichtfeld bestimmt den Aufwand.",
       text:
-        "Die orange gestrichelte Kontur markiert den Teil des Volants, der als Lichtfeld ausgeführt wird; die übrige Fläche bleibt Stoff. Größe, Schriftgröße sowie Anzahl von Schriftzügen oder Logos erhöhen den Umfang der Lichtkomponenten und beeinflussen damit die Projektkosten.",
+        "Die orange gestrichelte Kontur markiert den Teil des Volants, der als Lichtfeld ausgeführt wird; die übrige Fläche bleibt Stoff. Größe und Anzahl der Lichtfelder beeinflussen die Projektkosten.",
       image: "/images/lichtsaum-engineered-gestaltung-lichtfeld.webp",
       alt:
         "Schematische Ansicht der dunklen Markise mit orange gestrichelter Kontur um das Lichtfeld des leuchtenden Schriftzugs LICHTSAUM."
@@ -381,7 +381,7 @@ export const faqItems = [
     id: "universal-fit",
     question: "Passt ein Leuchtvolant an jede Markise?",
     answer:
-      "Nein. Vorgesehen ist der Austausch des vorhandenen Volants nur bei einer geeigneten bestehenden Gewerbemarkise. Entscheidend sind die Austauschbarkeit des Volants, Befestigungsart und Maße, ein ungehinderter Bewegungsablauf sowie ein sicher planbarer Kabelweg und eine geeignete Stromversorgung. Die Eignung wird am konkreten Objekt geprüft."
+      "Nein. Vorgesehen ist der Austausch des vorhandenen Volants nur bei einer geeigneten bestehenden Gewerbemarkise. Entscheidend sind die Austauschbarkeit des Volants, die Befestigungsart und die Maße, ein ungehinderter Bewegungsablauf, ein sicher planbarer Kabelweg sowie eine geeignete Stromversorgung. Die Eignung wird am konkreten Objekt geprüft."
   },
   {
     id: "required-inputs",

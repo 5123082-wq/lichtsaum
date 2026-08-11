@@ -84,8 +84,7 @@ export function TransformationComparison({
           type="button"
         >
           <Image
-            aria-hidden="true"
-            alt=""
+            alt={comparisonCard.alt}
             className="transformation__image transformation__image--reveal"
             fill
             sizes="(min-width: 768px) 32vw, 100vw"
@@ -99,8 +98,8 @@ export function TransformationComparison({
 
       <div className="transformation__slogan">
         <p className="transformation__slogan-copy">
-          <span>Tagsüber Marke</span>
-          <span>Nachts Markenlicht</span>
+          <span>Tagsüber Marke.</span>
+          <span>Nachts Markenlicht.</span>
         </p>
       </div>
 

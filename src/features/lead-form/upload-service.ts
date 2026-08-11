@@ -1,6 +1,8 @@
 import "server-only";
 
-import { and, count, eq, gt, gte } from "drizzle-orm";
+import { isDeepStrictEqual } from "node:util";
+
+import { and, count, eq, gt, gte, sql } from "drizzle-orm";
 
 import { getDb } from "@/db";
 import { leadFiles, leads } from "@/db/schema";
@@ -15,11 +17,12 @@ import {
 } from "./blob-storage";
 import {
   blobUploadPayloadSchema,
+  leadSubmissionAttemptSchema,
   uploadManifestSchema,
+  type LeadSubmissionAttempt,
   type UploadFileDescriptor
 } from "./upload-contract";
 import {
-  createUploadToken,
   hashUploadToken,
   uploadTokenMatches
 } from "./upload-security";
@@ -29,6 +32,7 @@ import {
   sendLeadNotification
 } from "./notification-service";
 import { formatPublicLeadNumber } from "./public-lead-number";
+import type { LeadRequestContext } from "./request-context";
 
 const LEAD_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const LEAD_RATE_LIMIT_MAX = 3;
@@ -37,12 +41,14 @@ export interface LeadContactDraft {
   email: string;
   phone?: string;
   projectContext?: string;
+  requestContext?: LeadRequestContext;
   sourcePath?: string;
 }
 
 export interface PlannedLeadFile extends UploadFileDescriptor {
   fileId: string;
   pathname: string;
+  uploaded: boolean;
 }
 
 export interface LeadUploadPlan {
@@ -51,15 +57,196 @@ export interface LeadUploadPlan {
   files: PlannedLeadFile[];
 }
 
+export type LeadUploadPreparation =
+  | { kind: "upload"; plan: LeadUploadPlan }
+  | {
+      kind: "submitted";
+      leadId: string;
+      publicLeadNumber: string;
+    };
+
+type PersistedPlanFile = Readonly<{
+  fileId: string;
+  storageKey: string;
+  originalName: string;
+  mediaType: string;
+  byteSize: number;
+  status: string;
+}>;
+
+function optionalValue<T>(value: T | null | undefined) {
+  return value ?? undefined;
+}
+
+function restorePlannedFiles(
+  records: readonly PersistedPlanFile[],
+  manifest: readonly UploadFileDescriptor[]
+): PlannedLeadFile[] | null {
+  if (records.length !== manifest.length) {
+    return null;
+  }
+
+  return manifest.map((descriptor, index) => {
+    const record = records[index];
+
+    if (
+      !record ||
+      record.originalName !== descriptor.name ||
+      record.mediaType !== descriptor.type ||
+      record.byteSize !== descriptor.size ||
+      (record.status !== "pending" && record.status !== "uploaded")
+    ) {
+      throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
+    }
+
+    return {
+      ...descriptor,
+      fileId: record.fileId,
+      pathname: record.storageKey,
+      uploaded: record.status === "uploaded"
+    };
+  });
+}
+
+async function recoverLeadUploadPreparation(
+  contact: LeadContactDraft,
+  attempt: LeadSubmissionAttempt,
+  manifest: readonly UploadFileDescriptor[],
+  remainingProvisioningRetries = 4
+): Promise<LeadUploadPreparation | undefined> {
+  const db = getDb();
+  const [lead] = await db
+    .select({
+      id: leads.id,
+      leadId: leads.leadId,
+      status: leads.status,
+      email: leads.email,
+      phone: leads.phone,
+      projectContext: leads.projectContext,
+      requestContext: leads.requestContext,
+      sourcePath: leads.sourcePath,
+      uploadTokenHash: leads.uploadTokenHash,
+      createdAt: leads.createdAt
+    })
+    .from(leads)
+    .where(eq(leads.idempotencyKey, attempt.idempotencyKey))
+    .limit(1);
+
+  if (!lead) {
+    return undefined;
+  }
+
+  const tokenIsValid =
+    lead.uploadTokenHash &&
+    uploadTokenMatches(attempt.uploadToken, lead.uploadTokenHash);
+  const contactMatches =
+    lead.email === contact.email &&
+    optionalValue(lead.phone) === optionalValue(contact.phone) &&
+    optionalValue(lead.projectContext) ===
+      optionalValue(contact.projectContext) &&
+    isDeepStrictEqual(
+      optionalValue(lead.requestContext),
+      optionalValue(contact.requestContext)
+    ) &&
+    lead.sourcePath === (contact.sourcePath ?? "/");
+
+  if (!tokenIsValid || !contactMatches) {
+    throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
+  }
+
+  const fileRecords = await db
+    .select({
+      fileId: leadFiles.fileId,
+      storageKey: leadFiles.storageKey,
+      originalName: leadFiles.originalName,
+      mediaType: leadFiles.mediaType,
+      byteSize: leadFiles.byteSize,
+      status: leadFiles.status
+    })
+    .from(leadFiles)
+    .where(eq(leadFiles.leadId, lead.id))
+    .orderBy(leadFiles.id);
+  const files = restorePlannedFiles(fileRecords, manifest);
+
+  if (!files) {
+    const planMayStillBeProvisioning =
+      lead.status === "uploading" &&
+      fileRecords.length < manifest.length &&
+      fileRecords.every((record, index) =>
+        record.originalName === manifest[index]?.name &&
+        record.mediaType === manifest[index]?.type &&
+        record.byteSize === manifest[index]?.size &&
+        record.status === "pending"
+      );
+
+    if (planMayStillBeProvisioning && remainingProvisioningRetries > 0) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      return recoverLeadUploadPreparation(
+        contact,
+        attempt,
+        manifest,
+        remainingProvisioningRetries - 1
+      );
+    }
+
+    throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
+  }
+
+  if (lead.status === "new") {
+    return {
+      kind: "submitted",
+      leadId: lead.leadId,
+      publicLeadNumber: formatPublicLeadNumber(lead.id, lead.createdAt)
+    };
+  }
+
+  if (lead.status !== "uploading") {
+    throw new LeadUploadDiagnosticError("LeadUploadPlanNotAuthorized");
+  }
+
+  const now = new Date();
+
+  await db
+    .update(leads)
+    .set({
+      uploadExpiresAt: uploadExpiryFrom(now),
+      updatedAt: now
+    })
+    .where(and(eq(leads.id, lead.id), eq(leads.status, "uploading")));
+
+  return {
+    kind: "upload",
+    plan: {
+      leadId: lead.leadId,
+      uploadToken: attempt.uploadToken,
+      files
+    }
+  };
+}
+
 export async function createLeadUploadPlan(
   contact: LeadContactDraft,
+  attemptInput: unknown,
   manifestInput: unknown
-): Promise<LeadUploadPlan> {
-  if (!attachmentsAreEnabled()) {
+): Promise<LeadUploadPreparation> {
+  const attempt = leadSubmissionAttemptSchema.parse(attemptInput);
+  const manifest = uploadManifestSchema.parse(manifestInput);
+
+  if (manifest.length > 0 && !attachmentsAreEnabled()) {
     throw new LeadUploadDiagnosticError("LeadUploadIntakeDisabled");
   }
 
-  const manifest = uploadManifestSchema.parse(manifestInput);
+  const recovered = await recoverLeadUploadPreparation(
+    contact,
+    attempt,
+    manifest
+  );
+
+  if (recovered) {
+    return recovered;
+  }
+
   const db = getDb();
   const now = new Date();
   const [recent] = await db
@@ -67,7 +254,7 @@ export async function createLeadUploadPlan(
     .from(leads)
     .where(
       and(
-        eq(leads.email, contact.email),
+        sql`lower(${leads.email}) = lower(${contact.email})`,
         gte(
           leads.createdAt,
           new Date(now.getTime() - LEAD_RATE_LIMIT_WINDOW_MS)
@@ -80,33 +267,50 @@ export async function createLeadUploadPlan(
   }
 
   const leadId = crypto.randomUUID();
-  const uploadToken = createUploadToken();
-  const uploadTokenHash = hashUploadToken(uploadToken);
+  const uploadTokenHash = hashUploadToken(attempt.uploadToken);
   const files = manifest.map((file) => {
     const fileId = crypto.randomUUID();
 
     return {
       ...file,
       fileId,
-      pathname: buildLeadBlobPath(leadId, fileId)
+      pathname: buildLeadBlobPath(leadId, fileId),
+      uploaded: false
     };
   });
 
-  const [lead] = await db
-    .insert(leads)
-    .values({
-      leadId,
-      idempotencyKey: crypto.randomUUID(),
-      status: "uploading",
-      email: contact.email,
-      phone: contact.phone,
-      projectContext: contact.projectContext,
-      sourcePath: contact.sourcePath ?? "/",
-      uploadTokenHash,
-      uploadExpiresAt: uploadExpiryFrom(now),
-      retentionUntil: retentionUntilFrom(now)
-    })
-    .returning({ id: leads.id });
+  let lead: { id: number } | undefined;
+
+  try {
+    [lead] = await db
+      .insert(leads)
+      .values({
+        leadId,
+        idempotencyKey: attempt.idempotencyKey,
+        status: "uploading",
+        email: contact.email,
+        phone: contact.phone,
+        projectContext: contact.projectContext,
+        requestContext: contact.requestContext,
+        sourcePath: contact.sourcePath ?? "/",
+        uploadTokenHash,
+        uploadExpiresAt: uploadExpiryFrom(now),
+        retentionUntil: retentionUntilFrom(now)
+      })
+      .returning({ id: leads.id });
+  } catch (error) {
+    const racedPreparation = await recoverLeadUploadPreparation(
+      contact,
+      attempt,
+      manifest
+    );
+
+    if (racedPreparation) {
+      return racedPreparation;
+    }
+
+    throw error;
+  }
 
   if (!lead) {
     throw new Error("Could not create the lead upload plan.");
@@ -131,7 +335,10 @@ export async function createLeadUploadPlan(
     throw error;
   }
 
-  return { leadId, uploadToken, files };
+  return {
+    kind: "upload",
+    plan: { leadId, uploadToken: attempt.uploadToken, files }
+  };
 }
 
 export async function authorizeLeadFileUpload(
@@ -215,7 +422,6 @@ export async function recordCompletedLeadFileUpload(
     record.storageKey !== pathname ||
     record.mediaType !== contentType
   ) {
-    await deletePrivateBlob(pathname);
     throw new LeadUploadDiagnosticError("LeadUploadCompletionMismatch");
   }
 
@@ -248,11 +454,32 @@ export async function confirmLeadFileUpload(input: {
   leadId: string;
   fileId: string;
   uploadToken: string;
-  pathname: string;
   contentType: string;
 }) {
+  if (!attachmentsAreEnabled()) {
+    throw new LeadUploadDiagnosticError("LeadUploadIntakeDisabled");
+  }
+
   await assertActiveLeadUploadPlan(input.leadId, input.uploadToken);
-  await recordCompletedLeadFileUpload(input.pathname, input.contentType, {
+  const db = getDb();
+  const [plannedFile] = await db
+    .select({ storageKey: leadFiles.storageKey })
+    .from(leadFiles)
+    .innerJoin(leads, eq(leadFiles.leadId, leads.id))
+    .where(
+      and(
+        eq(leads.leadId, input.leadId),
+        eq(leadFiles.fileId, input.fileId),
+        eq(leads.status, "uploading")
+      )
+    )
+    .limit(1);
+
+  if (!plannedFile) {
+    throw new LeadUploadDiagnosticError("LeadUploadCompletionMismatch");
+  }
+
+  await recordCompletedLeadFileUpload(plannedFile.storageKey, input.contentType, {
     leadId: input.leadId,
     fileId: input.fileId
   });
@@ -317,7 +544,6 @@ export async function finalizeLeadUploadPlan(
     .update(leads)
     .set({
       status: "new",
-      uploadTokenHash: null,
       uploadExpiresAt: null,
       updatedAt: new Date()
     })

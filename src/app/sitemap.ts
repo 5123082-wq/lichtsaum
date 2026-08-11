@@ -4,8 +4,30 @@ import { isIndexable, siteUrl } from "@/config/environment";
 import { referenceGallery } from "@/content/references.de";
 import { isReferenceGalleryPublished } from "@/features/references/types";
 
-const LAST_MATERIAL_UPDATE = new Date("2026-08-06T00:00:00.000Z");
-const CORE_INDEXABLE_PATHS = ["/", "/kontakt", "/impressum", "/datenschutz"];
+const CORE_INDEXABLE_ROUTES = [
+  { path: "/", lastModified: new Date("2026-08-10T00:00:00.000Z") },
+  {
+    path: "/kontakt",
+    lastModified: new Date("2026-08-06T00:00:00.000Z")
+  },
+  {
+    path: "/konfigurator",
+    lastModified: new Date("2026-08-11T00:00:00.000Z")
+  },
+  {
+    path: "/impressum",
+    lastModified: new Date("2026-08-06T00:00:00.000Z")
+  },
+  {
+    path: "/datenschutz",
+    lastModified: new Date("2026-08-10T00:00:00.000Z")
+  }
+] as const;
+
+const REFERENCE_ROUTE = {
+  path: "/referenzen",
+  lastModified: new Date("2026-08-09T00:00:00.000Z")
+} as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   if (!isIndexable || !siteUrl) {
@@ -13,12 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   const productionOrigin = siteUrl;
-  const indexablePaths = isReferenceGalleryPublished(referenceGallery)
-    ? [...CORE_INDEXABLE_PATHS, "/referenzen"]
-    : CORE_INDEXABLE_PATHS;
+  const indexableRoutes = isReferenceGalleryPublished(referenceGallery)
+    ? [...CORE_INDEXABLE_ROUTES, REFERENCE_ROUTE]
+    : CORE_INDEXABLE_ROUTES;
 
-  return indexablePaths.map((path) => ({
+  return indexableRoutes.map(({ path, lastModified }) => ({
     url: new URL(path, productionOrigin).toString(),
-    lastModified: LAST_MATERIAL_UPDATE
+    lastModified
   }));
 }

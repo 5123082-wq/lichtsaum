@@ -259,6 +259,8 @@ export function MiniConfiguratorPreview({
               fontWeight={selectedFont.weight}
               key={`${configuration.text}-${configuration.fontId}-${configuration.lightColorId}`}
               opacity={isNight ? 1 : 0.78}
+              style={{ whiteSpace: "pre" }}
+              xmlSpace="preserve"
               x={geometry.textStartMm}
               y={geometry.textBaselineMm}
             >

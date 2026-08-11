@@ -1,62 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { engineeredPrecision } from "@/content/landing.de";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 type PrecisionViewId = (typeof engineeredPrecision.views)[number]["id"];
-type ImageLayer = Readonly<{
-  viewId: PrecisionViewId;
-  state: "incoming" | "outgoing";
-}>;
 
 export function EngineeredPrecisionSection() {
   const [activeViewId, setActiveViewId] =
     useState<PrecisionViewId>("lichtbild");
-  const [imageLayers, setImageLayers] = useState<readonly ImageLayer[]>([
-    { viewId: "lichtbild", state: "incoming" }
-  ]);
-  const outgoingImageCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
-
-  useEffect(() => {
-    return () => {
-      if (outgoingImageCleanupRef.current) {
-        clearTimeout(outgoingImageCleanupRef.current);
-      }
-    };
-  }, []);
 
   function selectView(viewId: PrecisionViewId) {
-    if (viewId === activeViewId) {
-      return;
-    }
-
-    if (outgoingImageCleanupRef.current) {
-      clearTimeout(outgoingImageCleanupRef.current);
-    }
-
     setActiveViewId(viewId);
-    setImageLayers((layers) => {
-      const incomingLayer = layers.find((layer) => layer.state === "incoming");
-
-      return [
-        {
-          viewId: incomingLayer?.viewId ?? viewId,
-          state: "outgoing"
-        },
-        { viewId, state: "incoming" }
-      ];
-    });
-    outgoingImageCleanupRef.current = setTimeout(() => {
-      setImageLayers((layers) =>
-        layers.filter((layer) => layer.state === "incoming")
-      );
-      outgoingImageCleanupRef.current = null;
-    }, 240);
   }
 
   return (
@@ -125,22 +82,18 @@ export function EngineeredPrecisionSection() {
 
           <figure className="engineered-precision__figure" aria-live="polite">
             <div className="engineered-precision__media">
-              {imageLayers.map((layer) => {
-                const view =
-                  engineeredPrecision.views.find(
-                    (candidate) => candidate.id === layer.viewId
-                  ) ?? engineeredPrecision.views[0];
-                const isOutgoing = layer.state === "outgoing";
+              {engineeredPrecision.views.map((view) => {
+                const isActive = view.id === activeViewId;
 
                 return (
                   <Image
                     className="engineered-precision__image"
-                    data-state={layer.state}
+                    data-state={isActive ? "active" : "inactive"}
                     src={view.image}
-                    alt={isOutgoing ? "" : view.alt}
-                    aria-hidden={isOutgoing || undefined}
+                    alt={isActive ? view.alt : ""}
+                    aria-hidden={!isActive || undefined}
                     fill
-                    key={layer.viewId}
+                    key={view.id}
                     sizes="(min-width: 64rem) 58vw, 100vw"
                   />
                 );

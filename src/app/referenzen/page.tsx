@@ -8,7 +8,6 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import {
   deploymentEnvironment,
   isIndexable,
-  isPreviewDeployment,
   siteUrl
 } from "@/config/environment";
 import { siteConfig } from "@/config/site";
@@ -37,20 +36,16 @@ export function generateMetadata(): Metadata {
       description,
       alternates: { canonical: null },
       openGraph: null,
-      ...(isPreviewDeployment
-        ? {
-            robots: {
-              index: false,
-              follow: false,
-              nocache: true,
-              googleBot: {
-                index: false,
-                follow: false,
-                noimageindex: true
-              }
-            }
-          }
-        : {})
+      robots: {
+        index: false,
+        follow: false,
+        nocache: true,
+        googleBot: {
+          index: false,
+          follow: false,
+          noimageindex: true
+        }
+      }
     };
   }
 

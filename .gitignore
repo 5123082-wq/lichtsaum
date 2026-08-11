@@ -1,6 +1,14 @@
 # Local temporary workspace
 temp/
 
+# Local-only review and generation output
+artifacts/
+output/
+
+# Editor and agent settings
+.vscode/
+.codex/
+
 # Operating system
 .DS_Store
 
@@ -24,3 +32,7 @@ test-results/
 
 # Logs
 *.log
+
+# Unused production media candidates
+public/images/candidates/
+public/brand/candidates/

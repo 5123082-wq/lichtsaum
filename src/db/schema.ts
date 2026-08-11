@@ -10,6 +10,8 @@ import {
   uuid
 } from "drizzle-orm/pg-core";
 
+import type { LeadRequestContext } from "@/features/lead-form/request-context";
+
 export const leads = pgTable(
   "leads",
   {
@@ -20,6 +22,7 @@ export const leads = pgTable(
     email: text("email").notNull(),
     phone: text("phone"),
     projectContext: text("project_context"),
+    requestContext: jsonb("request_context").$type<LeadRequestContext>(),
     sourcePath: text("source_path").default("/").notNull(),
     attribution: jsonb("attribution"),
     consentPolicyVersion: text("consent_policy_version"),

@@ -25,10 +25,23 @@ export const uploadManifestSchema = z
     "The combined file size exceeds 50 MB."
   );
 
+export const leadUploadTokenSchema = z
+  .string()
+  .min(43)
+  .max(128)
+  .regex(/^[A-Za-z0-9_-]+$/, "Invalid upload token.");
+
+export const leadSubmissionAttemptSchema = z
+  .object({
+    idempotencyKey: z.string().uuid(),
+    uploadToken: leadUploadTokenSchema
+  })
+  .strict();
+
 export const blobUploadPayloadSchema = z.object({
   leadId: z.string().uuid(),
   fileId: z.string().uuid(),
-  uploadToken: z.string().min(32).max(256)
+  uploadToken: leadUploadTokenSchema
 });
 
 export const blobCallbackPayloadSchema = blobUploadPayloadSchema.omit({
@@ -36,3 +49,6 @@ export const blobCallbackPayloadSchema = blobUploadPayloadSchema.omit({
 });
 
 export type UploadFileDescriptor = z.infer<typeof uploadFileDescriptorSchema>;
+export type LeadSubmissionAttempt = z.infer<
+  typeof leadSubmissionAttemptSchema
+>;

@@ -16,6 +16,9 @@ import {
   type FormEvent
 } from "react";
 
+import { emitGenerateLeadOnce } from "@/features/analytics/events";
+import type { ConfiguratorCalculation } from "@/features/configurator/types";
+
 import {
   isAcceptedProjectFileType,
   MAX_PROJECT_FILES,
@@ -23,6 +26,7 @@ import {
   MAX_PROJECT_FILES_TOTAL_SIZE,
   PROJECT_FILE_ACCEPT
 } from "./file-rules";
+import type { ConfiguratorProjectSubmission } from "./request-context";
 import {
   confirmProjectFileUpload,
   finalizeProjectCheckSubmission,
@@ -41,8 +45,68 @@ const fieldClassName =
 const labelClassName =
   "mb-2 block text-sm font-semibold text-[var(--text-primary)]";
 
+const euroCurrencyFormatter = new Intl.NumberFormat("de-DE", {
+  style: "currency",
+  currency: "EUR"
+});
+
+type ConfiguratorPricingChange = Readonly<{
+  pricingVersion: string;
+  calculation: ConfiguratorCalculation;
+}>;
+
+type LeadFormProps = Readonly<{
+  attachmentsEnabled?: boolean;
+  configuratorProject?: ConfiguratorProjectSubmission;
+  labelledById?: string;
+  onConfiguratorPricingConfirmed?: (
+    change: ConfiguratorPricingChange
+  ) => void;
+  onSubmissionPendingChange?: (isPending: boolean) => void;
+}>;
+
 function fileKey(file: File) {
   return [file.name, file.size, file.type, file.lastModified].join(":");
+}
+
+type ClientSubmissionAttempt = Readonly<{
+  fingerprint: string;
+  idempotencyKey: string;
+  uploadToken: string;
+}>;
+
+function canonicalize(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(canonicalize);
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, entry]) => [key, canonicalize(entry)])
+    );
+  }
+
+  return value;
+}
+
+function submissionFingerprint(value: unknown) {
+  return JSON.stringify(canonicalize(value));
+}
+
+function createClientUploadToken() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  let binary = "";
+
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+
+  return btoa(binary)
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replace(/=+$/, "");
 }
 
 function formatFileSize(bytes: number) {
@@ -177,8 +241,50 @@ function ErrorSummary({ state }: { state: ProjectCheckFormState }) {
   );
 }
 
-export function LeadForm() {
+function SubmissionLoader({ active }: { active: boolean }) {
+  return (
+    <div
+      className="lead-form__loader"
+      data-active={active}
+      aria-hidden={!active}
+    >
+      <svg
+        className="lead-form__loader-mark"
+        viewBox="0 0 512 512"
+        aria-hidden="true"
+      >
+        <g className="lead-form__loader-pieces" fill="currentColor">
+          <path
+            className="lead-form__loader-piece lead-form__loader-piece--a"
+            d="M96 96h320L96 416V96Z"
+          />
+          <path
+            className="lead-form__loader-piece lead-form__loader-piece--b"
+            d="M116 416h212V208L116 416Z"
+          />
+          <path
+            className="lead-form__loader-piece lead-form__loader-piece--c"
+            d="M348 188v228h72V116l-72 72Z"
+          />
+        </g>
+      </svg>
+      <span className="sr-only" aria-live="polite">
+        {active ? "Ihre Anfrage wird verarbeitet." : ""}
+      </span>
+    </div>
+  );
+}
+
+export function LeadForm({
+  attachmentsEnabled = true,
+  configuratorProject,
+  labelledById = "project-check-title",
+  onConfiguratorPricingConfirmed,
+  onSubmissionPendingChange
+}: LeadFormProps) {
   const [state, setState] = useState(initialProjectCheckFormState);
+  const [configuratorPricingChange, setConfiguratorPricingChange] =
+    useState<ConfiguratorPricingChange | null>(null);
   const [isPending, startTransition] = useTransition();
   const [attachments, setAttachments] = useState<ProjectAttachment[]>([]);
   const [fileSelectionError, setFileSelectionError] = useState("");
@@ -188,6 +294,8 @@ export function LeadForm() {
   const successRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewUrlsRef = useRef(new Set<string>());
+  const submissionAttemptRef = useRef<ClientSubmissionAttempt | null>(null);
+  const submissionLockRef = useRef(false);
 
   function syncFileInput(files: File[]) {
     if (!fileInputRef.current) {
@@ -319,6 +427,19 @@ export function LeadForm() {
     }
   }, [state.status]);
 
+  useEffect(() => {
+    if (!isPending) {
+      return;
+    }
+
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.documentElement.style.overflow = previousOverflow;
+    };
+  }, [isPending]);
+
   const hasResult =
     state.status === "prototype_validated" ||
     state.status === "prototype_unavailable";
@@ -333,16 +454,55 @@ export function LeadForm() {
     formRef.current?.reset();
     setAttachments([]);
     setFileSelectionError("");
+    setConfiguratorPricingChange(null);
     setState(initialProjectCheckFormState);
+    submissionAttemptRef.current = null;
 
     requestAnimationFrame(() => emailInputRef.current?.focus());
   }
 
   function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (submissionLockRef.current) {
+      return;
+    }
+
+    submissionLockRef.current = true;
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const sourcePath = window.location.pathname;
+    const files = attachments.map((attachment) => ({
+      name: attachment.file.name,
+      type: attachment.file.type,
+      size: attachment.file.size
+    }));
+    const fingerprint = submissionFingerprint({
+      email: String(formData.get("email") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      projectContext: String(formData.get("projectContext") ?? ""),
+      website: String(formData.get("website") ?? ""),
+      sourcePath,
+      configuratorProject,
+      files: attachments.map((attachment) => ({
+        name: attachment.file.name,
+        type: attachment.file.type,
+        size: attachment.file.size,
+        lastModified: attachment.file.lastModified
+      }))
+    });
+    let attempt = submissionAttemptRef.current;
 
+    if (!attempt || attempt.fingerprint !== fingerprint) {
+      attempt = {
+        fingerprint,
+        idempotencyKey: crypto.randomUUID(),
+        uploadToken: createClientUploadToken()
+      };
+      submissionAttemptRef.current = attempt;
+    }
+
+    onSubmissionPendingChange?.(true);
     startTransition(async () => {
       let leadIdForRecovery: string | null = null;
 
@@ -352,16 +512,28 @@ export function LeadForm() {
           phone: String(formData.get("phone") ?? ""),
           projectContext: String(formData.get("projectContext") ?? ""),
           website: String(formData.get("website") ?? ""),
-          sourcePath: window.location.pathname,
-          files: attachments.map((attachment) => ({
-            name: attachment.file.name,
-            type: attachment.file.type,
-            size: attachment.file.size
-          }))
+          sourcePath,
+          idempotencyKey: attempt.idempotencyKey,
+          uploadToken: attempt.uploadToken,
+          configuratorProject,
+          files
         });
 
         if (prepared.kind === "result") {
+          if (prepared.state.status === "submitted" && prepared.state.leadId) {
+            emitGenerateLeadOnce(prepared.state.leadId);
+          }
+
           setState(prepared.state);
+          return;
+        }
+
+        if (prepared.kind === "pricing_changed") {
+          setConfiguratorPricingChange({
+            pricingVersion: prepared.pricingVersion,
+            calculation: prepared.calculation
+          });
+          requestAnimationFrame(() => resultRef.current?.focus());
           return;
         }
 
@@ -374,6 +546,10 @@ export function LeadForm() {
         });
 
         for (const [index, plannedFile] of prepared.plan.files.entries()) {
+          if (plannedFile.uploaded) {
+            continue;
+          }
+
           const attachment = attachments[index];
 
           if (!attachment) {
@@ -394,17 +570,20 @@ export function LeadForm() {
             leadId: prepared.plan.leadId,
             fileId: plannedFile.fileId,
             uploadToken: prepared.plan.uploadToken,
-            pathname: blob.pathname,
             contentType: blob.contentType
           });
         }
 
-        setState(
-          await finalizeProjectCheckSubmission(
-            prepared.plan.leadId,
-            prepared.plan.uploadToken
-          )
+        const finalizedState = await finalizeProjectCheckSubmission(
+          prepared.plan.leadId,
+          prepared.plan.uploadToken
         );
+
+        if (finalizedState.status === "submitted" && finalizedState.leadId) {
+          emitGenerateLeadOnce(finalizedState.leadId);
+        }
+
+        setState(finalizedState);
       } catch {
         if (leadIdForRecovery) {
           try {
@@ -413,10 +592,11 @@ export function LeadForm() {
             );
 
             if (recoveredStatus.status === "submitted") {
+              emitGenerateLeadOnce(leadIdForRecovery);
               setState({
                 status: "submitted",
                 message:
-                  "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über die angegebene Kontaktmöglichkeit.",
+                  "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über den von Ihnen angegebenen Kontaktweg.",
                 fieldErrors: {},
                 leadId: leadIdForRecovery,
                 publicLeadNumber: recoveredStatus.publicLeadNumber
@@ -434,6 +614,9 @@ export function LeadForm() {
             "Die Projektanfrage konnte nicht sicher gespeichert werden. Bitte versuchen Sie es später erneut.",
           fieldErrors: {}
         });
+      } finally {
+        submissionLockRef.current = false;
+        onSubmissionPendingChange?.(false);
       }
     });
   }
@@ -445,17 +628,24 @@ export function LeadForm() {
       name="project-check-form"
       ref={formRef}
       onSubmit={submitForm}
-      aria-labelledby="project-check-title"
+      aria-labelledby={labelledById}
+      aria-busy={isPending}
       noValidate
     >
       <div className="lead-form__stage" data-submitted={isSubmitted}>
         <div
           className="lead-form__entry"
           aria-hidden={isSubmitted}
-          inert={isSubmitted}
+          inert={isSubmitted || isPending}
         >
-      <div className="grid desktop:grid-cols-2">
-        <div className="grid content-start gap-6 border-b border-[var(--border)] py-8 desktop:border-b-0 desktop:border-r desktop:py-10 desktop:pr-10">
+      <div className={attachmentsEnabled ? "grid desktop:grid-cols-2" : "grid"}>
+        <div
+          className={
+            attachmentsEnabled
+              ? "grid content-start gap-6 border-b border-[var(--border)] py-8 desktop:border-b-0 desktop:border-r desktop:py-10 desktop:pr-10"
+              : "grid content-start gap-6 py-8 desktop:py-10"
+          }
+        >
           <div>
             <p className="m-0 font-mono text-xs font-bold uppercase tracking-[0.1em] text-[var(--accent)]">
               01 / Kontakt
@@ -465,9 +655,44 @@ export function LeadForm() {
             </h3>
           </div>
 
-          {state.status !== "idle" ? (
+          {state.status !== "idle" || configuratorPricingChange ? (
             <div ref={resultRef} tabIndex={-1}>
               <ErrorSummary state={state} />
+              {configuratorPricingChange ? (
+                <div
+                  className="border-l-4 border-[var(--accent)] bg-[rgb(255_92_0_/_8%)] p-5"
+                  role="alert"
+                  aria-labelledby="configurator-pricing-change-title"
+                >
+                  <h3
+                    className="m-0 text-lg font-bold text-[var(--text-primary)]"
+                    id="configurator-pricing-change-title"
+                  >
+                    Kalkulation wurde aktualisiert
+                  </h3>
+                  <p className="mt-2 text-sm text-[var(--text-muted)]">
+                    Der neue vorläufige Nettopreis beträgt{" "}
+                    {euroCurrencyFormatter.format(
+                      configuratorPricingChange.calculation.netTotalCents / 100
+                    )}
+                    . Bitte übernehmen Sie die Aktualisierung und senden Sie
+                    die Anfrage danach erneut.
+                  </p>
+                  <button
+                    className="button button--secondary mt-4"
+                    onClick={() => {
+                      onConfiguratorPricingConfirmed?.(
+                        configuratorPricingChange
+                      );
+                      setConfiguratorPricingChange(null);
+                      setState(initialProjectCheckFormState);
+                    }}
+                    type="button"
+                  >
+                    Aktualisierten Preis bestätigen
+                  </button>
+                </div>
+              ) : null}
               {hasResult ? (
                 <div
                   className="border-l-4 border-[var(--accent)] bg-[rgb(255_92_0_/_8%)] p-5"
@@ -564,7 +789,8 @@ export function LeadForm() {
           </div>
         </div>
 
-        <div className="grid content-start gap-6 py-8 desktop:py-10 desktop:pl-10">
+        {attachmentsEnabled ? (
+          <div className="grid content-start gap-6 py-8 desktop:py-10 desktop:pl-10">
           <div>
             <p className="m-0 font-mono text-xs font-bold uppercase tracking-[0.1em] text-[var(--accent)]">
               02 / Dateien
@@ -706,8 +932,8 @@ export function LeadForm() {
               zur Bearbeitung Ihrer Anfrage übermitteln dürfen.
             </p>
           </div>
-
-        </div>
+          </div>
+        ) : null}
       </div>
 
       <div
@@ -739,7 +965,7 @@ export function LeadForm() {
           <button
             className="button button--primary min-w-60 disabled:cursor-not-allowed disabled:opacity-60"
             type="submit"
-            disabled={isPending}
+            disabled={isPending || configuratorPricingChange !== null}
           >
             {state.status === "uploading"
               ? "Dateien werden übertragen…"
@@ -779,8 +1005,8 @@ export function LeadForm() {
               <p className="lead-form__success-copy">
                 Vielen Dank für Ihre Anfrage. Ihre Angaben
                 {attachments.length > 0 ? " und Dateien" : ""} wurden sicher
-                übermittelt. Wir melden uns über die angegebene
-                Kontaktmöglichkeit.
+                übermittelt. Wir melden uns über den von Ihnen angegebenen
+                Kontaktweg.
               </p>
               {state.publicLeadNumber ? (
                 <p className="font-mono text-sm font-bold uppercase tracking-[0.08em] text-[var(--text-primary)]">
@@ -797,6 +1023,8 @@ export function LeadForm() {
             </>
           ) : null}
         </div>
+
+        <SubmissionLoader active={isPending && !isSubmitted} />
       </div>
     </form>
   );

@@ -1,7 +1,7 @@
 # LICHTSAUM configurator fonts
 
-The mini-configurator bundles the following fonts locally. No runtime request is made to Google
-Fonts or another font CDN.
+The mini and full configurators bundle the following fonts locally. No runtime request is made to
+Google Fonts or another font CDN.
 
 | Font | Copyright notice | License copy |
 | --- | --- | --- |
@@ -19,6 +19,18 @@ from the official `google/fonts` repository at revision
 `389b770410cc0b7c21c85673bfa2077420fe7f65`, reviewed on 2026-07-17. The locally served WOFF2
 files were generated from those sources for web delivery and subset to the character ranges used
 by the configurator (Latin, Cyrillic, common punctuation, currency symbols and selected marks).
+
+Both configurators use static Regular/400 WOFF2 instances for Montserrat, Open Sans, Oswald,
+Playfair Display, Rubik and Source Sans 3. They were derived from the already bundled variable
+WOFF2 files with fontTools 4.60.2 so both browser previews and the server-side fontkit calculation
+read the same fixed outlines and metrics. The reproducible command pattern was:
+
+```sh
+python3 -m fontTools.varLib.instancer INPUT-variable.woff2 wght=400 --static --no-recalc-timestamp -q -o OUTPUT-regular-400.woff2
+```
+
+This format/instance conversion does not change the applicable SIL Open Font License 1.1; the same
+license copies and copyright notices listed above cover the derived files.
 
 The CSS/runtime family names are scoped with a `LICHTSAUM` prefix to avoid collisions with other
 font installations. This attribution does not imply endorsement of LICHTSAUM by the font authors

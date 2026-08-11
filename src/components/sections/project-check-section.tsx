@@ -1,3 +1,4 @@
+import { displaysLeadAttachmentPicker } from "@/config/environment";
 import { LeadForm } from "@/features/lead-form/lead-form";
 
 export function ProjectCheckSection() {
@@ -21,11 +22,13 @@ export function ProjectCheckSection() {
             </h2>
           </div>
           <p className="m-0 max-w-[22ch] text-[clamp(1.2rem,2vw,1.6rem)] font-semibold leading-snug text-[var(--text-muted)] desktop:pb-1">
-            E-Mail genügt. Dateien optional.
+            {displaysLeadAttachmentPicker
+              ? "E-Mail genügt. Dateien optional."
+              : "E-Mail genügt."}
           </p>
         </div>
 
-        <LeadForm />
+        <LeadForm attachmentsEnabled={displaysLeadAttachmentPicker} />
       </div>
     </section>
   );

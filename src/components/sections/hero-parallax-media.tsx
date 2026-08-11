@@ -116,7 +116,7 @@ export function HeroParallaxMedia() {
       <Image
         className="hero__image hero__image--day"
         src="/images/lichtsaum-concept-cad-awning-off.webp"
-        alt="Konzeptvisualisierung einer dunklen Gewerbemarkise an einer modernen Fassade, die rechts in eine technische Linienzeichnung übergeht; die Beschriftung LICHTSAUM ist unbeleuchtet."
+        alt="Konzeptvisualisierung einer dunklen Gewerbemarkise an einer modernen Fassade, die rechts in eine technische Linienzeichnung übergeht; beim Scrollen wechselt der Schriftzug LICHTSAUM von unbeleuchtet zu warm leuchtend."
         width={1672}
         height={941}
         preload
@@ -128,7 +128,7 @@ export function HeroParallaxMedia() {
         alt=""
         width={1672}
         height={941}
-        preload
+        loading="lazy"
         sizes="100vw"
         data-hero-night
       />

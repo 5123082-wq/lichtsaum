@@ -14,7 +14,7 @@ export function ConfiguratorSection() {
           </p>
           <h2 id="configurator-title">LICHTSAUM STUDIO</h2>
           <div>
-            <p>Wie könnte es an Ihrer Fassade aussehen?</p>
+            <p>Wie könnte Ihr Volant aussehen?</p>
             <span>
               Schriftzug, Farbe und Proportionen direkt in einer schematischen
               Frontansicht vergleichen.

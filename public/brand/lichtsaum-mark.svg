@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
-  <title id="title">LICHTSAUM Bildmarke</title>
-  <desc id="desc">Eine geometrische L-Form mit einem orangefarbenen Lichtsaum.</desc>
-  <rect width="1024" height="1024" fill="#131313"/>
-  <path fill="#E5E2E1" d="M240 208h144v424h400v144H240z"/>
-  <path fill="#E5E2E1" d="m384 456 56-64h392l-64 112H384z"/>
-  <path fill="#FF5C00" d="M384 504h384l-18 32H384z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">LICHTSAUM</title>
+  <rect width="512" height="512" fill="#11100F"/>
+  <g fill="#FF5C00">
+    <path d="M96 96h320L96 416V96Z"/>
+    <path d="M116 416h212V208L116 416Z"/>
+    <path d="M348 188v228h72V116l-72 72Z"/>
+  </g>
 </svg>
