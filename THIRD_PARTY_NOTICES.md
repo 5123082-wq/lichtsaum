@@ -51,6 +51,16 @@ license copies are stored in `public/fonts/lichtsaum-configurator/`.
 
 This attribution does not imply endorsement of LICHTSAUM by the font authors or contributors.
 
+## Font measurement engine
+
+The full configurator uses `fontkit` 2.0.4 to open the locally bundled WOFF2 files and reproduce
+glyph layout, kerning and metrics on the application server. The dependency is distributed under
+the MIT License.
+
+- Project: `foliojs/fontkit`
+- Source: `https://github.com/foliojs/fontkit`
+- Installed version: `2.0.4`
+
 ## Europe contact-map geometry
 
 The local map asset in `public/maps/lichtsaum-europe-countries-10m.svg` is derived from Natural

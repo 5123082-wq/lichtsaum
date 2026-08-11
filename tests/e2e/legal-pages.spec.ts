@@ -10,17 +10,20 @@ test("renders the adapted Impressum with verified provider details", async ({
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Impressum");
   await expect(page.getByText("NVKV Werbeagentur Inh. Ivan Novikov").first()).toBeVisible();
   await expect(page.getByText("Dannenwalder Weg 110")).toBeVisible();
-  await expect(page.getByRole("link", { name: "info@nvkv.de" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "info@lichtsaum.com" })
+  ).toBeVisible();
   await expect(page.getByText("DE367887602")).toBeVisible();
-  await expect(page.getByText(/nicht bereit oder verpflichtet/)).toBeVisible();
 
   const content = await page.locator("main").textContent();
+  expect(content).not.toContain("Verbraucherstreitbeilegung");
+  expect(content).not.toContain("Haftung für Inhalte");
   expect(content).not.toContain("pixel-ring.com");
   expect(content).not.toContain("ec.europa.eu/consumers/odr");
-  await expect(page.locator('[data-legal-review="required"]')).toHaveCount(5);
+  await expect(page.locator('[data-legal-review="required"]')).toHaveCount(0);
 });
 
-test("describes only the current LICHTSAUM data flows", async ({ page }) => {
+test("describes the confirmed LICHTSAUM data flows", async ({ page }) => {
   const response = await page.goto("/datenschutz");
 
   expect(response?.status()).toBe(200);
@@ -30,8 +33,17 @@ test("describes only the current LICHTSAUM data flows", async ({ page }) => {
   await expect(
     page.getByText("sessionStorage", { exact: true })
   ).toBeVisible();
-  await expect(page.getByText(/keine Cookies/)).toBeVisible();
-  await expect(page.getByText(/nicht dauerhaft gespeichert/)).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "4. Google Tag Manager, Analytics und Ads"
+    })
+  ).toBeVisible();
+  await expect(page.getByText("lichtsaum_consent")).toBeVisible();
+  await expect(
+    page.locator("main p").filter({
+      hasText: "Das Projektformular ist in dieser Umgebung eine Prototypfunktion."
+    })
+  ).toContainText("nicht dauerhaft gespeichert");
   await expect(
     page.getByText("Berliner Beauftragte für Datenschutz und Informationsfreiheit")
   ).toBeVisible();
@@ -40,7 +52,7 @@ test("describes only the current LICHTSAUM data flows", async ({ page }) => {
   expect(content).not.toContain("OpenAI");
   expect(content).not.toContain("PixelRing");
   expect(content).not.toContain("Diese Erklärung beschreibt den aktuellen");
-  await expect(page.locator('[data-legal-review="required"]')).toHaveCount(11);
+  await expect(page.locator('[data-legal-review="required"]')).toHaveCount(0);
 });
 
 for (const route of ["/impressum", "/datenschutz"] as const) {

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  normalizeProjectSourcePath,
   parseProjectCheckFormData,
-  projectCheckSchema
+  projectCheckSchema,
+  projectSourcePathSchema
 } from "../../src/features/lead-form/schema";
 
 const validInput = {
@@ -172,5 +174,25 @@ describe("projectCheckSchema", () => {
     if (result.success) {
       expect(result.data.email).toBe(validInput.email);
     }
+  });
+
+  it("accepts only bounded site-relative source paths", () => {
+    expect(projectSourcePathSchema.safeParse("/").success).toBe(true);
+    expect(projectSourcePathSchema.safeParse("/kontakt").success).toBe(true);
+    expect(projectSourcePathSchema.safeParse("/de/projekt-check/").success).toBe(
+      true
+    );
+    expect(
+      projectSourcePathSchema.safeParse("/?email=person@example.test").success
+    ).toBe(false);
+    expect(projectSourcePathSchema.safeParse("https://example.test/").success).toBe(
+      false
+    );
+  });
+
+  it("falls back to the homepage instead of persisting an unsafe source path", () => {
+    expect(normalizeProjectSourcePath("/kontakt")).toBe("/kontakt");
+    expect(normalizeProjectSourcePath("/?message=private")).toBe("/");
+    expect(normalizeProjectSourcePath("mailto:person@example.test")).toBe("/");
   });
 });

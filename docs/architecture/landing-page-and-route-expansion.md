@@ -1,10 +1,14 @@
 # Landing Page and Route Expansion Brief
 
-Status: `Decision` with local references-gallery review implemented  
-Last reviewed: 2026-08-06
+Status: `Decision`; public references gallery and full configurator implemented locally
+Last reviewed: 2026-08-11
 
-Scope: homepage information architecture, navigation, compact configurator, application gallery,
-modal routing and Search boundaries
+> Publication controls in this brief are superseded by
+> [`publication-governance.md`](publication-governance.md). Keep the technical and UX contracts;
+> use `Спросить у пользователя` for actual publication, indexing, Ads and attachment choices.
+
+Scope: homepage information architecture, navigation, compact/full configurator, application
+gallery, modal routing and Search boundaries
 
 ## Purpose
 
@@ -40,8 +44,8 @@ modal routing and Search boundaries
 - Объединённый Eignung-блок `Konstruktion prüfen. Volant erneuern.` сохраняется без возврата
   удалённых CTA и строки входных материалов.
 - Главная использует один основной CTA: `Projekt prüfen lassen`.
-- Первый этап мини-конфигуратора реализуется только на главной: существующий `#kosten` полностью
-  заменяется блоком `#konfigurator` / `LICHTSAUM STUDIO`; отдельный маршрут пока не создаётся.
+- Первый этап мини-конфигуратора остаётся на главной: существующий `#kosten` полностью заменён
+  блоком `#konfigurator` / `LICHTSAUM STUDIO`; ADR-015 subsequently adds the separate full route.
 - Сцена мини-конфигуратора — компактный параметрический SVG в прямой фронтальной проекции: только
   световой волан без верхнего полотна маркизы, фасада и растровой фотографии.
 - AI-визуализация, загрузка фотографии клиента и перенос SVG на фотографию отложены за границу
@@ -50,30 +54,38 @@ modal routing and Search boundaries
   позиция галереи → FAQ → project check → footer.
 - `Varianten`, `Ablauf`, `Projektgrenzen`, `Nachweise` и `Alternatives` исключены из render; их
   исходные компоненты пока сохранены.
-- Навигация использует четыре абсолютных домашних anchor: `/#produkt`, `/#eignung`,
-  `/#konfigurator`, `/#faq`. `Referenzen` добавляется только при публикации галереи.
-- Галерея реализована как data-driven scaffold со статусами `awaiting-assets`, `review` и
-  `published`. Текущее состояние — local `review` с четырьмя явно маркированными временными
-  AI-концептами, одобренными владельцем для визуальной проверки.
-- AI-концепты не являются Referenzen и не могут активировать `published`; публичная галерея
-  по-прежнему требует четыре фотографии реальных выполненных проектов.
+- Навигация использует `/#wirkung` для `Produkt`, canonical `/konfigurator` для полного инструмента,
+  conditional `/referenzen` и `/kontakt`; `Eignung` и `FAQ` остаются в homepage flow, но не в
+  global header.
+- Global `Konfigurator` navigation now targets the substantive `/konfigurator` route; the homepage
+  `#konfigurator` remains the visual teaser and transfers only its non-personal session draft.
+- Галерея реализована как data-driven registry со статусом `published`: три реальные объектные
+  фотографии и одна постоянно маркированная концепт-визуализация публично одобрены владельцем.
+- Публичная галерея использует нейтральное название `Ansichten` и не утверждает, что объекты были
+  выполнены LICHTSAUM.
 
-### Proposed / later phase
+### Implemented locally on 2026-08-11
 
-- Полный конфигуратор получает отдельную страницу.
+- `/konfigurator` is a separate server-rendered German route with a three-step calculator, one
+  authoritative pricing version and the shared project-inquiry form.
+- The route is added to the production-gated sitemap but no deployment, Search Console submission,
+  GTM publication or Ads activation is authorized by this implementation.
 
 ### TBD
 
-- окончательные production slugs после проверки Search intent;
-- формула, цена, VAT treatment и допустимая точность полного калькулятора;
+- slugs for any additional future route; `/`, `/konfigurator`, `/referenzen` and `/kontakt` are
+  current decisions;
+- consumer/B2C VAT presentation and legal release of the net-only calculator beyond the expressly
+  commercial-project positioning;
+- maximum panel count, physical joints and mounting gaps for technical compatibility approval;
 - реальные project/reference assets и право на публичные фактические подписи;
-- production domain, canonical origin и sitemap activation.
+- production release and sitemap activation on the already verified canonical origin.
 
 ## Block responsibilities
 
 | Block | Русское описание и концепция | Назначение | Восприятие клиентом |
 | --- | --- | --- | --- |
-| Header / navigation | Минимальная навигация по продукту и самостоятельным инструментам | Дать быстрый доступ к визуальному результату продукта, конфигуратору, Referenzen, контакту и заявке; review-галерея доступна только в local/protected preview, а production Referenzen — только после публикации | «Я понимаю структуру сайта и главное действие» |
+| Header / navigation | Минимальная навигация по продукту и самостоятельным инструментам | Дать быстрый доступ к визуальному результату продукта, конфигуратору, публичной галерее, контакту и заявке | «Я понимаю структуру сайта и главное действие» |
 | Hero — `Markise wird Markenlicht.` | Существующая маркиза превращается в носитель светового бренда | За один экран объяснить продукт и результат | «Это визуально сильное обновление существующей маркизы» |
 | Three principles | `Bestehendes weiterdenken`, `Markenlicht gestalten`, `Objektbezogen prüfen` | Зафиксировать философию продукта | «Подход разумный, индивидуальный и ответственный» |
 | `Eine Fassade. Zwei Ansichten.` | Эмоциональное сравнение восприятия фасада | Объяснить, зачем нужна подсветка, без ROI-обещаний | «Я вижу эффект и смысл продукта» |
@@ -81,7 +93,7 @@ modal routing and Search boundaries
 | `Konstruktion prüfen. Volant erneuern.` | Проверка конструкции и замена только волана | Снять страх полной замены и честно обозначить compatibility boundary | «Маркизу можно сохранить, если объект подходит» |
 | Mini configurator | Интерактивный визуальный выбор оформления | Дать сравнить надпись без logo, с logo слева или с одинаковыми logo по краям | «Я вижу подходящее направление для своего объекта» |
 | Mini assessment | Небольшая предварительная классификация без неподтверждённой цены | Показать, достаточно ли данных для первого review | «Я понимаю следующий шаг, но не получаю ложного расчёта» |
-| `Ausgewählte Referenzen` | Небольшой набор подтверждённых реализованных проектов | Показать сопоставимые реальные объекты, их размещение и согласованный scope | «Я вижу, что решение уже реализовано в похожем контексте» |
+| `Ausgewählte Ansichten` | Три реальные объектные фотографии и одна раскрытая концепт-визуализация | Показать световую композицию в разных контекстах без заявления о выполненных проектах LICHTSAUM | «Я вижу возможные направления и контексты применения» |
 | `Fragen.` | Короткий FAQ о совместимости, размерах, Stromweg (кабельный/электрический путь), согласованиях и нужных материалах | Закрыть оставшиеся возражения | «Основные риски предусмотрены без необоснованных обещаний» |
 | `Projekt prüfen lassen` | Предельно короткий первый контакт без анкеты | Дать начать диалог, не превращая интерес в технический бриф | «Оставить заявку легко; детали можно уточнить позже» |
 | Footer | Двухчастное завершение: световая бренд-полоса и служебная строка | Завершить страницу, закрепить образ бренда и дать обязательные ссылки | «Сайт завершённый, продуманный и ответственный» |
@@ -96,8 +108,7 @@ modal routing and Search boundaries
 4. **Как это проектируется?** — `Engineered Precision`.
 5. **Подойдёт ли существующая маркиза?** — объединённый Eignung.
 6. **Как это может выглядеть?** — мини-конфигуратор.
-7. **Где это уже реализовано?** — карточки `Ausgewählte Referenzen`, только когда доступны четыре
-   подтверждённых проекта.
+7. **Как это выглядит в разных контекстах?** — публичная галерея `Ausgewählte Ansichten`.
 8. **Какие остаются вопросы?** — `Fragen.`.
 9. **Что сделать сейчас?** — `Projekt prüfen lassen`.
 
@@ -110,7 +121,7 @@ modal routing and Search boundaries
 5. `Engineered Precision`.
 6. `Konstruktion prüfen. Volant erneuern.`.
 7. Visual mini-configurator with preliminary assessment.
-8. `Ausgewählte Referenzen` preview.
+8. `Ausgewählte Ansichten` gallery.
 9. `Fragen.`.
 10. `Projekt prüfen lassen`.
 11. Footer.
@@ -119,20 +130,14 @@ modal routing and Search boundaries
 
 ### Current desktop navigation
 
-Local/protected review: `LICHTSAUM · Produkt · Konfigurator · Referenzen · Kontakt ·
-[Projekt prüfen lassen]`.
-
-Production до валидного `published`: `LICHTSAUM · Produkt · Konfigurator · Kontakt ·
-[Projekt prüfen lassen]`.
-
-После валидного `published`: `LICHTSAUM · Produkt · Konfigurator · Referenzen · Kontakt ·
+Current navigation: `LICHTSAUM · Produkt · Konfigurator · Referenzen · Kontakt ·
 [Projekt prüfen lassen]`.
 
 | Label | Target | Decision |
 | --- | --- | --- |
 | `Produkt` | `/#wirkung` | Owner decision: `Eine Fassade. Zwei Ansichten.` is the menu destination |
-| `Konfigurator` | `/#konfigurator` | Replace `Varianten` and `Kosten` |
-| `Referenzen` | `/referenzen` | Show in local/protected review; show in production only for a valid `published` registry |
+| `Konfigurator` | `/konfigurator` | Substantive full tool; homepage `#konfigurator` remains its teaser |
+| `Referenzen` | `/referenzen` | Public gallery route in production; preview follows the global noindex policy |
 | `Kontakt` | `/kontakt` | Keep as the direct contact-information route |
 | `Projekt prüfen lassen` | `/#projekt-pruefen` | Keep as separate primary CTA |
 
@@ -140,8 +145,9 @@ Changes from the current menu:
 
 - remove `Eignung` and `FAQ` from the global header; both sections remain in the homepage flow;
 - point `Produkt` to the owner-selected transformation section `#wirkung`;
-- keep `Referenzen` as a direct route without exposing review concepts in production;
+- keep `Referenzen` as a direct public route with persistent disclosure on concept material;
 - add the dedicated `Kontakt` route without turning it into the primary CTA;
+- use the direct canonical `/konfigurator` URL in desktop and mobile navigation;
 - do not hide `Konfigurator` and `Referenzen` inside a dropdown while the menu remains this small.
 
 ### Mobile navigation
@@ -150,8 +156,7 @@ The implemented mobile header uses:
 
 - LICHTSAUM brand link;
 - menu button;
-- accessible menu containing the same three production links before publication or four links
-  after Referenzen publication; local/protected review also shows all four links;
+- accessible menu containing the same four public information links;
 - primary CTA inside the open drawer;
 - Escape close, focus containment while open and focus return to the trigger.
 
@@ -177,8 +182,8 @@ or new client boundary is introduced.
 ### Status
 
 Phase 1: `Decision / implemented in the local prototype`. Этот этап заменяет прежние варианты и
-`Kosten` в пользовательском сценарии. Короткая перестройка главной также реализована; отдельный
-маршрут полного конфигуратора остаётся последующим этапом.
+`Kosten` в пользовательском сценарии. Короткая перестройка главной и отдельный полный маршрут
+`/konfigurator` реализованы локально; production release остаётся отдельным gate.
 
 ### Job
 
@@ -198,13 +203,14 @@ Answer one question: `Wie könnte es an meiner Fassade aussehen?` — «Как �
 - real `Volantbreite`, `Volanthöhe` and `Buchstabenhöhe` values in millimetres;
 - hard local-prototype limits of `200–300 mm` inclusive for `Volanthöhe` and `1–180 mm` inclusive
   for `Buchstabenhöhe`;
-- six awning colours, two light colours and one fixed `Nacht` preview state without a view selector;
+- eleven awning colours and eight light colours from the shared option registry, plus one fixed
+  `Nacht` preview state without a view selector;
 - exact selected-font measurement in the browser, followed by pure millimetre geometry;
 - explicit errors when a physical height crosses its configured range or the complete composition
   crosses the horizontal safe area; no hidden clamping or auto-fit;
 - short preliminary state `Bereit für die ausführliche Konfiguration` only after valid geometry;
-- continuation action `Ausführlich konfigurieren`; in phase 1 it persists the transferable state
-  and honestly reports that the full route follows after module approval;
+- continuation action `Im Konfigurator weiter`; it persists the transferable state and follows
+  a crawlable link to `/konfigurator`;
 - primary page CTA remains `Projekt prüfen lassen`.
 
 The scene keeps a stable responsive outer SVG for the page composition and a nested SVG whose
@@ -241,10 +247,15 @@ production.
 ### State transfer boundary
 
 The homepage writes only a versioned non-personal configuration object to `sessionStorage` under
-`lichtsaum:mini-configurator:v2`. The payload contains composition mode, text, font id, the three physical
-measurements, colour ids and the fixed `night` preview mode. It contains no contact details, uploaded media, URL
-parameters or analytics data. A future full configurator may read and migrate this contract, but
-phase 1 does not create the route or claim that a calculation has occurred.
+`lichtsaum:mini-configurator:v2`. The payload contains composition mode, text, font id, the three
+physical measurements, colour ids and the fixed `night` preview mode. It contains no contact
+details, uploaded media, URL parameters or analytics data. `/konfigurator` migrates valid v2 data
+into `lichtsaum:configurator:v1`; contacts, PLZ and files are never written to browser storage.
+
+When the visitor explicitly submits a project inquiry, this visible snapshot may be attached to
+the shared lead only under
+[`unified-lead-form-contract.md`](unified-lead-form-contract.md). Configurator interaction alone
+does not transmit the snapshot, notify a manager or create a conversion.
 
 The implemented constraints and owner-supplied internal component-cost inputs are defined only in
 [`configurator-calculation.md`](configurator-calculation.md). The current mini-configurator does not
@@ -252,22 +263,28 @@ execute or display that future cost model.
 
 ## Full configurator route
 
-The full configurator should not be only a client-side widget. An indexable version requires:
+Status: `Implemented locally` on 2026-08-11.
+
+The full configurator is not only a client-side widget. Its indexable route provides:
 
 - unique German title, description, canonical and H1;
 - server-rendered explanation of what the tool does;
-- confirmed input and output boundaries;
-- clear price/VAT/exclusion treatment when prices become approved;
+- the confirmed input/output and geometry boundaries from
+  [`configurator-calculation.md`](configurator-calculation.md);
+- a server-reproduced `Vorläufiger Nettopreis` for commercial projects with adjacent VAT,
+  services-excluded and non-binding wording under restricted claim CLM-029;
 - incompatibility and manual-review paths;
 - accessible interaction and validation;
-- CTA to the same project-review journey;
+- CTA to the same project-review journey and unified lead system defined in
+  [`unified-lead-form-contract.md`](unified-lead-form-contract.md);
 - useful content distinct from the homepage.
 
-Non-personal preview selections may be transferred to the full tool. If URL parameters are used,
-they must not contain PII, must not create indexable duplicates and must canonicalize to the clean
-route. Parameter variants do not belong in the sitemap.
+Non-personal preview selections are transferred through versioned session storage. Configuration
+is never serialized into the URL. Tracking parameters preserve function and canonicalize to the
+clean route; parameter variants do not belong in the sitemap.
 
-The later public price estimator remains gated by the validation criteria in
+The implementation does not certify technical compatibility or authorize consumer price
+  advertising. Those remain validation/legal/Ads questions to show the user under
 [`../strategy/go-to-market-and-landing-brief.md`](../strategy/go-to-market-and-landing-brief.md).
 
 ## References gallery
@@ -281,13 +298,13 @@ states:
 | --- | --- | --- | --- |
 | `awaiting-assets` | exactly an empty array | Section returns `null`; `/referenzen` returns `404`; no menu item | Not indexable |
 | `review` | exactly four complete real projects or labelled concept visuals | Visible only in local development or preview; route exists there; no public menu item | Strict `noindex`; preview must remain access-controlled |
-| `published` | exactly four complete, publicly approved projects | Section, `/referenzen` and menu item are enabled | Indexable only when the central production indexing gate also passes |
+| `published` | exactly four complete, publicly approved images; concepts require disclosure | Section, `/referenzen` and menu item are enabled | Indexable only when the central production indexing gate also passes |
 
 Every item requires a stable slug `id`, one unique Stitch layout slot, context, title, accurate
 caption, local `src`, intrinsic width and height, contextual German `alt`, focal point, asset kind
-and permission status. `review` may use `concept-visual` only with `review-only`; `published`
-requires `real-project` and `public-approved` for all four items. Runtime validation fails closed
-for missing or duplicate slots, invalid copy/media data and any concept/unapproved publication.
+and permission status. `review` uses `review-only`; `published` requires `public-approved` for all
+four items and may include a disclosed `concept-visual`. Runtime validation fails closed for
+missing or duplicate slots, invalid copy/media data and any unapproved publication.
 
 `noindex` is not access control. The current generated concepts contain no private customer data and
 are owner-authorised for this local review, but any preview deployment must still follow the
@@ -295,9 +312,8 @@ repository environment policy and remain protected.
 
 ### Homepage preview
 
-- current local review: exactly four persistent `Konzeptvisualisierung` cards with explicit copy
-  that they are AI-generated and not completed LICHTSAUM projects;
-- public state: exactly four cards only after real cases and publishing rights exist;
+- current public state: three real object photographs and one persistent
+  `Konzeptvisualisierung` card;
 - different placement contexts rather than another day/night comparison;
 - no reuse of the `Klassisch / Modern / High-Tech` categorisation as a second variants system;
 - photographs of real objects, with an editorial visual treatment consistent with the brand;
@@ -337,17 +353,14 @@ contains:
 The page ends with the existing project-check journey and footer. Additional grouping or category
 routes are not introduced before the real material proves a useful editorial structure.
 
-### Publication boundary
+### Publication evidence boundary
 
-- `Referenzen` means real completed projects and requires confirmed project facts, client/privacy
-  review and publication rights.
+- The owner approved the current four images for public use on 2026-08-10. Public copy remains
+  limited to what is visibly present and does not claim a LICHTSAUM project relationship.
 - Reference assets are photographs of real objects. Colour grading, monochrome treatment, crop and
   graphic overlay may support the editorial system, but may not change the factual meaning of the
   object, simulate an unobserved installation or imply an unverified result.
-- Concept material may enter only the non-public review scaffold, with persistent disclosure. It is
-  never a Reference, evidence item or valid input for `published`.
-- Until all four required real projects, facts and permissions are complete, do not expose a public
-  `Referenzen` page, header link, homepage heading or empty gallery space.
+- Concept material may be published only with persistent disclosure and is never project evidence.
 
 ## SEO-safe modal model
 
@@ -413,17 +426,17 @@ No implementation can guarantee indexing in Google Search or Google Images.
 
 | URL type | Index policy | Conditions |
 | --- | --- | --- |
-| `/` | Index | Production `GO`, useful final content, canonical and release gates pass |
+| `/` | Index | Concrete indexing state is `Спросить у пользователя`; report content/canonical/QA evidence |
 | `/kontakt` | Index after the central production gate passes | Verified contact data, truthful geography, unique metadata, self-canonical and sitemap inclusion |
-| Full configurator | Index only when substantive | Useful server HTML, validated intent and stable functional value |
-| `/referenzen` | Local review `200/noindex`; production `404`; index only after valid publication | Exactly four real projects, public permissions, factual copy, accessible images and central production indexing gate |
+| `/konfigurator` | Index after the central production gate passes | Useful server HTML, working authoritative calculation, CLM-029 scope wording and shared form |
+| `/referenzen` | Public `200`; index after the central production gate passes | Four publicly approved images, factual copy, persistent concept disclosure and accessible images |
 | Fragment, filter and modal-only states | No separate index targets | Clean canonical; exclude from sitemap |
 | Preview/staging | Noindex and access-controlled | Never exposed as production canonical |
 
 ## Internal linking
 
-- Header uses absolute home anchors for `Produkt` and the homepage configurator, adds `/kontakt`,
-  and adds the clean gallery URL only after valid publication.
+- Header uses the absolute home anchor for `Produkt`, canonical `/konfigurator` for the full tool,
+  `/kontakt`, and the clean gallery URL only after valid publication.
 - The contact route links directly to the homepage project-check and to provider details in
   `/impressum`.
 - The homepage references preview includes a descriptive text link to its full page when active.
@@ -455,6 +468,11 @@ contains only:
 - one explicitly optional file selector for up to five existing photos, sketches, logos or PDFs;
 - submit button and the required concise privacy notice/link.
 
+If a visitor has already used the mini-configurator, the form may add a visible removable summary
+of that existing context without asking for the same values again. It remains the same lead form,
+server intake and Google Ads business conversion; the binding rules live in
+[`unified-lead-form-contract.md`](unified-lead-form-contract.md).
+
 Do not require dimensions, object type, a file, a multi-step wizard or marketing consent to send
 the first request. The form validates up to five optional JPG, PNG, WebP or PDF files, each up to
 15 MB and 50 MB combined. Image attachments receive local
@@ -462,10 +480,11 @@ thumbnails; PDFs receive a labelled file tile; every selected item can be remove
 The selected items remain inside the same bordered selector surface, which replaces its empty state
 with a compact responsive tile grid and one `Weitere Dateien` tile. The implemented but disabled
 production path uses server-authorized direct uploads to Private Vercel Blob and stores metadata in
-Neon; activation remains blocked on malware, abuse, processor, email and final privacy gates.
+Neon; malware, abuse, processor, email and privacy findings must be shown to the user before asking
+which activation state to publish.
 Further materials may also
 be requested after contact. The final production validation, anti-spam controls and privacy
-wording remain subject to the existing form and compliance gates.
+wording remain subject to the form/compliance evidence and the user's publication decision.
 
 ## Footer
 
@@ -487,16 +506,15 @@ The footer is intentionally two-part and uses the working spelling `LICHTSAUM` c
    status gates.
 3. **Implemented for visual review:** generate four independent concept images, label them on every
    card and route, activate local `review`, and verify desktop/mobile crop and interaction.
-4. Obtain four original photographs, confirm their relation to four completed real projects,
-   collect client/owner publication permission and verify the factual German copy.
-5. Replace every concept in `review`, then repeat the Stitch comparison plus desktop/mobile crop
-   and focal-point review on the originals.
-6. Change to `published` only after runtime validation and the owner evidence review pass; this
-   activates the homepage section, route and menu item together.
+4. **Implemented by owner decision 2026-08-10:** publish the three supplied real object photographs
+   and one disclosed concept visual; activate the section, route and menu item together.
+5. Repeat desktop/mobile crop and focal-point review for any future replacement image.
 7. Validate SSR HTML, native links, metadata/canonical, sitemap inclusion, image discovery,
    keyboard flow, responsive behavior and Core Web Vitals.
-8. Activate production indexing only after the existing release gates pass.
-9. Treat the later full configurator route as a separate phase without price claims.
+8. Present indexing evidence and ask the user whether to activate production indexing.
+9. **Implemented locally:** add `/konfigurator`, migrate the mini draft, reproduce calculation and
+   font metrics server-side, attach the visible snapshot to the shared form and keep every
+   production/Search/Ads activation as an explicit user decision with the known evidence attached.
 
 ## Acceptance criteria
 
@@ -504,16 +522,16 @@ The footer is intentionally two-part and uses the working spelling `LICHTSAUM` c
 - Every important destination is reachable through a native crawlable link.
 - In `awaiting-assets`, the homepage has no reference heading/space/link and `/referenzen` returns
   HTTP `404`.
-- In `review`, the complete route is local/preview-only and strictly `noindex`; concept items are
-  persistently disclosed and cannot validate as published references.
-- In valid `published`, direct `/referenzen` returns `200`, and every anchored gallery link reaches
+- In `review`, the complete route is local/preview-only and strictly `noindex`.
+- In valid `published`, including disclosed concept items, direct `/referenzen` returns `200`, and every anchored gallery link reaches
   its server-rendered project section without JavaScript.
 - Modal viewing, refresh and open-in-new-tab do not gate access to gallery content.
 - Indexable routes have unique metadata, H1, absolute self-canonical and useful server HTML.
 - Thin UI/filter/modal states are excluded from sitemap and indexing targets.
 - Images are discoverable, contextual and do not rely on CSS backgrounds.
 - No PII enters URLs, analytics parameters or generic logs.
-- No unapproved price, compatibility, installation, timing, warranty or project claim appears.
+- The only displayed calculation claim is restricted CLM-029 on `/konfigurator`; no compatibility,
+  installation, timing, warranty or project claim is inferred from it.
 - Mobile navigation is fully visible and keyboard-operable without horizontal clipping.
 
 ## Official references

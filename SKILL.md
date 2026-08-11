@@ -20,11 +20,12 @@ description: Build, review, or launch the CHISEL German illuminated-awning websi
 
 ## Context routing
 
-Всегда начать с:
+Всегда начать с минимального размеченного контекста:
 
-1. `PROGRESS.md` → `Context Beacon`.
-2. `docs/README.md`.
-3. Релевантный source of truth:
+1. `PROGRESS.md` → только `AGENT_CONTEXT` и три записи `RECENT_CHANGES`.
+2. `docs/README.md` → `AGENT_BRIEF` и `Reading map`.
+3. Релевантный source of truth → сначала только `AGENT_BRIEF` или найденный через `rg` узкий
+   раздел:
    - visual/UI → `DESIGN.md`;
    - architecture/forms/environments → `docs/architecture/system-architecture.md`;
    - public copy → `docs/content/content-strategy.md`;
@@ -35,6 +36,11 @@ description: Build, review, or launch the CHISEL German illuminated-awning websi
    - events/conversions → `docs/marketing/measurement-plan.md`;
    - consent/data → `docs/legal/data-processing-and-consent.md`;
    - compliance → `docs/legal/compliance-plan.md`.
+
+Полный доменный документ читать только если задача меняет принадлежащий ему контракт, краткого
+контекста недостаточно либо расследование требует первичных подробностей. Git-историю начинать с
+трёх последних релевантных коммитов. Требование вышестоящей инструкции полностью прочитать сам
+`SKILL.md` или другой конкретный файл сохраняет приоритет.
 
 ## Workflow
 
@@ -137,11 +143,14 @@ description: Build, review, or launch the CHISEL German illuminated-awning websi
 - какие assumptions/TBD остались;
 - какие external/production действия не выполнялись.
 
-Обновить `PROGRESS.md` только для material milestone.
+Для material milestone обновить `AGENT_BRIEF` владеющего документа и rolling-блок
+`RECENT_CHANGES` в `PROGRESS.md`; в нём всегда остаются только три новейшие записи, а вытесненная
+запись без удаления переносится в `CHANGE_HISTORY`.
 
-## Stop conditions
+## Owner decision points
 
-Остановиться и запросить данные/разрешение, если работа требует:
+Не принимать самостоятельное решение о публикации. Показать факты/риски и использовать статус
+`Спросить у пользователя`, если работа требует:
 
 - реальных company/legal/contact facts;
 - неподтверждённого product claim;

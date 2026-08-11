@@ -4,6 +4,8 @@ temp/
 # Local-only review and generation output
 artifacts/
 output/
+DesignPrototip/assets/og-candidates/
+DesignPrototip/assets/review-optimized/
 
 # Editor and agent settings
 .vscode/

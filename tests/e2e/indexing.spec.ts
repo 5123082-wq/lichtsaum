@@ -27,3 +27,15 @@ test("serves a neutral local robots.txt", async ({ request }) => {
   expect(body).not.toMatch(/^Disallow:\s*\/(?:\s|$)/im);
   expect(body).not.toMatch(/Sitemap:/i);
 });
+
+test("keeps truthful 404 responses out of the index without a home canonical", async ({
+  page
+}) => {
+  const response = await page.goto("/not-a-real-page");
+
+  expect(response?.status()).toBe(404);
+  expect(
+    await page.locator('meta[name="robots"][content*="noindex"]').count()
+  ).toBeGreaterThan(0);
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+});

@@ -3,6 +3,10 @@
 Status: `Decision`  
 Last reviewed: 2026-07-30
 
+For a candidate whose public rights remain `TBD`, show the rights record and use
+`Спросить у пользователя` under `../docs/architecture/publication-governance.md`. Owner direction
+does not itself turn unknown third-party rights into verified rights.
+
 Эта папка хранит утверждаемые визуальные материалы Google Stitch. Единственный источник истины
 по реализуемой visual system — [`../DESIGN.md`](../DESIGN.md).
 
@@ -64,6 +68,8 @@ Add a small adjacent Markdown record or extend this table when approved assets a
 | `../public/images/lichtsaum-concept-cafe-terrace-night.webp` | Optimized 4:5 derivative of the recorded night source | Local prototype only until owner approves public use | The only image in the interactive vertical card | 1080 × 1350; monochrome by default, original colour on hover, focus or activation | `Candidate` |
 | `assets/lichtsaum-konzept-klassische-restaurantfassade-beleuchtete-markisenvolants-nacht-source.png` | User-provided ChatGPT Image output supplied for this task | Local prototype use authorised by the owner; production/public rights remain `TBD` | Night source for the `Klassisch` card | 1912 × 823; meaningful German alt describes the concept scene and illuminated lettering | `Candidate` |
 | `../public/images/lichtsaum-konzept-klassische-restaurantfassade-beleuchtete-markisenvolants-nacht.webp` | Optimized derivative of the recorded `Klassisch` source | Local prototype only until owner approves public use | Interactive panoramic `Klassisch` card | 1912 × 823; monochrome by default, original colour on hover, focus or activation | `Candidate` |
+| `assets/lichtsaum-konzept-bar-am-markt-eckfassade-abend-source.png` | User-provided ChatGPT Image output supplied for the public gallery | Use on the site authorised by the owner | Source for the fourth gallery view; concept, not a customer project or product proof | 1536 × 1024; evening bar at a historic corner facade with illuminated `BAR AM MARKT` lettering | `Approved` |
+| `../public/images/referenzen/lichtsaum-konzept-bar-am-markt-eckfassade-abend.webp` | Optimized derivative of the owner-provided source | Use on the site authorised by the owner with persistent concept disclosure | Current fourth image in the public references gallery | 1536 × 1024; contextual German alt describes only visible content | `Approved` |
 
 The final art-direction prompts and content boundaries are recorded in
 [`assets/lichtsaum-concept-prompts.md`](assets/lichtsaum-concept-prompts.md).

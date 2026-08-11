@@ -30,11 +30,12 @@ describe("sendLeadCustomerConfirmation", () => {
     process.env.RESEND_API_KEY = "re_test";
     process.env.LEAD_EMAIL_FROM = "LICHTSAUM Website <info@lichtsaum.com>";
     process.env.LEAD_NOTIFICATION_TO = "info@lichtsaum.com";
-    mocks.limit.mockResolvedValueOnce([
+    mocks.limit.mockResolvedValue([
       {
         id: 42,
         email: "kunde@example.com",
         idempotencyKey: "00000000-0000-4000-8000-000000000002",
+        requestContext: null,
         createdAt: new Date("2026-08-10T12:00:00Z")
       }
     ]);
@@ -90,5 +91,60 @@ describe("sendLeadCustomerConfirmation", () => {
     ).rejects.toThrow(
       "Lead customer confirmation could not be delivered to Resend."
     );
+  });
+
+  it("includes the fixed configuration, services and net total without customer attachments", async () => {
+    mocks.limit.mockResolvedValueOnce([
+      {
+        id: 42,
+        email: "kunde@example.com",
+        idempotencyKey: "00000000-0000-4000-8000-000000000002",
+        requestContext: {
+          schemaVersion: 1,
+          origin: "full_configurator",
+          evaluation: "valid",
+          configuration: {
+            schemaVersion: 1,
+            compositionMode: "text-only",
+            text: "CAFÉ LICHT",
+            fontId: "montserrat",
+            valanceWidthMm: 3000,
+            valanceHeightMm: 300,
+            letterHeightMm: 120,
+            awningColorId: "anthracite",
+            lightColorId: "warm-white"
+          },
+          services: ["design", "site-measurement"],
+          postalCode: "10115",
+          calculation: {
+            panelAllocation: {
+              counts: { 600: 0, 1000: 1, 1200: 0 }
+            }
+          },
+          pricingVersion: "2026-08-11.v1",
+          netTotalCents: 67_000
+        },
+        createdAt: new Date("2026-08-10T12:00:00Z")
+      }
+    ]);
+    mocks.send.mockResolvedValueOnce({
+      data: { id: "email_configurator" },
+      error: null
+    });
+
+    await sendLeadCustomerConfirmation(
+      "00000000-0000-4000-8000-000000000001"
+    );
+
+    const [message] = mocks.send.mock.calls[0]!;
+
+    expect(message.text).toContain("Ihre Anfragenummer: LS-2026-000042");
+    expect(message.text).toContain("Beschriftung: CAFÉ LICHT");
+    expect(message.text).toContain("Aufmaß");
+    expect(message.text).toContain("1 × 1000 mm");
+    expect(message.text).toContain("Vorläufiger Nettopreis: 670,00");
+    expect(message.html).toContain("CAFÉ LICHT");
+    expect(message).not.toHaveProperty("attachments");
+    expect(message.text).not.toContain("Datei");
   });
 });

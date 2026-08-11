@@ -1,7 +1,10 @@
 # Structured Data Plan
 
-Status: `Proposed`; publish only from verified business data  
-Last reviewed: 2026-07-30
+Status: minimal graph `Implemented` locally; production publication is `Спросить у пользователя`
+Last reviewed: 2026-08-10
+
+Publication authority: [`../architecture/publication-governance.md`](../architecture/publication-governance.md).
+Validation findings are evidence for the owner, not autonomous release blockers.
 
 ## Objective
 
@@ -12,7 +15,8 @@ Last reviewed: 2026-07-30
 
 - JSON-LD is rendered in initial/server HTML.
 - Builders live in `src/lib/structured-data/`.
-- Business facts come from `src/config/company.ts`; site/URL facts from `src/config/site.ts`.
+- Verified business/display facts currently come from `src/config/site.ts`; the canonical origin
+  comes from the server-only `SITE_URL` environment value.
 - Copy, metadata and Schema consume the same approved facts.
 - Absolute IDs/URLs use the production canonical origin.
 - Optional fields are omitted when unknown; no placeholders or guessed values.
@@ -24,15 +28,31 @@ Last reviewed: 2026-07-30
 
 | Page | Candidate type | Release condition |
 | --- | --- | --- |
-| All public pages | `WebSite` | Real name, production URL and identity available |
-| Site identity | `Organization` | Legal/display identity, URL, logo and contacts verified |
+| All public pages | `WebSite` | Implemented locally from the canonical origin and visible brand |
+| Site identity | `Organization` | Implemented locally from verified provider/contact facts; unapproved logo/social fields omitted |
 | Home/service page | `Service` | Service description and provider match visible content |
 | Physical local provider | Most specific valid `LocalBusiness` subtype | Real public location/contact/hours and local customer-facing operation verified |
 | Inner routes | `BreadcrumbList` | Visible/crawlable hierarchy exists |
 | References | No special rating schema by default | Project content is real and permission/rights confirmed |
 
-Use stable `@id` nodes such as `https://example.de/#organization` only after the canonical domain
-is known.
+Stable `@id` nodes use the configured canonical domain, for example
+`https://www.lichtsaum.com/#organization`.
+
+## Current implementation boundary
+
+Status: `Verified` locally on 2026-08-10; not deployed by this audit
+
+- `src/lib/structured-data/site-graph.ts` builds one `Organization` and one `WebSite` node with
+  stable IDs under the configured canonical origin.
+- `src/lib/structured-data/json-ld.ts` escapes `<`, U+2028 and U+2029 before insertion into the
+  server-rendered script.
+- The graph is emitted only when the central production indexing gate passes.
+- `Service`, `Product`, `Offer`, `LocalBusiness`, `ImageObject`, ratings, prices, service area,
+  opening hours, social profiles and logo are deliberately absent.
+- Unit tests assert both the exact graph boundary and script-safe serialization.
+
+Production validation in Schema.org Validator and rendered Search Console inspection remains a
+release task after claims and legal approval.
 
 ## Organization vs LocalBusiness
 

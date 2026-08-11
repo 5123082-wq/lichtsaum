@@ -4,7 +4,7 @@ const formSubmitLabel = "Projekt prüfen lassen";
 
 const navigationItems = [
   { label: "Produkt", href: "/#wirkung" },
-  { label: "Konfigurator", href: "/#konfigurator" },
+  { label: "Konfigurator", href: "/konfigurator" },
   { label: "Referenzen", href: "/referenzen" },
   { label: "Kontakt", href: "/kontakt" }
 ] as const;
@@ -720,7 +720,7 @@ test("renders the concise object-specific FAQ with the approved marker treatment
   await expect(
     section.locator(".faq-list details > p")
   ).toHaveText([
-    "Nein. Vorgesehen ist der Austausch des vorhandenen Volants nur bei einer geeigneten bestehenden Gewerbemarkise. Entscheidend sind die Austauschbarkeit des Volants, Befestigungsart und Maße, ein ungehinderter Bewegungsablauf sowie ein sicher planbarer Kabelweg und eine geeignete Stromversorgung. Die Eignung wird am konkreten Objekt geprüft.",
+    "Nein. Vorgesehen ist der Austausch des vorhandenen Volants nur bei einer geeigneten bestehenden Gewerbemarkise. Entscheidend sind die Austauschbarkeit des Volants, die Befestigungsart und die Maße, ein ungehinderter Bewegungsablauf, ein sicher planbarer Kabelweg sowie eine geeignete Stromversorgung. Die Eignung wird am konkreten Objekt geprüft.",
     "Für den ersten Kontakt genügt eine E-Mail-Adresse. Falls vorhanden, helfen Fotos der Markise und der Volantbefestigung, bekannte Maße, eine Logo- oder Schriftzugvorlage sowie Angaben zu Stromversorgung, Zugang und zum Zustimmungsstatus am Objekt.",
     "Im aktuellen Konfigurator kann die Volanthöhe zwischen 200 und 300 mm gewählt werden. Die Buchstabenhöhe ist auf maximal 180 mm begrenzt. Ob der gesamte Schriftzug bei der gewählten Schriftart und Höhe in die verfügbare Breite passt, wird anhand seiner tatsächlich gemessenen Länge geprüft. Die finale technische Ausführung bleibt objektbezogen.",
     "Das ist objekt- und standortabhängig. Zu prüfen sind insbesondere die erforderlichen Zustimmungen am Objekt sowie örtliche Vorgaben für Werbeanlagen. Bei denkmalgeschützten Gebäuden oder in geschützten Bereichen können zusätzliche denkmalrechtliche Anforderungen gelten.",
@@ -830,8 +830,8 @@ test("configures the physical SVG valance and enforces its height limits", async
   const section = page.locator("#konfigurator");
   const preview = section.locator(".configurator-preview");
   const previewImage = preview.getByRole("img");
-  const continuationButton = section.getByRole("button", {
-    name: "Ausführlich konfigurieren"
+  const continuationButton = section.getByRole("link", {
+    name: "Im Konfigurator weiter"
   });
 
   await expect(
@@ -974,10 +974,21 @@ test("configures the physical SVG valance and enforces its height limits", async
   );
   await expect(preview).toHaveAttribute("data-mode", "night");
 
+  await page.evaluate(() => {
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (
+          event.target instanceof Element &&
+          event.target.closest('a[href="/konfigurator"]')
+        ) {
+          event.preventDefault();
+        }
+      },
+      { capture: true, once: true }
+    );
+  });
   await continuationButton.click();
-  await expect(
-    section.getByText(/Konfiguration gespeichert/)
-  ).toBeVisible();
   const storedConfiguration = await page.evaluate(() =>
     JSON.parse(
       window.sessionStorage.getItem("lichtsaum:mini-configurator:v2") ?? "null"
@@ -1018,7 +1029,7 @@ test("configures the physical SVG valance and enforces its height limits", async
     section.getByText("Die Volanthöhe muss zwischen 200 und 300 mm liegen.")
   ).toBeVisible();
   await expect(valanceHeightInput).toHaveAttribute("aria-invalid", "true");
-  await expect(continuationButton).toBeDisabled();
+  await expect(continuationButton).toHaveAttribute("aria-disabled", "true");
   await expect(preview).toHaveAttribute("data-error", "true");
 
   await valanceHeightInput.fill("301");
@@ -1038,14 +1049,14 @@ test("configures the physical SVG valance and enforces its height limits", async
     )
   ).toBeVisible();
   await expect(letterHeightInput).toHaveAttribute("aria-invalid", "true");
-  await expect(continuationButton).toBeDisabled();
+  await expect(continuationButton).toHaveAttribute("aria-disabled", "true");
   await expect(preview).toHaveAttribute("data-error", "true");
 
   await letterHeightInput.fill("180");
   await expect(
     section.getByText("Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.")
   ).toHaveCount(0);
-  await expect(continuationButton).toBeEnabled();
+  await expect(continuationButton).toHaveAttribute("aria-disabled", "false");
 });
 
 test("opens an accessible mobile navigation drawer", async ({ page }) => {
@@ -1146,14 +1157,16 @@ test("shows the selected precision explanation only in the left accordion", asyn
     section.locator("#precision-description-gestaltung")
   ).toContainText("Projektkosten");
   await expect(
-    section.locator('.engineered-precision__image[data-state="incoming"]')
+    section.locator('.engineered-precision__image[data-state="active"]')
   ).toHaveAttribute(
     "src",
     /lichtsaum-engineered-gestaltung-lichtfeld\.webp/
   );
-  await expect(section.locator(".engineered-precision__image")).toHaveCount(2);
+  await expect(section.locator(".engineered-precision__image")).toHaveCount(3);
   await expect(
-    section.locator('.engineered-precision__image[data-state="outgoing"]')
+    section.locator(
+      '.engineered-precision__image[data-state="inactive"][src*="lichtsaum-engineered-lichtbild"]'
+    )
   ).toHaveAttribute("src", /lichtsaum-engineered-lichtbild\.webp/);
 
   await measurementView.click();
@@ -1164,26 +1177,28 @@ test("shows the selected precision explanation only in the left accordion", asyn
     section.locator("#precision-description-aufmass")
   ).toBeVisible();
   await expect(
-    section.locator('.engineered-precision__image[data-state="incoming"]')
+    section.locator('.engineered-precision__image[data-state="active"]')
   ).toHaveAttribute(
     "src",
     /lichtsaum-engineered-aufmass-volant\.webp/
   );
-  await expect(section.locator(".engineered-precision__image")).toHaveCount(2);
+  await expect(section.locator(".engineered-precision__image")).toHaveCount(3);
   await expect(
-    section.locator('.engineered-precision__image[data-state="outgoing"]')
+    section.locator(
+      '.engineered-precision__image[data-state="inactive"][src*="lichtsaum-engineered-gestaltung-lichtfeld"]'
+    )
   ).toHaveAttribute(
     "src",
     /lichtsaum-engineered-gestaltung-lichtfeld\.webp/
   );
-  await expect(section.locator(".engineered-precision__image")).toHaveCount(1, {
-    timeout: 1_000
-  });
+  await expect(
+    section.locator('.engineered-precision__image[data-state="inactive"]')
+  ).toHaveCount(2);
 });
 
 test("anchors precision imagery to the left edge", async ({ page }) => {
   const image = page.locator(
-    '#praezision .engineered-precision__image[data-state="incoming"]'
+    '#praezision .engineered-precision__image[data-state="active"]'
   );
 
   await expect(image).toHaveCSS("object-position", "0% 50%");
@@ -1194,7 +1209,7 @@ test("uses opacity-only precision transitions with reduced motion", async ({ pag
   await page.goto("/#praezision");
 
   const image = page.locator(
-    '.engineered-precision__image[data-state="incoming"]'
+    '.engineered-precision__image[data-state="active"]'
   );
 
   await expect(image).toHaveCSS("transform", "none");
@@ -1257,7 +1272,7 @@ test("validates complete prototype input without claiming lead success", async (
   await form
     .locator('input[name="projectFiles"]')
     .setInputFiles(
-      "public/images/referenzen/concept-eingang-detail-wide.webp"
+      "DesignPrototip/assets/review-optimized/concept-eingang-detail-wide.webp"
     );
   await expect(
     form.getByText("concept-eingang-detail-wide.webp")

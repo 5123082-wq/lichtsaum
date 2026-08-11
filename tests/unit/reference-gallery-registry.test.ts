@@ -104,7 +104,7 @@ describe("reference gallery registry", () => {
     ).toEqual({ render: true, indexable: false });
   });
 
-  it("publishes only a valid, fully approved four-slot registry", () => {
+  it("publishes a valid, fully approved four-slot registry", () => {
     expect(validateReferenceGalleryRegistry(publishedRegistry).valid).toBe(true);
     expect(
       getReferenceGalleryVisibility(publishedRegistry, "production", true)

@@ -1,6 +1,7 @@
 "use client";
 
 import { List, X } from "@phosphor-icons/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -71,7 +72,15 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
     <header className="site-header">
       <div className="site-header__inner">
         <Link className="brand-link" href="/" aria-label="LICHTSAUM Startseite">
-          LICHTSAUM
+          <Image
+            alt=""
+            aria-hidden="true"
+            className="brand-mark"
+            height={320}
+            src="/brand/lichtsaum-mark.svg"
+            width={324}
+          />
+          <span>LICHTSAUM</span>
         </Link>
 
         <nav className="site-navigation" aria-label="Hauptnavigation">
@@ -112,7 +121,14 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
         ref={dialogRef}
       >
         <span aria-hidden="true" className="mobile-menu__brand">
-          LICHTSAUM
+          <Image
+            alt=""
+            className="brand-mark"
+            height={320}
+            src="/brand/lichtsaum-mark.svg"
+            width={324}
+          />
+          <span>LICHTSAUM</span>
         </span>
 
         <div

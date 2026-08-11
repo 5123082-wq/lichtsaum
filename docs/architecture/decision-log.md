@@ -1,6 +1,6 @@
 # Architecture Decision Log
 
-Last reviewed: 2026-07-30
+Last reviewed: 2026-08-11
 
 Этот файл хранит решения и причины, но не текущий статус выполнения.
 
@@ -17,8 +17,11 @@ Last reviewed: 2026-07-30
 | ADR-009 | 2026-07-30 | Accepted | Claims must be evidenced before use in copy, Ads or Schema |
 | ADR-010 | 2026-07-30 | Accepted | Fonts are self-hosted by default |
 | ADR-011 | 2026-07-30 | Accepted | Use one GTM web container as the managed Google-tag layer |
-| ADR-012 | 2026-07-30 | Proposed | Validate the LICHTSAUM B2B illuminated-valance retrofit before application scaffolding |
-| ADR-013 | 2026-07-30 | Accepted | Allow an explicitly local, non-indexable review prototype before product `GO` |
+| ADR-012 | 2026-07-30 | Superseded for sequencing | Original validate-before-scaffold rule; product evidence questions remain |
+| ADR-013 | 2026-07-30 | Superseded | Original local-prototype exception; production implementation now exists |
+| ADR-014 | 2026-08-11 | Accepted | Use one lead system and one Primary Ads conversion across plain, configurator and calculator inquiries |
+| ADR-015 | 2026-08-11 | Accepted; publication limits superseded | Implement `/konfigurator` with server-reproduced restricted B2B-net pricing |
+| ADR-016 | 2026-08-11 | Accepted | Owner controls every publication decision; repository-imposed release blockers are cancelled |
 
 ## ADR-001 — Stitch boundary
 
@@ -52,18 +55,10 @@ behavior and remains replaceable until CMP/legal choices are final.
 ## ADR-012 — Product validation before scaffold
 
 - Date: 2026-07-30
-- Status: Proposed; requires owner acceptance
-- Context: the available evidence confirms a technically feasible but early and narrow category.
-  Search volume, installed-base compatibility, supplier/installation responsibility and realised
-  German unit economics are not yet verified.
-- Decision: scope LICHTSAUM to a B2B retrofit of the replaceable valance on an existing compatible
-  commercial awning. Prioritise independent restaurants/cafés, test Berlin/Brandenburg only if
-  operations are confirmed, and use `Projekt prüfen lassen` as the compatibility-led CTA. Do not
-  initialise the application or publish a landing until the product decision, technical chain,
-  operating scope, claims and legal inputs pass their gates.
-- Consequences: product/market validation precedes the existing application roadmap. One canonical
-  exact-category landing is planned; B2C/new-awning scope, generic ambient-light keywords,
-  nationwide full service and a public calculator are deferred.
+- Status: Superseded for implementation/publication sequencing by ADR-013 and ADR-016
+- Retained decision: the product hypothesis is a B2B retrofit of the replaceable valance on an
+  existing compatible commercial awning, with `Projekt prüfen lassen` as the CTA. Product,
+  supplier, geography and unit-economics evidence remains incomplete.
 - Verification: `../strategy/product-market-decision.md`,
   `../strategy/market-and-competitor-evidence.md` and
   `../strategy/go-to-market-and-landing-brief.md`.
@@ -71,20 +66,74 @@ behavior and remains replaceable until CMP/legal choices are final.
 ## ADR-013 — Local prototype before product `GO`
 
 - Date: 2026-07-30
-- Status: Accepted by explicit owner request
-- Context: ADR-012 intentionally deferred application scaffolding until product validation. The
-  owner later explicitly requested a complete responsive implementation in order to evaluate the
-  product story, UX and Stitch adaptation, while also prohibiting publication without separate
-  approval.
-- Decision: implement a local Next.js prototype with the full German landing journey and a
-  validation-only form. Keep every environment non-indexable unless production release is
-  separately configured and approved. Do not connect persistence, email, CRM, uploads, analytics,
-  advertising tags or a server-confirmed lead event.
-- Consequences: the prototype can be reviewed and tested before product `GO`, but it does not
-  supersede the `VALIDATE FIRST` decision or satisfy supplier, operational, evidence, legal,
-  privacy, measurement or launch gates. Production activation remains a separate decision.
+- Status: Superseded by the implemented production lead flow and ADR-016
+- Retained decision: Stitch is a visual reference and the application uses accessible responsive
+  production code. The former prototype-only restrictions are retired and must not be reopened.
 - Verification: `../../PROGRESS.md`, `../../design-qa.md` and the automated checks in
   `../../tests/`.
+
+## ADR-014 — Unified lead form and conversion
+
+- Date: 2026-08-11
+- Status: Accepted by explicit owner request
+- Context: the homepage mini-configurator already preserves a browser-local configuration, and a
+  later full calculator will collect more inputs and may eventually show a preliminary estimate.
+  Separate form pipelines or conversion actions would fragment the manager workflow, duplicate
+  validation/security behavior and make Ads bidding count UI variants instead of the same business
+  outcome.
+- Decision: all ordinary, mini-configurator, full-configurator and calculator inquiries extend one
+  shared lead intake. UI instances may differ, but contact validation, persistence, notification,
+  idempotency, accepted-result semantics and the sole Primary action
+  `Projektanfrage – serverbestätigt` remain shared. Configuration/calculation data is attached as a
+  visible, optional, versioned and server-validated request context. Before explicit form submit,
+  only a stateless allowlisted calculation request may reach the application runtime; it creates no
+  lead, persistence, notification or conversion. No context value enters analytics.
+- Consequences: the compatible schema/form/notification extension is implemented. New form surfaces
+  may add controlled analytics enums but do not create another Primary conversion unless a
+  separately accepted ADR establishes a different business outcome and operational owner.
+- Verification:
+  [`unified-lead-form-contract.md`](unified-lead-form-contract.md),
+  [`../marketing/measurement-plan.md`](../marketing/measurement-plan.md) and
+  [`../legal/data-processing-and-consent.md`](../legal/data-processing-and-consent.md).
+
+## ADR-015 — Full configurator and restricted preliminary price
+
+- Date: 2026-08-11
+- Status: Accepted by explicit owner implementation plan
+- Context: the owner approved showing the current component subtotal with `markupPercent = 0` as a
+  preliminary net result for commercial projects. The same plan requires an indexable full tool,
+  server-authoritative font measurement/geometry/pricing and the already accepted unified inquiry
+  boundary.
+- Decision: implement canonical `/konfigurator` with three UI steps, WOFF2 metrics reproduced by
+  `fontkit`, integer-cent component pricing and unlimited panel selection ordered by cost, unused
+  length and panel count. Services remain manual and outside the displayed amount. The result is
+  always labelled net plus statutory VAT, services excluded and non-binding under restricted claim
+  CLM-029. A changed pricing version must be shown and confirmed again before persistence.
+- Consequences: the route and narrowly scoped calculation are implemented. This does not establish
+  technical compatibility, a general tariff, consumer Gesamtpreis or margin strategy. B2C/PAngV,
+  Ads, Search and deployment choices follow ADR-016 and are owner questions.
+- Verification: [`configurator-calculation.md`](configurator-calculation.md),
+  [`landing-page-and-route-expansion.md`](landing-page-and-route-expansion.md),
+  [`../content/claims-and-evidence-register.md`](../content/claims-and-evidence-register.md) and
+  [`../legal/compliance-plan.md`](../legal/compliance-plan.md).
+
+## ADR-016 — Owner-controlled publication decisions
+
+- Date: 2026-08-11
+- Status: Accepted by explicit owner directive
+- Context: publication restrictions, deferred actions and release blockers had accumulated across
+  architecture, SEO, marketing, legal and progress documents. The owner cancelled those defaults
+  and directed agents never to decide publication restrictions without consultation.
+- Decision: no repository document may autonomously forbid, defer or authorize a concrete public
+  action. Known technical, legal, privacy, security and accessibility facts are reported with the
+  status `Спросить у пользователя`. Feature flags remain technical controls, not owner policy.
+  Retired audit/handoff content is not an active work queue.
+- Consequences: before a concrete deployment, indexing, Search Console/DNS, GTM/Ads, form,
+  attachment, spend or new-data-flow action, ask the owner unless that exact action is already
+  requested in the current task. Do not invent facts, conceal risk or treat owner acceptance as
+  independent legal confirmation.
+- Verification: [`publication-governance.md`](publication-governance.md), `../../PROGRESS.md` and
+  the consistency audit across active documentation.
 
 ## New decision template
 

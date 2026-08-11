@@ -1,7 +1,12 @@
 # Google Ads Readiness
 
-Status: `Decision` with business/account inputs `TBD`  
-Last reviewed: 2026-07-30
+Status: `Decision`; O10 account resources are configured locally, while business/release inputs
+remain open user questions
+Last reviewed: 2026-08-11
+
+This file is a readiness/evidence checklist. Campaign publication follows
+[`../architecture/publication-governance.md`](../architecture/publication-governance.md) and is
+`Спросить у пользователя`; this checklist does not autonomously authorize or block it.
 
 Этот файл задаёт выпускной шлюз для рекламной посадочной. Он не обещает одобрение Google Ads:
 решение остаётся за Google и зависит также от объявления, аккаунта, продукта и фактического
@@ -66,17 +71,21 @@ Preview/staging URL никогда не используется как Ads fina
 ## Conversion policy
 
 - Единственная primary conversion для bidding в v1 — успешно принятая системой заявка.
+- Plain, mini-configurator, full-configurator and calculator entry points share that same business
+  conversion and lead intake under
+  [`../architecture/unified-lead-form-contract.md`](../architecture/unified-lead-form-contract.md).
 - Клик по кнопке, начало формы, просмотр thank-you page, телефонный или email-клик —
   diagnostic/secondary signals, не primary lead.
 - `generate_lead` создаётся приложением после server success и получает неперсональный
   `lead_id`.
 - Повторная отправка/refresh не должны создавать новый conversion для того же принятого лида.
-- Выбрать один основной Google Ads conversion source. Если GA4 conversion импортируется в Ads,
-  параллельный Ads tag не должен удваивать primary conversion.
+- Direct Google Ads is the sole Primary conversion source. The sanitized GA4 `generate_lead` is
+  not imported into Ads and must not duplicate the direct action.
 - Enhanced Conversions выключены до отдельного privacy/legal решения и технической реализации
   через поддерживаемый Google канал.
 
-Полный контракт событий находится в `measurement-plan.md`.
+Полный контракт событий находится в `measurement-plan.md`; unified form/context behavior — в
+[`../architecture/unified-lead-form-contract.md`](../architecture/unified-lead-form-contract.md).
 
 ## Consent and privacy
 
@@ -153,4 +162,3 @@ Preview/staging URL никогда не используется как Ads fina
 - [Google Tag Manager consent support](https://support.google.com/tagmanager/answer/10718549?hl=en)
 - [Google Analytics policy on personally identifiable information](https://support.google.com/analytics/answer/6366371?hl=en)
 - [Google Ads enhanced conversions](https://support.google.com/google-ads/answer/15712870?hl=en-0)
-

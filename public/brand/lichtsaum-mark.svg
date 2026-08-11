@@ -1,6 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="96 96 324 320" role="img" aria-labelledby="title">
   <title id="title">LICHTSAUM</title>
-  <rect width="512" height="512" fill="#11100F"/>
   <g fill="#FF5C00">
     <path d="M96 96h320L96 416V96Z"/>
     <path d="M116 416h212V208L116 416Z"/>
