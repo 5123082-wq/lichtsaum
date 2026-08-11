@@ -1,7 +1,7 @@
 import type { ReferenceGalleryRegistry } from "@/features/references/types";
 
 export const referenceGallery: ReferenceGalleryRegistry = {
-  status: "review",
+  status: "published",
   items: [
     {
       id: "real-gastronomie-bar",
@@ -18,7 +18,7 @@ export const referenceGallery: ReferenceGalleryRegistry = {
         focalPoint: { x: 50, y: 52 }
       },
       assetKind: "real-project",
-      permission: "review-only"
+      permission: "public-approved"
     },
     {
       id: "real-restaurant-garten",
@@ -35,7 +35,7 @@ export const referenceGallery: ReferenceGalleryRegistry = {
         focalPoint: { x: 50, y: 52 }
       },
       assetKind: "real-project",
-      permission: "review-only"
+      permission: "public-approved"
     },
     {
       id: "real-gewerbefassade-ahouse",
@@ -52,7 +52,7 @@ export const referenceGallery: ReferenceGalleryRegistry = {
         focalPoint: { x: 50, y: 54 }
       },
       assetKind: "real-project",
-      permission: "review-only"
+      permission: "public-approved"
     },
     {
       id: "konzept-ecklage",
@@ -60,16 +60,16 @@ export const referenceGallery: ReferenceGalleryRegistry = {
       context: "Ecklage · Stadtraum",
       title: "Wirkung im Straßenraum",
       caption:
-        "Eine urbane Ecklage mit räumlicher Tiefe, Spiegelungen und prägnanter Lichtkante.",
+        "Konzeptansicht einer Bar an einer historischen Eckfassade mit beleuchtetem Schriftzug im Markisenvolant.",
       image: {
-        src: "/images/referenzen/concept-ecklage-tall.webp",
-        width: 1122,
-        height: 1402,
-        alt: "Schwarze Markise mit warmer Lichtkante über einem Eingang an einer regennassen städtischen Ecklage.",
-        focalPoint: { x: 51, y: 44 }
+        src: "/images/referenzen/lichtsaum-konzept-bar-am-markt-eckfassade-abend.webp",
+        width: 1536,
+        height: 1024,
+        alt: "Historische Eckfassade einer Bar am Abend mit schwarzer Markise, leuchtendem Schriftzug „BAR AM MARKT“ und Tischen auf regennassem Kopfsteinpflaster.",
+        focalPoint: { x: 63, y: 50 }
       },
       assetKind: "concept-visual",
-      permission: "review-only"
+      permission: "public-approved"
     }
   ]
 };

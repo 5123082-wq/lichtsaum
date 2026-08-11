@@ -9,17 +9,17 @@ export const MINI_CONFIGURATOR_FONTS = [
   {
     id: "montserrat",
     label: "Montserrat",
-    direction: "Moderner Grotesk",
+    direction: "Moderne Grotesk",
     family: "LICHTSAUM Montserrat",
-    source: "/fonts/lichtsaum-configurator/montserrat-variable.woff2",
+    source: "/fonts/lichtsaum-configurator/montserrat-regular-400.woff2",
     weight: "400"
   },
   {
     id: "open-sans",
     label: "Open Sans",
-    direction: "Offener Sans",
+    direction: "Offene Grotesk",
     family: "LICHTSAUM Open Sans",
-    source: "/fonts/lichtsaum-configurator/open-sans-variable.woff2",
+    source: "/fonts/lichtsaum-configurator/open-sans-regular-400.woff2",
     weight: "400"
   },
   {
@@ -27,13 +27,13 @@ export const MINI_CONFIGURATOR_FONTS = [
     label: "Oswald",
     direction: "Schmal und präzise",
     family: "LICHTSAUM Oswald",
-    source: "/fonts/lichtsaum-configurator/oswald-variable.woff2",
+    source: "/fonts/lichtsaum-configurator/oswald-regular-400.woff2",
     weight: "400"
   },
   {
     id: "pt-sans",
     label: "PT Sans",
-    direction: "Ruhiger Humanist",
+    direction: "Ruhige humanistische Grotesk",
     family: "LICHTSAUM PT Sans",
     source: "/fonts/lichtsaum-configurator/pt-sans-regular.woff2",
     weight: "400"
@@ -41,23 +41,24 @@ export const MINI_CONFIGURATOR_FONTS = [
   {
     id: "playfair-display",
     label: "Playfair Display",
-    direction: "Kontrastreiche Serif",
+    direction: "Kontrastreiche Serifenschrift",
     family: "LICHTSAUM Playfair Display",
-    source: "/fonts/lichtsaum-configurator/playfair-display-variable.woff2",
+    source:
+      "/fonts/lichtsaum-configurator/playfair-display-regular-400.woff2",
     weight: "400"
   },
   {
     id: "rubik",
     label: "Rubik",
-    direction: "Konzeptioneller Sans",
+    direction: "Konzeptionelle Grotesk",
     family: "LICHTSAUM Rubik",
-    source: "/fonts/lichtsaum-configurator/rubik-variable.woff2",
+    source: "/fonts/lichtsaum-configurator/rubik-regular-400.woff2",
     weight: "400"
   },
   {
     id: "fira-sans",
     label: "Fira Sans",
-    direction: "Technischer Sans",
+    direction: "Technische Grotesk",
     family: "LICHTSAUM Fira Sans",
     source: "/fonts/lichtsaum-configurator/fira-sans-regular.woff2",
     weight: "400"
@@ -65,9 +66,10 @@ export const MINI_CONFIGURATOR_FONTS = [
   {
     id: "source-sans-3",
     label: "Source Sans 3",
-    direction: "Editorialer Sans",
+    direction: "Editoriale Grotesk",
     family: "LICHTSAUM Source Sans 3",
-    source: "/fonts/lichtsaum-configurator/source-sans-3-variable.woff2",
+    source:
+      "/fonts/lichtsaum-configurator/source-sans-3-regular-400.woff2",
     weight: "400"
   }
 ] as const satisfies readonly MiniConfiguratorFont[];
@@ -140,4 +142,4 @@ export const DEFAULT_MINI_CONFIGURATOR_CONFIG: MiniConfiguratorConfig = {
 };
 
 export const SUPPORTED_MINI_CONFIGURATOR_TEXT =
-  /^[\p{Script=Latin}\p{Script=Cyrillic}\p{Number}\p{Mark}\s.,!?&+/\-–—:'"()@№%€$]*$/u;
+  /^[\p{Script=Latin}\p{Script=Cyrillic}\p{Number}\p{Mark}\u0020.,!?&+/\-–—:'"()@№%€$]*$/u;

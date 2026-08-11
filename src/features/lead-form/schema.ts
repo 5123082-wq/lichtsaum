@@ -52,6 +52,21 @@ export const projectCheckContactSchema = z.object({
     .default("")
 });
 
+export const projectSourcePathSchema = z
+  .string()
+  .trim()
+  .max(256)
+  .regex(
+    /^\/(?:[a-z0-9_-]+(?:\/[a-z0-9_-]+)*)?\/?$/i,
+    "The source path must be a site-relative path without parameters."
+  );
+
+export function normalizeProjectSourcePath(value: unknown) {
+  const parsed = projectSourcePathSchema.safeParse(value);
+
+  return parsed.success ? parsed.data : "/";
+}
+
 export const projectCheckSchema = projectCheckContactSchema.extend({
   projectFiles: z
     .array(projectFile)

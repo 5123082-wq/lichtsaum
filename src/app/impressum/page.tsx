@@ -54,7 +54,6 @@ export default function ImpressumPage() {
         <article className="container legal-document">
           <section aria-labelledby="anbieter">
             <h2 id="anbieter">Anbieter</h2>
-            <p>{legal.brandRelationship}</p>
             <address>
               <strong>{legal.providerName}</strong>
               <span>{legal.street}</span>
@@ -93,74 +92,6 @@ export default function ImpressumPage() {
             <p>
               Umsatzsteuer-Identifikationsnummer gemäß § 27a
               Umsatzsteuergesetz: {legal.vatId}
-            </p>
-          </section>
-
-          <section aria-labelledby="streitbeilegung">
-            <h2 id="streitbeilegung">Verbraucherstreitbeilegung</h2>
-            <p>
-              Wir sind nicht bereit oder verpflichtet, an
-              Streitbeilegungsverfahren vor einer
-              Verbraucherschlichtungsstelle teilzunehmen.
-            </p>
-          </section>
-
-          <section aria-labelledby="inhalte">
-            <h2 id="inhalte">Haftung für Inhalte</h2>
-            <p>
-              Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten
-              nach den allgemeinen Gesetzen verantwortlich. Eine Verpflichtung
-              zur Überwachung übermittelter oder gespeicherter fremder
-              Informationen oder zur Nachforschung nach Umständen, die auf eine
-              rechtswidrige Tätigkeit hinweisen, besteht nicht, soweit
-              gesetzlich nichts anderes gilt.
-            </p>
-            <p>
-              Verpflichtungen zur Entfernung oder Sperrung der Nutzung von
-              Informationen nach den allgemeinen Gesetzen bleiben hiervon
-              unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem
-              Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich.
-              Bei Bekanntwerden entsprechender Rechtsverletzungen werden wir
-              diese Inhalte umgehend entfernen.
-            </p>
-          </section>
-
-          <section aria-labelledby="links">
-            <h2 id="links">Haftung für Links</h2>
-            <p>
-              Unser Angebot kann Links zu externen Websites Dritter enthalten,
-              auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir
-              für diese fremden Inhalte keine Gewähr übernehmen. Für die Inhalte
-              der verlinkten Seiten ist stets der jeweilige Anbieter oder
-              Betreiber verantwortlich. Die verlinkten Seiten werden zum
-              Zeitpunkt der Verlinkung auf erkennbare Rechtsverstöße geprüft.
-            </p>
-            <p>
-              Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist
-              ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar.
-              Bei Bekanntwerden von Rechtsverletzungen werden wir derartige
-              Links umgehend entfernen.
-            </p>
-          </section>
-
-          <section aria-labelledby="urheberrecht">
-            <h2 id="urheberrecht">Urheberrecht</h2>
-            <p>
-              Die durch den Seitenbetreiber erstellten Inhalte und Werke auf
-              diesen Seiten unterliegen dem deutschen Urheberrecht. Die
-              Vervielfältigung, Bearbeitung, Verbreitung und jede Art der
-              Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der
-              schriftlichen Zustimmung des jeweiligen Autors beziehungsweise
-              Erstellers. Downloads und Kopien dieser Seite sind nur für den
-              privaten, nicht kommerziellen Gebrauch gestattet.
-            </p>
-            <p>
-              Soweit Inhalte nicht vom Betreiber erstellt wurden, werden die
-              Urheberrechte Dritter beachtet und solche Inhalte entsprechend
-              gekennzeichnet. Sollten Sie auf eine Urheberrechtsverletzung
-              aufmerksam werden, bitten wir um einen Hinweis. Bei Bekanntwerden
-              von Rechtsverletzungen werden wir derartige Inhalte umgehend
-              entfernen.
             </p>
           </section>
 

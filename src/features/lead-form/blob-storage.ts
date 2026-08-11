@@ -2,14 +2,14 @@ import "server-only";
 
 import { del, head } from "@vercel/blob";
 
-import { acceptsProductionLeads } from "@/config/environment";
+import { acceptsProductionLeadAttachments } from "@/config/environment";
 
 import { PROJECT_FILE_RETENTION_DAYS } from "./file-rules";
 
 const LEAD_BLOB_PATH = /^leads\/([0-9a-f-]{36})\/([0-9a-f-]{36})$/i;
 
 export function attachmentsAreEnabled() {
-  return acceptsProductionLeads;
+  return acceptsProductionLeadAttachments;
 }
 
 export function buildLeadBlobPath(leadId: string, fileId: string) {

@@ -5,12 +5,12 @@ import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import {
   acceptsProductionLeads,
+  acceptsProductionLeadAttachments,
   isIndexable,
   isPreviewDeployment,
   siteUrl
 } from "@/config/environment";
 import { siteConfig } from "@/config/site";
-import { LegalReviewTodo } from "@/features/legal/legal-review-todo";
 
 export function generateMetadata(): Metadata {
   const title = `Datenschutzerklärung | ${siteConfig.name}`;
@@ -40,6 +40,7 @@ export function generateMetadata(): Metadata {
 export default function DatenschutzPage() {
   const { legal } = siteConfig;
   const leadIntakeEnabled = acceptsProductionLeads;
+  const leadAttachmentsEnabled = acceptsProductionLeadAttachments;
 
   return (
     <>
@@ -58,25 +59,8 @@ export default function DatenschutzPage() {
         </header>
 
         <article className="container legal-document">
-          <section aria-labelledby="allgemeine-hinweise">
-            <h2 id="allgemeine-hinweise">1. Allgemeine Hinweise</h2>
-            <p>
-              Der Schutz personenbezogener Daten ist uns wichtig. Wir
-              verarbeiten personenbezogene Daten vertraulich und entsprechend
-              den geltenden Datenschutzvorschriften, insbesondere der DSGVO und
-              dem Bundesdatenschutzgesetz (BDSG).
-            </p>
-            <LegalReviewTodo item="hostingAndLogs" />
-            <p>
-              Personenbezogene Daten sind alle Informationen, mit denen eine
-              Person direkt oder indirekt identifiziert werden kann. Welche
-              Daten auf dieser Website verarbeitet werden, richtet sich danach,
-              welche Funktionen Sie nutzen.
-            </p>
-          </section>
-
           <section aria-labelledby="verantwortlicher">
-            <h2 id="verantwortlicher">2. Verantwortlicher</h2>
+            <h2 id="verantwortlicher">1. Verantwortlicher</h2>
             <address>
               <strong>{legal.providerName}</strong>
               <span>{legal.street}</span>
@@ -88,83 +72,199 @@ export default function DatenschutzPage() {
                 E-Mail: <a href={`mailto:${legal.email}`}>{legal.email}</a>
               </span>
             </address>
-            <p>{legal.brandRelationship}</p>
-          </section>
-
-          <section aria-labelledby="zwecke-rechtsgrundlagen">
-            <h2 id="zwecke-rechtsgrundlagen">
-              3. Zwecke und Rechtsgrundlagen
-            </h2>
-            <p>
-              Wir verarbeiten personenbezogene Daten, um die Website technisch
-              bereitzustellen und abzusichern, Anfragen zu beantworten,
-              vorvertragliche Schritte durchzuführen und gesetzliche Pflichten
-              zu erfüllen. Je nach Verarbeitung stützen wir uns auf Art. 6 Abs.
-              1 lit. b, c oder f DSGVO. Soweit künftig eine Einwilligung
-              erforderlich ist, erfolgt die Verarbeitung auf Grundlage von Art.
-              6 Abs. 1 lit. a DSGVO.
-            </p>
           </section>
 
           <section aria-labelledby="server-logfiles">
-            <h2 id="server-logfiles">4. Bereitstellung und Server-Logfiles</h2>
+            <h2 id="server-logfiles">2. Hosting und Server-Logfiles</h2>
             <p>
-              Beim Aufruf der Website werden technisch erforderliche
-              Verbindungsdaten verarbeitet. Dazu können IP-Adresse, Datum und
-              Uhrzeit, aufgerufene URL, Referrer-URL, übertragene Datenmenge,
-              Browserinformationen und User-Agent gehören. Die Verarbeitung ist
-              erforderlich, um Inhalte auszuliefern, Stabilität und Sicherheit
-              zu gewährleisten und Missbrauch abzuwehren. Rechtsgrundlage ist
-              Art. 6 Abs. 1 lit. f DSGVO.
+              Diese Website wird durch Vercel Inc. bereitgestellt; die
+              Serverfunktionen sind der ausgewählten Region Frankfurt am Main
+              zugeordnet. Beim Aufruf verarbeitet Vercel insbesondere
+              IP-Adresse, Datum und Uhrzeit, aufgerufene URL,
+              Referrer-URL, übertragene Datenmenge, Browserinformationen und
+              User-Agent. Zweck ist die Auslieferung der Website sowie die
+              Gewährleistung von Stabilität, Sicherheit und Missbrauchsschutz.
+              Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes
+              Interesse liegt im sicheren und funktionsfähigen Betrieb der
+              Website. Die Runtime-Logs des eingesetzten Tarifs sind eine Stunde
+              abrufbar. Die Anwendung schreibt keine Formularinhalte in diese
+              Logs.
             </p>
           </section>
 
           <section aria-labelledby="speichertechnologien">
             <h2 id="speichertechnologien">
-              5. Cookies und ähnliche Technologien
+              3. Erforderliche Speichertechnologien
             </h2>
             <p>
-              Im aktuellen Prototyp setzen wir keine Cookies, Analyse- oder
-              Marketingtechnologien ein. Google Analytics, Google Ads, ein
-              Tag-Manager und externe Medien sind nicht eingebunden.
+              Wir speichern Ihre Auswahl zu Analytics und Marketing für 180
+              Tage im technisch erforderlichen First-Party-Cookie{" "}
+              <code>lichtsaum_consent</code>. Das Cookie enthält die Version
+              der Einwilligungsregeln, den Zeitpunkt Ihrer Auswahl und Ihre
+              getrennten Entscheidungen. Rechtsgrundlage für das Speichern ist
+              § 25 Abs. 2 Nr. 2 TDDDG. Sie können die Auswahl jederzeit über
+              „Cookie-Einstellungen“ im Footer ändern.
             </p>
             <p>
-              Sobald Sie den Mini-Konfigurator bedienen, speichert er seine aktuelle Konfiguration –
-              zum Beispiel Beschriftung, Maße, Farben und Gestaltungswahl – im
-              <code>sessionStorage</code> Ihres Browsers. Diese Daten bleiben auf
-              Ihrem Gerät, werden nicht an uns übertragen und werden in der
-              Regel beim Beenden der Browser-Sitzung gelöscht. Die Speicherung
-              dient ausschließlich dazu, die von Ihnen ausdrücklich genutzte
-              Konfiguratorfunktion innerhalb der Sitzung bereitzustellen. Sie
-              wird ausschließlich im Browser gespeichert.
+              Sobald Sie den Mini- oder vollständigen Konfigurator bedienen,
+              speichert er den aktuellen Entwurf, insbesondere Beschriftung,
+              Maße, Farben, Gestaltungswahl und ausgewählte Leistungen, im{" "}
+              <code>sessionStorage</code> Ihres Browsers. Kontaktdaten,
+              Postleitzahl und Dateien werden dort nicht gespeichert. Der
+              Entwurf wird beim Beenden der Browser-Sitzung gelöscht. Die
+              Speicherung ist erforderlich, um den ausdrücklich aufgerufenen
+              Konfigurator bereitzustellen (§ 25 Abs. 2 Nr. 2 TDDDG).
+            </p>
+            <p>
+              Im vollständigen Konfigurator werden die eingegebenen
+              Gestaltungswerte vorübergehend an unseren Anwendungsserver
+              übertragen, damit Schriftmaße, Geometrie und der angezeigte
+              vorläufige Nettopreis serverseitig berechnet werden können. Diese
+              Berechnungsanfrage wird von der Anwendung nicht dauerhaft
+              gespeichert, löst keine Projektanfrage aus und wird nicht an
+              Analyse- oder Werbedienste übermittelt.
+            </p>
+          </section>
+
+          <section aria-labelledby="google-dienste">
+            <h2 id="google-dienste">4. Google Tag Manager, Analytics und Ads</h2>
+            <p>
+              Wir verwenden den Google Tag Manager, Google Analytics 4 und
+              Google Ads von Google Ireland Limited nur nach Ihrer vorherigen
+              Einwilligung. Im eingesetzten Basic Consent Mode werden vor Ihrer
+              Auswahl keine Google-Tags geladen und keine Anfragen an Google
+              gesendet. Analytics und Marketing können getrennt erlaubt oder
+              abgelehnt werden.
+            </p>
+            <p>
+              Nach Ihrer Einwilligung in Analytics lädt der Google Tag Manager
+              Google Analytics 4. Dabei können IP-Adresse, Geräte- und
+              Browserinformationen, Referrer, aufgerufene Seiten, Zeitpunkte,
+              pseudonyme Cookie-Kennungen sowie Nutzungs- und Ereignisdaten
+              verarbeitet werden. Für Formularereignisse übermitteln wir nur
+              die technischen Parameter <code>form_id</code> und{" "}
+              <code>lead_type</code>. Formularinhalte, Name, E-Mail-Adresse,
+              Telefonnummer, Dateinamen und interne Anfragekennungen werden
+              nicht an Google Analytics übermittelt. Zweck ist die statistische
+              Auswertung der Websitenutzung. Die nutzer- und ereignisbezogene
+              Aufbewahrung in Google Analytics ist auf zwei Monate eingestellt.
+            </p>
+            <p>
+              Google Analytics verwendet standardmäßig die First-Party-Cookies{" "}
+              <code>_ga</code> zur Unterscheidung von Nutzern und{" "}
+              <code>_ga_&lt;Container-ID&gt;</code> zur Speicherung des
+              Sitzungsstatus. Beide Cookies haben nach der
+              Standardkonfiguration eine Laufzeit von bis zu zwei Jahren;
+              Browser können diese Laufzeit verkürzen.
+            </p>
+            <p>
+              Nach Ihrer Einwilligung in Marketing darf Google Ads eine von
+              unserem Server bestätigte Projektanfrage als Conversion messen.
+              Dabei werden technische Verbindungs- und Ereignisdaten,
+              kontrollierte Ereignisparameter und eine zufällig erzeugte, nicht
+              aus Kontaktdaten abgeleitete Transaktionskennung verarbeitet. Die
+              eingesetzte Conversion-Linker-Funktion kann First-Party-Cookies
+              mit dem Präfix <code>_gcl_</code> für bis zu 90 Tage speichern.
+              Name, E-Mail-Adresse, Telefonnummer, Nachricht, Dateinamen und
+              Formularinhalte werden nicht an Google Ads übermittelt.
+              Personalisierte Werbung, Remarketing, Google Signals, User-ID,
+              user-provided data, Enhanced Conversions und Offline-Uploads sind
+              deaktiviert.
+            </p>
+            <p>
+              Rechtsgrundlage für den Zugriff auf Ihr Endgerät ist Ihre
+              Einwilligung nach § 25 Abs. 1 TDDDG; Rechtsgrundlage für die
+              anschließende Verarbeitung personenbezogener Daten ist Art. 6 Abs.
+              1 lit. a DSGVO. Die Einwilligung ist freiwillig. Eine Ablehnung
+              hat keine Auswirkung auf die Nutzung der Website oder die
+              Möglichkeit, eine Projektanfrage zu senden. Sie können Ihre
+              Auswahl jederzeit über „Cookie-Einstellungen“ im Footer mit
+              Wirkung für die Zukunft ändern oder widerrufen.
+            </p>
+            <p>
+              Weitere Informationen zu den Google-Cookies finden Sie in der{" "}
+              <a
+                href="https://support.google.com/analytics/answer/11397207?hl=de"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Google-Analytics-Hilfe
+              </a>{" "}
+              und in der{" "}
+              <a
+                href="https://business.safety.google/adscookies/?hl=de"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Übersicht der Werbe- und Analyse-Cookies von Google
+              </a>
+              .
             </p>
           </section>
 
           <section aria-labelledby="projektanfragen">
-            <h2 id="projektanfragen">6. Kontakt- und Projektanfragen</h2>
+            <h2 id="projektanfragen">5. Kontakt- und Projektanfragen</h2>
             <p>
               Wenn Sie uns per E-Mail oder Telefon kontaktieren, verarbeiten wir
-              die von Ihnen übermittelten Kontaktdaten und Inhalte, um Ihre
-              Anfrage zu beantworten und erforderliche Anschlussfragen zu
-              klären. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit es
-              um vorvertragliche Maßnahmen geht, andernfalls Art. 6 Abs. 1 lit.
-              f DSGVO.
+              die übermittelten Kontaktdaten und Inhalte, um Ihre Anfrage zu
+              beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO,
+              soweit es um vorvertragliche Maßnahmen geht, andernfalls Art. 6
+              Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in der
+              Bearbeitung geschäftlicher Anfragen.
             </p>
             {leadIntakeEnabled ? (
-              <p>
-                Wenn das Projektformular eine erfolgreiche Übermittlung
-                bestätigt, speichern wir die eingegebene E-Mail-Adresse sowie
-                optional Telefonnummer, Nachricht und Dateimetadaten in einer
-                Datenbank. Ausgewählte Dateien werden in einen privaten
-                Dateispeicher übertragen. Zur Bearbeitung erhalten wir eine
-                E-Mail-Benachrichtigung über Resend. An die angegebene
-                E-Mail-Adresse senden wir über Resend eine Eingangsbestätigung
-                mit der Anfragenummer; sie enthält weder den Nachrichtentext
-                noch Dateilinks. Die Dateilinks in unserer internen
-                Benachrichtigung sind signiert und sieben Tage gültig. Lokale
-                Bildvorschauen werden nur im Browser erzeugt und beim Entfernen
-                der Datei oder Verlassen der Seite verworfen.
-              </p>
+              <>
+                <p>
+                  Bei Beginn der Übermittlung des Projektformulars speichern wir
+                  die angegebene E-Mail-Adresse sowie optional Telefonnummer und
+                  Nachricht in einer Datenbank. Die E-Mail-Adresse ist
+                  erforderlich, damit wir die Anfrage zuordnen und beantworten
+                  können; ohne sie kann das Formular nicht gesendet werden.
+                  Telefonnummer, Nachricht, Objekt-Postleitzahl und Dateien sind
+                  freiwillig.
+                </p>
+                <p>
+                  Bei einer Anfrage aus dem vollständigen Konfigurator speichern
+                  wir außerdem die sichtbar zusammengefasste Konfiguration,
+                  ausgewählte Leistungen, eine optional eingegebene
+                  fünfstellige Objekt-Postleitzahl und die von unserem Server
+                  bestätigte vorläufige Berechnung. Zur Bearbeitung erhalten wir
+                  über Resend eine E-Mail-Benachrichtigung. An Ihre E-Mail-Adresse
+                  senden wir über Resend eine Eingangsbestätigung mit der
+                  Anfragenummer. Bei einer Konfigurator-Anfrage enthält sie auch
+                  die Konfigurationszusammenfassung, ausgewählte Leistungen und
+                  den bestätigten vorläufigen Nettopreis, jedoch nicht den freien
+                  Nachrichtentext oder angehängte Dateien.
+                </p>
+                <p>
+                  Zusätzlich speichern wir den Pfad der Ausgangsseite,
+                  technische Anfrage- und Idempotenzkennungen, Status- und
+                  Zeitangaben sowie den Löschzeitpunkt. Zum Schutz vor
+                  automatisierten oder wiederholten Anfragen prüfen wir, ob mit
+                  derselben E-Mail-Adresse innerhalb von 15 Minuten bereits drei
+                  Anfragen gestellt wurden. Rechtsgrundlage hierfür ist Art. 6
+                  Abs. 1 lit. f DSGVO; unser berechtigtes Interesse liegt im
+                  Schutz des Formulars vor Missbrauch und in der Sicherstellung
+                  einer zuverlässigen Bearbeitung.
+                </p>
+                {leadAttachmentsEnabled ? (
+                  <p>
+                    Wenn Sie freiwillig Dateien auswählen, speichern wir deren
+                    Namen, Dateityp und Größe in der Datenbank und übertragen die
+                    Dateien in einen privaten Dateispeicher. Dateilinks in unserer
+                    internen Benachrichtigung sind signiert und sieben Tage
+                    gültig. Lokale Bildvorschauen werden nur im Browser erzeugt
+                    und beim Entfernen der Datei oder Verlassen der Seite
+                    verworfen. Die Eingangsbestätigung enthält keine Dateilinks.
+                  </p>
+                ) : null}
+                <p>
+                  Rechtsgrundlage für die Bearbeitung und Speicherung der
+                  Projektanfrage ist Art. 6 Abs. 1 lit. b DSGVO, da die
+                  Verarbeitung auf Ihre Anfrage hin zur Durchführung
+                  vorvertraglicher Maßnahmen erfolgt.
+                </p>
+              </>
             ) : (
               <p>
                 Das Projektformular ist in dieser Umgebung eine
@@ -175,71 +275,59 @@ export default function DatenschutzPage() {
                 Seite verworfen.
               </p>
             )}
-            <LegalReviewTodo item="productionFormAndFiles" />
           </section>
 
           <section aria-labelledby="empfaenger">
-            <h2 id="empfaenger">
-              7. Empfänger und Auftragsverarbeitung
-            </h2>
+            <h2 id="empfaenger">6. Empfänger und Drittlandübermittlungen</h2>
             <p>
-              Personenbezogene Daten geben wir nur weiter, wenn dies zur
-              Erfüllung der genannten Zwecke erforderlich ist, eine gesetzliche
-              Pflicht besteht oder Sie eingewilligt haben. Technische
-              Dienstleister dürfen Daten nur auf Grundlage geeigneter
-              vertraglicher und datenschutzrechtlicher Vereinbarungen,
-              insbesondere eines Vertrags nach Art. 28 DSGVO, verarbeiten.
-            </p>
-            <LegalReviewTodo item="recipientsAndTransfers" />
-            <p>
-              Für aktivierte Projektanfragen nutzen wir Neon, LLC für die
-              Datenbank in der AWS-Region Frankfurt (eu-central-1), Vercel Inc.
-              für Hosting und privaten Dateispeicher in der Region Frankfurt
-              (fra1) sowie Plus Five Five, Inc. (Resend) für die operative
-              E-Mail-Benachrichtigung aus der EU-Senderegion eu-west-1.
-              Eingehende Nachrichten an info@lichtsaum.com werden durch
-              Cloudflare, Inc. an ein Postfach von Google Ireland Limited
-              weitergeleitet. Formularinhalte werden nicht an Analyse-, Werbe-,
-              Chat- oder KI-Dienste übermittelt.
-            </p>
-            <LegalReviewTodo item="transportSecurity" />
-            <p>
-              Soweit dabei Daten außerhalb der EU oder des EWR verarbeitet
-              werden, stützen die Anbieter die Übermittlung insbesondere auf
-              Angemessenheitsbeschlüsse, das EU-US Data Privacy Framework oder
-              Standardvertragsklauseln der Europäischen Kommission. Die
-              eingesetzten Anbieter veröffentlichen Vereinbarungen zur
-              Auftragsverarbeitung und Listen ihrer Unterauftragnehmer.
+              Für Hosting nutzen wir Vercel Inc.; die Serverfunktionen sind der
+              ausgewählten Region Frankfurt am Main zugeordnet. Die Datenbank wird durch
+              Neon, LLC in der AWS-Region Frankfurt (eu-central-1) betrieben.
+              {leadAttachmentsEnabled
+                ? " Dateien werden in einem privaten Vercel-Blob-Speicher in der Region Frankfurt (fra1) gespeichert."
+                : ""} E-Mail-Benachrichtigungen versendet Plus Five Five, Inc.
+              (Resend) aus der EU-Senderegion eu-west-1. Eingehende Nachrichten
+              an <a href={`mailto:${legal.email}`}>{legal.email}</a> werden
+              durch Cloudflare, Inc. an ein Postfach von Google Ireland Limited
+              weitergeleitet. Für die einwilligungsabhängige Nutzungs- und
+              Conversion-Messung ist Google Ireland Limited Empfängerin.
             </p>
             <p>
-              Eine ausschließlich automatisierte Entscheidungsfindung
-              einschließlich Profiling im Sinne von Art. 22 DSGVO findet nicht
-              statt.
+              Die genannten Anbieter haben ihren Sitz teilweise in den USA oder
+              können dortige Unterauftragnehmer einsetzen. Soweit Daten in die
+              USA oder ein anderes Land außerhalb der EU oder des EWR
+              übermittelt werden, erfolgt dies auf Grundlage eines anwendbaren
+              Angemessenheitsbeschlusses, insbesondere des EU-US Data Privacy
+              Framework für aktiv zertifizierte US-Empfänger, oder geeigneter
+              Garantien nach Art. 46 DSGVO, insbesondere der
+              Standardvertragsklauseln der Europäischen Kommission. Eine Kopie
+              der einschlägigen Garantien können Sie unter{" "}
+              <a href={`mailto:${legal.email}`}>{legal.email}</a> anfordern.
             </p>
           </section>
 
           <section aria-labelledby="speicherdauer">
-            <h2 id="speicherdauer">8. Speicherdauer</h2>
+            <h2 id="speicherdauer">7. Speicherdauer</h2>
             <p>
-              Wir speichern personenbezogene Daten nur so lange, wie es für den
-              jeweiligen Zweck erforderlich ist oder gesetzliche
-              Aufbewahrungspflichten bestehen. Gespeicherte Projektanfragen,
-              private Dateien und die zugehörigen operativen E-Mail-Nachrichten
-              werden grundsätzlich nach 90 Tagen gelöscht. Signierte
-              Dateilinks sind sieben Tage gültig. Technische Runtime-Logs des
-              derzeitigen Vercel-Tarifs sind eine Stunde abrufbar; die
-              Anwendung schreibt keine Formularinhalte in diese Logs. Eine
-              längere Aufbewahrung erfolgt nur, soweit sie zur weiteren
-              Bearbeitung einer konkreten Anfrage, zur Rechtsverteidigung oder
-              aufgrund gesetzlicher Pflichten erforderlich ist. Daten aus
-              direkten E-Mail- oder Telefonanfragen werden gelöscht, sobald die
-              Anfrage abschließend bearbeitet ist und keine solchen Gründe für
-              eine weitere Aufbewahrung bestehen.
+              Gespeicherte Projektanfragen
+              {leadAttachmentsEnabled ? " und private Dateien" : ""} werden
+              grundsätzlich nach 90 Tagen gelöscht.
+              {leadAttachmentsEnabled
+                ? " Signierte Dateilinks sind sieben Tage gültig."
+                : ""} Operative E-Mail-Nachrichten sowie Daten aus direkten
+              E-Mail- oder Telefonanfragen löschen wir, sobald die jeweilige
+              Anfrage abschließend bearbeitet ist und keine weitere Aufbewahrung
+              erforderlich ist. Eine längere Aufbewahrung erfolgt nur, soweit
+              sie zur weiteren Bearbeitung, zur Rechtsverteidigung oder aufgrund
+              gesetzlicher Pflichten erforderlich ist. Die Speicherdauern des
+              Consent-Cookies sowie der Google-Cookies und
+              Google-Analytics-Daten sind in den vorstehenden Abschnitten
+              angegeben.
             </p>
           </section>
 
           <section aria-labelledby="betroffenenrechte">
-            <h2 id="betroffenenrechte">9. Ihre Rechte</h2>
+            <h2 id="betroffenenrechte">8. Ihre Rechte</h2>
             <p>Unter den gesetzlichen Voraussetzungen haben Sie das Recht auf:</p>
             <ul>
               <li>Auskunft über Ihre verarbeiteten Daten (Art. 15 DSGVO),</li>
@@ -251,8 +339,10 @@ export default function DatenschutzPage() {
             </ul>
             <p>
               Eine erteilte Einwilligung können Sie jederzeit mit Wirkung für
-              die Zukunft widerrufen. Zur Ausübung Ihrer Rechte genügt eine
-              Nachricht an <a href={`mailto:${legal.email}`}>{legal.email}</a>.
+              die Zukunft widerrufen. Die Rechtmäßigkeit der bis zum Widerruf
+              erfolgten Verarbeitung bleibt unberührt. Zur Ausübung Ihrer Rechte
+              genügt eine Nachricht an{" "}
+              <a href={`mailto:${legal.email}`}>{legal.email}</a>.
             </p>
             <aside aria-labelledby="widerspruchsrecht">
               <h3 id="widerspruchsrecht">Hinweis zum Widerspruchsrecht</h3>
@@ -267,53 +357,18 @@ export default function DatenschutzPage() {
           </section>
 
           <section aria-labelledby="beschwerderecht">
-            <h2 id="beschwerderecht">10. Beschwerderecht</h2>
+            <h2 id="beschwerderecht">9. Beschwerderecht</h2>
             <p>
               Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde zu
-              beschweren. Für den Verantwortlichen ist insbesondere folgende
-              Behörde zuständig:
-            </p>
-            <address>
-              <strong>
+              beschweren. Für den Verantwortlichen ist insbesondere die{" "}
+              <a
+                href="https://www.datenschutz-berlin.de/"
+                rel="noreferrer"
+                target="_blank"
+              >
                 Berliner Beauftragte für Datenschutz und Informationsfreiheit
-              </strong>
-              <span>Alt-Moabit 59–61</span>
-              <span>10555 Berlin</span>
-              <span>
-                E-Mail:{" "}
-                <a href="mailto:mailbox@datenschutz-berlin.de">
-                  mailbox@datenschutz-berlin.de
-                </a>
-              </span>
-              <span>
-                Website:{" "}
-                <a
-                  href="https://www.datenschutz-berlin.de/"
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  www.datenschutz-berlin.de
-                </a>
-              </span>
-            </address>
-          </section>
-
-          <section aria-labelledby="datensicherheit">
-            <h2 id="datensicherheit">11. Datensicherheit</h2>
-            <p>
-              Wir setzen angemessene technische und organisatorische Maßnahmen
-              ein, um personenbezogene Daten vor Verlust, Manipulation und
-              unberechtigtem Zugriff zu schützen. Im öffentlichen Betrieb wird
-              die Übertragung über TLS/SSL verschlüsselt.
-            </p>
-          </section>
-
-          <section aria-labelledby="aktualisierung">
-            <h2 id="aktualisierung">12. Aktualisierung</h2>
-            <p>
-              Wir aktualisieren diese Datenschutzerklärung, wenn technische,
-              rechtliche oder organisatorische Änderungen dies erfordern. Es
-              gilt die jeweils auf dieser Seite veröffentlichte Fassung.
+              </a>{" "}
+              zuständig.
             </p>
           </section>
 

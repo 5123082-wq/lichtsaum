@@ -3,19 +3,33 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { acceptsProductionLeads } from "@/config/environment";
+import {
+  acceptsProductionLeads,
+  isProductionDeployment
+} from "@/config/environment";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
 
-import { projectCheckContactSchema } from "./schema";
+import {
+  normalizeProjectSourcePath,
+  projectCheckContactSchema
+} from "./schema";
 import { formatPublicLeadNumber } from "./public-lead-number";
+import {
+  prepareConfiguratorProjectContext,
+  type ConfiguratorPricingChangedResult
+} from "./server-request-context";
 import {
   confirmLeadFileUpload,
   createLeadUploadPlan,
   finalizeLeadUploadPlan,
   type LeadUploadPlan
 } from "./upload-service";
-import { uploadManifestSchema } from "./upload-contract";
+import {
+  leadSubmissionAttemptSchema,
+  uploadManifestSchema
+} from "./upload-contract";
+import type { ConfiguratorProjectSubmission } from "./request-context";
 import type {
   ProjectCheckFieldErrors,
   ProjectCheckFieldName,
@@ -23,13 +37,18 @@ import type {
 } from "./types";
 
 const submissionSchema = projectCheckContactSchema.extend({
-  files: uploadManifestSchema
-});
+  files: uploadManifestSchema,
+  idempotencyKey: leadSubmissionAttemptSchema.shape.idempotencyKey,
+  uploadToken: leadSubmissionAttemptSchema.shape.uploadToken,
+  sourcePath: z.unknown().optional(),
+  configuratorProject: z.unknown().optional()
+}).strict();
 
 const projectCheckFieldNames = new Set<ProjectCheckFieldName>([
   "email",
   "phone",
   "projectContext",
+  "configuratorProject",
   "projectFiles"
 ]);
 
@@ -39,12 +58,16 @@ export interface ProjectCheckSubmissionInput {
   projectContext: string;
   website: string;
   sourcePath: string;
+  idempotencyKey: string;
+  uploadToken: string;
   files: Array<{ name: string; type: string; size: number }>;
+  configuratorProject?: ConfiguratorProjectSubmission;
 }
 
 export type PrepareProjectCheckResult =
   | { kind: "result"; state: ProjectCheckFormState }
-  | { kind: "upload"; plan: LeadUploadPlan };
+  | { kind: "upload"; plan: LeadUploadPlan }
+  | ConfiguratorPricingChangedResult;
 
 function collectErrors(error: z.ZodError): ProjectCheckFieldErrors {
   const fieldErrors: ProjectCheckFieldErrors = {};
@@ -66,6 +89,24 @@ function collectErrors(error: z.ZodError): ProjectCheckFieldErrors {
   return fieldErrors;
 }
 
+function leadIntakeUnavailableState(): ProjectCheckFormState {
+  if (isProductionDeployment) {
+    return {
+      status: "prototype_unavailable",
+      message:
+        "Die Projektanfrage ist derzeit nicht verfügbar. Ihre Eingaben wurden nicht gespeichert oder weitergeleitet. Bitte versuchen Sie es später erneut.",
+      fieldErrors: {}
+    };
+  }
+
+  return {
+    status: "prototype_validated",
+    message:
+      "Ihre Eingaben erfüllen die Formularregeln dieses Prototyps. Sie wurden nicht gespeichert und nicht als Projektanfrage weitergeleitet.",
+    fieldErrors: {}
+  };
+}
+
 export async function prepareProjectCheckSubmission(
   input: ProjectCheckSubmissionInput
 ): Promise<PrepareProjectCheckResult> {
@@ -82,36 +123,85 @@ export async function prepareProjectCheckSubmission(
     };
   }
 
-  if (!acceptsProductionLeads) {
+  const preparedContext = await prepareConfiguratorProjectContext(
+    parsed.data.configuratorProject
+  );
+
+  if (preparedContext.kind === "pricing_changed") {
+    return preparedContext;
+  }
+
+  if (preparedContext.kind === "invalid") {
     return {
       kind: "result",
       state: {
-        status: "prototype_validated",
+        status: "invalid",
+        message: "Bitte prüfen Sie die Konfiguration und Preisbestätigung.",
+        fieldErrors: {
+          configuratorProject: [preparedContext.message]
+        }
+      }
+    };
+  }
+
+  if (preparedContext.kind === "unavailable") {
+    return {
+      kind: "result",
+      state: {
+        status: "prototype_unavailable",
         message:
-          "Ihre Eingaben erfüllen die Formularregeln dieses Prototyps. Sie wurden nicht gespeichert und nicht als Projektanfrage weitergeleitet.",
+          "Die Konfiguration konnte nicht sicher berechnet werden. Bitte versuchen Sie es später erneut.",
         fieldErrors: {}
       }
     };
   }
 
-  const plan = await createLeadUploadPlan(
+  if (!acceptsProductionLeads) {
+    return {
+      kind: "result",
+      state: leadIntakeUnavailableState()
+    };
+  }
+
+  const preparation = await createLeadUploadPlan(
     {
       email: parsed.data.email,
       phone: parsed.data.phone,
       projectContext: parsed.data.projectContext,
-      sourcePath: input.sourcePath
+      requestContext:
+        preparedContext.kind === "ready"
+          ? preparedContext.requestContext
+          : undefined,
+      sourcePath: normalizeProjectSourcePath(input.sourcePath)
+    },
+    {
+      idempotencyKey: parsed.data.idempotencyKey,
+      uploadToken: parsed.data.uploadToken
     },
     parsed.data.files
   );
 
-  return { kind: "upload", plan };
+  if (preparation.kind === "submitted") {
+    return {
+      kind: "result",
+      state: {
+        status: "submitted",
+        message:
+          "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über den von Ihnen angegebenen Kontaktweg.",
+        fieldErrors: {},
+        leadId: preparation.leadId,
+        publicLeadNumber: preparation.publicLeadNumber
+      }
+    };
+  }
+
+  return preparation;
 }
 
 export async function confirmProjectFileUpload(input: {
   leadId: string;
   fileId: string;
   uploadToken: string;
-  pathname: string;
   contentType: string;
 }) {
   await confirmLeadFileUpload(input);
@@ -121,6 +211,10 @@ export async function finalizeProjectCheckSubmission(
   leadId: string,
   uploadToken: string
 ): Promise<ProjectCheckFormState> {
+  if (!acceptsProductionLeads) {
+    return leadIntakeUnavailableState();
+  }
+
   const { publicLeadNumber } = await finalizeLeadUploadPlan(
     leadId,
     uploadToken
@@ -129,7 +223,7 @@ export async function finalizeProjectCheckSubmission(
   return {
     status: "submitted",
     message:
-      "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über die angegebene Kontaktmöglichkeit.",
+      "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über den von Ihnen angegebenen Kontaktweg.",
     fieldErrors: {},
     leadId,
     publicLeadNumber

@@ -6,8 +6,8 @@ import {
   useMemo,
   useRef,
   useState,
-  type FormEvent,
-  type KeyboardEvent as ReactKeyboardEvent
+  type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent as ReactMouseEvent
 } from "react";
 import { CaretDown, Check, Diamond } from "@phosphor-icons/react";
 
@@ -18,6 +18,7 @@ import {
 import { measureMiniConfiguratorText } from "@/features/mini-configurator/font-metrics";
 import { evaluateMiniConfiguratorGeometry } from "@/features/mini-configurator/geometry";
 import { MiniConfiguratorPreview } from "@/features/mini-configurator/mini-configurator-preview";
+import { CONFIGURATOR_STORAGE_KEY } from "@/features/configurator/storage-key";
 import {
   DEFAULT_MINI_CONFIGURATOR_CONFIG,
   MINI_CONFIGURATOR_AWNING_COLORS,
@@ -482,6 +483,7 @@ export function MiniConfigurator() {
     !matchingMeasurement &&
     measurementState.status !== "error";
   const canContinue =
+    storageIsReady &&
     numericValuesAreValid &&
     !textIsEmpty &&
     textIsSupported &&
@@ -511,7 +513,7 @@ export function MiniConfigurator() {
     statusText = "Eingaben korrigieren";
   } else if (canContinue) {
     statusState = "ready";
-    statusText = "Bereit für die ausführliche Konfiguration";
+    statusText = "Bereit zum Speichern";
   }
 
   function updateDraft<Key extends keyof MiniConfiguratorDraft>(
@@ -523,21 +525,33 @@ export function MiniConfigurator() {
     setDraft((currentDraft) => ({ ...currentDraft, [key]: value }));
   }
 
-  function saveForContinuation(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function clearConfiguratorDrafts() {
+    for (const storageKey of [
+      CONFIGURATOR_STORAGE_KEY,
+      MINI_CONFIGURATOR_STORAGE_KEY
+    ]) {
+      try {
+        window.sessionStorage.removeItem(storageKey);
+      } catch {
+        // The destination also falls back to defaults when storage is unavailable.
+      }
+    }
+  }
 
+  function saveForContinuation(event: ReactMouseEvent<HTMLAnchorElement>) {
     if (!canContinue || !configuration) {
+      event.preventDefault();
       return;
     }
 
     try {
+      window.sessionStorage.removeItem(CONFIGURATOR_STORAGE_KEY);
       writeMiniConfiguratorStoredState(window.sessionStorage, configuration);
-      setContinuationMessage(
-        "Konfiguration gespeichert. Der ausführliche Konfigurator folgt nach Freigabe dieses Moduls."
-      );
     } catch {
+      event.preventDefault();
+      clearConfiguratorDrafts();
       setContinuationMessage(
-        "Die Konfiguration konnte in diesem Browser nicht gespeichert werden."
+        "Die Konfiguration konnte nicht übertragen werden. Öffnen Sie den vollständigen Konfigurator mit Standardwerten."
       );
     }
   }
@@ -568,7 +582,10 @@ export function MiniConfigurator() {
   }
 
   return (
-    <form className="mini-configurator" onSubmit={saveForContinuation}>
+    <form
+      className="mini-configurator"
+      onSubmit={(event) => event.preventDefault()}
+    >
       <MiniConfiguratorPreview
         configuration={previewConfiguration}
         geometry={geometry}
@@ -1048,13 +1065,15 @@ export function MiniConfigurator() {
           {statusText}
         </p>
         <div className="configurator-actions">
-          <button
+          <a
+            aria-disabled={!canContinue}
             className="button button--primary"
-            disabled={!canContinue}
-            type="submit"
+            href="/konfigurator"
+            onClick={saveForContinuation}
+            tabIndex={canContinue ? undefined : -1}
           >
-            Ausführlich konfigurieren
-          </button>
+            Im Konfigurator weiter
+          </a>
           <a className="configurator-actions__project-link" href="#projekt-pruefen">
             Projekt prüfen lassen
           </a>
@@ -1068,6 +1087,15 @@ export function MiniConfigurator() {
       <p aria-live="polite" className="configurator-continuation-message">
         {continuationMessage}
       </p>
+      {continuationMessage ? (
+        <a
+          className="configurator-actions__project-link"
+          href="/konfigurator"
+          onClick={clearConfiguratorDrafts}
+        >
+          Konfigurator mit Standardwerten öffnen
+        </a>
+      ) : null}
     </form>
   );
 }
