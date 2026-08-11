@@ -5,6 +5,10 @@ Last reviewed: 2026-07-30
 Primary market: Germany  
 Pilot geography: Berlin/Brandenburg only if owner-confirmed
 
+> Publication prohibitions and deferrals in this proposed brief are superseded by
+> [`../architecture/publication-governance.md`](../architecture/publication-governance.md).
+> Keep the market evidence; use `Спросить у пользователя` for concrete public actions.
+
 ## Objective
 
 Validate whether independent restaurants and cafés will pay for a managed illuminated-valance
@@ -123,8 +127,8 @@ For selected awning/sign partners:
 - explicit allocation of measurement, installation, electrical work and warranty;
 - referral or resale economics.
 
-Do not publish the partner programme before supplier, liability, territory and margin terms are
-signed.
+Before publishing the partner programme, show the supplier, liability, territory and margin gaps
+and use `Спросить у пользователя`.
 
 ### 4. Deferred multi-site rollout
 
@@ -143,9 +147,9 @@ No national rollout claim belongs in the first release.
 
 | Layer | Proposed German wording | Use / evidence boundary |
 | --- | --- | --- |
-| Category | `Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen` | Precise working category; owner must confirm capability |
-| Main promise | `Aus Ihrer bestehenden Markise wird Markenlicht.` | Conceptual line; immediately explain the physical product |
-| Supporting explanation | `Ein individuell gestalteter Leuchtvolant ersetzt den vorhandenen Volant – nach Prüfung von Markise, Einbausituation und Stromweg.` | Does not imply universal fit |
+| Category | `Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen` | Owner-approved for homepage metadata and Ads; do not add as new visible hero copy |
+| Main promise | `Markise wird Markenlicht.` | Owner-approved, locked landing H1 and hero composition; may also be used in Ads; do not add hero copy for SEO |
+| Lower-page explanation | `Der textile Volant wird durch einen individuell gestalteten Leuchtvolant ersetzt.` | Retain under `Eignung` / `Was sich ändert`; no adjacent qualifier required |
 | Primary CTA | `Projekt prüfen lassen` | Neutral; no `kostenlos` or `unverbindlich` until approved |
 | Secondary CTA | `So funktioniert der Retrofit` | Anchor to process, not a competing lead action |
 
@@ -194,8 +198,8 @@ Only publish a reason after its evidence exists:
    unnecessary personal data.
 2. Code only business-level facts needed for the test: frontage, awning, evening hours, visible
    branding, trigger signal and contact route.
-3. For a small subset, create a restrained private concept visualisation. Do not publish or imply a
-   client relationship.
+3. For a small subset, create a restrained private concept visualisation. Before publication, show
+   the source/permission and use `Спросить у пользователя`; never imply a client relationship.
 4. Offer the compatibility check, not a generic sales call.
 5. Record disposition: incompatible, no need, timing, price, landlord/permission, current sign,
    interested review, quote, order.
@@ -345,15 +349,9 @@ material, not supplier/client imagery copied from competitor pages.
 
 ### Hero direction
 
-Proposed:
-
-> **Aus Ihrer bestehenden Markise wird Markenlicht.**  
-> Ein individuell gestalteter, beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Vor
-> Fertigung prüfen wir Markise, Einbausituation und Stromweg.  
-> **Projekt prüfen lassen**
-
-If measurement, installation or electrical coordination is owner-confirmed, mention it in a
-separate factual scope line. Do not compress unverified “full service” into the hero.
+Final owner decision: retain the current hero exactly as implemented with the H1
+`Markise wird Markenlicht.` Do not add category, explanation, CTA or disclaimer copy to it. The
+existing product explanation remains lower on the page under `Eignung` / `Was sich ändert`.
 
 ### Compatibility input
 
@@ -395,7 +393,12 @@ First release:
 - list exclusions clearly;
 - do not expose the supplier catalogue as a customer tariff.
 
-Later estimator:
+ADR-015 authorizes one narrower implementation before those validation targets: `/konfigurator`
+may show the server-reproduced component subtotal with 0% markup as `Vorläufiger Nettopreis` for
+commercial projects, with VAT, services-excluded and non-binding wording under CLM-029. This is a
+validation instrument, not evidence that complete quoted project variance is already stable.
+
+Later complete-project estimator:
 
 1. validate at least 10 complete estimates and 3 paid installed projects;
 2. prove standard-case quoted variance can remain within ±15%;
@@ -475,7 +478,7 @@ Manual-only:
 
 - create a private low-fidelity page prototype and sales one-pager;
 - photograph the owned sample by day and night;
-- do not publish or scaffold the production site.
+- show the current evidence and ask the user whether to publish or scaffold the production site.
 
 ### Days 31–60
 
@@ -522,6 +525,7 @@ After owner acceptance, the team may proceed with:
 - sample photography planning;
 - form/data-flow specification.
 
-Do not proceed with production code, a public calculator, Ads or deployment until the owner resolves
-the blockers listed in the product decision and the repository’s architecture, claims, legal and
-Ads gates pass.
+ADR-016 and the publication-governance directive supersede the former code/publication prohibition.
+Before deploying `/konfigurator`, activating Ads or presenting it as a complete-project tariff,
+show the remaining product, architecture, claims, legal and Ads evidence and use
+`Спросить у пользователя`.

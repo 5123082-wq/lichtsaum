@@ -16,9 +16,11 @@ test("renders the Berlin contact scene without unconfirmed service claims", asyn
     /lichtsaum-europe-countries-10m\.svg/
   );
   await expect(page.getByText("Kartendaten / Natural Earth 1:10m")).toBeVisible();
-  await expect(page.getByRole("link", { name: "info@nvkv.de" })).toHaveAttribute(
+  await expect(
+    page.getByRole("link", { name: "info@lichtsaum.com" })
+  ).toHaveAttribute(
     "href",
-    "mailto:info@nvkv.de"
+    "mailto:info@lichtsaum.com"
   );
   await expect(
     page.getByRole("link", { name: "Projekt prüfen lassen", exact: true }).last()

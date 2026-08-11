@@ -155,12 +155,22 @@ textarea {
 .brand-link {
   grid-column: 1;
   grid-row: 1;
+  display: inline-flex;
   width: fit-content;
+  align-items: center;
+  gap: 0.35em;
   font-size: clamp(1.1rem, 4.5vw, 1.75rem);
   font-weight: 800;
   letter-spacing: -0.05em;
   line-height: 1;
   text-decoration: none;
+}
+
+.brand-mark {
+  width: auto;
+  height: 0.72em;
+  height: 1cap;
+  flex: 0 0 auto;
 }
 
 .site-navigation {
@@ -567,6 +577,7 @@ textarea {
   display: flex;
   min-height: var(--header-height);
   align-items: center;
+  gap: 0.35em;
   padding-left: var(--page-gutter);
   font-size: 0.85rem;
   font-weight: 800;

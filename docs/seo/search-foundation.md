@@ -1,7 +1,12 @@
 # Google Search Foundation
 
-Status: `Decision` with domain and final route inputs `TBD`  
-Last reviewed: 2026-07-30
+Status: `Decision`; canonical origin and homepage intent owner are owner-approved
+Last reviewed: 2026-08-10
+
+> Search flags and checklists describe technical behavior and evidence. Current indexing and Search
+> Console actions follow
+> [`../architecture/publication-governance.md`](../architecture/publication-governance.md) and are
+> `Спросить у пользователя`.
 
 ## Objective
 
@@ -32,8 +37,15 @@ Rules:
 - removed content returns a truthful `404`/`410`, not a soft-404 landing;
 - no mass city/category URLs until each page has real service relevance and unique value.
 
-The production origin and preferred host (`www` or apex) are `TBD` and must live in
-`src/config/site.ts`.
+The verified production origin is `https://www.lichtsaum.com`. Runtime canonical generation uses
+the server-only `SITE_URL` environment value. By owner decision on 2026-08-10, `/` owns the exact
+product intent in v1 and is the Google Ads landing URL. Do not create the previously proposed
+`/beleuchteter-markisen-volant` route unless a later owner decision gives the homepage a genuinely
+different purpose and authorizes a substantive separate product page.
+
+`/konfigurator` is the clean canonical URL for the implemented full tool. Configuration, PLZ,
+contacts and files are never placed in its query string. Harmless tracking parameters canonicalize
+to `/konfigurator`; no parameter/state variant is an index target or sitemap entry.
 
 ## Metadata contract
 
@@ -122,7 +134,7 @@ Targets are release budgets, not claims about current performance.
 
 ## Search files and status behavior
 
-Planned framework-owned outputs:
+Implemented framework-owned outputs:
 
 - route metadata / metadata helpers;
 - `robots.ts`;
@@ -131,7 +143,32 @@ Planned framework-owned outputs:
 - structured-data builders described in `structured-data.md`;
 - truthful `not-found` handling.
 
+The owner-approved static social preview is
+`public/brand/lichtsaum-og-1200x630.png`. The root metadata publishes it as a 1200 × 630 Open Graph
+image and Twitter large-image card only when the production Search/indexing gate is open. It does
+not change the visible homepage or hero composition.
+
 Checks must inspect rendered production HTML and HTTP headers, not only source code.
+
+### Current technical boundary
+
+Status: `Verified` locally on 2026-08-10; not deployed by this audit
+
+- Production indexing requires all three conditions: production environment, a valid `SITE_URL`
+  and the explicit `SEARCH_INDEXING_ENABLED=true` flag.
+- With the flag absent or false, production emits `noindex` and an empty sitemap while preserving
+  the functional site and lead flow.
+- Current code fails the build when central legal-review markers conflict with the selected
+  publication state. Any policy change to that behavior is `Спросить у пользователя`.
+- The owner-approved `published` reference gallery follows the central indexing gate and may enter
+  the sitemap; superseded review assets stay outside the public tree.
+- The substantive `/konfigurator` route follows the same central indexing gate and is included as
+  one clean canonical sitemap URL. Its H1, explanation and calculation limitations are
+  server-rendered; `Product` and `Offer` structured data remain absent.
+- The minimal site graph is limited to verified `Organization` and `WebSite` facts and is emitted
+  only through the same indexing gate.
+- Current Search state and open external actions are recorded only in `../../PROGRESS.md` and the
+  current implementation roadmap.
 
 ## Search Console and launch
 
@@ -140,13 +177,16 @@ After the real domain is verified:
 1. create the correct Domain property;
 2. submit the production sitemap;
 3. inspect the home page and core routes;
-4. request indexing only after release checks pass;
+4. show the release-check evidence and ask the user whether to request indexing;
 5. monitor Page indexing, crawl issues, Core Web Vitals, manual actions and search performance;
 6. annotate major route/canonical/content releases in `PROGRESS.md` or the release record.
 
-Search Console access, property ownership and domain are `TBD`.
+Search Console access and property ownership are `TBD`; the Domain property input should be
+`lichtsaum.com`, verified through DNS.
 
-## Release checklist
+## Publication evidence checklist
+
+Unchecked items are reported to the user; the checklist does not decide publication by itself.
 
 - [ ] Preferred host redirects once to canonical HTTPS.
 - [ ] Core URLs return `200`; missing URLs return truthful status.
@@ -168,4 +208,3 @@ Search Console access, property ownership and domain are `TBD`.
 - [Build and submit a sitemap](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
 - [Google Search structured data introduction](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)
 - [Core Web Vitals](https://web.dev/articles/vitals)
-

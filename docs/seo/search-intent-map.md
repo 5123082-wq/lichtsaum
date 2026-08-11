@@ -1,7 +1,7 @@
 # Search Intent Map
 
-Status: `Proposed`; public result composition checked, volume/CPC and route approval remain `TBD`  
-Last reviewed: 2026-07-30
+Status: `Decision` for current route ownership; volume/CPC remain `TBD`
+Last reviewed: 2026-08-11
 
 ## Purpose
 
@@ -34,18 +34,18 @@ Full dated evidence and URLs are in
 
 | Cluster | Example German queries | Intent | Proposed destination | Evidence/status |
 | --- | --- | --- | --- | --- |
-| Exact illuminated advertising valance | `beleuchteter Markisenvolant`, `LED-Markisenvolant`, `Leuchtvolant Markise`, `beleuchteter Werbevolant` | Commercial investigation | `/beleuchteter-markisen-volant` | Highest product fit; direct category pages observed; volume TBD |
-| Existing-awning retrofit | `beleuchteten Volant nachrüsten`, `bestehende Markise LED Volant`, `Markisenvolant Beleuchtung nachrüsten` | Compatibility/project | Same canonical pillar | High fit only when `Volant`/existing business awning is explicit |
-| Gastronomy | `beleuchteter Markisenvolant Gastronomie`, `Leuchtvolant Restaurant`, `LED-Markisenvolant Café` | Vertical commercial | Pillar hospitality section | Strongest first vertical; separate route needs a real case |
-| Price/quote | `beleuchteter Markisenvolant Preis`, `Leuchtvolant Kosten`, `LED-Markisenvolant Angebot` | Transactional research | Pillar cost/scope section | Useful intent; public price not approved |
-| Branding bridge | `Markisenvolant mit Logo beleuchtet`, `Markisenbeschriftung beleuchtet` | Comparison with unlit print | Pillar comparison/explainer | Adjacent print demand is visible; illumination demand unmeasured |
+| Exact illuminated advertising valance | `beleuchteter Markisenvolant`, `LED-Markisenvolant`, `Leuchtvolant Markise`, `beleuchteter Werbevolant` | Commercial investigation | `/` | Highest product fit; homepage owns the exact product intent; volume TBD |
+| Existing-awning retrofit | `beleuchteten Volant nachrüsten`, `bestehende Markise LED Volant`, `Markisenvolant Beleuchtung nachrüsten` | Compatibility/project | `/` | High fit only when `Volant`/existing business awning is explicit |
+| Gastronomy | `beleuchteter Markisenvolant Gastronomie`, `Leuchtvolant Restaurant`, `LED-Markisenvolant Café` | Vertical commercial | Homepage hospitality/product content | Strongest first vertical; separate route needs a real case |
+| Price/quote | `beleuchteter Markisenvolant Preis`, `Leuchtvolant Kosten`, `LED-Markisenvolant Angebot` | Transactional research | `/konfigurator` | Restricted component subtotal for commercial projects under CLM-029; volume TBD |
+| Branding bridge | `Markisenvolant mit Logo beleuchtet`, `Markisenbeschriftung beleuchtet` | Comparison with unlit print | Homepage comparison/explainer | Adjacent print demand is visible; illumination demand unmeasured |
 | Partner/supplier | `LED-Markisenvolant Hersteller`, `Leuchtvolant Werbetechnik`, `Markisenvolant B2B` | Supplier/partner | Future partner route only after offer exists | Business fit proposed; demand TBD |
-| Projects/evidence | Exact category + `Referenz`, `Beispiel`, day/night variants | Trust validation | Pillar first; `/referenzen` only when substantive | Real LICHTSAUM projects TBD |
-| Brand/contact | `LICHTSAUM` and contact variants | Navigational | Future approved homepage/contact route | Brand availability and domain TBD |
+| Projects/evidence | Exact category + `Referenz`, `Beispiel`, day/night variants | Trust validation | `/referenzen` | Public images are factual context, not claimed LICHTSAUM completed projects |
+| Brand/contact | `LICHTSAUM` and contact variants | Navigational | `/` and `/kontakt` | Current canonical routes implemented; trademark availability remains TBD |
 
 ## Page-to-intent contract
 
-### `/beleuchteter-markisen-volant` (proposed)
+### `/`
 
 - Primary job: understand whether an existing commercial awning can receive a custom illuminated
   replacement valance and submit the object for review.
@@ -57,8 +57,17 @@ Full dated evidence and URLs are in
   canonical page.
 - Must not pretend to answer new-awning, ambient lighting, repair, DIY, replacement-part or B2C
   terrace intent.
-- Homepage versus product-route ownership must be resolved before scaffold so two pages do not
-  compete for the same intent.
+- By owner decision, the homepage owns this intent; do not create the formerly proposed
+  `/beleuchteter-markisen-volant` duplicate.
+
+### `/konfigurator`
+
+- Job: configure one illuminated-valance composition for a commercial project, receive the current
+  server-reproduced preliminary net component result and submit the same shared project inquiry.
+- Must provide useful server-rendered explanation, unique metadata/H1, clean self-canonical,
+  visible calculation limitations and manual-review services.
+- Must not target consumer total-price intent, imply compatibility/final quotation or publish state
+  variants as URLs. `Product`/`Offer` Schema remains absent.
 
 ### `/referenzen`
 

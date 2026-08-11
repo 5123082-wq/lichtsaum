@@ -89,9 +89,9 @@ The four final prompt variants were:
 | `left-tall` | `lichtsaum-reference-concept-restaurantfassade-tall-source.png` | `/images/referenzen/concept-restaurantfassade-tall.webp` | 1122 × 1402 |
 | `center-top` | `lichtsaum-reference-concept-eingang-detail-wide-source.png` | `/images/referenzen/concept-eingang-detail-wide.webp` | 1586 × 992 |
 | `center-bottom` | `lichtsaum-reference-concept-terrasse-wide-source.png` | `/images/referenzen/concept-terrasse-wide.webp` | 1586 × 992 |
-| `right-tall` | `lichtsaum-reference-concept-ecklage-tall-source.png` | `/images/referenzen/concept-ecklage-tall.webp` | 1122 × 1402 |
+| `right-tall` | `lichtsaum-konzept-bar-am-markt-eckfassade-abend-source.png` | `/images/referenzen/lichtsaum-konzept-bar-am-markt-eckfassade-abend.webp` | 1536 × 1024 |
 
-Required presentation boundary: every card carries a persistent `Konzeptvisualisierung` badge;
-the section and `/referenzen` explicitly state that the images are AI-generated, do not show
-completed LICHTSAUM projects and will be replaced by approved originals. They may enter only the
-local/protected `review` state and can never satisfy the `published` registry contract.
+Required presentation boundary: every concept card carries a persistent
+`Konzeptvisualisierung` badge and does not imply a completed LICHTSAUM project. The current
+owner-approved fourth concept may be used in the `published` registry under that disclosure; the
+three superseded review concepts remain historical local-review assets.

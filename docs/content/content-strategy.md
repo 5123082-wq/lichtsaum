@@ -3,6 +3,10 @@
 Status: `Proposed` pending owner acceptance and product validation  
 Last reviewed: 2026-07-30
 
+Publication recommendations in this strategy are not autonomous restrictions. Use
+[`../architecture/publication-governance.md`](../architecture/publication-governance.md) and
+`Спросить у пользователя` for a concrete public choice.
+
 ## Purpose
 
 Создать оригинальный немецкий контент, который одновременно:
@@ -56,23 +60,26 @@ not yet an allowed public claim.
 ## Message hierarchy
 
 1. Exact category — an illuminated replacement valance for an existing commercial awning.
-2. Outcome — `Aus Ihrer bestehenden Markise wird Markenlicht.`
-3. Boundary — the existing awning remains only when compatibility is verified.
-4. Difference — managed compatibility, design and delivery rather than a loose LED panel.
+2. Owner-locked H1/outcome — `Markise wird Markenlicht.`
+3. Product explanation — an individually designed illuminated valance replaces the existing
+   valance.
+4. Difference — a designed and delivered product rather than a loose LED panel.
 5. Evidence — owned day/night project, exact technical limits and named responsibility.
-6. Risk reduction — object-specific review before production; no universal fit or permission claim.
+6. Project process — collect the measurements and technical inputs needed for execution.
 7. CTA — `Projekt prüfen lassen`.
 
-Supporting explanation must immediately make the metaphorical `Markenlicht` promise concrete.
+The owner-locked H1 and current hero composition must not be rewritten or supplemented for SEO.
+The page must explain the exact product clearly in later visible content, but that explanation is
+ordinary product copy, not a disclaimer or category line inside the hero.
 `Kostenlos` (бесплатно) and `unverbindlich` (без обязательства) may only be used when the real
 commercial process supports them.
 
 ## Landing-page content order
 
-1. Hero with exact category, existing-awning boundary and `Projekt prüfen lassen`.
-2. Rights-cleared day/night transformation.
-3. Combined compatibility section: what remains, what changes, what is checked and the three
-   required initial inputs.
+1. Current owner-approved hero with the positioning line only; no added category, supporting copy,
+   CTA or disclaimer.
+2. Rights-cleared day/night transformation and subsequent visible product/category explanation.
+3. Product-fit section: what remains, what changes and which inputs start a project.
 5. Flagship outcome and engineered variants.
 6. Project process and responsibility.
 7. Scope and honest cost drivers.

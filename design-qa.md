@@ -4,6 +4,10 @@ Date: 2026-07-30
 Scope: local responsive landing and project-check journey  
 Reference: `DesignPrototip/references/stitch-12ee44ad855e416db92641282c2f7629-2026-07-30.png`
 
+> This file records visual/technical QA history. Any publication `blocked`, gate or deferral wording
+> is superseded by `docs/architecture/publication-governance.md`; findings are shown to the owner
+> and the concrete action is `Спросить у пользователя`.
+
 ## Comparison inputs
 
 - Canonical Stitch reference: 2560 × 11712 px desktop export.
@@ -111,12 +115,12 @@ information architecture.
 - Local indexing boundary: `noindex`, `X-Robots-Tag`, disallowing `robots.txt`, no canonical,
   sitemap or JSON-LD
 
-## Remaining release boundaries
+## Remaining publication evidence
 
 This QA covers the local prototype, not production readiness. Real product evidence, service scope,
 price, legal identity, privacy text, image approval, CRM/email, lead persistence, rate limiting,
-consent, analytics and production indexing remain blocked until their source decisions and release
-gates pass.
+consent, analytics and production indexing remain evidence/questions to show the owner before using
+`Спросить у пользователя` for the concrete publication state.
 
 ## Transformation grid correction — 2026-07-30
 
@@ -869,5 +873,55 @@ passed
 The complete current comparison inputs, required fidelity review, responsive evidence, comparison
 history, interaction checks and technical checks are recorded above under `Animated lead
 acknowledgement — 2026-08-09`.
+
+final result: passed
+
+## Current handoff target — O9 consent banner right-card revision, 2026-08-11
+
+- Source visual truth: the owner-supplied pattern reference
+  `/Users/macbookaleks/Yandex.Disk.localized/Скриншоты/2026-08-10_23-56-42.jpg`,
+  1040 × 406 px. It establishes the three-way consent choice (accept, reject and preferences), not
+  the LICHTSAUM visual skin or an exact viewport composition. The owner's current instruction adds
+  the right-side placement requirement; `DESIGN.md` remains authoritative for typography, colour,
+  geometry and spacing.
+- Implementation evidence:
+  `temp/o9-cookie-banner-right-desktop.png`, 1440 × 900 px, captured from the browser at a
+  1440 × 900 CSS viewport and 1× output density, plus the focused component crop
+  `temp/o9-cookie-banner-right-component.png`, 544 × 392 px.
+- State: first visit with no saved choice. The banner is fixed to the lower-right at 544 px wide,
+  with a 28.8 px right gap and 24 px bottom gap; the page has zero horizontal overflow.
+- Full-view comparison evidence: the source reference and the 1440 × 900 implementation capture
+  were opened together in one visual comparison input. The source's semantic pattern is preserved
+  as `Auswahl anpassen`, `Alle ablehnen`, `Alle akzeptieren`; the site's right-card placement and
+  dark architectural styling are intentional project-specific adaptations.
+- Focused comparison evidence: the 544 × 392 component crop makes the heading, explanatory copy,
+  preference link and both decision controls legible without browser chrome. No additional focused
+  crop was required.
+- Fonts and typography: existing self-hosted Hanken Grotesk and JetBrains Mono roles are preserved.
+  Heading hierarchy, German wrapping, button tracking and optical weights remain consistent with
+  the landing page.
+- Spacing and layout rhythm: the card uses the existing square geometry, hairline border and
+  spacing scale. Preferences occupy a quiet full-width first row; reject and accept remain equally
+  sized on the second row. The compact card no longer spans or centres across the viewport.
+- Colours and visual tokens: the near-black surface, warm-white text, muted copy and architectural
+  orange eyebrow reuse existing project tokens. Reject and accept have equal visual prominence;
+  preferences remain an underlined secondary action.
+- Image quality and asset fidelity: the consent manager contains no visual asset that requires
+  generation or replacement. The surrounding page keeps the approved hero image; no CSS-drawn or
+  placeholder imagery was introduced.
+- Copy and content: the first layer now explicitly states that necessary cookies and functions
+  remain active and that `Alle ablehnen` rejects both optional categories. The settings dialog
+  continues to expose `Notwendig` as `Immer aktiv` and offers independent Analytics and Marketing
+  switches.
+- Interaction and browser evidence: `Auswahl anpassen` opened the labelled settings dialog; the
+  necessary category remained visibly always active, both optional switches were initially off,
+  and the dialog closed normally. The browser console reported no warnings or errors.
+- Comparison history: the first post-implementation visual pass found no actionable P0, P1 or P2
+  mismatch against the owner-approved semantic pattern and right-side placement. No visual fix loop
+  was required. The light reference styling and its horizontal order are intentional non-targets,
+  because LICHTSAUM's established tokens and the newly approved right-card hierarchy take priority.
+- Technical verification: focused and full unit suites, TypeScript, ESLint and a production webpack
+  build with the consent feature enabled passed. The browser confirmed the banner at 1440 × 900,
+  zero page overflow, the settings interaction and a clean console.
 
 final result: passed

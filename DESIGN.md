@@ -3,6 +3,10 @@
 Status: `Decision` with `TBD` brand/content inputs  
 Last reviewed: 2026-08-06
 
+Visual/accessibility/performance requirements remain design evidence and implementation contracts;
+they do not decide publication. Concrete public actions follow
+[`docs/architecture/publication-governance.md`](docs/architecture/publication-governance.md).
+
 Этот файл — единственный источник истины по визуальной системе. Production UI может отклоняться
 от Stitch только ради responsive behavior, accessibility, performance, content truth или
 конверсии; отклонение должно быть осознанным.
@@ -75,17 +79,22 @@ production foundation, абсолютные desktop-размеры, чернов
 
 ### Brand mark
 
-Status: `Proposed` pending owner acceptance and trademark review.
+Status: `Decision` — canonical identity selected by the owner on 2026-08-10; trademark availability
+remains a separate unresolved check.
 
-- The compact mark combines a geometric `L`, an architectural projection and one orange light
-  seam; it contains no separate claim or product specification.
-- Its master geometry is stored in `public/brand/lichtsaum-mark.svg` and uses only `background`,
-  `text-primary` and `architectural-orange`.
-- The square composition keeps generous outer space for a circular social-avatar crop and remains
-  legible at 16 × 16 px. The full `LICHTSAUM` wordmark remains the preferred form where horizontal
-  space permits.
-- The mark is approved only for local prototype use until the owner accepts the identity and the
-  requested brand name passes a separate availability review.
+- `public/brand/lichtsaum-mark.svg` is the only vector master and source of truth for the brand
+  mark. `src/app/icon.svg` is the Safari-optimized browser derivative: it preserves the exact orange
+  geometry but omits the near-black background so Safari can render it without an added light tile.
+- The owner-approved solid orange architectural mark selected on 2026-08-10 is the sole approved
+  LICHTSAUM identity. Its three orange fields form a rising diagonal light seam and right-hand
+  vertical support on a near-black square. The master uses `#FF5C00` on `#11100F`; glow, gradients
+  and raster softness are presentation effects and are not part of the canonical geometry.
+- `lichtsaum-favicon-16.png` and `lichtsaum-favicon-32.png` use the same transparent browser
+  treatment. `lichtsaum-mark-512.png`, `lichtsaum-instagram-1080.png` and
+  `src/app/apple-icon.png` retain the canonical near-black background. These are format/context
+  derivatives, not separate identities.
+- Alternative logo candidates must not be stored in the production public tree. A future identity
+  change requires a new explicit owner decision and coordinated replacement of every derivative.
 
 ### Spacing and grid
 
@@ -134,8 +143,8 @@ Status: `Proposed` pending owner acceptance and trademark review.
 5. `Engineered Precision` (`#praezision`).
 6. Объединённый Eignung (`#eignung`).
 7. Homepage mini-configurator (`#konfigurator`).
-8. Позиция галереи между конфигуратором и FAQ. В local `review` она показывает четыре явно
-   маркированные временные концепт-визуализации; production остаётся скрыт до реальных Referenzen.
+8. Публичная галерея между конфигуратором и FAQ показывает три реальные объектные фотографии и
+   одну явно маркированную концепт-визуализацию.
 9. FAQ (`#faq`).
 10. `Projekt prüfen lassen` (`#projekt-pruefen`).
 11. Footer with an illuminated wordmark strip, navigation, legal links, contact path and the
@@ -208,12 +217,12 @@ Status: `Proposed` pending owner acceptance and trademark review.
 ### Navigation
 
 - Desktop navigation минимальна.
-- Approved information links are `Produkt` → `/#wirkung`, `Konfigurator` → `/#konfigurator`,
+- Approved information links are `Produkt` → `/#wirkung`, `Konfigurator` → `/konfigurator`,
   conditional `Referenzen` → `/referenzen` and `Kontakt` → `/kontakt`; `Projekt prüfen lassen`
   remains the separate primary CTA. `Eignung` and `FAQ` stay in the homepage flow but are not
   global-header items.
-- `Referenzen` may appear for local/protected review while the route is visibly disclosed and
-  `noindex`; production shows it only for a valid `published` registry.
+- `Referenzen` ведёт на публичный маршрут `/referenzen`; preview остаётся `noindex` по общей
+  environment policy.
 - Mobile header — одна строка высотой `72px`: логотип слева и кнопка меню справа; CTA и ссылки
   отсутствуют в закрытом состоянии.
 - Открытое mobile menu использует нативный modal dialog и правую панель шириной `77vw`:
@@ -304,14 +313,42 @@ Status: `Proposed` pending owner acceptance and trademark review.
 - Блок не показывает цену, совместимость, сроки или готовый проект и заканчивается object-specific
   disclaimer.
 
-### References gallery scaffold
+### Full configurator `/konfigurator`
 
-- Галерея реализована как data-driven scaffold. По решению владельца от 2026-08-04 текущий статус
-  `review` использует четыре временные KI-generierte Konzeptvisualisierungen (ИИ-концепт-
-  визуализации), чтобы закончить и оценить композицию до получения реальных фотографий.
-- Review-вариант виден только локально или в защищённом preview, имеет `noindex`, нейтральный
-  заголовок `So wirkt die Galerie.` и постоянную маркировку `Konzeptvisualisierung` на каждой
-  карточке. Он не называется реализованными проектами или публичными Referenzen.
+- The full tool is a separate, indexable, German page. Its server-rendered introduction and H1
+  remain useful before client hydration; the interactive calculator progressively enhances that
+  content.
+- The flow has three numbered steps: `Grundkonfiguration`, `Weitere Optionen` and
+  `Preis & Projektanfrage`. Desktop keeps one preview column sticky beside the steps. On mobile the
+  same preview appears before the active step, without duplicating accessible content or creating
+  horizontal scrolling.
+- The preview remains a schematic front-view SVG. Uploaded logos, object photos and PDFs are
+  attachments for manual review and never become simulated geometry in v1; logo modes keep the
+  approved geometric placeholder.
+- Optional design/service groups use native buttons with `aria-expanded`; hidden groups remain
+  keyboard reachable after opening. Controls keep visible labels, 44 px targets, visible focus and
+  inline errors connected to their fields.
+- The result uses the label `Vorläufiger Nettopreis` and always keeps the three limitations beside
+  it: `zzgl. gesetzlicher Umsatzsteuer`, selected services are not included, and the result is not
+  a `verbindliches Angebot` (обязательное предложение). The page visibly limits this presentation
+  to `gewerbliche Projekte`.
+- Before the shared contact fields, the visitor sees a non-editable summary of dimensions,
+  inscription, font, composition, colours, requested services, panel allocation and the current
+  server-confirmed net total. Configuration is changed in the earlier steps, not through hidden
+  contact-form fields.
+- Loading, font-measurement, invalid-geometry, calculation and stale-pricing states fail closed:
+  price and submit remain unavailable until a current server result is explicitly confirmed.
+- The contact block is an instance of the existing unified lead form, not a separate form system.
+  The existing submission overlay, error/focus behavior, optional attachments and success state
+  remain consistent with the homepage form.
+
+### References gallery
+
+- По решению владельца от 2026-08-10 галерея публична и использует три реальные объектные
+  фотографии и одну концепт-визуализацию. Она не утверждает, что показанные объекты являются
+  выполненными проектами LICHTSAUM.
+- Концепт-визуализация всегда имеет видимую маркировку `Konzeptvisualisierung` на карточке,
+  странице и в modal.
 - Публичная композиция повторяет Stitch: две высокие крайние карточки и две карточки одна над
   другой в центральной колонке. Mobile использует одну колонку, tablet — две, desktop — сетку
   `3 × 2`.
@@ -324,12 +361,10 @@ Status: `Proposed` pending owner acceptance and trademark review.
 - Modal имеет видимые Close и Previous/Next, поддерживает Escape и стрелки клавиатуры, удерживает
   focus нативной modal-семантикой и возвращает его на исходную карточку. При увеличении текста и
   низком viewport содержимое прокручивается внутри поверхности, а не обрезается.
-- `review` допускает `assetKind: concept-visual` только с `permission: review-only`. Статус
-  `published` по-прежнему требует ровно четыре `assetKind: real-project`, фактические немецкие
-  подписи и публичные разрешения; runtime validation не позволяет опубликовать концепты.
-- Desktop/mobile композиция и текущие focal points проверены на временных изображениях. После
-  получения четырёх оригиналов визуальное сравнение со Stitch и crop-review повторяются; текущие
-  концепты не являются доказательством выполненных работ.
+- `published` требует `permission: public-approved` для каждого изображения, но допускает
+  `concept-visual` при постоянном disclosure. Концепт не является доказательством выполненных работ.
+- Desktop/mobile композиция и текущие focal points проверяются на фактически опубликованных
+  изображениях.
 
 ### Marker loop
 
@@ -400,7 +435,7 @@ Status: `Proposed` pending owner acceptance and trademark review.
 - `prefers-reduced-motion` отключает необязательное движение.
 - Motion не должен задерживать content visibility или CTA.
 
-## Accessibility gates
+## Accessibility evidence
 
 - Цель: WCAG 2.2 AA.
 - Один логичный H1, последовательная heading hierarchy.
@@ -412,7 +447,7 @@ Status: `Proposed` pending owner acceptance and trademark review.
 - Ошибки формы не зависят от цвета.
 - Consent banner доступен с клавиатуры и screen reader.
 
-## Performance gates
+## Performance evidence
 
 - LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1 на 75-м процентиле.
 - Минимальный client JavaScript.
@@ -452,6 +487,12 @@ Status: `Proposed` pending owner acceptance and trademark review.
 - Submit и одна короткая нейтральная ссылка на `Datenschutzerklärung` завершают нижнюю полосу.
   CTA остаётся оранжевым, без marker-loop;
   ошибки имеют summary, inline text, `aria-invalid` и focus transfer.
+- Pending-состояние после submit использует owner-approved полноэкранный overlay:
+  страница затемняется и размывается, а в центре без видимого текста работает точный
+  трёхчастный SVG-знак LICHTSAUM. За цикл `2.8s` он вращается, разбирается и собирается без
+  overlap/overshoot; при `prefers-reduced-motion` знак остаётся собранным.
+- Overlay немедленно блокирует повторное взаимодействие и scroll, а для screen reader сообщает
+  обработку заявки без добавления видимой copy.
 
 ## TBD before final design
 

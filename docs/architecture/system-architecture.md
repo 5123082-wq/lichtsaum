@@ -1,7 +1,21 @@
 # System Architecture
 
 Status: `Decision` with `TBD` integrations  
-Last reviewed: 2026-07-30
+Last reviewed: 2026-08-11
+
+Publication decisions follow [`publication-governance.md`](publication-governance.md). Environment
+flags below describe code behavior; they do not autonomously forbid or authorize a release.
+
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+
+- Owns: application stack, routes, rendering, environments, lead storage/uploads and notifications.
+- Current: Next.js 16 server-first app; unified lead records use Neon, private Blob and Resend;
+  runtime capabilities remain environment-gated.
+- Open: final hosting/CMP facts and production choices remain owner decisions.
+- Read full when: changing framework boundaries, routes, runtime flags, persistence, uploads,
+  notifications, environments or security boundaries.
+<!-- AGENT_BRIEF:END -->
 
 ## Goals
 
@@ -49,6 +63,7 @@ fonts. Prefer built-in mechanisms over parallel SEO plugins.
 | Route | Purpose | Index policy |
 | --- | --- | --- |
 | `/` | Primary German landing | index |
+| `/konfigurator` | Server-reproduced preliminary B2B-net configurator and shared project inquiry | index |
 | `/referenzen` | Real project evidence | index when substantive |
 | `/kontakt` | Contact options and request entry | index |
 | `/impressum` | Provider information | index |
@@ -67,7 +82,12 @@ Planned sources:
 - `src/config/seo.ts` — metadata defaults and canonical policy.
 - `src/features/analytics/events.ts` — typed event names and allowed parameters.
 - `src/features/consent/` — consent state and tag gating.
-- `src/features/lead-form/` — schema, UI, server processing and result contract.
+- `src/features/lead-form/` — shared schema, UI, server processing and result contract for every
+  plain, configurator and calculator inquiry; the cross-route product contract is
+  [`unified-lead-form-contract.md`](unified-lead-form-contract.md).
+- `src/features/configurator/` — versioned full configuration, server-compatible WOFF2 metrics,
+  geometry validation, integer-cent pricing, panel allocation and browser-session migration. Server
+  modules are marked `server-only`; client components receive only serializable results.
 - `src/lib/structured-data/` — JSON-LD builders from verified config.
 
 Copy, Ads and Schema may not maintain separate copies of company facts or claims.
@@ -83,6 +103,11 @@ Copy, Ads and Schema may not maintain separate copies of company facts or claims
 - Runtime rendering is introduced only for actual runtime data.
 
 ## Lead flow
+
+All present and future request entry points use one lead system. Optional configurator/calculator
+context extends the accepted lead instead of creating a parallel form pipeline or conversion. The
+authoritative expansion contract is
+[`unified-lead-form-contract.md`](unified-lead-form-contract.md).
 
 ```mermaid
 flowchart LR
@@ -108,13 +133,19 @@ Rules:
   failure is logged without contact data and does not reverse an already accepted lead.
 - File content goes directly to Private Blob after the server reserves a `lead_files` row and
   authorizes its exact random pathname. PostgreSQL stores metadata, never the binary content.
+- Full-configurator submissions store one optional allowlisted `request_context` JSONB snapshot on
+  the same `leads` row. The client supplies raw inputs and a confirmed pricing version; the server
+  validates and recalculates before persistence. Plain inquiries keep this field null.
 - Upload grants expire after 30 minutes. Accepted leads and their private files have a 90-day
   retention deadline enforced by the protected daily retention job.
 - Notification file links are HMAC-signed, contain only random lead/file identifiers and expire
   after seven days; downloads stream private Blob content through a no-store server route.
 - The form combines a honeypot with an email-based three-attempts-per-15-minute application limit.
-  Production intake remains fail-closed until malware handling, processor onboarding and final
-  privacy review pass their release gates.
+  Production contact intake defaults fail-closed through `LEAD_INTAKE_ENABLED=false`. Its value for
+  a concrete release is `Спросить у пользователя`. File intake is an additional dependent technical
+  control: the former mandatory `LEAD_ATTACHMENTS_ENABLED=false` publication baseline is
+  superseded. Show the malware/processor facts and ask the user for the concrete value; a forged
+  file manifest is rejected while an enabled contact-only flow continues to work.
 
 ## Consent and tag boot sequence
 
@@ -148,9 +179,18 @@ The enabled lead flow requires these server-only values:
 | `BLOB_READ_WRITE_TOKEN` | Local/non-OIDC Blob credential; server-only |
 | `CRON_SECRET` | Independent secret for the retention endpoint |
 | `SITE_URL` | Absolute deployed origin used in signed notification links |
+| `LEAD_INTAKE_ENABLED` | Concrete production value: `Спросить у пользователя`; absent/`false` remains the code default |
+| `LEAD_ATTACHMENTS_ENABLED` | Concrete production value: `Спросить у пользователя` after showing malware/processor facts; absent/`false` remains the code default |
 
 No variable in this contract may use the `NEXT_PUBLIC_` prefix. Deployment classification uses
 Vercel's system-provided `VERCEL_ENV`; no custom environment selector is required.
+
+When production intake is requested, the application fails its server-render preflight unless a
+runtime PostgreSQL URL and the required Resend values are present. Attachment activation also
+requires the contact-intake flag, Blob credential, retention secret, download secret and absolute
+HTTPS `SITE_URL`. Errors report variable names only and never secret values. This validates
+configuration shape, not database reachability, migration state or provider delivery; those remain
+release checks.
 
 ### Local
 
@@ -188,7 +228,9 @@ seeing `noindex`.
 - Processor/DPA inventory matches actual deployment.
 - Retention and deletion path defined before collecting production leads.
 
-## Quality gates
+## Quality evidence
+
+These checks produce evidence for the owner; they do not decide publication by themselves.
 
 - Typecheck, lint, tests and production build.
 - E2E happy path, validation errors, duplicate/retry and no-consent path.
@@ -198,7 +240,7 @@ seeing `noindex`.
 - Tag Assistant/DebugView and conversion deduplication.
 - Mobile performance and Core Web Vitals budget.
 
-## Open decisions
+## Open questions — `Спросить у пользователя`
 
 - Hosting and data region.
 - Operational access policy for the Neon lead store and Private Blob files.

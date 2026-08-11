@@ -6,6 +6,11 @@ Decision date: 2026-07-30
 Evidence cut-off: 2026-07-30  
 Working brand: `LICHTSAUM`; company-name and trademark availability remain `TBD`
 
+> This strategy remains evidence and a recommendation. Its former publication/scaffold/Ads gates
+> are superseded by
+> [`../architecture/publication-governance.md`](../architecture/publication-governance.md).
+> Concrete public actions are `Спросить у пользователя`.
+
 ## Executive decision
 
 **Decision: `VALIDATE FIRST`.**
@@ -33,12 +38,12 @@ decision models, not forecasts.
 | Flagship configuration | One 2400 × 200 mm illuminated zone in a 300 mm finished valance, delivered as a managed project and only where technically compatible |
 | Supporting configurations | 1200 × 150 mm, 1200 × 300 mm and 1–3 illuminated zones; all engineering-led, not public tariff families |
 | Positioning | An architecture-conscious brand-light retrofit for an existing commercial awning |
-| Primary promise | `Aus Ihrer bestehenden Markise wird Markenlicht.` |
+| Primary promise | `Markise wird Markenlicht.` — exact landing H1 locked by owner decision on 2026-08-10 |
 | Category line | `Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen` |
 | Primary CTA | `Projekt prüfen lassen` |
 | Commercial offer | Photo/compatibility check → design proof → confirmed scope and quote → production → optional coordinated installation/electrical work |
-| Public pricing at first release | No fixed `ab` price until German direct costs and scope are verified; explain cost drivers and provide a project-specific range |
-| Calculator | Not in the first release; later as an ungated preliminary range for auto-eligible standard cases |
+| Public pricing at first release | No fixed `ab` or complete-project price; ADR-015 permits only the server-reproduced component subtotal + 0% on `/konfigurator` as restricted B2B-net validation output |
+| Calculator | Implemented locally as a validation tool under ADR-015; production/B2C/Ads release remains gated |
 | First acquisition channels | Local account-based outreach, installer/sign-partner referrals, then tightly matched exact/phrase Search |
 | Explicit exclusions | New awnings, B2C terrace lighting, ambient LED strips, DIY/repair parts, generic signage, nationwide full-service claims |
 
@@ -71,7 +76,7 @@ confirmed who performs and warrants each step.
 ### Flagship
 
 **Proposed flagship:** one 2400 × 200 mm illuminated field, a 300 mm finished valance and a
-maximum supplier-catalogue letter height of 150 mm, as a managed one-site retrofit.
+maximum letter height of 180 mm, as a managed one-site retrofit.
 
 Reasoning:
 
@@ -81,7 +86,7 @@ Reasoning:
 - the underlying supplier format is already standardised in a current professional catalogue.
 
 This is an internal product hypothesis. It does **not** mean that every 1.3–6 m awning accepts the
-format or that every logo is legible at 150 mm. A real sample, supplier approval and compatibility
+format or that every logo is legible at 180 mm. A real sample, supplier approval and compatibility
 check are required before this becomes a public standard.
 
 ### Supporting line
@@ -202,17 +207,17 @@ selling an isolated light panel or a complete new awning.
 1. **What:** a custom illuminated valance for an existing commercial awning.
 2. **Why:** the brand remains visually present when an unlit textile valance disappears into the
    evening frontage.
-3. **Why this offer:** one managed compatibility, design and delivery process, where the real
-   operating scope is confirmed.
+3. **Why this offer:** one coherent design and delivery process for the new illuminated valance.
 4. **Proof:** a real day/night sample, technical limits, transparent inclusions and completed
    projects.
-5. **Risk reduction:** object-specific pre-check before production; no universal-fit or permit
-   promise.
+5. **Project process:** collect the object data needed to prepare the final execution.
 6. **Action:** `Projekt prüfen lassen`.
 
-The hero line `Aus Ihrer bestehenden Markise wird Markenlicht.` is proposed because it communicates
-the physical transformation without asserting revenue, customer traffic, energy savings or permit
-status. Supporting copy must immediately explain the exact product.
+The hero line `Markise wird Markenlicht.` is the owner-approved, locked landing H1. Do not rewrite
+it for SEO, expand it to the earlier proposed variant or add any category/supporting copy to the
+current hero. The approved lower-page product explanation is
+`Der textile Volant wird durch einen individuell gestalteten Leuchtvolant ersetzt.` It remains in
+the existing `Eignung` section; measurements and execution checks belong to the project process.
 
 ### Positioning alternatives rejected for launch
 
@@ -289,14 +294,17 @@ data must replace them.
 
 ### Public pricing decision
 
-1. Do not publish the supplier catalogue price as a LICHTSAUM price.
-2. Do not launch with a universal `ab EUR …` claim: a small product-only case and a managed
-   installed project are materially different scopes.
+1. Before publishing supplier component values as customer prices or a general LICHTSAUM tariff,
+   show the scope mismatch and use `Спросить у пользователя`. ADR-015 records the currently
+   implemented server-reproduced combined subtotal with 0% markup and CLM-029 limitations.
+2. Before a universal `ab EUR …` claim, show that a product-only case and a managed installed
+   project are materially different scopes and use `Спросить у пользователя`.
 3. On the first landing, explain price drivers and promise only a project-specific range after the
    compatibility check, if the owner confirms that workflow.
-4. After at least 10 complete estimates and 3 installed paid projects, test an ungated preliminary
-   range for standard cases. Show product, design, delivery, installation, electrical work and
-   special access as separate inclusions/exclusions.
+4. Use the locally implemented component calculator to collect validation evidence. A later
+   complete-project range still requires at least 10 complete estimates and 3 installed paid
+   projects and must show product, design, delivery, installation, electrical work and special
+   access as separate inclusions/exclusions.
 5. The estimator must visibly say `vorläufig`, state net/gross and VAT treatment, never guarantee
    compatibility or approval, and route non-standard cases to manual review.
 
@@ -342,8 +350,9 @@ is unresolved.
 - collect actual time and direct cost for design, measurement, logistics and installation;
 - create permission-cleared day/night material from the sample or first project.
 
-**Gate:** do not build the calculator if most quotes require manual exceptions or the price spread
-for standard cases remains wider than ±15%.
+**Owner question:** if most quotes require manual exceptions or the standard-case price spread
+remains wider than ±15%, show that evidence and use `Спросить у пользователя` before presenting the
+calculator as a complete-project estimator.
 
 ### Days 61–90 — prove repeatability
 
@@ -408,8 +417,8 @@ The following inputs cannot be inferred from market research:
 The product decision is sufficiently clear to begin **information architecture, German copy
 prototyping and a low-fidelity landing design** after the owner accepts this document.
 
-It is **not** sufficient to begin a production scaffold or publish a lead-generating landing. That
-remains blocked by:
+The former prohibition on a production scaffold or lead-generating landing is superseded. Before a
+concrete publication, show the owner these open facts:
 
 - supplier and complete-system technical evidence;
 - actual operating scope, geography and responsibility;
@@ -418,4 +427,5 @@ remains blocked by:
 - production domain, vendor, retention and final privacy-review inputs;
 - claims-register approval.
 
-No application code or scaffold is authorised by this decision.
+Application implementation/publication authority follows the user's current request and
+`../architecture/publication-governance.md`, not this historical strategy gate.

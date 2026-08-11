@@ -1,12 +1,18 @@
 # Configurator Calculation Contract
 
-Status: `Decision` for local constraints and internal cost inputs; public pricing `TBD`
+Status: `Decision`; full server-authoritative calculation implemented locally under restricted
+public claim CLM-029
 
-Last reviewed: 2026-08-06
+Last reviewed: 2026-08-11
 
-Этот документ — единственный источник истины для размерных ограничений конфигуратора и
-внутренних компонентных стоимостей будущего расчёта. Значения подтверждены владельцем
-2026-08-06 для локального noindex-прототипа. Они не являются клиентским тарифом или предложением.
+Publication choices follow [`publication-governance.md`](publication-governance.md). The claim and
+legal boundaries below are facts to show the owner; they do not autonomously block publication.
+
+Этот документ — единственный источник истины для размерных ограничений конфигуратора,
+компонентных стоимостей и версии предварительного расчёта. Значения подтверждены владельцем
+2026-08-06; явный implementation plan от 2026-08-11 разрешил показывать их сумму с наценкой 0% как
+ограниченный `/konfigurator` B2B-netto result. Это не общий клиентский тариф, проверка
+совместимости или обязательное предложение.
 
 ## Implemented local constraints
 
@@ -16,13 +22,14 @@ Last reviewed: 2026-08-06
 | `Volanthöhe` | `200–300 mm` inclusive | Outside the range: visible error, `aria-invalid`, continuation disabled |
 | `Buchstabenhöhe` | `1–180 mm` inclusive | Outside the range: visible error, `aria-invalid`, continuation disabled |
 
-The UI keeps the entered draft value and does not silently clamp or auto-fit it. The current
-`sessionStorage` v2 payload and key do not change; a stored configuration outside these bounds is
-rejected on restore.
+The UI keeps the entered draft value and does not silently clamp or auto-fit it. Homepage teaser
+keeps `lichtsaum:mini-configurator:v2`. The full route uses `lichtsaum:configurator:v1`, migrates
+only a valid mini v2 configuration and persists only configuration/services for the browser
+session. Optional PLZ, contacts and files are not stored.
 
-The 180 mm owner limit is not a replacement for the separate supplier-catalogue fact recorded in
-`CLM-016` (150 mm for its specified flagship format). The two sources must be reconciled against
-the actually contracted product and technical file before any production or public use.
+The 180 mm owner limit is the authoritative LICHTSAUM configurator and FAQ value. Dimensions found
+in individual supplier or competitor catalogue examples are market evidence and must not override
+this product setting or guide future calculator development as a general cap.
 
 ## Internal component cost inputs
 
@@ -41,7 +48,21 @@ permit/document coordination, warranty reserve and VAT treatment.
 The EUR 40 running-metre rate applies unchanged across the allowed 200–300 mm valance-height
 range.
 
-## Future panel allocation
+## Implemented pricing version
+
+- `pricingVersion`: `2026-08-11.v1`;
+- `markupPercent`: `0`;
+- all money arithmetic: integer euro cents;
+- electrical set: `10_000` cents fixed;
+- finished valance: `4` cents per full-width millimetre;
+- selected panel cost: internal catalog above;
+- displayed result: electrical set + valance + panels, then 0% markup.
+
+Selected design, delivery, site measurement, old-valance removal, new-valance installation and
+electrical connection are recorded for manual review and never change this version's displayed
+amount.
+
+## Panel allocation
 
 The required panel length is the measured width of the complete illuminated composition:
 inscription, illuminated logo placeholders and the gaps between them. Outer non-illuminated safe
@@ -54,11 +75,53 @@ length is at least `L`, then select in this order:
 2. lowest unused panel length;
 3. lowest panel count.
 
-The future internal component subtotal is:
+The authoritative component subtotal is:
 
 `EUR 100 + (Volantbreite in m × EUR 40) + selected panel cost`
 
-Maximum panel count, physical joints and mounting gaps remain `TBD`. No calculation result may be
-added to the public UI until those technical inputs, complete customer scope, margin and VAT
-presentation are approved. The current mini-configurator deliberately implements no price or panel
-allocation logic.
+Maximum panel count, physical joints and mounting gaps remain `TBD`; v1 therefore does not claim
+technical compatibility and routes the result to project review. The solver itself has no arbitrary
+panel-count cap and remains valid for the entered positive width. The homepage mini-configurator
+still performs no price or panel allocation.
+
+The UI may show total panel counts/allocation but does not expose the purchase cost of individual
+components.
+
+## Authoritative font and geometry boundary
+
+The full configurator opens the same local WOFF2 asset selected for the SVG through `fontkit`
+2.0.4, applies the configured variable-font weight where available and uses shaped glyph layout,
+kerning and visible bounds. The returned width, SVG font size and baseline offset drive both the
+preview geometry and required panel length.
+
+Unsupported glyphs, missing/unreadable fonts, non-finite metrics, invalid dimensions and a
+composition crossing the existing safe area fail closed: no price and no configurator submit are
+available. Client-calculated hidden totals are never accepted.
+
+## Version and persistence boundary
+
+Live calculation is a stateless server request. It does not create a lead, notification or
+conversion and the application does not log its body. On explicit shared-form submit the server
+validates the raw configuration again, repeats measurement/geometry/pricing and persists only its
+own result in the optional versioned `leads.request_context` snapshot.
+
+If the submitted confirmation version differs from `2026-08-11.v1`, the server returns the current
+authoritative calculation before any lead insert. The UI replaces the displayed result and requires
+an explicit new confirmation.
+
+## Public presentation evidence
+
+Every total on `/konfigurator` is labelled `Vorläufiger Nettopreis` and is adjacent to all three
+limitations: `zzgl. gesetzlicher Umsatzsteuer`, selected services are excluded, and the result is
+not a `verbindliches Angebot` (обязательное предложение). The page explicitly addresses
+`gewerbliche Projekte`.
+
+CLM-029 records approval for this exact surface. A general price, `Ab` claim, B2C presentation,
+`Product`/`Offer` Schema, Ads price promise or use on another route has no recorded approval.
+Present the PAngV/B2C, compatibility and claim context and use `Спросить у пользователя` for the
+concrete production/Ads publication decision.
+
+The attached preliminary calculation uses the shared intake, server-reproduced calculation version
+and single Google Ads conversion defined in
+[`unified-lead-form-contract.md`](unified-lead-form-contract.md). A calculator result does not
+create a lead or conversion before the visitor explicitly submits the shared contact form.
