@@ -22,23 +22,20 @@ vendor.
 | Disabled-environment form validation | Email; optional phone, message and selected files | Validate format/size rules without accepting a lead | Used whenever lead feature flags are off | Necessary prototype function | Application runtime only | No persistent storage |
 | Configurator draft and calculation | Inscription, dimensions, design and color choices; no contact, PLZ or files | Preserve the draft for the browser session and reproduce font metrics, geometry and the preliminary price on the application server | `sessionStorage` starts only after interaction; each live calculation is transient, allowlisted, not persisted and not logged by the application | Necessary requested configurator function | Browser and existing Vercel application runtime; no analytics/lead/notification processor | Browser session for the draft; request-lifetime only for server calculation |
 | Attached configurator request context | Versioned configuration, requested services, optional five-digit project PLZ and a server-reproduced preliminary calculation; values include the user-entered inscription | Send the visitor's visible project context with an explicitly submitted inquiry | Implemented locally; no lead record, manager/customer notification or conversion occurs before explicit form submit | Necessary inquiry function; no marketing consent | Existing Neon/Resend lead processors only; no analytics destination | Neon copy deleted with the lead under the approved 90-day deadline; operational manager/customer mailbox copies remain under the existing owner-managed purpose/statutory deletion rule |
-| Enabled lead request | Contact, request details and optional file metadata | Respond/pre-contract steps | Implemented and live-tested locally; owner accepts proceeding without an external legal opinion, but processor onboarding remains open | Not marketing consent | Neon PostgreSQL (`eu-central-1`), onboarding/DPA review pending | 90 days approved by owner decision O8 |
-| Enabled lead files | Up to five JPG/PNG/WebP/PDF files, 15 MB each and 50 MB combined | Object-specific project review | Implemented and live-tested; prepared code has an independent attachment flag; the former mandatory disabled launch baseline is superseded and the concrete value is `Спросить у пользователя` | Necessary form function when enabled | Private Vercel Blob (`fra1`), onboarding/DPA review pending | 90 days approved by owner decision O8 |
-| Lead notification and receipt | Internal contact/request notification with signed file links; customer receipt with email address, public request number and, for configurator inquiries, the submitted configuration/services/server-confirmed net summary; customer receipt never includes message text or files | Operational response and confirmation of receipt | Internal notification delivery-tested; customer receipt implemented, production delivery test pending | Not marketing consent | Plus Five Five, Inc. (Resend), sending region `eu-west-1`; Cloudflare, Inc.; Google Ireland Limited | No automated mailbox deletion; owner-managed deletion when the operational purpose ends, subject to active matters, legal claims and applicable statutory duties. Resend processes while the agreement is active and states deletion within 90 days after account termination |
-| First-party consent manager | Policy version, decision time, fixed Necessary/External-media states and independent Analytics/Marketing choices; no contact/form data | Remember and respect the browser's choice | Implemented locally; no external opinion on the sufficiency of browser-local evidence will be obtained for v1, by owner risk acceptance | Necessary | None; same-site application and browser | 180 days or until the policy version changes |
-| GA4 | Pseudonymous website-usage and funnel events; no form/contact content, filenames or `lead_id` | Usage and funnel analytics | Property/stream, privacy baseline and unpublished consent-aware GTM tag configured; runtime requires explicit Analytics consent; production activation is `Спросить у пользователя` | Analytics | Google only after activation | Two months, verified in GA4 on 2026-08-11 |
-| Google Ads | Server-confirmed conversion event with random non-personal `lead_id` used only as Transaction ID | Direct conversion measurement | Account, sole Primary action and unpublished consent-aware GTM tags configured; runtime requires explicit Marketing consent; production activation is `Спросить у пользователя` | Marketing | Google only after activation | Account policy/settings verified on 2026-08-11; advertiser identity verification is `Спросить у пользователя` |
+| Enabled lead request | Contact, request details and optional file metadata | Respond/pre-contract steps | Enabled and production-live-tested; owner accepts proceeding without an external legal opinion, but processor onboarding remains open | Not marketing consent | Neon PostgreSQL (`eu-central-1`), onboarding/DPA review pending | 90 days approved by owner decision O8 |
+| Enabled lead files | Up to five JPG/PNG/WebP/PDF files, 15 MB each and 50 MB combined | Object-specific project review | Enabled and production-live-tested through the independent attachment flag | Necessary form function when enabled | Private Vercel Blob (`fra1`), onboarding/DPA review pending | 90 days approved by owner decision O8 |
+| Lead notification and receipt | Internal contact/request notification with signed file links; customer receipt with email address, public request number and, for configurator inquiries, the submitted configuration/services/server-confirmed net summary; customer receipt never includes message text or files | Operational response and confirmation of receipt | Internal notification and customer receipt production-live-tested with controlled synthetic inquiries | Not marketing consent | Plus Five Five, Inc. (Resend), sending region `eu-west-1`; Cloudflare, Inc.; Google Ireland Limited | No automated mailbox deletion; owner-managed deletion when the operational purpose ends, subject to active matters, legal claims and applicable statutory duties. Resend processes while the agreement is active and states deletion within 90 days after account termination |
+| First-party consent manager | Policy version, decision time, fixed Necessary/External-media states and independent Analytics/Marketing choices; no contact/form data | Remember and respect the browser's choice | Enabled and production-network-tested; no external opinion on the sufficiency of browser-local evidence will be obtained for v1, by owner risk acceptance | Necessary | None; same-site application and browser | 180 days or until the policy version changes |
+| GA4 | Pseudonymous website-usage and funnel events; no form/contact content, filenames or `lead_id` | Usage and funnel analytics | Property/stream and published consent-aware GTM tag active only after explicit Analytics consent | Analytics | Google only after consent | Two months, verified in GA4 on 2026-08-11 |
+| Google Ads | Server-confirmed conversion event with random non-personal `lead_id` used only as Transaction ID | Direct conversion measurement | Account, sole Primary action and published consent-aware GTM tags active only after explicit Marketing consent; no campaign/spend activated | Marketing | Google only after consent | Account policy/settings verified on 2026-08-11; advertiser identity verification remains open |
 | Enhanced Conversions | Hashed first-party data | Ads matching/measurement | Disabled by O10; not part of v1 | Marketing/ad user data | Google | Not applicable while disabled |
 | Local fonts | Font files | Rendering | No external request | Necessary | Hosting | Cache policy |
 
-The current code includes a custom first-party consent manager and a dormant fail-closed GTM loader.
-GTM, GA4 and direct Google Ads resources now exist in an unpublished workspace, but their production
-environment flags remain disabled. No Enhanced Conversions, CRM, chat, AI service or external-media
-embed exists. Neon, Private Vercel Blob and Resend are active only in explicitly enabled
-environments; production contact intake defaults fail-closed through
-`LEAD_INTAKE_ENABLED=false`, and file intake has the additional dependent
-`LEAD_ATTACHMENTS_ENABLED` control, also false when absent. These are code defaults, not publication
-decisions; values and unresolved factual/security questions are `Спросить у пользователя`.
+The current production uses the custom first-party consent manager and fail-closed GTM loader.
+GTM version 2 publishes the GA4 and direct Google Ads resources, while the loader keeps them absent
+until the matching consent. No Enhanced Conversions, CRM, chat, AI service or external-media embed
+exists. Neon, Private Vercel Blob and Resend are active in production through explicit flags;
+contact and file intake still default fail-closed when those flags are absent.
 
 ## Resolved release facts
 
@@ -46,13 +43,12 @@ decisions; values and unresolved factual/security questions are `Спросит�
 - The public privacy page now describes the confirmed Basic Consent Mode, the 180-day consent
   cookie, standard GA4 cookies with a maximum two-year lifetime, two-month GA4 user/event
   retention and Conversion Linker cookies with a maximum 90-day lifetime. These disclosures do not
-  activate the dormant tags; final production network/cookie capture remains required.
+  activate tags without consent; production network behavior was verified on 2026-08-11.
 - The current product site contains no journalistic-editorial section. Reassess before adding a
   blog, news or comparable editorial publication.
-- No analytics, advertising or external-media vendor technology is active in the current runtime.
-  The local first-party manager stores a choice and the dormant loader can load a container only if
-  both are explicitly enabled with a real optional technology. Adding a vendor reopens the
-  data-flow and disclosure review.
+- GA4 and direct Ads conversion tags are active only after their respective optional consent.
+  Production verification found no Google requests before a decision and GTM/GA4/Ads requests
+  after Accept all. Adding another vendor reopens the data-flow and disclosure review.
 - The mini-configurator starts browser-local session storage only after user interaction.
 - The full configurator stores only its design draft in `sessionStorage`. Optional PLZ, contact data
   and selected files remain outside browser storage. Raw design values are transiently sent to the
@@ -87,7 +83,7 @@ decisions; values and unresolved factual/security questions are `Спросит�
   Mode and consent-dependent GA4. Necessary, Analytics and Marketing are exposed with independent
   optional choices; External media remains inactive. No external CMP processor or CMP budget is
   required for v1.
-- Owner decision O10 is recorded: the existing owner-controlled Google account owns the future
+- Owner decision O10 is recorded: the existing owner-controlled Google account owns the active
   GTM, GA4 and Google Ads resources. Direct Google Ads is the only Primary lead conversion; GA4
   receives a separate sanitized `generate_lead` without `lead_id` and is not imported to Ads. GA4
   retention is two months. Enhanced Conversions, offline uploads, Customer Match, remarketing,
@@ -96,15 +92,15 @@ decisions; values and unresolved factual/security questions are `Спросит�
   views retained in Enhanced Measurement and the remaining approved GA privacy baseline verified.
   Google Ads account `LICHTSAUM` and its sole direct Primary action `Projektanfrage –
   serverbestätigt` were configured with Count = One, value 0 EUR, no GA4 import and Enhanced
-  Conversions off. The unpublished GTM workspace implements independent Analytics/Marketing
+  Conversions off. Published GTM version 2 implements independent Analytics/Marketing
   triggers and destination-scoped lead tags. Chrome Tag Assistant verified the real base-tag
   consent matrix and full revoke on an isolated local noindex build without submitting a lead.
-  Advertiser identity verification remains with the owner. Standard installation snippets were not
-  added and production flags/container publication remain disabled, so no Google vendor request is
-  active on the public site.
-- The former O7 mandatory `LEAD_ATTACHMENTS_ENABLED=false` publication baseline is superseded.
-  Vercel Hobby and malware/processor risks remain documented; ask the user for concrete intake and
-  attachment values.
+  GTM version 2 was published and production consent/network plus controlled server-confirmed lead
+  checks passed on 2026-08-11. Advertiser identity verification remains with the owner. Standard
+  unconditional installation snippets were not added, and no Ads campaign or spend was activated.
+- The former O7 mandatory `LEAD_ATTACHMENTS_ENABLED=false` publication baseline is superseded;
+  production contact and attachment flags are enabled. Vercel Hobby and malware/processor risks
+  remain documented.
 - The previous Search Console/DNS, advertiser-verification and controlled-alias QA deferrals are
   cancelled. Each concrete action is `Спросить у пользователя`.
 
@@ -154,10 +150,11 @@ state, including Accept all.
 6. Keep application analytics/conversion events out of `dataLayer` unless the matching active
    category is allowed. `Implemented`.
 7. Set denied defaults before authorized tags and apply same-page updates. `Verified with the real
-   unpublished container in Chrome Tag Assistant`.
+   container in Chrome Tag Assistant and published as GTM version 2`.
 8. Verify real Google tag behavior with Reject/default, partial choices, Accept and revoke.
-   `Verified locally with Chrome Tag Assistant; production diagnostics and synthetic lead payload
-   QA remain open evidence to show the user`.
+   `Verified locally with Chrome Tag Assistant; production Playwright found zero Google requests
+   before consent and GTM/GA4/Ads requests after Accept all. Controlled server-confirmed contact
+   and Private Blob attachment inquiries completed on 2026-08-11`.
 
 The v1 record is browser-local and is not linked to a person or copied to a server ledger. This
 avoids a new data flow. The owner accepts the residual risk of using this evidence model without an
@@ -252,7 +249,7 @@ containing visitor or lead data:
 - `src/features/analytics/google-tag-boundary.tsx` and `events.ts` for Basic Consent Mode,
   conditional GTM loading, permanently denied `ad_personalization` and the PII allowlist;
 - `src/app/datenschutz/page.tsx` for the visitor-facing German disclosure;
-- the recorded GA4 baseline, Ads Primary-action settings and unpublished GTM workspace described
+- the recorded GA4 baseline, Ads Primary-action settings and published GTM version described
   in the measurement plan.
 
 Technical evidence recorded on 2026-08-11:
@@ -263,7 +260,10 @@ Technical evidence recorded on 2026-08-11:
 - Marketing-only activates the Ads Google tag and Conversion Linker while GA4 remains inactive;
 - Accept all activates each applicable base tag once and leaves `ad_personalization` denied;
 - full revoke reloads the page without the GTM boundary;
-- no real lead/contact/file data was used in this QA.
+- production verification found no Google request before consent and GTM/GA4/Ads requests after
+  Accept all;
+- controlled synthetic contact and Private Blob attachment inquiries completed without real
+  customer data.
 
 Known legal questions accepted by the owner without external written confirmation:
 
@@ -278,10 +278,9 @@ Known legal questions accepted by the owner without external written confirmatio
   release-candidate capture.
 
 The risk acceptance closes the requirement to name a reviewer, but it does not convert any `TBD`
-fact into a verified fact. Technical, processor/DPA, malware, advertiser-identity and production-QA
-questions must be shown to the user. A final production cookie/network capture, synthetic
-server-confirmed lead evidence and Google DebugView/Ads Diagnostics are `Спросить у пользователя`;
-when performed, they must use controlled synthetic data and contain no real customer data.
+fact into a verified fact. Technical, processor/DPA, malware and advertiser-identity questions
+remain visible. Production cookie/network and synthetic server-confirmed lead evidence were
+captured with controlled data; Google DebugView/Ads Diagnostics remain follow-up monitoring.
 
 ## Official references
 

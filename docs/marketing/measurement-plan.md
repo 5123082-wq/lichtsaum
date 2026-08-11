@@ -1,8 +1,7 @@
 # Measurement Plan
 
-Status: `Decision`; O10 resources and the consent-aware GTM workspace are configured and the base
-Tag Assistant matrix passes, while the container remains unpublished/disconnected and synthetic
-server-confirmed conversion QA is still open
+Status: `Verified`; O10 resources and consent-aware GTM version 2 are published, production
+consent/network checks pass and controlled server-confirmed inquiries completed
 Last reviewed: 2026-08-11
 
 Publication, GTM activation, advertiser verification and synthetic-QA timing follow
@@ -27,7 +26,7 @@ Adding a form surface does not by itself create another Primary conversion actio
 
 ## Current implementation boundary
 
-Status: `Verified` locally on 2026-08-11
+Status: `Verified` locally and in production on 2026-08-11
 
 - `src/features/analytics/events.ts` is the single typed and runtime-allowlisted client adapter for
   lead-form events. It copies only event-specific fields into `dataLayer`; arbitrary payload keys
@@ -46,9 +45,8 @@ Status: `Verified` locally on 2026-08-11
 - The custom first-party consent manager stores one versioned 180-day choice cookie when enabled.
   A local fail-closed Consent Mode v2/GTM loader now exists behind both
   `NEXT_PUBLIC_GOOGLE_TAGS_ENABLED` and `NEXT_PUBLIC_GTM_CONTAINER_ID`, and application code permits
-  that loader only when `VERCEL_ENV=production`. Both production flags remain absent/disabled, so
-  no GTM container, GA4 destination or Google Ads destination is currently loaded and the current
-  public behavior creates no Google network request.
+  that loader only when `VERCEL_ENV=production`. Both production flags and container ID
+  `GTM-TNW2DDMZ` are enabled on Vercel Production.
 - O10 selects a direct Google Ads tag as the only Primary conversion source. The server-created
   `lead_id` is used only as the Ads Transaction ID. GA4 receives a separate sanitized
   `generate_lead` without `lead_id`, and that GA4 event must not be imported into Google Ads.
@@ -63,8 +61,8 @@ Status: `Verified` locally on 2026-08-11
   It contains exactly one enabled Primary website action, `Projektanfrage – serverbestätigt`
   (conversion ID `18383141630`, label `oUIGCLrozN8cEP714b1E`), category Submit lead form,
   Count = One and value 0 EUR. GA4 import and Enhanced Conversions are off. Advertiser identity
-  verification remains an open owner question before Ads publication.
-- The unpublished GTM workspace contains five tags, four custom-event triggers and six data-layer
+  verification remains an open owner question before campaign activation.
+- Published GTM version 2 contains five tags, four custom-event triggers and six data-layer
   variables. GA4 maps only `form_id` and `lead_type`; the direct Ads action maps `lead_id` only as
   Transaction ID. Both Google base tags and Conversion Linker use consent-specific triggers and
   fire at most once per page.
@@ -72,10 +70,12 @@ Status: `Verified` locally on 2026-08-11
   consent; only `GA4 – Google tag` for Analytics-only; only `Ads – Google tag` and
   `Ads – Conversion Linker` for Marketing-only; one firing of each applicable base tag after Accept
   all; correct Consent Mode v2 updates; `ad_personalization` denied in every state; and GTM removed
-  after full revoke. No real or synthetic lead was submitted, so end-to-end GA4/Ads
-  `generate_lead`, Transaction-ID deduplication, DebugView and Ads Diagnostics remain release QA.
-- The standard GTM/gtag installation snippets were not added to the site. Production flags remain
-  disabled and the GTM container remains unpublished.
+  after full revoke. Production Playwright verification found zero Google requests before consent
+  and GTM, GA4 and Ads requests after Accept all. Controlled server-confirmed inquiries, including
+  a Private Blob attachment, completed after publication. GA4 DebugView, Ads Diagnostics and
+  Transaction-ID deduplication remain monitoring evidence rather than launch blockers.
+- The standard unconditional GTM/gtag installation snippets were not added to the site; the local
+  consent boundary remains the only production loader.
 
 ## Primary business conversion
 
@@ -182,15 +182,14 @@ Actual code must add runtime allowlisting and must not accept an open
 | --- | --- | --- | --- |
 | No choice/default | Works | None; Basic mode blocks tag/event | None; Basic mode blocks tag/event |
 | Necessary only / reject | Works | None; known Analytics cookies removed where accessible | None; known Marketing cookies removed where accessible |
-| Analytics accepted | Works | Allowlisted diagnostic/funnel events and sanitized `generate_lead` may enter `dataLayer`; GA4 still requires external resource setup | None unless Marketing is separately accepted |
-| Marketing accepted | Works | None unless Analytics is separately accepted | Server-confirmed Ads `generate_lead` with Transaction ID may enter `dataLayer`; Ads still requires external resource setup |
+| Analytics accepted | Works | Allowlisted diagnostic/funnel events and sanitized `generate_lead` enter the published GA4 tag boundary | None unless Marketing is separately accepted |
+| Marketing accepted | Works | None unless Analytics is separately accepted | Server-confirmed Ads `generate_lead` with Transaction ID enters the published direct Ads tag boundary |
 | Revoked | Works | Future Analytics events stop immediately; known Analytics cookies are removed | Future conversion events stop immediately; known Marketing cookies are removed |
 
 O9 selects Basic Consent Mode, the custom first-party manager and GA4 in v1. Necessary, Analytics
 and Marketing are exposed with independent choices; External media remains inactive/hidden. The
-form never depends on consent. The manager stays dormant through
-`NEXT_PUBLIC_CONSENT_UI_ENABLED=false` until a real optional Analytics or Marketing tag is
-configured and legally cleared.
+form never depends on consent. Production enables the manager and published tags; deployments with
+`NEXT_PUBLIC_CONSENT_UI_ENABLED=false` keep the boundary dormant.
 
 ## Attribution readiness
 
