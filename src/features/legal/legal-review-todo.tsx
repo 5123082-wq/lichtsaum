@@ -2,21 +2,8 @@ import { isIndexable } from "@/config/environment";
 
 import {
   legalReviewItems,
-  type LegalReviewItemId,
-  unresolvedLegalReviewItemIds
+  type LegalReviewItemId
 } from "./legal-review-items";
-
-export function assertLegalReviewCompleteForProduction() {
-  if (legalReviewBlocksProductionIndexing(isIndexable)) {
-    throw new Error(
-      `Production indexing is blocked by ${unresolvedLegalReviewItemIds.length} unresolved legal review items.`
-    );
-  }
-}
-
-export function legalReviewBlocksProductionIndexing(indexable: boolean) {
-  return indexable && unresolvedLegalReviewItemIds.length > 0;
-}
 
 export function LegalReviewTodo({ item }: { item: LegalReviewItemId }) {
   if (isIndexable) {
