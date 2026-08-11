@@ -4,22 +4,30 @@
 ## Context Beacon
 
 - Last updated: 2026-08-11
-- Current stage: public LICHTSAUM site exists; newer application and documentation work remains in
-  the local working tree and has not been published as one verified release.
-- Active track: complete only the site work requested by the owner. Before any concrete deployment,
-  indexing, Search Console/DNS, GTM/Ads, production-form or attachment action, show the current
-  evidence and use `Спросить у пользователя` under
-  `docs/architecture/publication-governance.md`.
+- Current stage: the verified LICHTSAUM release is live on `www.lichtsaum.com`; indexing, lead
+  intake, private attachments, consent UI and consent-aware Google tags are enabled in production.
+- Active track: monitor the live release and continue only the owner's next concrete site request.
 - Working tree: intentionally dirty with owner/previous-agent changes. Do not reset, overwrite or
   broadly reformat unrelated work.
 - Default context protocol: read this block and the three `RECENT_CHANGES` entries only. Read the
   detailed sections below when the current task needs their domain.
-- Next action: continue the owner's latest concrete site request; ask before a concrete external or
-  production action under `docs/architecture/publication-governance.md`.
+- Next action: monitor production diagnostics and continue the owner's next concrete site request.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20260811-05 — Verified production launch
+
+- Scope: GitHub release, Vercel production, indexing, inquiries, private attachments, consent and
+  Google measurement.
+- Outcome: PRs #5 and #6 are merged; Vercel deployment `dpl_FtgiozRys2MLnx5g1tUTNbseTmHK` is
+  `READY`; GTM version 2 with five consent-aware tags is published.
+- Verification: release gates passed; production robots/sitemap/canonical returned the intended
+  indexable state; controlled inquiries `LS-2026-000022` and attachment inquiry
+  `LS-2026-000023` completed; Google requests were absent before consent and present after Accept
+  all; Vercel reported no build or runtime errors.
+- Follow-up: monitor delivery and Google diagnostics; no Ads campaign or spend was activated.
 
 ### CHG-20260811-04 — Progress history is preserved
 
@@ -36,16 +44,17 @@
 - Verification: marker uniqueness, record count, relative links and diff whitespace checked.
 - Follow-up: add or refresh `AGENT_BRIEF` when a material domain document is next changed.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
+
 ### CHG-20260811-02 — Current-only documentation cleanup
 
 - Scope: progress, roadmap, decision log and retired Search/Ads handoff documents.
 - Outcome: closed phases were removed from active reading paths; old handoffs are tombstones only.
 - Verification: all Markdown relative links passed and `git diff --check` was clean.
 - Follow-up: none.
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260811-01 — Publication decisions returned to the owner
 
@@ -86,9 +95,8 @@
 - The nullable `leads.request_context` migration is applied to the production Neon database.
 - Accepted inquiries have a public `LS-YYYY-NNNNNN` request number. Customer receipts contain no
   message or file content.
-- `LEAD_INTAKE_ENABLED` and `LEAD_ATTACHMENTS_ENABLED` are independent production controls. Their
-  absent/false behavior is a code default, not a publication decision. Ask the owner which state to
-  publish after showing runtime, abuse, malware and processor evidence.
+- `LEAD_INTAKE_ENABLED` and `LEAD_ATTACHMENTS_ENABLED` are enabled in production. Controlled live
+  requests verified the contact-only and Private Vercel Blob paths on 2026-08-11.
 
 ### Search, consent and measurement
 
@@ -104,8 +112,8 @@
   - Google Ads account `363-818-4039`;
   - Primary action `Projektanfrage – serverbestätigt`, ID `18383141630`, label
     `oUIGCLrozN8cEP714b1E`.
-- The GTM workspace remains unpublished in the last recorded state. No campaign/spend activation is
-  recorded in the repository.
+- GTM version 2 (`Production launch 2026-08-11`) is published with five consent-aware tags, four
+  custom-event triggers and six data-layer variables. No campaign/spend activation is recorded.
 
 ### Legal and operational state
 
@@ -121,10 +129,10 @@
 
 ### Last recorded verification
 
-- The latest implementation milestone recorded passing unit, typecheck, lint, production build,
-  accessibility and responsive browser checks.
-- These results describe the local state at the time they were run. Re-run checks proportional to
-  any new change and revalidate the actual production deployment before relying on it.
+- The release passed typecheck, lint, 159 unit tests with one skip, production build, 50 browser
+  tests with two skips, accessibility and responsive checks.
+- Production deployment `58b18f7` is `READY`; live SEO, consent, Google-network, contact-only lead,
+  Private Blob attachment and Vercel error checks passed on 2026-08-11.
 
 ## Do not reopen completed work by default
 
@@ -141,10 +149,7 @@ Read the owning domain document only when the current task touches that area.
 ## Open owner questions
 
 - Which remaining site pages/content should be completed next?
-- Should the next production release enable indexing, lead intake and attachments?
-- Should Search Console/DNS, advertiser verification and controlled synthetic-lead diagnostics be
-  performed now?
-- Should the current GTM workspace and Google measurement boundary be published/activated?
+- Should Search Console/DNS and advertiser verification be performed now?
 - What are the confirmed supplier, service geography, installation/electrical ownership, capacity,
   warranty and commercial terms?
 - How should the known Vercel Hobby/DPA, upload-malware and configurator B2C/PAngV risks be handled?
@@ -155,7 +160,8 @@ Read the owning domain document only when the current task touches that area.
 
 1. Follow the owner's latest concrete request; do not restart completed milestones.
 2. Inspect only the relevant source-of-truth document and code.
-3. Before an external/public action, present the exact proposed state and ask the owner.
+3. For a new external/public action, follow the owner's current authorization and publication
+   governance.
 4. Update this file only when the current state, next action or open questions materially change.
 
 ## Read next
