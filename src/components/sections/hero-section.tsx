@@ -10,7 +10,7 @@ export function HeroSection() {
         <div className="container hero__content">
           <h1 className="hero__title" id="hero-title">
             <span className="hero__display">
-              Markise wird <span className="text-accent">Markenlicht.</span>
+              Markise wird <span className="text-accent">Markenlicht</span>
             </span>
           </h1>
         </div>

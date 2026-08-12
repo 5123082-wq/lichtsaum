@@ -381,6 +381,120 @@ passed
 
 final result: passed
 
+## Current handoff target — Configurator sticky technical intro scene, 2026-08-12
+
+- Source visual truth: the owner-supplied reference image
+  `/var/folders/sw/wqxr8fzn2z9d0ht64tglhf3m0000gn/T/codex-clipboard-833500c5-377b-43c1-88e1-670f854f3ad7.png`,
+  1508 × 938 px. It shows the intended technical-awning illustration, warm illuminated lettering,
+  orange dimension lines and dark architectural treatment.
+- Implementation screenshot:
+  `/Users/macbookaleks/Documents/GitHub/LICHTSAUM/artifacts/design-qa/configurator-intro-scene/implementation-desktop-1508x938-refined.png`,
+  captured from `http://localhost:3000/konfigurator` at 1508 × 938 CSS px and 1× output density,
+  at scroll position 0 with the default configuration. The earlier combined comparison input is
+  retained as comparison history; the source reference and this refined frame were opened
+  together for the current review.
+- Dynamic evidence:
+  `/Users/macbookaleks/Documents/GitHub/LICHTSAUM/artifacts/design-qa/configurator-intro-scene/implementation-desktop-1508x938-mid-refined.png`
+  records the mid-scroll state, while
+  `/Users/macbookaleks/Documents/GitHub/LICHTSAUM/artifacts/design-qa/configurator-intro-scene/implementation-desktop-1508x938-cover-refined.png`
+  records the calculator surface covering the scene. The scroll states were captured at the same
+  1508 × 938 CSS viewport. The responsive frame is
+  `/Users/macbookaleks/Documents/GitHub/LICHTSAUM/artifacts/design-qa/configurator-intro-scene/implementation-mobile-390x844-refined.png`.
+- State and interaction: German `/konfigurator`, dark theme, default configuration, no saved form
+  input; scroll from the initial scene through a sticky midpoint into the next calculator section.
+  The fresh browser tab reported no warning or error console entries. Targeted configurator e2e
+  passed 8/8, including Axe and 320 px overflow checks; mobile visual review at 390 × 844 reported
+  `scrollWidth === 390`.
+- Full-view comparison evidence: the combined source/implementation image confirms that the
+  existing `lichtsaum-engineered-aufmass-volant.webp` asset preserves the reference's awning,
+  technical linework and orange measurement language, while the implementation adds the requested
+  left gradient, overlaid copy and site chrome.
+- Focused region comparison: no separate crop was required; the source is itself a focused hero
+  visual and the implementation's key fidelity question is the full-frame relationship between
+  image placement, left fade, text overlay and the following section.
+- Fonts and typography: self-hosted Hanken Grotesk keeps the architectural two-line H1 hierarchy;
+  JetBrains Mono remains reserved for the eyebrow and concept label. The implementation adds page
+  copy that is intentionally absent from the standalone image reference.
+- Spacing and layout rhythm: the scene is slightly shorter than the previous pass; the image is
+  right-anchored and raised inside the sticky stage, copy begins in the left content column, and
+  the normal-flow calculator surface overlaps from below as the scene ends. No horizontal
+  overflow was observed at desktop or 390 px mobile width.
+- Colours and visual tokens: the near-black background, warm-white type, muted body copy and
+  architectural-orange reference lines are preserved; the left-to-right mask plus layered radial
+  and vertical scrims fade the crop edges into the page background without covering the focal
+  technical lines.
+- Image quality and asset fidelity: the existing project asset is used directly rather than
+  replaced by a handcrafted SVG, CSS drawing or placeholder. It remains labelled
+  `Konzeptvisualisierung / Aufmaß` and is not presented as a completed project.
+- Copy and content: the intro remains concise and preserves the commercial-project, preliminary
+  calculation and manual-review limitations already established for the route.
+- Comparison history: the previous compact inline-SVG attempt was rejected by the owner because it
+  did not resemble the supplied image. It was replaced by the existing technical concept visual,
+  gradient treatment and sticky scroll scene. This refinement tightened the scene height, moved the
+  media crop right/up, and added edge vignettes after the owner requested the static image to remain
+  visible until the calculator gradually covers it. The current comparison found no actionable P0,
+  P1 or P2 mismatch; the standalone reference's lack of navigation and page copy is an intentional
+  state difference, not a fidelity defect.
+- Technical verification: `pnpm typecheck`, `pnpm lint`, `git diff --check`, targeted configurator
+  e2e (8/8), desktop/mobile browser review, static-media checks, sticky midpoint and overlap checks,
+  and zero-overflow checks all passed.
+
+final result: passed
+
+## Current handoff target — Fixed configurator background, 2026-08-12
+
+- Source visual truth: the owner-supplied reference image
+  `/var/folders/sw/wqxr8fzn2z9d0ht64tglhf3m0000gn/T/codex-clipboard-833500c5-377b-43c1-88e1-670f854f3ad7.png`,
+  1508 × 938 px. It establishes the technical-awning visual, illuminated lettering, orange
+  measurement lines and dark architectural treatment.
+- Implementation evidence:
+  `/Users/macbookaleks/Documents/GitHub/LICHTSAUM/artifacts/design-qa/configurator-intro-scene/implementation-desktop-1508x938-fixed-background.png`,
+  plus the same-viewport mid-scroll
+  `implementation-desktop-1508x938-mid-fixed-background.png` and cover
+  `implementation-desktop-1508x938-cover-fixed-background.png`. The mobile frame is
+  `implementation-mobile-390x844-fixed-background.png` in the same directory.
+- Interaction state: `/konfigurator` at 1508 × 938 and 390 × 844. The technical image and scrim
+  use fixed positioning and remain at the same viewport coordinates while the normal-flow intro
+  copy and calculator move upward. The calculator's opaque surface covers the fixed background
+  from below; after the intro fully leaves the viewport, an IntersectionObserver hides the fixed
+  layer so it cannot reappear over later sections.
+- Height and spacing: the upper scene now resolves to one viewport-height stage (`816px` at the
+  1440 × 900 QA viewport) instead of the previous `1350px`, approximately 40% shorter on desktop.
+  The copy remains in the left column and the technical lettering stays higher/right within the
+  crop.
+- Responsive and accessibility evidence: the 390 px view reported `scrollWidth === 390`; the
+  targeted configurator suite passed all 8 tests, including Axe and the 320 px overflow check.
+  `prefers-reduced-motion` remains respected because the scroll behavior no longer uses a motion
+  transform.
+- Technical verification: `pnpm typecheck`, `pnpm lint`, `git diff --check`, production `pnpm build`,
+  targeted configurator e2e 8/8 and live in-app-browser desktop/mobile geometry checks passed.
+
+final result: passed
+
+## Current handoff target — Compact fixed scene height, 2026-08-12
+
+- Source visual truth: the same owner-supplied technical-awning reference
+  `/var/folders/sw/wqxr8fzn2z9d0ht64tglhf3m0000gn/T/codex-clipboard-833500c5-377b-43c1-88e1-670f854f3ad7.png`,
+  1508 × 938 px.
+- Latest implementation evidence:
+  `/Users/macbookaleks/Documents/GitHub/LICHTSAUM/artifacts/design-qa/configurator-intro-scene/implementation-desktop-1508x938-shorter-fixed-background.png`,
+  with mid-scroll and cover frames `implementation-desktop-1508x938-shorter-mid.png` and
+  `implementation-desktop-1508x938-shorter-cover.png`; mobile evidence is
+  `implementation-mobile-390x844-shorter.png` in the same directory.
+- The scene height was reduced another 30% relative to the fixed-background pass: at 1440 × 900
+  the stage is now `571px`, while the full intro copy remains visible. The calculator begins
+  covering the fixed image from approximately the first viewport's lower third.
+- Browser geometry confirms the media remains `position: fixed`, with unchanged `top` and
+  `transform: none` at initial and mid-scroll states. The opaque calculator covers it from below;
+  the existing completion guard hides the layer once the intro fully exits the viewport.
+- Responsive evidence: 390 × 844 resolves to a `544px` stage, keeps the full copy visible and
+  reports zero horizontal overflow. The targeted configurator suite remains 8/8 with Axe, reduced
+  motion and 320 px overflow checks included.
+- Technical verification: `pnpm typecheck`, `pnpm lint`, `git diff --check`, production `pnpm build`,
+  targeted configurator e2e 8/8 and live desktop/mobile browser review passed.
+
+final result: passed
+
 ## Animated lead acknowledgement — 2026-08-09
 
 - Source visual truth:
@@ -426,9 +540,8 @@ final result: passed
   finding remains.
 - Technical verification: `pnpm typecheck`, `pnpm lint`, 66 unit tests and the focused prototype
   lead-form E2E pass. The production build passes. A broader pre-fix 41-test E2E run passed 37
-  scenarios; the focused follow-up resolved the one lead-form failure. Three unrelated, pre-existing
-  expectations for gallery noindex and local legal-review marker counts remain stale against the
-  current project state.
+  scenarios; the focused follow-up resolved the one lead-form failure. The previously stale local
+  legal-review marker expectations were removed with the superseded automatic blocker.
 
 ### Animation review
 

@@ -7,7 +7,7 @@ export function VariantsSection() {
       <div className="container">
         <SectionHeading
           eyebrow="Gestaltungsrichtungen"
-          title="Ein System. Unterschiedliche Markenauftritte."
+          title="Ein System – unterschiedliche Markenauftritte"
           introduction="Die Varianten beschreiben mögliche Kompositionsrichtungen, keine bestätigten technischen Ausführungen. Motiv, Fläche und Machbarkeit werden erst im Projekt geprüft."
         />
 

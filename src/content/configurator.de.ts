@@ -2,13 +2,13 @@ import type { ConfiguratorTechnicalSection } from "@/features/configurator/types
 
 export const configuratorPageContent = {
   eyebrow: "Konfigurator",
-  title: "Leuchtvolant konfigurieren.",
+  title: "Leuchtvolant konfigurieren",
   description:
     "Leuchtvolant für ein gewerbliches Projekt konfigurieren und einen vorläufigen Nettopreis mit anschließendem Projekt-Check erhalten.",
   intro:
-    "Stellen Sie Maße, Schrift und Gestaltung für Ihr gewerbliches Projekt zusammen. Der Rechner prüft die eingegebene Komposition und zeigt eine vorläufige Netto-Kalkulation.",
+    "Stellen Sie Maße, Schrift und Gestaltung für Ihr gewerbliches Projekt zusammen. Die Vorschau zeigt die Komposition schematisch.",
   explanation:
-    "Die Darstellung ist schematisch. Gewählte Dienstleistungen werden für die manuelle Projektprüfung vorgemerkt und verändern den angezeigten Preis nicht.",
+    "Vorschau und Preis bleiben vorläufig. Gewählte Dienstleistungen werden für die manuelle Projektprüfung vorgemerkt und verändern den angezeigten Preis nicht.",
   technicalSections: [] as readonly ConfiguratorTechnicalSection[]
 } as const;
 

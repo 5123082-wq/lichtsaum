@@ -1,7 +1,7 @@
 # DESIGN.md — CHISEL Architectural
 
 Status: `Decision` with `TBD` brand/content inputs  
-Last reviewed: 2026-08-06
+Last reviewed: 2026-08-11
 
 Visual/accessibility/performance requirements remain design evidence and implementation contracts;
 they do not decide publication. Concrete public actions follow
@@ -10,6 +10,18 @@ they do not decide publication. Concrete public actions follow
 Этот файл — единственный источник истины по визуальной системе. Production UI может отклоняться
 от Stitch только ради responsive behavior, accessibility, performance, content truth или
 конверсии; отклонение должно быть осознанным.
+
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+
+- Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
+- Current: production UI follows the approved dark architectural direction; the full configurator
+  opens with a fixed technical concept background that fades into the left background while intro
+  content and the calculator scroll upward; internal legal review markers are not part of the visual
+  system.
+- Open: working brand and remaining content inputs stay `TBD` where not owner-confirmed.
+- Read full when: changing the visual system, major page composition or cross-route UI contracts.
+<!-- AGENT_BRIEF:END -->
 
 ## Stitch provenance
 
@@ -175,17 +187,6 @@ remains a separate unresolved check.
   settings control appears only when a real optional data flow and CMP exist; no inactive control
   is simulated.
 
-### Internal legal review markers
-
-- Unresolved Impressum/Datenschutz inputs are shown only in the non-indexable local/preview state
-  as sharp yellow `Intern / vor Livegang` notes with a `2px` border and Russian owner-facing copy.
-- These are operational annotations, not public legal design and not part of the production visual
-  system. They remain next to the affected paragraph instead of forming one detached checklist.
-- Each annotation carries `data-legal-review="required"`; production indexing fails closed until
-  the complete set is resolved and the annotations are removed.
-- Yellow is reserved for this internal review state. It does not replace architectural orange for
-  CTA/focus and must retain sufficient contrast at 320–1920px and 200% zoom.
-
 ### Buttons
 
 - Primary: orange background, dark text, mono label.
@@ -318,6 +319,11 @@ remains a separate unresolved check.
 - The full tool is a separate, indexable, German page. Its server-rendered introduction and H1
   remain useful before client hydration; the interactive calculator progressively enhances that
   content.
+- The introduction is a scroll scene: a large technical concept visual is anchored on the right,
+  fades into the left background and remains fixed as the upper-block background while the H1 and
+  short explanation move upward naturally; the calculator surface covers it from below and the
+  visual is hidden after the intro leaves the viewport. The asset is labelled
+  `Konzeptvisualisierung / Aufmaß` and is not presented as a completed project.
 - The flow has three numbered steps: `Grundkonfiguration`, `Weitere Optionen` and
   `Preis & Projektanfrage`. Desktop keeps one preview column sticky beside the steps. On mobile the
   same preview appears before the active step, without duplicating accessible content or creating

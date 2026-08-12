@@ -7,7 +7,7 @@ export function ProcessSection() {
       <div className="container">
         <SectionHeading
           eyebrow="Projektablauf"
-          title="Von der ersten Sichtung zur möglichen Umsetzung."
+          title="Von der ersten Sichtung zur möglichen Umsetzung"
           introduction="Jeder Schritt reduziert offene Annahmen. Eine Umsetzung beginnt erst, wenn Eignung, Gestaltung, Umfang und Zuständigkeiten bestätigt sind."
         />
 

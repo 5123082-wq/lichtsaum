@@ -99,7 +99,7 @@ export function ConsentManager() {
         >
           <div className="consent-banner__copy">
             <p className="consent-manager__eyebrow">Datenschutz</p>
-            <h2 id="consent-banner-title">Ihre Auswahl. Ohne Umwege.</h2>
+            <h2 id="consent-banner-title">Ihre Auswahl – ohne Umwege</h2>
             <p>
               Notwendige Cookies und Funktionen bleiben immer aktiv. Google
               Analytics und Marketing-Technologien sind optional und bleiben

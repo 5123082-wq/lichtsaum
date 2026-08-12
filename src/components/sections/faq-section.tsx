@@ -13,7 +13,7 @@ export function FaqSection() {
           eyebrow="FAQ"
           eyebrowTreatment="marker-loop"
           headingId="faq-title"
-          title="Fragen."
+          title="Fragen"
         />
 
         <div className="faq-list">

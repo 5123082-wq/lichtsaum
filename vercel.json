@@ -1,5 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "lichtsaum.com"
+        }
+      ],
+      "destination": "https://www.lichtsaum.com/:path*",
+      "permanent": true
+    }
+  ],
   "crons": [
     {
       "path": "/api/internal/retention",

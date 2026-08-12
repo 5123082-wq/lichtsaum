@@ -18,7 +18,7 @@ export function ProjectCheckSection() {
               className="m-0 text-[clamp(3rem,7vw,6.5rem)] font-[780] uppercase leading-[0.9] tracking-[-0.055em]"
               id="project-check-title"
             >
-              Ihr Projekt.
+              Ihr Projekt
             </h2>
           </div>
           <p className="m-0 max-w-[22ch] text-[clamp(1.2rem,2vw,1.6rem)] font-semibold leading-snug text-[var(--text-muted)] desktop:pb-1">

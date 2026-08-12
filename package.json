@@ -14,6 +14,7 @@
     "lint": "eslint . --max-warnings=0",
     "test": "vitest run",
     "test:unit": "vitest run",
+    "test:integration:live": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "playwright test",
     "dev:watch": "bash scripts/dev-watch.sh",
     "db:generate": "drizzle-kit generate",

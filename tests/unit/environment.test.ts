@@ -38,6 +38,24 @@ describe("deployment environment", () => {
     expect(environment.displaysLeadAttachmentPicker).toBe(false);
   });
 
+  it.each([
+    "http://www.lichtsaum.com",
+    "https://lichtsaum.com",
+    "https://www.lichtsaum.com/other-page",
+    "https://www.lichtsaum.com/?preview=true"
+  ])(
+    "keeps production indexing fail-closed for noncanonical SITE_URL %s",
+    async (configuredSiteUrl) => {
+      vi.stubEnv("VERCEL_ENV", "production");
+      vi.stubEnv("SITE_URL", configuredSiteUrl);
+      vi.stubEnv("SEARCH_INDEXING_ENABLED", "true");
+
+      const environment = await loadEnvironment();
+
+      expect(environment.isIndexable).toBe(false);
+    }
+  );
+
   it("enables production lead intake only through its explicit release flag", async () => {
     vi.stubEnv("VERCEL_ENV", "production");
     vi.stubEnv("LEAD_INTAKE_ENABLED", "true");

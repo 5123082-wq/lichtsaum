@@ -7,7 +7,7 @@ export function ConstraintsSection() {
       <div className="container">
         <SectionHeading
           eyebrow="Projektgrenzen"
-          title="Was vor einer Freigabe geklärt sein muss."
+          title="Was vor einer Freigabe geklärt sein muss"
           introduction="Der Retrofit ist keine pauschale Standardlösung. Diese Grenzen schützen das Objekt, die bestehende Markise und alle beteiligten Parteien vor ungeklärten Annahmen."
         />
 

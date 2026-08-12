@@ -11,10 +11,8 @@ import {
 } from "../../src/features/lead-form/upload-service";
 import { createUploadToken } from "../../src/features/lead-form/upload-security";
 
-const liveIt = process.env.RUN_LIVE_LEAD_TEST === "true" ? it : it.skip;
-
 describe("live lead flow", () => {
-  liveIt(
+  it(
     "persists a lead, uploads a private file, sends a notification and serves a signed download",
     async () => {
       const liveTestEmail = process.env.LIVE_LEAD_TEST_EMAIL?.trim();

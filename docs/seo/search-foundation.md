@@ -1,12 +1,22 @@
 # Google Search Foundation
 
 Status: `Decision`; canonical origin and homepage intent owner are owner-approved
-Last reviewed: 2026-08-10
+Last reviewed: 2026-08-12
 
 > Search flags and checklists describe technical behavior and evidence. Current indexing and Search
 > Console actions follow
 > [`../architecture/publication-governance.md`](../architecture/publication-governance.md) and are
 > `Спросить у пользователя`.
+
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+
+- Owns: canonical, metadata, robots, sitemap and indexability contracts.
+- Current: one central environment gate plus exact canonical-origin validation controls production
+  indexing; the apex host redirect is source-controlled in `vercel.json`.
+- Open: the concrete production indexing and Search Console actions remain owner decisions.
+- Read full when: changing URLs, canonical behavior, robots, sitemap or indexing controls.
+<!-- AGENT_BRIEF:END -->
 
 ## Objective
 
@@ -38,7 +48,9 @@ Rules:
 - no mass city/category URLs until each page has real service relevance and unique value.
 
 The verified production origin is `https://www.lichtsaum.com`. Runtime canonical generation uses
-the server-only `SITE_URL` environment value. By owner decision on 2026-08-10, `/` owns the exact
+the server-only `SITE_URL` environment value, and production indexing fails closed unless it is
+exactly this HTTPS origin. The source-controlled Vercel redirect maps the apex host to the
+preferred `www` host. By owner decision on 2026-08-10, `/` owns the exact
 product intent in v1 and is the Google Ads landing URL. Do not create the previously proposed
 `/beleuchteter-markisen-volant` route unless a later owner decision gives the homepage a genuinely
 different purpose and authorizes a substantive separate product page.
@@ -152,14 +164,14 @@ Checks must inspect rendered production HTML and HTTP headers, not only source c
 
 ### Current technical boundary
 
-Status: `Verified` locally on 2026-08-10; not deployed by this audit
+Status: `Verified` locally on 2026-08-12; not deployed by this audit
 
-- Production indexing requires all three conditions: production environment, a valid `SITE_URL`
-  and the explicit `SEARCH_INDEXING_ENABLED=true` flag.
+- Production indexing requires all three conditions: production environment, the exact canonical
+  `SITE_URL=https://www.lichtsaum.com` and the explicit `SEARCH_INDEXING_ENABLED=true` flag.
 - With the flag absent or false, production emits `noindex` and an empty sitemap while preserving
   the functional site and lead flow.
-- Current code fails the build when central legal-review markers conflict with the selected
-  publication state. Any policy change to that behavior is `Спросить у пользователя`.
+- Legal and publication risks are shown to the owner before a concrete release; they do not create
+  a second automatic indexing blocker outside the central environment gate.
 - The owner-approved `published` reference gallery follows the central indexing gate and may enter
   the sitemap; superseded review assets stay outside the public tree.
 - The substantive `/konfigurator` route follows the same central indexing gate and is included as
@@ -167,6 +179,8 @@ Status: `Verified` locally on 2026-08-10; not deployed by this audit
   server-rendered; `Product` and `Offer` structured data remain absent.
 - The minimal site graph is limited to verified `Organization` and `WebSite` facts and is emitted
   only through the same indexing gate.
+- Indexable inner routes publish route-specific Open Graph and Twitter metadata; previews and
+  non-indexable environments do not publish deployment metadata.
 - Current Search state and open external actions are recorded only in `../../PROGRESS.md` and the
   current implementation roadmap.
 

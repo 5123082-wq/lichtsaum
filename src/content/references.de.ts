@@ -7,7 +7,7 @@ export const referenceGallery: ReferenceGalleryRegistry = {
       id: "real-gastronomie-bar",
       slot: "left-tall",
       context: "Gastronomie · Abendansicht",
-      title: "Licht über drei Fenstern.",
+      title: "Licht über drei Fenstern",
       caption:
         "Reale Objektaufnahme einer Gastronomiefassade mit drei bordeauxroten Markisen und warm leuchtenden Schriftzügen.",
       image: {
@@ -24,7 +24,7 @@ export const referenceGallery: ReferenceGalleryRegistry = {
       id: "real-restaurant-garten",
       slot: "center-top",
       context: "Restaurant · Abendansicht",
-      title: "Licht entlang der Terrasse.",
+      title: "Licht entlang der Terrasse",
       caption:
         "Reale Objektaufnahme einer Restaurantfassade mit mehreren dunkelgrünen Markisen und warm leuchtenden Schriftzügen über einer Außenterrasse.",
       image: {
@@ -41,7 +41,7 @@ export const referenceGallery: ReferenceGalleryRegistry = {
       id: "real-gewerbefassade-ahouse",
       slot: "center-bottom",
       context: "Gewerbe · Abendansicht",
-      title: "Zwei Lichtfelder. Eine Fassade.",
+      title: "Zwei Lichtfelder – eine Fassade",
       caption:
         "Reale Objektaufnahme einer nächtlichen Gewerbefassade mit zwei dunklen Markisen und warm leuchtenden Schriftzügen.",
       image: {

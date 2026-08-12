@@ -3,31 +3,101 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-08-11
-- Current stage: the verified LICHTSAUM release is live on `www.lichtsaum.com`; indexing, lead
-  intake, private attachments, consent UI and consent-aware Google tags are enabled in production.
-- Active track: monitor the live release and continue only the owner's next concrete site request.
+- Last updated: 2026-08-12
+- Current stage: public LICHTSAUM site exists; the full configurator now has a locally verified
+  fixed technical intro background based on the existing concept asset, while the SEO canonical
+  guard, apex redirect contract and route social metadata remain local and unpublished as one
+  verified release.
+- Active track: complete only the site work requested by the owner. Before any concrete deployment,
+  indexing, Search Console/DNS, GTM/Ads, production-form or attachment action, show the current
+  evidence and use `Спросить у пользователя` under
+  `docs/architecture/publication-governance.md`.
 - Working tree: intentionally dirty with owner/previous-agent changes. Do not reset, overwrite or
   broadly reformat unrelated work.
 - Default context protocol: read this block and the three `RECENT_CHANGES` entries only. Read the
   detailed sections below when the current task needs their domain.
-- Next action: monitor production diagnostics and continue the owner's next concrete site request.
+- Next action: continue the owner's latest concrete site request; ask before a concrete external or
+  production action under `docs/architecture/publication-governance.md`.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
-### CHG-20260811-05 — Verified production launch
+### CHG-20260812-06 — Compact fixed scene height
 
-- Scope: GitHub release, Vercel production, indexing, inquiries, private attachments, consent and
-  Google measurement.
-- Outcome: PRs #5 and #6 are merged; Vercel deployment `dpl_FtgiozRys2MLnx5g1tUTNbseTmHK` is
-  `READY`; GTM version 2 with five consent-aware tags is published.
-- Verification: release gates passed; production robots/sitemap/canonical returned the intended
-  indexable state; controlled inquiries `LS-2026-000022` and attachment inquiry
-  `LS-2026-000023` completed; Google requests were absent before consent and present after Accept
-  all; Vercel reported no build or runtime errors.
-- Follow-up: monitor delivery and Google diagnostics; no Ads campaign or spend was activated.
+- Scope: `/konfigurator` fixed-background scene height across desktop and mobile.
+- Outcome: the current intro was reduced by another 30%; the stage now uses a responsive compact
+  height while preserving the full copy, fixed technical background and lower-content overlap.
+- Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
+  8/8, in-app browser review at 1440×900 and 390×844, static-media checks and zero overflow passed.
+- Follow-up: none.
+
+### CHG-20260812-05 — Fixed configurator background
+
+- Scope: `/konfigurator` intro scroll mechanics and upper-block height.
+- Outcome: the technical visual and scrim remain fixed as the intro background; normal-flow copy
+  and calculator content move over it, the calculator covers it from below, and the background is
+  hidden once the intro fully leaves the viewport. The intro is now one viewport tall, roughly 40%
+  shorter than the previous desktop scene.
+- Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
+  8/8, in-app browser desktop/mobile fixed-position checks, overlap checks and zero mobile overflow
+  passed.
+- Follow-up: none.
+
+### CHG-20260812-04 — Sticky scene crop refinement
+
+- Scope: `/konfigurator` intro scene height, technical-image placement and edge treatment.
+- Outcome: the sticky stage is slightly shorter; the technical visual is statically positioned a
+  little higher and farther right; layered vignette gradients hide crop edges across responsive
+  widths while the calculator still rises over the scene from below.
+- Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
+  8/8, in-app browser review at 1508×938 and 390×844, static-media checks, overlap checks and
+  zero mobile overflow passed.
+- Follow-up: none.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
+
+### CHG-20260812-03 — Sticky configurator concept scene
+
+- Scope: `/konfigurator` intro visual, image treatment and scroll behavior.
+- Outcome: the rejected inline SVG was replaced by the existing technical concept visual on the
+  right; a left fade, sticky stage, upward-moving copy and calculator-surface overlap now mirror
+  the main-page scroll language.
+- Verification: 162 unit tests, typecheck, lint, production build, targeted configurator e2e 8/8,
+  in-app browser desktop/mobile review, mid-scroll sticky checks, end-of-scene overlap checks and
+  no horizontal overflow at 390px passed.
+- Follow-up: none.
+
+### CHG-20260812-02 — SEO canonical and social metadata hardening
+
+- Scope: canonical-origin validation, apex-host redirect contract, route-specific Twitter metadata
+  and favicon asset.
+- Outcome: production indexing fails closed for noncanonical `SITE_URL` values, Vercel redirects
+  `lichtsaum.com` to `www.lichtsaum.com`, and public inner routes no longer inherit homepage
+  Twitter cards.
+- Verification: targeted SEO suite passed 162 tests, typecheck and lint passed; production deploy
+  and one-hop external redirect remain unverified.
+- Follow-up: deploy owner-approved release, then verify production redirects, CWV and Search Console.
+
+### CHG-20260812-01 — Compact configurator introduction
+
+- Scope: `/konfigurator` server-rendered introduction, German copy and technical SVG example.
+- Outcome: the oversized hero became a compact responsive composition with a two-line H1, shorter
+  explanation, accessible front-view dimensions and an example `Montserrat` label.
+- Verification: 156 unit tests, typecheck, lint, targeted configurator e2e 8/8, in-app browser
+  desktop/mobile review and no horizontal overflow at 390px passed.
+- Follow-up: none.
+
+### CHG-20260811-05 — Unit suite is smaller and domain-correct
+
+- Scope: Vitest environments, duplicated tests, live integration routing and obsolete legal gate.
+- Outcome: unit tests run in Node by default, browser suites opt into jsdom, duplicate tests were
+  consolidated, and the live lead flow has a separate explicit integration command.
+- Verification: 156 unit tests, typecheck, lint, integration discovery and production build passed.
+- Follow-up: run `pnpm test:integration:live` only with owner-approved synthetic credentials.
 
 ### CHG-20260811-04 — Progress history is preserved
 
@@ -43,11 +113,6 @@
 - Outcome: default startup reading is limited to marked briefs and the three newest changes.
 - Verification: marker uniqueness, record count, relative links and diff whitespace checked.
 - Follow-up: add or refresh `AGENT_BRIEF` when a material domain document is next changed.
-
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260811-02 — Current-only documentation cleanup
 
@@ -80,7 +145,8 @@
   visual approved by the owner for public use. Public copy does not describe them as completed
   LICHTSAUM projects.
 - The homepage mini-configurator and the full `/konfigurator` route are implemented locally. The
-  full route uses server-reproduced font metrics, geometry and pricing version `2026-08-11.v1`.
+  full route uses server-reproduced font metrics, geometry and pricing version `2026-08-11.v1`; its
+  server-rendered intro now uses a fixed technical concept background before the calculator.
 - The configurator displays the restricted commercial-project `Vorläufiger Nettopreis` defined by
   CLM-029; B2C/PAngV and Ads price use remain legal questions to show the owner.
 
@@ -95,8 +161,9 @@
 - The nullable `leads.request_context` migration is applied to the production Neon database.
 - Accepted inquiries have a public `LS-YYYY-NNNNNN` request number. Customer receipts contain no
   message or file content.
-- `LEAD_INTAKE_ENABLED` and `LEAD_ATTACHMENTS_ENABLED` are enabled in production. Controlled live
-  requests verified the contact-only and Private Vercel Blob paths on 2026-08-11.
+- `LEAD_INTAKE_ENABLED` and `LEAD_ATTACHMENTS_ENABLED` are independent production controls. Their
+  absent/false behavior is a code default, not a publication decision. Ask the owner which state to
+  publish after showing runtime, abuse, malware and processor evidence.
 
 ### Search, consent and measurement
 
@@ -112,8 +179,8 @@
   - Google Ads account `363-818-4039`;
   - Primary action `Projektanfrage – serverbestätigt`, ID `18383141630`, label
     `oUIGCLrozN8cEP714b1E`.
-- GTM version 2 (`Production launch 2026-08-11`) is published with five consent-aware tags, four
-  custom-event triggers and six data-layer variables. No campaign/spend activation is recorded.
+- The GTM workspace remains unpublished in the last recorded state. No campaign/spend activation is
+  recorded in the repository.
 
 ### Legal and operational state
 
@@ -129,10 +196,13 @@
 
 ### Last recorded verification
 
-- The release passed typecheck, lint, 159 unit tests with one skip, production build, 50 browser
-  tests with two skips, accessibility and responsive checks.
-- Production deployment `58b18f7` is `READY`; live SEO, consent, Google-network, contact-only lead,
-  Private Blob attachment and Vercel error checks passed on 2026-08-11.
+- The latest implementation milestone recorded passing unit, typecheck, lint, production build,
+  accessibility and responsive browser checks.
+- The latest configurator-intro revision passed 162 unit tests, typecheck, lint, production build,
+  targeted e2e 8/8, and in-app browser desktop/mobile and scroll checks; these results describe the
+  local state only.
+- These results describe the local state at the time they were run. Re-run checks proportional to
+  any new change and revalidate the actual production deployment before relying on it.
 
 ## Do not reopen completed work by default
 
@@ -149,7 +219,10 @@ Read the owning domain document only when the current task touches that area.
 ## Open owner questions
 
 - Which remaining site pages/content should be completed next?
-- Should Search Console/DNS and advertiser verification be performed now?
+- Should the next production release enable indexing, lead intake and attachments?
+- Should Search Console/DNS, advertiser verification and controlled synthetic-lead diagnostics be
+  performed now?
+- Should the current GTM workspace and Google measurement boundary be published/activated?
 - What are the confirmed supplier, service geography, installation/electrical ownership, capacity,
   warranty and commercial terms?
 - How should the known Vercel Hobby/DPA, upload-malware and configurator B2C/PAngV risks be handled?
@@ -160,8 +233,7 @@ Read the owning domain document only when the current task touches that area.
 
 1. Follow the owner's latest concrete request; do not restart completed milestones.
 2. Inspect only the relevant source-of-truth document and code.
-3. For a new external/public action, follow the owner's current authorization and publication
-   governance.
+3. Before an external/public action, present the exact proposed state and ask the owner.
 4. Update this file only when the current state, next action or open questions materially change.
 
 ## Read next

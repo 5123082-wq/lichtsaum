@@ -19,10 +19,15 @@ describe("configurator search contract", () => {
     const metadata = generateMetadata();
     const entries = sitemap();
 
+    expect(metadata.title).toBe("Leuchtvolant konfigurieren | LICHTSAUM");
     expect(metadata.alternates).toEqual({ canonical: "/konfigurator" });
     expect(metadata.openGraph).toMatchObject({
       title: "Leuchtvolant konfigurieren | LICHTSAUM",
       url: "/konfigurator"
+    });
+    expect(metadata.twitter).toMatchObject({
+      card: "summary_large_image",
+      title: "Leuchtvolant konfigurieren | LICHTSAUM"
     });
     expect(
       entries.filter(
@@ -30,6 +35,45 @@ describe("configurator search contract", () => {
       )
     ).toHaveLength(1);
     expect(entries.some((entry) => entry.url.includes("?"))).toBe(false);
+  });
+
+  it("publishes route-specific Twitter metadata for public routes", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("SITE_URL", "https://www.lichtsaum.com");
+    vi.stubEnv("SEARCH_INDEXING_ENABLED", "true");
+    vi.resetModules();
+
+    const [
+      { generateMetadata: getContactMetadata },
+      { generateMetadata: getReferencesMetadata },
+      { generateMetadata: getImpressumMetadata },
+      { generateMetadata: getPrivacyMetadata }
+    ] = await Promise.all([
+      import("@/app/kontakt/page"),
+      import("@/app/referenzen/page"),
+      import("@/app/impressum/page"),
+      import("@/app/datenschutz/page")
+    ]);
+
+    const routeMetadata = [
+      getContactMetadata(),
+      getReferencesMetadata(),
+      getImpressumMetadata(),
+      getPrivacyMetadata()
+    ];
+    const expectedTitles = [
+      "Kontakt | LICHTSAUM",
+      "Galerie | LICHTSAUM",
+      "Impressum | LICHTSAUM",
+      "Datenschutzerklärung | LICHTSAUM"
+    ];
+
+    routeMetadata.forEach((metadata, index) => {
+      expect(metadata.twitter).toMatchObject({
+        card: "summary_large_image",
+        title: expectedTitles[index]
+      });
+    });
   });
 
   it("keeps deployment SEO output fail-closed outside the indexing gate", async () => {

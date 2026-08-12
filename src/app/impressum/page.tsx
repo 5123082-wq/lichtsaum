@@ -27,6 +27,17 @@ export function generateMetadata(): Metadata {
             title,
             description,
             url: "/impressum"
+          },
+          twitter: {
+            card: "summary_large_image" as const,
+            title,
+            description,
+            images: [
+              {
+                url: "/brand/lichtsaum-og-1200x630.png",
+                alt: "LICHTSAUM — Markise wird Markenlicht."
+              }
+            ]
           }
         }
       : isPreviewDeployment

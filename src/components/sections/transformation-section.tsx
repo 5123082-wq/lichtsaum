@@ -12,9 +12,9 @@ export function TransformationSection() {
             eyebrowTreatment="marker-loop"
             title={
               <>
-                Eine Fassade.
+                Eine Fassade
                 <br />
-                <span className="text-accent">Zwei Ansichten.</span>
+                <span className="text-accent">Zwei Ansichten</span>
               </>
             }
           />
