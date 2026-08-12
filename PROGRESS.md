@@ -5,9 +5,11 @@
 
 - Last updated: 2026-08-12
 - Current stage: public LICHTSAUM site exists; the full configurator now has a locally verified
-  fixed technical intro background based on the existing concept asset, while the SEO canonical
-  guard, apex redirect contract and route social metadata remain local and unpublished as one
-  verified release.
+  fixed technical intro background and a sequential calculator layout: the schematic preview spans
+  the width, step 01 repeats the homepage three-group control layout, step 02 exposes all services,
+  and price plus specification remain hidden until step 03. The server-authoritative configurator
+  pricing is version `2026-08-12.v2` with a server-only 100% commercial coefficient; the SEO
+  canonical guard, apex redirect contract and route social metadata remain local and unpublished.
 - Active track: complete only the site work requested by the owner. Before any concrete deployment,
   indexing, Search Console/DNS, GTM/Ads, production-form or attachment action, show the current
   evidence and use `Спросить у пользователя` under
@@ -23,6 +25,31 @@
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
+### CHG-20260812-08 — Sequential full-width configurator
+
+- Scope: `/konfigurator` calculator composition, responsive step flow and result visibility.
+- Outcome: one full-width schematic preview now precedes a compact three-step control area on
+  desktop and mobile. Step 01 repeats the homepage `Gestaltung / Maße / Farbe & Licht` layout;
+  step 02 shows all six services without disclosures; trailing actions keep a stable position, and
+  specification plus preliminary net price are not rendered until step 03.
+- Verification: typecheck, lint, `git diff --check`, 163 unit tests and production build passed;
+  production SSR returned 200. Live in-app review at 1159×863 and 390×844 confirmed the three
+  desktop columns, ordered mobile stack, two-column/one-column services, no disclosures, no early
+  price and no horizontal overflow.
+- Follow-up: none.
+
+### CHG-20260812-07 — Server-controlled configurator coefficient
+
+- Scope: `/konfigurator` pricing, client-facing calculation contract and pricing documentation.
+- Outcome: the displayed preliminary net price now applies a server-only 100% commercial
+  coefficient to the internal component subtotal; pricing version `2026-08-12.v2` invalidates
+  stale confirmations, and the browser no longer receives the coefficient field.
+- Verification: 163 unit tests, typecheck, lint, `git diff --check` and production build passed;
+  the SSR configurator e2e passed. The remaining parallel/interactive e2e scenarios timed out
+  in the shared local dev-server/font-storage hydration path and had no pricing assertion failure.
+- Follow-up: none for the pricing change; the unrelated local e2e hydration timeouts remain
+  unverified.
+
 ### CHG-20260812-06 — Compact fixed scene height
 
 - Scope: `/konfigurator` fixed-background scene height across desktop and mobile.
@@ -31,6 +58,11 @@
 - Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
   8/8, in-app browser review at 1440×900 and 390×844, static-media checks and zero overflow passed.
 - Follow-up: none.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
 
 ### CHG-20260812-05 — Fixed configurator background
 
@@ -54,11 +86,6 @@
   8/8, in-app browser review at 1508×938 and 390×844, static-media checks, overlap checks and
   zero mobile overflow passed.
 - Follow-up: none.
-
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260812-03 — Sticky configurator concept scene
 
@@ -145,7 +172,7 @@
   visual approved by the owner for public use. Public copy does not describe them as completed
   LICHTSAUM projects.
 - The homepage mini-configurator and the full `/konfigurator` route are implemented locally. The
-  full route uses server-reproduced font metrics, geometry and pricing version `2026-08-11.v1`; its
+  full route uses server-reproduced font metrics, geometry and pricing version `2026-08-12.v2`; its
   server-rendered intro now uses a fixed technical concept background before the calculator.
 - The configurator displays the restricted commercial-project `Vorläufiger Nettopreis` defined by
   CLM-029; B2C/PAngV and Ads price use remain legal questions to show the owner.

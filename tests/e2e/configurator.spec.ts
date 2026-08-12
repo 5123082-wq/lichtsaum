@@ -16,12 +16,20 @@ test("serves a substantive server-rendered configurator route", async ({
       name: "Leuchtvolant konfigurieren"
     })
   ).toBeVisible();
-  await expect(
-    page.getByText(/gewerbliches Projekt zusammen/i)
-  ).toBeVisible();
+  await expect(page.locator(".configurator-intro__image")).toHaveAttribute(
+    "src",
+    /lichtsaum-konfigurator-markise-leuchtvolant-konzept\.webp/
+  );
+  await expect(page.locator(".configurator-intro__image")).toHaveAttribute(
+    "alt",
+    "Dunkle technische Konzeptzeichnung einer Markise mit beleuchtetem Leuchtvolant vor einer Fassade."
+  );
+  await expect(page.getByText(/gewerbliches Projekt zusammen/i)).toHaveCount(
+    0
+  );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
-    /vorläufigen Nettopreis/i
+    /Leuchtvolant für Ihr Projekt konfigurieren/i
   );
 
   // Local development follows the central environment policy and adds no
@@ -85,7 +93,9 @@ test("migrates the homepage teaser and opens the clean configurator URL", async 
   await teaserLink.click();
 
   await expect(page).toHaveURL(/\/konfigurator$/);
-  await expect(page.getByLabel("Beschriftung")).toHaveValue("ABENDLICHT");
+  await expect(page.getByLabel("Text auf dem Volant")).toHaveValue(
+    "ABENDLICHT"
+  );
   await expect(page.getByLabel("Schrift", { exact: true })).toHaveValue(
     "oswald"
   );
@@ -167,7 +177,9 @@ test("offers an explicit defaults path when teaser storage cannot be written", a
 
   await defaultContinuation.click();
   await expect(page).toHaveURL(/\/konfigurator$/);
-  await expect(page.getByLabel("Beschriftung")).toHaveValue("CAFÉ LICHT");
+  await expect(page.getByLabel("Text auf dem Volant")).toHaveValue(
+    "CAFÉ LICHT"
+  );
 });
 
 test("supports the three keyboard-accessible steps and one shared inquiry form", async ({
@@ -182,10 +194,13 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     { timeout: 15_000 }
   );
   await expect(
+    configurator.locator(".full-configurator__calculation-message")
+  ).toHaveCount(0);
+  await expect(
     configurator.locator(".full-configurator-preview > svg")
   ).toBeVisible();
 
-  const inscriptionInput = configurator.getByLabel("Beschriftung");
+  const inscriptionInput = configurator.getByLabel("Text auf dem Volant");
   await inscriptionInput.fill("LICHT  2026");
   await expect(configurator).toHaveAttribute(
     "data-calculation-status",
@@ -198,9 +213,20 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   await expect(previewInscription).toHaveText("LICHT  2026");
   await expect(previewInscription).toHaveAttribute("xml:space", "preserve");
 
-  const initialPrice = await configurator
-    .locator(".full-configurator__preview-price > strong")
-    .textContent();
+  await expect(configurator.locator("#configuratorProject")).toHaveCount(0);
+  await expect(
+    configurator.getByText("Vorläufiger Nettopreis")
+  ).toHaveCount(0);
+  await expect(configurator.getByLabel("01 Gestaltung")).toBeVisible();
+  await expect(configurator.getByLabel("02 Maße")).toBeVisible();
+  await expect(configurator.getByLabel("03 Farbe & Licht")).toBeVisible();
+
+  await configurator.getByLabel("Komposition").selectOption("logo-left");
+  await configurator.getByLabel("Markisenfarbe").selectOption("night-blue");
+  await expect(
+    configurator.locator(".configurator-preview__product > rect").first()
+  ).toHaveAttribute("fill", "#263746");
+
   const nextButton = configurator.getByRole("button", {
     name: "Weitere Optionen",
     exact: true
@@ -212,47 +238,15 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     configurator.getByRole("heading", { name: "Weitere Optionen" })
   ).toBeFocused();
 
-  const compositionDisclosure = configurator.getByRole("button", {
-    name: /Komposition/
-  });
-  await expect(compositionDisclosure).toHaveAttribute("aria-expanded", "true");
-  await compositionDisclosure.click();
-  await expect(compositionDisclosure).toHaveAttribute("aria-expanded", "false");
-  await compositionDisclosure.focus();
-  await compositionDisclosure.press("Enter");
-  await expect(compositionDisclosure).toBeFocused();
-  await expect(compositionDisclosure).toHaveAttribute("aria-expanded", "true");
-  await expect(
-    configurator.getByRole("radio", { name: /Logo links/ })
-  ).toBeVisible();
-
-  const awningColorDisclosure = configurator.getByRole("button", {
-    name: /Volantfarbe/
-  });
-  await awningColorDisclosure.click();
-  const initialAwningColor = configurator.getByRole("radio", {
-    name: "Anthrazit"
-  });
-  await initialAwningColor.focus();
-  await initialAwningColor.press("ArrowRight");
-  await expect(
-    configurator.getByRole("radio", { name: "Tiefschwarz" })
-  ).toBeChecked();
-  await configurator.getByRole("radio", { name: "Nachtblau" }).check();
-  await expect(
-    configurator.locator(".configurator-preview__product > rect").first()
-  ).toHaveAttribute("fill", "#263746");
-
-  const servicesDisclosure = configurator.getByRole("button", {
-    name: /Dienstleistungen/
-  });
-  await servicesDisclosure.click();
   const serviceCheckboxes = configurator.getByRole("checkbox");
   await expect(serviceCheckboxes).toHaveCount(6);
+  await expect(configurator.locator(".full-configurator__disclosure")).toHaveCount(
+    0
+  );
   await configurator.getByRole("checkbox", { name: "Gestaltung" }).check();
   await expect(
-    configurator.locator(".full-configurator__preview-price > strong")
-  ).toHaveText(initialPrice ?? "");
+    configurator.getByText("Vorläufiger Nettopreis")
+  ).toHaveCount(0);
 
   const postalCode = configurator.getByLabel("PLZ des Objekts (optional)");
   const priceStepButton = configurator.getByRole("button", {
@@ -329,9 +323,10 @@ test("blocks preview, price and continuation for an impossible composition", asy
       .locator(".full-configurator__calculation-message")
       .getByText(/passt nicht in die verfügbare Volantbreite/i)
   ).toBeVisible();
+  await expect(configurator.locator("#configuratorProject")).toHaveCount(0);
   await expect(
-    configurator.locator(".full-configurator__preview-price > strong")
-  ).toHaveText("—");
+    configurator.getByText("Vorläufiger Nettopreis")
+  ).toHaveCount(0);
   await expect(
     configurator.getByRole("button", {
       name: "Weitere Optionen",
@@ -379,7 +374,7 @@ test("has no detectable A/AA violations or horizontal overflow at 320px", async 
   expect(results.violations, violationSummary).toEqual([]);
 });
 
-test("keeps preview and controls reflowed across the required QA widths", async ({
+test("keeps the full-width preview before the controls at the required QA widths", async ({
   page
 }) => {
   for (const viewport of [
@@ -403,13 +398,10 @@ test("keeps preview and controls reflowed across the required QA widths", async 
 
     const layout = await page.evaluate(() => {
       const preview = document.querySelector<HTMLElement>(
-        ".full-configurator__preview-column"
+        ".full-configurator__preview-stage"
       );
       const controls = document.querySelector<HTMLElement>(
         ".full-configurator__controls-column"
-      );
-      const sticky = document.querySelector<HTMLElement>(
-        ".full-configurator__preview-sticky"
       );
       const previewRect = preview?.getBoundingClientRect();
       const controlsRect = controls?.getBoundingClientRect();
@@ -421,21 +413,22 @@ test("keeps preview and controls reflowed across the required QA widths", async 
           document.body.scrollWidth
         ),
         previewLeft: previewRect?.left ?? -1,
+        previewRight: previewRect?.right ?? -1,
         previewBottom: previewRect?.bottom ?? -1,
         controlsLeft: controlsRect?.left ?? -1,
-        controlsTop: controlsRect?.top ?? -1,
-        stickyPosition: sticky ? getComputedStyle(sticky).position : ""
+        controlsRight: controlsRect?.right ?? -1,
+        controlsTop: controlsRect?.top ?? -1
       };
     });
 
     expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
-
-    if (viewport.width >= 1024) {
-      expect(layout.previewLeft).toBeLessThan(layout.controlsLeft);
-      expect(layout.stickyPosition).toBe("sticky");
-    } else {
-      expect(layout.previewBottom).toBeLessThanOrEqual(layout.controlsTop + 1);
-    }
+    expect(Math.abs(layout.previewLeft - layout.controlsLeft)).toBeLessThanOrEqual(
+      1
+    );
+    expect(
+      Math.abs(layout.previewRight - layout.controlsRight)
+    ).toBeLessThanOrEqual(1);
+    expect(layout.previewBottom).toBeLessThanOrEqual(layout.controlsTop + 1);
   }
 });
 
@@ -459,18 +452,10 @@ test("honors reduced motion and remains usable with enlarged text", async ({
       document.querySelector<SVGElement>(
         ".full-configurator-preview .configurator-preview__product"
       )!
-    ).animationName,
-    disclosureTransition: getComputedStyle(
-      document.querySelector<SVGElement>(
-        ".full-configurator__disclosure-trigger svg"
-      )!
-    ).transitionDuration
+    ).animationName
   }));
 
   expect(motion.productAnimation).toBe("none");
-  expect(Number.parseFloat(motion.disclosureTransition)).toBeLessThanOrEqual(
-    0.001
-  );
 
   await page.evaluate(() => {
     document.documentElement.style.fontSize = "200%";

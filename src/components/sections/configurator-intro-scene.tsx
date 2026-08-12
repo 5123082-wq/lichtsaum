@@ -5,15 +5,11 @@ import { useEffect, useRef } from "react";
 
 type ConfiguratorIntroSceneProps = Readonly<{
   eyebrow: string;
-  explanation: string;
-  intro: string;
   title: string;
 }>;
 
 export function ConfiguratorIntroScene({
   eyebrow,
-  explanation,
-  intro,
   title
 }: ConfiguratorIntroSceneProps) {
   const sceneRef = useRef<HTMLElement>(null);
@@ -42,27 +38,25 @@ export function ConfiguratorIntroScene({
       <div className="configurator-intro__stage">
         <figure className="configurator-intro__media">
           <Image
-            alt="Technische Konzeptvisualisierung einer Gewerbemarkise mit Leuchtvolant; orange Maßlinien markieren Höhe und Länge des Volants."
+            alt="Dunkle technische Konzeptzeichnung einer Markise mit beleuchtetem Leuchtvolant vor einer Fassade."
             className="configurator-intro__image"
             fill
             priority
             sizes="(min-width: 64rem) 78vw, 100vw"
-            src="/images/lichtsaum-engineered-aufmass-volant.webp"
+            src="/images/lichtsaum-konfigurator-markise-leuchtvolant-konzept.webp"
           />
           <figcaption className="configurator-intro__visual-label">
-            Konzeptvisualisierung / Aufmaß
+            Konzeptvisualisierung / Leuchtvolant
           </figcaption>
         </figure>
         <div className="configurator-intro__scrim" aria-hidden="true" />
 
         <div className="configurator-intro__content container">
           <div className="configurator-intro__copy">
-            <p className="eyebrow">{eyebrow}</p>
+            <p className="eyebrow eyebrow--marker-loop">
+              <span>{eyebrow}</span>
+            </p>
             <h1>{title}</h1>
-            <div className="configurator-page__intro-copy">
-              <p>{intro}</p>
-              <p>{explanation}</p>
-            </div>
           </div>
         </div>
       </div>

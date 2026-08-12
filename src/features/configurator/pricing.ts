@@ -5,8 +5,10 @@ import type {
   ConfiguratorPanelCounts
 } from "@/features/configurator/types";
 
-export const CONFIGURATOR_PRICING_VERSION = "2026-08-11.v1" as const;
-export const CONFIGURATOR_MARKUP_PERCENT = 0 as const;
+export const CONFIGURATOR_PRICING_VERSION = "2026-08-12.v2" as const;
+// Keep the commercial coefficient server-only. It must never be exposed as
+// part of the client-facing calculation result.
+export const CONFIGURATOR_MARKUP_PERCENT = 100 as const;
 
 const ELECTRICAL_SET_CENTS = 10_000;
 const FINISHED_VALANCE_CENTS_PER_MM = 4;

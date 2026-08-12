@@ -1,14 +1,11 @@
 "use client";
 
-import { CaretDown } from "@phosphor-icons/react";
 import {
   useEffect,
-  useId,
   useMemo,
   useRef,
   useState,
-  useTransition,
-  type ReactNode
+  useTransition
 } from "react";
 
 import { calculateConfigurator } from "@/features/configurator/actions";
@@ -65,13 +62,6 @@ type ConfiguratorWizardProps = Readonly<{
   attachmentsEnabled: boolean;
   initialConfiguration: ConfiguratorConfigurationV1;
   initialResult: ConfiguratorAuthoritativeResult;
-}>;
-
-type DisclosureProps = Readonly<{
-  children: ReactNode;
-  defaultOpen?: boolean;
-  summary: string;
-  title: string;
 }>;
 
 const STEPS = [
@@ -173,46 +163,15 @@ function calculationErrorMessage(result: ConfiguratorAuthoritativeResult) {
   return "Bitte prüfen Sie die markierten Angaben.";
 }
 
-function Disclosure({
-  children,
-  defaultOpen = false,
-  summary,
-  title
-}: DisclosureProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  const panelId = useId();
-
-  return (
-    <section className="full-configurator__disclosure" data-open={isOpen}>
-      <button
-        aria-controls={panelId}
-        aria-expanded={isOpen}
-        className="full-configurator__disclosure-trigger"
-        onClick={() => setIsOpen((current) => !current)}
-        type="button"
-      >
-        <span>
-          <strong>{title}</strong>
-          <span>{summary}</span>
-        </span>
-        <CaretDown aria-hidden="true" size={20} weight="bold" />
-      </button>
-      <div
-        className="full-configurator__disclosure-panel"
-        hidden={!isOpen}
-        id={panelId}
-      >
-        {children}
-      </div>
-    </section>
-  );
-}
-
 function PriceScopeNotice() {
   return (
     <ul className="full-configurator__price-notes">
+      <li>Vorschau und Nettopreis sind vorläufig.</li>
       <li>zzgl. gesetzlicher Umsatzsteuer</li>
-      <li>Gewählte Dienstleistungen sind nicht enthalten.</li>
+      <li>
+        Gewählte Dienstleistungen werden manuell kalkuliert und sind nicht
+        enthalten.
+      </li>
       <li>Das Ergebnis ist kein verbindliches Angebot.</li>
     </ul>
   );
@@ -370,6 +329,12 @@ export function ConfiguratorWizard({
     configurationKey(calculationState.configuration) === currentConfigurationKey;
   const canContinue =
     calculationIsReady && fontState === "ready" && postalCodeIsValid;
+  const showCalculationStatus =
+    fontState === "error" ||
+    calculationState.status === "invalid" ||
+    calculationState.status === "unavailable" ||
+    !calculationIsReady ||
+    fontState !== "ready";
 
   useEffect(() => {
     let cancelled = false;
@@ -582,10 +547,6 @@ export function ConfiguratorWizard({
     !Number.isSafeInteger(draft.letterHeightMm) ||
     draft.letterHeightMm < 1 ||
     draft.letterHeightMm > 180;
-  const selectedServiceSummary =
-    services.length > 0
-      ? `${services.length} ausgewählt`
-      : "Keine ausgewählt";
   const submission: ConfiguratorProjectSubmission | undefined =
     calculationIsReady && configuration && postalCodeIsValid
       ? {
@@ -606,53 +567,38 @@ export function ConfiguratorWizard({
       aria-busy={submissionIsPending}
     >
       <div className="full-configurator__layout container">
-        <aside
-          aria-labelledby="full-configurator-preview-title"
-          className="full-configurator__preview-column"
+        <section
+          aria-label="Live-Vorschau"
+          className="full-configurator__preview-stage"
         >
-          <div className="full-configurator__preview-sticky">
-            <div className="full-configurator__preview-heading">
-              <p>Live / serverberechnet</p>
-              <h2 id="full-configurator-preview-title">Ihre Vorschau</h2>
-            </div>
+          <p className="full-configurator__preview-kicker eyebrow--marker-loop">
+            <span>Live / serverberechnet</span>
+          </p>
 
-            {calculationIsReady && fontState === "ready" ? (
-              <ConfiguratorPreview
-                configuration={calculationState.configuration}
-                geometry={calculationState.calculation.geometry}
-                measurement={calculationState.calculation.measurement}
-                statusText="Vorschau und Preis sind berechnet."
-              />
-            ) : (
-              <div
-                className="full-configurator__preview-status"
-                role="status"
-                aria-live="polite"
-              >
-                <p>
-                  {fontState === "error"
-                    ? "Die ausgewählte Schrift konnte nicht geladen werden."
-                    : calculationState.status === "invalid" ||
-                        calculationState.status === "unavailable"
-                      ? calculationState.message
-                      : "Vorschau und Preis werden berechnet …"}
-                </p>
-              </div>
-            )}
-
-            <div className="full-configurator__preview-price" aria-live="polite">
-              <span>Vorläufiger Nettopreis</span>
-              <strong>
-                {calculationIsReady && fontState === "ready"
-                  ? euroCurrencyFormatter.format(
-                      calculationState.calculation.netTotalCents / 100
-                    )
-                  : "—"}
-              </strong>
-              <PriceScopeNotice />
+          {calculationIsReady && fontState === "ready" ? (
+            <ConfiguratorPreview
+              configuration={calculationState.configuration}
+              geometry={calculationState.calculation.geometry}
+              measurement={calculationState.calculation.measurement}
+              statusText="Vorschau ist berechnet."
+            />
+          ) : (
+            <div
+              className="full-configurator__preview-status"
+              role="status"
+              aria-live="polite"
+            >
+              <p>
+                {fontState === "error"
+                  ? "Die ausgewählte Schrift konnte nicht geladen werden."
+                  : calculationState.status === "invalid" ||
+                      calculationState.status === "unavailable"
+                    ? calculationState.message
+                    : "Vorschau wird berechnet …"}
+              </p>
             </div>
-          </div>
-        </aside>
+          )}
+        </section>
 
         <div className="full-configurator__controls-column">
           <nav aria-label="Konfigurationsschritte">
@@ -701,182 +647,296 @@ export function ConfiguratorWizard({
                 </p>
               </div>
 
-              <div className="full-configurator__field-grid">
-                <div className="full-configurator__field full-configurator__field--wide">
-                  <label htmlFor="configurator-text">Beschriftung</label>
-                  <input
-                    aria-describedby={
-                      textIsInvalid ? "configurator-text-error" : undefined
-                    }
-                    aria-invalid={textIsInvalid}
-                    id="configurator-text"
-                    maxLength={60}
-                    onChange={(event) =>
-                      updateDraft("text", event.currentTarget.value)
-                    }
-                    type="text"
-                    value={draft.text}
-                  />
-                  {textIsInvalid ? (
-                    <p
-                      className="full-configurator__field-error"
-                      id="configurator-text-error"
-                    >
-                      Bitte geben Sie bis zu 60 unterstützte Zeichen ein.
-                    </p>
-                  ) : null}
-                </div>
+              <div className="configurator-controls full-configurator__base-controls">
+                <fieldset
+                  aria-label="01 Gestaltung"
+                  className="configurator-control-group"
+                >
+                  <legend>
+                    <span>01</span> Gestaltung
+                  </legend>
 
-                <div className="full-configurator__field full-configurator__field--wide">
-                  <label htmlFor="configurator-font">Schrift</label>
-                  <select
-                    id="configurator-font"
-                    onChange={(event) =>
-                      updateDraft(
-                        "fontId",
-                        event.currentTarget.value as ConfiguratorConfigurationV1["fontId"]
-                      )
-                    }
-                    value={draft.fontId}
-                  >
-                    {CONFIGURATOR_FONTS.map((font) => (
-                      <option key={font.id} value={font.id}>
-                        {font.label} — {font.direction}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="full-configurator__field">
-                  <label htmlFor="configurator-width">Volantbreite</label>
-                  <span className="full-configurator__number-input">
-                    <input
-                      aria-describedby={
-                        widthIsInvalid ? "configurator-width-error" : undefined
-                      }
-                      aria-invalid={widthIsInvalid}
-                      id="configurator-width"
-                      inputMode="numeric"
-                      min={1}
+                  <div className="configurator-select-field">
+                    <label htmlFor="configurator-composition">
+                      Komposition
+                    </label>
+                    <select
+                      className="full-configurator__compact-select"
+                      id="configurator-composition"
                       onChange={(event) =>
                         updateDraft(
-                          "valanceWidthMm",
-                          event.currentTarget.value === ""
-                            ? ""
-                            : event.currentTarget.valueAsNumber
+                          "compositionMode",
+                          event.currentTarget
+                            .value as ConfiguratorConfigurationV1["compositionMode"]
                         )
                       }
-                      step={1}
-                      type="number"
-                      value={draft.valanceWidthMm}
-                    />
-                    <span>mm</span>
-                  </span>
-                  {widthIsInvalid ? (
-                    <p
-                      className="full-configurator__field-error"
-                      id="configurator-width-error"
+                      value={draft.compositionMode}
                     >
-                      Bitte geben Sie eine ganze Breite ab 1 mm ein.
-                    </p>
-                  ) : null}
-                </div>
+                      {CONFIGURATOR_COMPOSITION_MODES.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="full-configurator__field">
-                  <label htmlFor="configurator-height">Volanthöhe</label>
-                  <span className="full-configurator__number-input">
+                  <div className="configurator-text-field">
+                    <label htmlFor="configurator-text">
+                      Text auf dem Volant
+                    </label>
                     <input
                       aria-describedby={
-                        valanceHeightIsInvalid
-                          ? "configurator-height-error"
-                          : undefined
+                        textIsInvalid ? "configurator-text-error" : undefined
                       }
-                      aria-invalid={valanceHeightIsInvalid}
-                      id="configurator-height"
-                      inputMode="numeric"
-                      max={300}
-                      min={200}
+                      aria-invalid={textIsInvalid}
+                      id="configurator-text"
+                      maxLength={60}
                       onChange={(event) =>
-                        updateDraft(
-                          "valanceHeightMm",
-                          event.currentTarget.value === ""
-                            ? ""
-                            : event.currentTarget.valueAsNumber
-                        )
+                        updateDraft("text", event.currentTarget.value)
                       }
-                      step={1}
-                      type="number"
-                      value={draft.valanceHeightMm}
+                      spellCheck="false"
+                      type="text"
+                      value={draft.text}
                     />
-                    <span>mm</span>
-                  </span>
-                  {valanceHeightIsInvalid ? (
-                    <p
-                      className="full-configurator__field-error"
-                      id="configurator-height-error"
-                    >
-                      Die Volanthöhe muss zwischen 200 und 300 mm liegen.
-                    </p>
-                  ) : null}
-                </div>
+                    {textIsInvalid ? (
+                      <p
+                        className="configurator-field-error"
+                        id="configurator-text-error"
+                      >
+                        Bitte geben Sie bis zu 60 unterstützte Zeichen ein.
+                      </p>
+                    ) : null}
+                  </div>
 
-                <div className="full-configurator__field">
-                  <label htmlFor="configurator-letter-height">
-                    Buchstabenhöhe
-                  </label>
-                  <span className="full-configurator__number-input">
-                    <input
-                      aria-describedby={
-                        letterHeightIsInvalid
-                          ? "configurator-letter-height-error"
-                          : undefined
-                      }
-                      aria-invalid={letterHeightIsInvalid}
-                      id="configurator-letter-height"
-                      inputMode="numeric"
-                      max={180}
-                      min={1}
+                  <div className="configurator-select-field">
+                    <label htmlFor="configurator-font">Schriftstil</label>
+                    <select
+                      className="full-configurator__compact-select"
+                      id="configurator-font"
                       onChange={(event) =>
                         updateDraft(
-                          "letterHeightMm",
-                          event.currentTarget.value === ""
-                            ? ""
-                            : event.currentTarget.valueAsNumber
+                          "fontId",
+                          event.currentTarget
+                            .value as ConfiguratorConfigurationV1["fontId"]
                         )
                       }
-                      step={1}
-                      type="number"
-                      value={draft.letterHeightMm}
-                    />
-                    <span>mm</span>
-                  </span>
-                  {letterHeightIsInvalid ? (
-                    <p
-                      className="full-configurator__field-error"
-                      id="configurator-letter-height-error"
+                      value={draft.fontId}
                     >
-                      Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.
+                      {CONFIGURATOR_FONTS.map((font) => (
+                        <option key={font.id} value={font.id}>
+                          {font.label} — {font.direction}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {draft.compositionMode !== "text-only" ? (
+                    <p className="configurator-composition-note">
+                      Das Logo wird schematisch dargestellt. Die finale Datei
+                      wird separat geprüft.
                     </p>
                   ) : null}
-                </div>
+                </fieldset>
+
+                <fieldset
+                  aria-label="02 Maße"
+                  className="configurator-control-group"
+                >
+                  <legend>
+                    <span>02</span> Maße
+                  </legend>
+                  <div className="configurator-number-grid">
+                    <div className="configurator-number-field">
+                      <label htmlFor="configurator-width">Volantbreite</label>
+                      <span className="configurator-number-input">
+                        <input
+                          aria-describedby={
+                            widthIsInvalid
+                              ? "configurator-width-error"
+                              : undefined
+                          }
+                          aria-invalid={widthIsInvalid}
+                          id="configurator-width"
+                          inputMode="numeric"
+                          min={1}
+                          onChange={(event) =>
+                            updateDraft(
+                              "valanceWidthMm",
+                              event.currentTarget.value === ""
+                                ? ""
+                                : event.currentTarget.valueAsNumber
+                            )
+                          }
+                          step={1}
+                          type="number"
+                          value={draft.valanceWidthMm}
+                        />
+                        <span>mm</span>
+                      </span>
+                      {widthIsInvalid ? (
+                        <p
+                          className="configurator-field-error"
+                          id="configurator-width-error"
+                        >
+                          Bitte geben Sie eine ganze Breite ab 1 mm ein.
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="configurator-number-field">
+                      <label htmlFor="configurator-height">Volanthöhe</label>
+                      <span className="configurator-number-input">
+                        <input
+                          aria-describedby={
+                            valanceHeightIsInvalid
+                              ? "configurator-height-error"
+                              : undefined
+                          }
+                          aria-invalid={valanceHeightIsInvalid}
+                          id="configurator-height"
+                          inputMode="numeric"
+                          max={300}
+                          min={200}
+                          onChange={(event) =>
+                            updateDraft(
+                              "valanceHeightMm",
+                              event.currentTarget.value === ""
+                                ? ""
+                                : event.currentTarget.valueAsNumber
+                            )
+                          }
+                          step={1}
+                          type="number"
+                          value={draft.valanceHeightMm}
+                        />
+                        <span>mm</span>
+                      </span>
+                      {valanceHeightIsInvalid ? (
+                        <p
+                          className="configurator-field-error"
+                          id="configurator-height-error"
+                        >
+                          Die Volanthöhe muss zwischen 200 und 300 mm liegen.
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="configurator-number-field">
+                      <label htmlFor="configurator-letter-height">
+                        Buchstabenhöhe
+                      </label>
+                      <span className="configurator-number-input">
+                        <input
+                          aria-describedby={
+                            letterHeightIsInvalid
+                              ? "configurator-letter-height-error"
+                              : undefined
+                          }
+                          aria-invalid={letterHeightIsInvalid}
+                          id="configurator-letter-height"
+                          inputMode="numeric"
+                          max={180}
+                          min={1}
+                          onChange={(event) =>
+                            updateDraft(
+                              "letterHeightMm",
+                              event.currentTarget.value === ""
+                                ? ""
+                                : event.currentTarget.valueAsNumber
+                            )
+                          }
+                          step={1}
+                          type="number"
+                          value={draft.letterHeightMm}
+                        />
+                        <span>mm</span>
+                      </span>
+                      {letterHeightIsInvalid ? (
+                        <p
+                          className="configurator-field-error"
+                          id="configurator-letter-height-error"
+                        >
+                          Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset
+                  aria-label="03 Farbe & Licht"
+                  className="configurator-control-group"
+                >
+                  <legend>
+                    <span>03</span> Farbe &amp; Licht
+                  </legend>
+
+                  <div className="configurator-select-field">
+                    <label htmlFor="configurator-awning-color">
+                      Markisenfarbe
+                    </label>
+                    <select
+                      className="full-configurator__compact-select"
+                      id="configurator-awning-color"
+                      onChange={(event) =>
+                        updateDraft(
+                          "awningColorId",
+                          event.currentTarget
+                            .value as ConfiguratorConfigurationV1["awningColorId"]
+                        )
+                      }
+                      value={draft.awningColorId}
+                    >
+                      {CONFIGURATOR_AWNING_COLORS.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="configurator-select-field">
+                    <label htmlFor="configurator-light-color">
+                      Lichtwirkung
+                    </label>
+                    <select
+                      className="full-configurator__compact-select"
+                      id="configurator-light-color"
+                      onChange={(event) =>
+                        updateDraft(
+                          "lightColorId",
+                          event.currentTarget
+                            .value as ConfiguratorConfigurationV1["lightColorId"]
+                        )
+                      }
+                      value={draft.lightColorId}
+                    >
+                      {CONFIGURATOR_LIGHT_COLORS.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </fieldset>
               </div>
 
-              <div
-                className="full-configurator__calculation-message"
-                role="status"
-                aria-live="polite"
-              >
-                {fontState === "error"
-                  ? "Die ausgewählte Schrift konnte nicht geladen werden."
-                  : calculationState.status === "invalid" ||
-                      calculationState.status === "unavailable"
-                    ? calculationState.message
-                    : calculationIsReady && fontState === "ready"
-                      ? "Komposition geprüft."
+              {showCalculationStatus ? (
+                <div
+                  className="full-configurator__calculation-message"
+                  role="status"
+                  aria-live="polite"
+                >
+                  {fontState === "error"
+                    ? "Die ausgewählte Schrift konnte nicht geladen werden."
+                    : calculationState.status === "invalid" ||
+                        calculationState.status === "unavailable"
+                      ? calculationState.message
                       : "Komposition wird geprüft …"}
-              </div>
+                </div>
+              ) : null}
 
-              <div className="full-configurator__step-actions">
+              <div className="full-configurator__step-actions full-configurator__step-actions--forward">
                 <button
                   className="button button--primary"
                   disabled={!canContinue}
@@ -904,133 +964,31 @@ export function ConfiguratorWizard({
                   Weitere Optionen
                 </h2>
                 <p>
-                  Ergänzen Sie Gestaltung, Lichtwirkung und gewünschte
-                  Dienstleistungen.
+                  Wählen Sie die gewünschten Dienstleistungen für die manuelle
+                  Projektprüfung aus.
                 </p>
               </div>
 
-              <div className="full-configurator__disclosures">
-                <Disclosure
-                  defaultOpen
-                  summary={
-                    compositionsById.get(draft.compositionMode)?.label ?? ""
-                  }
-                  title="Komposition"
-                >
-                  <fieldset className="full-configurator__option-grid">
-                    <legend className="visually-hidden">
-                      Komposition auswählen
-                    </legend>
-                    {CONFIGURATOR_COMPOSITION_MODES.map((option) => (
-                      <label key={option.id}>
-                        <input
-                          checked={draft.compositionMode === option.id}
-                          name="configurator-composition"
-                          onChange={() =>
-                            updateDraft("compositionMode", option.id)
-                          }
-                          type="radio"
-                          value={option.id}
-                        />
-                        <span>
-                          <strong>{option.label}</strong>
-                          <small>{option.description}</small>
-                        </span>
-                      </label>
-                    ))}
-                  </fieldset>
-                  <p className="full-configurator__option-note">
-                    Logo-Varianten zeigen einen geometrischen Platzhalter. Ein
-                    reales Logo kann erst mit der Projektanfrage als Datei
-                    geprüft werden.
-                  </p>
-                </Disclosure>
-
-                <Disclosure
-                  summary={
-                    awningColorsById.get(draft.awningColorId)?.label ?? ""
-                  }
-                  title="Volantfarbe"
-                >
-                  <fieldset className="full-configurator__swatch-grid">
-                    <legend className="visually-hidden">
-                      Volantfarbe auswählen
-                    </legend>
-                    {CONFIGURATOR_AWNING_COLORS.map((option) => (
-                      <label key={option.id}>
-                        <input
-                          checked={draft.awningColorId === option.id}
-                          name="configurator-awning-color"
-                          onChange={() =>
-                            updateDraft("awningColorId", option.id)
-                          }
-                          type="radio"
-                          value={option.id}
-                        />
-                        <span
-                          aria-hidden="true"
-                          style={{ backgroundColor: option.value }}
-                        />
-                        {option.label}
-                      </label>
-                    ))}
-                  </fieldset>
-                </Disclosure>
-
-                <Disclosure
-                  summary={
-                    lightColorsById.get(draft.lightColorId)?.label ?? ""
-                  }
-                  title="Lichtfarbe"
-                >
-                  <fieldset className="full-configurator__swatch-grid">
-                    <legend className="visually-hidden">
-                      Lichtfarbe auswählen
-                    </legend>
-                    {CONFIGURATOR_LIGHT_COLORS.map((option) => (
-                      <label key={option.id}>
-                        <input
-                          checked={draft.lightColorId === option.id}
-                          name="configurator-light-color"
-                          onChange={() =>
-                            updateDraft("lightColorId", option.id)
-                          }
-                          type="radio"
-                          value={option.id}
-                        />
-                        <span
-                          aria-hidden="true"
-                          style={{ backgroundColor: option.value }}
-                        />
-                        {option.label}
-                      </label>
-                    ))}
-                  </fieldset>
-                </Disclosure>
-
-                <Disclosure summary={selectedServiceSummary} title="Dienstleistungen">
-                  <fieldset className="full-configurator__service-grid">
-                    <legend className="visually-hidden">
-                      Dienstleistungen für die manuelle Prüfung auswählen
-                    </legend>
-                    {CONFIGURATOR_SERVICES.map((service) => (
-                      <label key={service.id}>
-                        <input
-                          checked={services.includes(service.id)}
-                          onChange={() => toggleService(service.id)}
-                          type="checkbox"
-                          value={service.id}
-                        />
-                        <span>{service.label}</span>
-                      </label>
-                    ))}
-                  </fieldset>
-                  <p className="full-configurator__option-note">
-                    Diese Leistungen werden manuell kalkuliert und sind nicht
-                    im vorläufigen Nettopreis enthalten.
-                  </p>
-                </Disclosure>
-              </div>
+              <fieldset className="full-configurator__services-block">
+                <legend>Dienstleistungen</legend>
+                <div className="full-configurator__service-grid">
+                  {CONFIGURATOR_SERVICES.map((service) => (
+                    <label key={service.id}>
+                      <input
+                        checked={services.includes(service.id)}
+                        onChange={() => toggleService(service.id)}
+                        type="checkbox"
+                        value={service.id}
+                      />
+                      <span>{service.label}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="full-configurator__option-note">
+                  Diese Leistungen werden manuell kalkuliert und sind nicht im
+                  vorläufigen Nettopreis enthalten.
+                </p>
+              </fieldset>
 
               <div className="full-configurator__postal-code">
                 <label htmlFor="configurator-postal-code">

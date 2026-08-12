@@ -1,5 +1,13 @@
 # Claims and Evidence Register
 
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+- Owns: допустимые публичные формулировки и evidence/status для цен, scope и иных claims.
+- Current: CLM-029 ограничивает `/konfigurator` предварительной B2B-netto ценой с видимыми оговорками; внутренние inputs и commercial coefficient не являются customer-facing claims.
+- Open: B2C/PAngV, Ads, Schema и общие price-range claims требуют отдельного решения и evidence.
+- Read full when: меняется публичная формулировка, статус claim, scope разрешённых поверхностей или доказательная база.
+<!-- AGENT_BRIEF:END -->
+
 Status: `Decision / evidence register`; unresolved claims are `Спросить у пользователя`
 Last reviewed: 2026-08-11
 
@@ -52,7 +60,7 @@ publication policy: [`../architecture/publication-governance.md`](../architectur
 | CLM-026 | `Für den Außeneinsatz geeignet` | Подходит для наружной эксплуатации | Technical/safety | TBD | Complete-system declarations, enclosure, installation method and operating limits | None | — |
 | CLM-027 | `Größe und Anzahl der Lichtfelder beeinflussen die Projektkosten.` | Размер и количество световых элементов влияют на стоимость проекта | Price driver | Approved | Owner confirmation for the local prototype; no public price or price range implied | Landing: Engineered Precision | 2026-07-31 |
 | CLM-028 | `Volanthöhe 200–300 mm; Buchstabenhöhe max. 180 mm` | Рабочие ограничения текущего конфигуратора | Technical | Approved | Final owner confirmation on 2026-08-10; O5 closed | Configurator and FAQ | 2026-08-10 |
-| CLM-029 | `Vorläufiger Nettopreis: freigegebene Komponentenbasis + 0 % Aufschlag; zzgl. gesetzlicher Umsatzsteuer; gewählte Leistungen nicht enthalten; kein verbindliches Angebot.` | Предварительная B2B-netto сумма на утверждённой компонентной базе с наценкой 0%; НДС и выбранные услуги не включены; не обязательное предложение | Price/calculation | Restricted | Explicit owner implementation plan on 2026-08-11; the server must reproduce the current pricing version from validated inputs | Only `/konfigurator`, visibly limited to `gewerbliche Projekte`; no Ads price claim, `Product`/`Offer` Schema, B2C presentation or other surface until separate legal/release approval | 2026-08-11 |
+| CLM-029 | `Vorläufiger Nettopreis; zzgl. gesetzlicher Umsatzsteuer; gewählte Leistungen nicht enthalten; kein verbindliches Angebot.` | Предварительная B2B-netto сумма; НДС и выбранные услуги не включены; не обязательное предложение | Price/calculation | Restricted | Owner-approved server-side commercial calculation version; the server must reproduce the current pricing version from validated inputs. Internal component inputs and coefficient are not customer-facing claims. | Only `/konfigurator`, visibly limited to `gewerbliche Projekte`; no Ads price claim, `Product`/`Offer` Schema, B2C presentation or other surface until separate legal/release approval | 2026-08-12 |
 
 ## Approval record template
 

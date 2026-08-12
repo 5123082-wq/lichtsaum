@@ -109,7 +109,6 @@ export type ConfiguratorPanelAllocation = Readonly<{
 
 export type ConfiguratorCalculation = Readonly<{
   pricingVersion: string;
-  markupPercent: 0;
   netTotalCents: number;
   measurement: ConfiguratorTextMeasurement;
   geometry: ConfiguratorGeometry;

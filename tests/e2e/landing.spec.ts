@@ -144,6 +144,10 @@ test("illuminates the footer wordmark on entry and keeps only legal links", asyn
   await expect(wordmark).toHaveAttribute("data-illuminated", "false");
   await wordmark.scrollIntoViewIfNeeded();
   await expect(wordmark).toHaveAttribute("data-illuminated", "true");
+  const transitionDelay = await wordmark.evaluate((element) =>
+    getComputedStyle(element, "::after").transitionDelay
+  );
+  expect(transitionDelay).toBe("1.5s");
 
   await expect(
     footer.getByRole("navigation", { name: "Rechtliche Informationen" })

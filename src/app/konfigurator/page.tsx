@@ -79,8 +79,6 @@ export default async function ConfiguratorPage() {
       <main className="configurator-page" id="main-content">
         <ConfiguratorIntroScene
           eyebrow={configuratorPageContent.eyebrow}
-          explanation={configuratorPageContent.explanation}
-          intro={configuratorPageContent.intro}
           title={configuratorPageContent.title}
         />
 

@@ -99,7 +99,7 @@ behavior and remains replaceable until CMP/legal choices are final.
 ## ADR-015 — Full configurator and restricted preliminary price
 
 - Date: 2026-08-11
-- Status: Accepted by explicit owner implementation plan
+- Status: Accepted by explicit owner implementation plan; pricing terms superseded by ADR-017
 - Context: the owner approved showing the current component subtotal with `markupPercent = 0` as a
   preliminary net result for commercial projects. The same plan requires an indexable full tool,
   server-authoritative font measurement/geometry/pricing and the already accepted unified inquiry
@@ -134,6 +134,24 @@ behavior and remains replaceable until CMP/legal choices are final.
   independent legal confirmation.
 - Verification: [`publication-governance.md`](publication-governance.md), `../../PROGRESS.md` and
   the consistency audit across active documentation.
+
+## ADR-017 — Server-controlled commercial coefficient
+
+- Date: 2026-08-12
+- Status: Accepted by explicit owner request
+- Context: the owner changed the configurator commercial model from a component subtotal with no
+  markup to a 100% increase over the internal component basis. The customer should receive only
+  the resulting preliminary net price; internal component inputs and the coefficient are not
+  customer-facing information.
+- Decision: keep the coefficient in the server-only pricing module, apply it uniformly to the
+  authoritative internal subtotal and bump the pricing version to `2026-08-12.v2`. Do not include
+  the coefficient or individual component costs in the client-facing calculation result. Any
+  future coefficient change must create a new pricing version and require reconfirmation.
+- Consequences: a configuration that was open before this change cannot silently submit against the
+  old price. The restricted configurator wording continues to show a preliminary net amount plus
+  VAT, services excluded and non-binding; it does not disclose internal cost structure.
+- Verification: `configurator-calculation.md`, `claims-and-evidence-register.md`,
+  `src/features/configurator/pricing.ts` and the configurator/lead unit tests.
 
 ## New decision template
 
