@@ -2845,11 +2845,12 @@ textarea {
 
 .configurator-intro__stage {
   position: relative;
-  height: clamp(
+  --configurator-intro-height: clamp(
     34rem,
     calc(70svh - var(--header-height) * 0.7),
     52rem
   );
+  height: var(--configurator-intro-height);
   min-height: 0;
   overflow: hidden;
   background: var(--background);
@@ -2902,7 +2903,7 @@ textarea {
   z-index: 2;
   display: flex;
   height: 100%;
-  align-items: flex-end;
+  align-items: flex-start;
   padding-block: 4rem clamp(4rem, 8vh, 6rem);
 }
 
@@ -3460,13 +3461,15 @@ textarea {
     top: calc(var(--header-height) - 14vh);
     right: 4%;
     bottom: -2vh;
-    left: 18%;
-    transform: translate(6vw, -2vh);
+    left: clamp(18rem, 29.5vw, 38rem);
+    transform: none;
+    mask-image: none;
   }
 
   .configurator-intro__image {
-    transform: translate(5vw, -10vh) scale(0.84);
+    transform: translateX(20%) scale(1.2);
     transform-origin: center;
+    object-position: center;
   }
 
   .configurator-intro__copy {
@@ -3549,16 +3552,16 @@ textarea {
   }
 
   .configurator-intro__media {
-    top: var(--header-height);
+    top: calc(var(--header-height) - 1.25rem);
     right: -12%;
     bottom: auto;
     left: -12%;
     height: clamp(
-      34rem,
-      calc(70svh - var(--header-height) * 0.7),
-      52rem
+      35.5rem,
+      calc(70svh - var(--header-height) * 0.7 + 1.5rem),
+      53.5rem
     );
-    transform: none;
+    transform: translateX(3rem);
     background: var(--background);
     mask-image: none;
   }
@@ -3568,6 +3571,23 @@ textarea {
     transform-origin: center;
     object-fit: cover;
     object-position: center;
+  }
+
+  .configurator-intro__media::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    height: clamp(4.5rem, 12vh, 7rem);
+    background: linear-gradient(
+      180deg,
+      rgb(19 19 19 / 0%) 0%,
+      rgb(19 19 19 / 72%) 58%,
+      var(--background) 100%
+    );
+    content: "";
+    pointer-events: none;
   }
 
   .configurator-intro__content {
@@ -3581,11 +3601,19 @@ textarea {
   .configurator-intro__visual-label {
     right: 1rem;
     bottom: 1rem;
+    z-index: 2;
     font-size: 0.58rem;
   }
 }
 
 @media (min-width: 64rem) {
+  .configurator-intro__media {
+    top: var(--header-height);
+    right: 0;
+    bottom: auto;
+    height: var(--configurator-intro-height);
+  }
+
   .configurator-intro__edge-fade {
     position: fixed;
     z-index: 1;
