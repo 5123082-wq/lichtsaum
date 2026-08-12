@@ -4,7 +4,9 @@
 ## Context Beacon
 
 - Last updated: 2026-08-12
-- Current stage: public LICHTSAUM site exists; the full configurator now has a locally verified
+- Current stage: public LICHTSAUM site exists; its mobile menu now uses a locally verified smooth
+  two-way drawer transition with one stable header wordmark and no underlying layout shift. The
+  full configurator has a locally verified
   fixed technical intro background and a sequential calculator layout: the schematic preview spans
   the width, step 01 repeats the homepage three-group control layout, step 02 exposes all services,
   and price plus specification remain hidden until step 03. The server-authoritative configurator
@@ -24,6 +26,20 @@
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20260812-09 — Stable mobile menu drawer
+
+- Scope: mobile header wordmark, drawer entry/exit motion, scroll locking and accessibility.
+- Outcome: the drawer now opens and closes through an interruptible 260ms transform transition;
+  the native dialog remains mounted through exit, the backdrop fades separately, and the original
+  header logo keeps one unchanged rendering and geometry. Reduced motion removes lateral travel.
+- Verification: typecheck, lint and `git diff --check` passed. Live in-app review at 393×852
+  confirmed identical logo/content bounds before and during open, one brand instance, zero
+  horizontal shift, the two-way `open`/`closed` state, animated close and focus return. The
+  targeted Playwright run was inconclusive because the shared dev server's HMR connection left
+  that runner unhydrated; the shared server was not restarted.
+- Follow-up: rerun the targeted mobile-navigation Playwright test when the shared dev runtime is
+  healthy; no product-code follow-up is currently identified.
 
 ### CHG-20260812-08 — Sequential full-width configurator
 
@@ -50,6 +66,11 @@
 - Follow-up: none for the pricing change; the unrelated local e2e hydration timeouts remain
   unverified.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
+
 ### CHG-20260812-06 — Compact fixed scene height
 
 - Scope: `/konfigurator` fixed-background scene height across desktop and mobile.
@@ -58,11 +79,6 @@
 - Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
   8/8, in-app browser review at 1440×900 and 390×844, static-media checks and zero overflow passed.
 - Follow-up: none.
-
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260812-05 — Fixed configurator background
 

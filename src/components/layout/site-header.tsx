@@ -11,10 +11,17 @@ type SiteHeaderProps = Readonly<{
   showReferences?: boolean;
 }>;
 
+type MobileMenuState = "closed" | "open";
+
 export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mobileMenuState, setMobileMenuState] =
+    useState<MobileMenuState>("closed");
   const dialogRef = useRef<HTMLDialogElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const openAnimationFrameRef = useRef<number | null>(null);
+  const closeTimeoutRef = useRef<number | null>(null);
+  const closeTransitionCleanupRef = useRef<(() => void) | null>(null);
   const navigation = showReferences
     ? [
         ...siteConfig.navigation.slice(0, 2),
@@ -30,18 +37,103 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
       return;
     }
 
-    if (isMenuOpen && !dialog.open) {
-      dialog.showModal();
-      document.documentElement.classList.add("mobile-menu-open");
-    } else if (!isMenuOpen && dialog.open) {
-      dialog.close();
-      document.documentElement.classList.remove("mobile-menu-open");
+    if (openAnimationFrameRef.current !== null) {
+      window.cancelAnimationFrame(openAnimationFrameRef.current);
+      openAnimationFrameRef.current = null;
     }
 
+    closeTransitionCleanupRef.current?.();
+    closeTransitionCleanupRef.current = null;
+
+    if (closeTimeoutRef.current !== null) {
+      window.clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+
+    if (isMenuOpen) {
+      document.documentElement.classList.add("mobile-menu-open");
+
+      if (!dialog.open) {
+        setMobileMenuState("closed");
+        dialog.showModal();
+        openAnimationFrameRef.current = window.requestAnimationFrame(() => {
+          openAnimationFrameRef.current = null;
+          setMobileMenuState("open");
+        });
+      } else {
+        setMobileMenuState("open");
+      }
+
+      return;
+    }
+
+    if (!dialog.open) {
+      setMobileMenuState("closed");
+      document.documentElement.classList.remove("mobile-menu-open");
+      return;
+    }
+
+    const wasVisuallyOpen = dialog.dataset.state === "open";
+    setMobileMenuState("closed");
+
+    if (!wasVisuallyOpen) {
+      dialog.close();
+      return;
+    }
+
+    const panel = dialog.querySelector<HTMLElement>(".mobile-menu__panel");
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const finishClose = () => {
+      closeTransitionCleanupRef.current?.();
+      closeTransitionCleanupRef.current = null;
+
+      if (closeTimeoutRef.current !== null) {
+        window.clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
+      }
+
+      if (dialog.open) {
+        dialog.close();
+      }
+    };
+
+    if (panel && !prefersReducedMotion) {
+      const handleTransitionEnd = (event: TransitionEvent) => {
+        if (event.target === panel && event.propertyName === "transform") {
+          finishClose();
+        }
+      };
+
+      panel.addEventListener("transitionend", handleTransitionEnd);
+      closeTransitionCleanupRef.current = () => {
+        panel.removeEventListener("transitionend", handleTransitionEnd);
+      };
+    }
+
+    closeTimeoutRef.current = window.setTimeout(
+      finishClose,
+      prefersReducedMotion ? 180 : 320
+    );
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     return () => {
+      if (openAnimationFrameRef.current !== null) {
+        window.cancelAnimationFrame(openAnimationFrameRef.current);
+      }
+
+      closeTransitionCleanupRef.current?.();
+
+      if (closeTimeoutRef.current !== null) {
+        window.clearTimeout(closeTimeoutRef.current);
+      }
+
       document.documentElement.classList.remove("mobile-menu-open");
     };
-  }, [isMenuOpen]);
+  }, []);
 
   useEffect(() => {
     const desktopViewport = window.matchMedia("(min-width: 48rem)");
@@ -62,8 +154,27 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
     setIsMenuOpen(false);
   };
 
+  const handleDialogCancel = (event: React.SyntheticEvent<HTMLDialogElement>) => {
+    event.preventDefault();
+    closeMenu();
+  };
+
   const handleDialogClose = () => {
+    if (openAnimationFrameRef.current !== null) {
+      window.cancelAnimationFrame(openAnimationFrameRef.current);
+      openAnimationFrameRef.current = null;
+    }
+
+    closeTransitionCleanupRef.current?.();
+    closeTransitionCleanupRef.current = null;
+
+    if (closeTimeoutRef.current !== null) {
+      window.clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+
     setIsMenuOpen(false);
+    setMobileMenuState("closed");
     document.documentElement.classList.remove("mobile-menu-open");
     menuButtonRef.current?.focus();
   };
@@ -114,23 +225,13 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
       <dialog
         aria-label="Hauptmenü"
         className="mobile-menu"
+        data-state={mobileMenuState}
         id="mobile-main-menu"
-        onCancel={closeMenu}
+        onCancel={handleDialogCancel}
         onClose={handleDialogClose}
         onClick={closeMenu}
         ref={dialogRef}
       >
-        <span aria-hidden="true" className="mobile-menu__brand">
-          <Image
-            alt=""
-            className="brand-mark"
-            height={320}
-            src="/brand/lichtsaum-mark.svg"
-            width={324}
-          />
-          <span>LICHTSAUM</span>
-        </span>
-
         <div
           autoFocus
           className="mobile-menu__panel"
