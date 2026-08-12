@@ -3,5 +3,6 @@
 | # | Plan | Severity | Status |
 | --- | --- | --- | --- |
 | 001 | Smooth the Engineered Precision transitions | High | DONE |
+| 002 | Soften the mobile menu drawer | High | DONE |
 
-Execute plan 001 first. It is self-contained and has no dependencies.
+Plans 001 and 002 are complete; both are self-contained and have no dependencies.

@@ -187,6 +187,8 @@ test("transitions the hero from day to night and respects reduced motion", async
   const dayImage = page.locator(".hero__image--day");
   const nightImage = page.locator("[data-hero-night]");
   const hero = page.locator(".hero");
+  const heroContent = page.locator(".hero__content");
+  const heroTitle = page.locator(".hero__title");
   const stage = page.locator(".hero__stage");
   const signalStrip = page.locator(".signal-strip");
 
@@ -233,6 +235,12 @@ test("transitions the hero from day to night and respects reduced motion", async
   await page.goto("/");
 
   await expect(stage).toHaveCSS("position", "sticky");
+  await expect(heroContent).toHaveCSS("transform", "none");
+  await expect
+    .poll(() =>
+      media.evaluate((element) => (element as HTMLElement).style.transform)
+    )
+    .not.toBe("");
   const mobileScrollTravel =
     (await hero.evaluate((element) => element.clientHeight)) - 844;
 
@@ -252,6 +260,20 @@ test("transitions the hero from day to night and respects reduced motion", async
   await expect
     .poll(() => signalStrip.evaluate((element) => element.getBoundingClientRect().top))
     .toBeGreaterThanOrEqual(840);
+  await expect
+    .poll(async () => {
+      const [signalBounds, titleBounds] = await Promise.all([
+        signalStrip.boundingBox(),
+        heroTitle.boundingBox()
+      ]);
+
+      if (!signalBounds || !titleBounds) {
+        return 0;
+      }
+
+      return signalBounds.y - (titleBounds.y + titleBounds.height);
+    })
+    .toBeGreaterThanOrEqual(48);
 
   const mobileHeroTop = await hero.evaluate(
     (element) => element.getBoundingClientRect().top + window.scrollY
@@ -285,6 +307,7 @@ test("transitions the hero from day to night and respects reduced motion", async
   await expect
     .poll(() => signalStrip.evaluate((element) => element.getBoundingClientRect().top))
     .toBeLessThan(520);
+  await expect(heroContent).toHaveCSS("transform", "none");
 
   await page.evaluate(
     (scrollTop) => window.scrollTo({ top: scrollTop, behavior: "instant" }),
@@ -342,6 +365,50 @@ test("keeps the LICHTSAUM lettering centered across hero breakpoints", async ({
       })
       .toBeLessThan(2);
   }
+});
+
+test("keeps the mobile hero title above its boundary in a compact Safari viewport", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 664 });
+  await page.goto("/");
+
+  const hero = page.locator(".hero");
+  const stage = page.locator(".hero__stage");
+  const content = page.locator(".hero__content");
+  const title = page.locator(".hero__title");
+  const signalStrip = page.locator(".signal-strip");
+
+  expect(await stage.evaluate((element) => element.clientHeight)).toBe(664);
+  await expect(content).toHaveCSS("transform", "none");
+
+  const assertTitleGap = async () => {
+    const [titleBounds, signalBounds] = await Promise.all([
+      title.boundingBox(),
+      signalStrip.boundingBox()
+    ]);
+
+    expect(titleBounds).not.toBeNull();
+    expect(signalBounds).not.toBeNull();
+    expect(
+      (signalBounds?.y ?? 0) -
+        ((titleBounds?.y ?? 0) + (titleBounds?.height ?? 0))
+    ).toBeGreaterThanOrEqual(48);
+  };
+
+  await assertTitleGap();
+
+  const scrollTravel = await hero.evaluate(
+    (element) =>
+      element.clientHeight -
+      (element.querySelector<HTMLElement>(".hero__stage")?.clientHeight ?? 0)
+  );
+
+  await page.evaluate(
+    (distance) => window.scrollTo({ top: distance * 0.5, behavior: "instant" }),
+    scrollTravel
+  );
+  await assertTitleGap();
 });
 
 test("lets the following block fully cover the desktop hero scene", async ({
@@ -1073,17 +1140,26 @@ test("opens an accessible mobile navigation drawer", async ({ page }) => {
 
   const trigger = page.getByRole("button", { name: "Menü öffnen" });
   const dialog = page.getByRole("dialog", { name: "Hauptmenü" });
+  const header = page.locator(".site-header");
+  const brand = page.getByRole("link", { name: "LICHTSAUM Startseite" });
   const mobileNavigation = page.getByRole("navigation", {
     name: "Mobiles Hauptmenü"
   });
 
   await expect(trigger).toBeVisible();
   await expect(dialog).toBeHidden();
+  await expect(brand).toHaveCount(1);
+  await expect(header.getByText("LICHTSAUM", { exact: true })).toHaveCount(1);
+  const closedBrandBox = await brand.boundingBox();
   await trigger.click();
 
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
   await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute("data-state", "open");
   await expect(page.locator("html")).toHaveClass(/mobile-menu-open/);
+  await expect(brand).toHaveCount(1);
+  await expect(header.getByText("LICHTSAUM", { exact: true })).toHaveCount(1);
+  expect(await brand.boundingBox()).toEqual(closedBrandBox);
 
   for (const item of navigationItems) {
     await expect(
@@ -1097,14 +1173,23 @@ test("opens an accessible mobile navigation drawer", async ({ page }) => {
     dialog.getByRole("link", { name: formSubmitLabel, exact: true })
   ).toHaveAttribute("href", "/#projekt-pruefen");
 
-  await dialog.click({ position: { x: 24, y: 320 } });
+  await dialog.getByRole("button", { name: "Menü schließen" }).click();
+  await expect(dialog).toHaveAttribute("data-state", "closed");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
 
   await trigger.click();
-  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute("data-state", "open");
+  await dialog.click({ position: { x: 24, y: 320 } });
+  await expect(dialog).toHaveAttribute("data-state", "closed");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await expect(dialog).toHaveAttribute("data-state", "open");
 
   await page.keyboard.press("Escape");
+  await expect(dialog).toHaveAttribute("data-state", "closed");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
   await expect(page.locator("html")).not.toHaveClass(/mobile-menu-open/);

@@ -24,9 +24,9 @@ export function HeroParallaxMedia() {
     const media = mediaRef.current;
     const nightImage = media?.querySelector<HTMLElement>("[data-hero-night]");
     const hero = media?.closest<HTMLElement>(".hero");
-    const content = hero?.querySelector<HTMLElement>(".hero__content");
+    const stage = hero?.querySelector<HTMLElement>(".hero__stage");
 
-    if (!media || !nightImage || !hero || !content) {
+    if (!media || !nightImage || !hero || !stage) {
       return;
     }
 
@@ -42,12 +42,11 @@ export function HeroParallaxMedia() {
       if (reducedMotion.matches) {
         media.style.transform = "translate3d(0, 0, 0)";
         nightImage.style.opacity = "0";
-        content.style.transform = "none";
         return;
       }
 
       const heroRect = hero.getBoundingClientRect();
-      const scrollTravel = Math.max(1, heroRect.height - window.innerHeight);
+      const scrollTravel = Math.max(1, hero.offsetHeight - stage.offsetHeight);
       const maxParallaxOffset = desktopViewport.matches
         ? DESKTOP_MAX_PARALLAX_OFFSET
         : MOBILE_MAX_PARALLAX_OFFSET;
@@ -58,11 +57,10 @@ export function HeroParallaxMedia() {
       if (heroRect.bottom <= 0) {
         media.style.transform = `translate3d(0, ${maxParallaxOffset}px, 0)`;
         nightImage.style.opacity = "1";
-        content.style.transform = `translate3d(0, -${scrollTravel}px, 0)`;
         return;
       }
 
-      if (heroRect.top >= window.innerHeight) {
+      if (heroRect.top >= stage.offsetHeight) {
         return;
       }
 
@@ -78,9 +76,6 @@ export function HeroParallaxMedia() {
 
       media.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
       nightImage.style.opacity = smoothstep(fadeProgress).toFixed(3);
-      content.style.transform = `translate3d(0, -${distanceScrolled.toFixed(
-        2
-      )}px, 0)`;
     };
 
     const scheduleUpdate = () => {

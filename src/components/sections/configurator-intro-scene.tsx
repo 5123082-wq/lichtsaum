@@ -43,14 +43,14 @@ export function ConfiguratorIntroScene({
             fill
             priority
             sizes="(min-width: 64rem) 78vw, 100vw"
-            src="/images/lichtsaum-konfigurator-markise-leuchtvolant-konzept.webp"
+            src="/images/lichtsaum-konfigurator-markise-leuchtvolant-konzept-original.png"
+            unoptimized
           />
           <figcaption className="configurator-intro__visual-label">
             Konzeptvisualisierung / Leuchtvolant
           </figcaption>
         </figure>
-        <div className="configurator-intro__scrim" aria-hidden="true" />
-
+        <div className="configurator-intro__edge-fade" aria-hidden="true" />
         <div className="configurator-intro__content container">
           <div className="configurator-intro__copy">
             <p className="eyebrow eyebrow--marker-loop">
