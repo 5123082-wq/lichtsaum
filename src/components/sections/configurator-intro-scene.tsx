@@ -38,12 +38,12 @@ export function ConfiguratorIntroScene({
       <div className="configurator-intro__stage">
         <figure className="configurator-intro__media">
           <Image
-            alt="Dunkle technische Konzeptzeichnung einer Markise mit beleuchtetem Leuchtvolant vor einer Fassade."
+            alt="Dunkle technische Konzeptzeichnung einer Markise mit Maßangaben für Volanthöhe und Volantlänge."
             className="configurator-intro__image"
             fill
             priority
             sizes="(min-width: 64rem) 78vw, 100vw"
-            src="/images/lichtsaum-konfigurator-markise-leuchtvolant-konzept-original.png"
+            src="/images/lichtsaum-konfigurator-header-technical.png"
             unoptimized
           />
           <figcaption className="configurator-intro__visual-label">
