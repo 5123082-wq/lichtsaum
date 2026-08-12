@@ -4,11 +4,7 @@ export const configuratorPageContent = {
   eyebrow: "Konfigurator",
   title: "Leuchtvolant konfigurieren",
   description:
-    "Leuchtvolant für ein gewerbliches Projekt konfigurieren und einen vorläufigen Nettopreis mit anschließendem Projekt-Check erhalten.",
-  intro:
-    "Stellen Sie Maße, Schrift und Gestaltung für Ihr gewerbliches Projekt zusammen. Die Vorschau zeigt die Komposition schematisch.",
-  explanation:
-    "Vorschau und Preis bleiben vorläufig. Gewählte Dienstleistungen werden für die manuelle Projektprüfung vorgemerkt und verändern den angezeigten Preis nicht.",
+    "Leuchtvolant für Ihr Projekt konfigurieren und einen vorläufigen Nettopreis mit anschließendem Projekt-Check erhalten.",
   technicalSections: [] as readonly ConfiguratorTechnicalSection[]
 } as const;
 

@@ -161,7 +161,7 @@ describe("LeadForm measurement", () => {
       },
       services: ["site-measurement"],
       postalCode: "10115",
-      confirmedPricingVersion: "2026-08-11.v1"
+      confirmedPricingVersion: "2026-08-12.v2"
     } as const;
 
     render(<LeadForm configuratorProject={configuratorProject} />);
@@ -179,7 +179,7 @@ describe("LeadForm measurement", () => {
     expect(analyticsPayload).not.toContain("CAFÉ LICHT");
     expect(analyticsPayload).not.toContain("site-measurement");
     expect(analyticsPayload).not.toContain("10115");
-    expect(analyticsPayload).not.toContain("2026-08-11.v1");
+    expect(analyticsPayload).not.toContain("2026-08-12.v2");
   });
 
   it("does not queue a conversion while an updated price awaits reconfirmation", async () => {

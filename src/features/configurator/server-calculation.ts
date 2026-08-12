@@ -2,7 +2,6 @@ import "server-only";
 
 import { evaluateConfiguratorGeometry } from "@/features/configurator/geometry";
 import {
-  CONFIGURATOR_MARKUP_PERCENT,
   CONFIGURATOR_PRICING_VERSION,
   calculateConfiguratorNet
 } from "@/features/configurator/pricing";
@@ -103,7 +102,6 @@ export async function calculateConfiguratorAuthoritatively(
 
   const calculation = {
     pricingVersion: CONFIGURATOR_PRICING_VERSION,
-    markupPercent: CONFIGURATOR_MARKUP_PERCENT,
     netTotalCents: pricedCalculation.netTotalCents,
     measurement: measurementResult.measurement,
     geometry,

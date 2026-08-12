@@ -17,8 +17,11 @@ they do not decide publication. Concrete public actions follow
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
 - Current: production UI follows the approved dark architectural direction; the full configurator
   opens with a fixed technical concept background that fades into the left background while intro
-  content and the calculator scroll upward; internal legal review markers are not part of the visual
-  system.
+  content and the calculator scroll upward. Inside the calculator, one full-width preview precedes
+  the compact three-step controls on desktop and mobile. Step 01 repeats the homepage
+  mini-configurator's three-group layout, step 02 keeps all service choices visible, and price plus
+  specification appear only after both steps. Internal legal review markers are not part of the
+  visual system.
 - Open: working brand and remaining content inputs stay `TBD` where not owner-confirmed.
 - Read full when: changing the visual system, major page composition or cross-route UI contracts.
 <!-- AGENT_BRIEF:END -->
@@ -176,11 +179,12 @@ remains a separate unresolved check.
   one third of the earlier oversized concept, so it reads as a quiet closing signature rather than
   another hero.
 - The wordmark is dim on approach and gently increases in luminosity as a whole when at least one
-  quarter enters the viewport. Only opacity transitions over `1600ms`; there is no directional wipe,
-  bright lamp-like flash, background light pool, loop or flicker.
+  quarter enters the viewport. The opacity transition starts after a `1500ms` pause and runs over
+  `1600ms`; there is no directional wipe, bright lamp-like flash, background light pool, loop or
+  flicker.
 - Under `prefers-reduced-motion` the wordmark is shown immediately in its illuminated end state.
-- The illuminated end state uses a controlled cold white-blue light. It is brighter than the dim
-  base wordmark but remains soft enough not to become a second CTA.
+- The illuminated end state uses a controlled neutral-warm light, visually approximating `4000 K`.
+  It is brighter than the dim base wordmark but remains soft enough not to become a second CTA.
 - Only `Impressum` and `Datenschutz` remain below the wordmark as one quiet unboxed legal row.
   Product, studio, contact and prototype-status copy are not repeated in the footer.
 - The local prototype shows that no optional analysis or marketing tags are active. A consent
@@ -325,19 +329,29 @@ remains a separate unresolved check.
   visual is hidden after the intro leaves the viewport. The asset is labelled
   `Konzeptvisualisierung / Aufmaß` and is not presented as a completed project.
 - The flow has three numbered steps: `Grundkonfiguration`, `Weitere Optionen` and
-  `Preis & Projektanfrage`. Desktop keeps one preview column sticky beside the steps. On mobile the
-  same preview appears before the active step, without duplicating accessible content or creating
-  horizontal scrolling.
+  `Preis & Projektanfrage`. The schematic preview spans the calculator width above the controls;
+  the compact step navigation and active control grid follow below it in the same order on desktop
+  and mobile, without duplicated accessible content or horizontal scrolling. Each step keeps its
+  forward action at the trailing edge of the control area; the final shared form keeps its submit
+  action in the corresponding trailing position.
+- Step 01 is the homepage mini-configurator extended into the price flow, not a second layout
+  system. It uses the same three functional groups and responsive order: `01 Gestaltung` contains
+  composition/logo mode, inscription and font; `02 Maße` contains the three physical dimensions;
+  `03 Farbe & Licht` contains awning colour and light effect. Desktop shows three equal columns;
+  mobile stacks the same groups without reordering them.
+- Step 02 contains only manually calculated services and the optional object postal code. All six
+  service choices are immediately visible without disclosure/burger interaction; desktop uses two
+  columns and mobile one column.
 - The preview remains a schematic front-view SVG. Uploaded logos, object photos and PDFs are
   attachments for manual review and never become simulated geometry in v1; logo modes keep the
   approved geometric placeholder.
-- Optional design/service groups use native buttons with `aria-expanded`; hidden groups remain
-  keyboard reachable after opening. Controls keep visible labels, 44 px targets, visible focus and
-  inline errors connected to their fields.
+- Controls keep visible labels, 44 px targets, visible focus and inline errors connected to their
+  fields.
 - The result uses the label `Vorläufiger Nettopreis` and always keeps the three limitations beside
   it: `zzgl. gesetzlicher Umsatzsteuer`, selected services are not included, and the result is not
   a `verbindliches Angebot` (обязательное предложение). The page visibly limits this presentation
-  to `gewerbliche Projekte`.
+  to `gewerbliche Projekte`. Neither the price nor the non-editable specification is rendered in
+  steps 01–02; both first appear together in step 03 after the visitor completes the sequence.
 - Before the shared contact fields, the visitor sees a non-editable summary of dimensions,
   inscription, font, composition, colours, requested services, panel allocation and the current
   server-confirmed net total. Configuration is changed in the earlier steps, not through hidden

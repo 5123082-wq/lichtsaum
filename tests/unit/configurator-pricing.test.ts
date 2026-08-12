@@ -119,13 +119,13 @@ describe("configurator panel allocation", () => {
     });
   });
 
-  it("calculates every monetary value in integer cents with zero markup", () => {
-    expect(CONFIGURATOR_MARKUP_PERCENT).toBe(0);
+  it("calculates every monetary value in integer cents with the server markup", () => {
+    expect(CONFIGURATOR_MARKUP_PERCENT).toBe(100);
     expect(applyMarkupCents(47_000, CONFIGURATOR_MARKUP_PERCENT)).toBe(
-      47_000
+      94_000
     );
     expect(calculateConfiguratorNet(3000, 1200)).toEqual({
-      netTotalCents: 47_000,
+      netTotalCents: 94_000,
       panelAllocation: {
         requiredLengthMm: 1200,
         totalLengthMm: 1200,
@@ -137,5 +137,12 @@ describe("configurator panel allocation", () => {
     expect(Number.isSafeInteger(calculateConfiguratorNet(3000, 1200)?.netTotalCents)).toBe(
       true
     );
+
+    expect(calculateConfiguratorNet(2000, 1600)).toMatchObject({
+      netTotalCents: 106_000,
+      panelAllocation: {
+        counts: { 600: 1, 1000: 1, 1200: 0 }
+      }
+    });
   });
 });
