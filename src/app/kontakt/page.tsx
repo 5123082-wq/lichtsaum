@@ -28,6 +28,17 @@ export function generateMetadata(): Metadata {
             title,
             description,
             url: "/kontakt"
+          },
+          twitter: {
+            card: "summary_large_image" as const,
+            title,
+            description,
+            images: [
+              {
+                url: "/brand/lichtsaum-og-1200x630.png",
+                alt: "LICHTSAUM — Markise wird Markenlicht."
+              }
+            ]
           }
         }
       : isPreviewDeployment
@@ -52,7 +63,7 @@ export default function KontaktPage() {
           <div className="container contact-hero__inner">
             <header className="contact-hero__intro">
               <p className="eyebrow">Kontakt / Berlin</p>
-              <h1 id="contact-title">Kontakt.</h1>
+              <h1 id="contact-title">Kontakt</h1>
               <p>
                 Berlin ist unser Ausgangspunkt. Für Fragen zu einer bestehenden
                 Gewerbemarkise oder zum Projekt-Check erreichen Sie uns direkt.
@@ -81,9 +92,6 @@ export default function KontaktPage() {
             <div className="contact-hero__actions">
               <Link className="button button--primary" href="/#projekt-pruefen">
                 Projekt prüfen lassen
-              </Link>
-              <Link className="contact-hero__legal-link" href="/impressum">
-                Anbieterangaben im Impressum
               </Link>
             </div>
 

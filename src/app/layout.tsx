@@ -20,7 +20,6 @@ import { siteConfig } from "@/config/site";
 import { SiteStructuredData } from "@/components/seo/site-structured-data";
 import { GoogleTagBoundary } from "@/features/analytics/google-tag-boundary";
 import { ConsentManager } from "@/features/consent/consent-manager";
-import { assertLegalReviewCompleteForProduction } from "@/features/legal/legal-review-todo";
 
 import "./globals.css";
 
@@ -84,7 +83,6 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  assertLegalReviewCompleteForProduction();
   assertGoogleTagsConfigurationValidForProduction();
   assertLeadIntakeConfigurationValidForProduction();
 

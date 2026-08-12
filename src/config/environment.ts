@@ -99,9 +99,22 @@ function isPostgresUrl(value: string) {
   }
 }
 
-function isAbsoluteHttpsUrl(value: string) {
+function isCanonicalSiteUrl(value: string | null): value is string {
+  if (!value) {
+    return false;
+  }
+
   try {
-    return new URL(value).protocol === "https:";
+    const url = new URL(value);
+
+    return (
+      url.protocol === "https:" &&
+      url.hostname === "www.lichtsaum.com" &&
+      url.port === "" &&
+      (url.pathname === "" || url.pathname === "/") &&
+      url.search === "" &&
+      url.hash === ""
+    );
   } catch {
     return false;
   }
@@ -171,12 +184,12 @@ export function assertLeadIntakeConfigurationValidForProduction() {
     );
   }
 
-  if (!isAbsoluteHttpsUrl(siteUrl!)) {
+  if (!isCanonicalSiteUrl(siteUrl)) {
     throw new Error(
-      "Production lead attachments require an absolute HTTPS SITE_URL."
+      "Production lead attachments require SITE_URL=https://www.lichtsaum.com."
     );
   }
 }
 
 export const isIndexable =
-  isProductionDeployment && siteUrl !== null && searchIndexingEnabled;
+  isProductionDeployment && isCanonicalSiteUrl(siteUrl) && searchIndexingEnabled;

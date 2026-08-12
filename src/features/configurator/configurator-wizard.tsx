@@ -613,7 +613,7 @@ export function ConfiguratorWizard({
           <div className="full-configurator__preview-sticky">
             <div className="full-configurator__preview-heading">
               <p>Live / serverberechnet</p>
-              <h2 id="full-configurator-preview-title">Ihre Vorschau.</h2>
+              <h2 id="full-configurator-preview-title">Ihre Vorschau</h2>
             </div>
 
             {calculationIsReady && fontState === "ready" ? (
@@ -693,7 +693,7 @@ export function ConfiguratorWizard({
                   ref={activeStepHeadingRef}
                   tabIndex={-1}
                 >
-                  Grundkonfiguration.
+                  Grundkonfiguration
                 </h2>
                 <p>
                   Geben Sie die sichtbare Beschriftung und die Grundmaße des
@@ -901,7 +901,7 @@ export function ConfiguratorWizard({
                   ref={activeStepHeadingRef}
                   tabIndex={-1}
                 >
-                  Weitere Optionen.
+                  Weitere Optionen
                 </h2>
                 <p>
                   Ergänzen Sie Gestaltung, Lichtwirkung und gewünschte
@@ -1099,7 +1099,7 @@ export function ConfiguratorWizard({
                   ref={activeStepHeadingRef}
                   tabIndex={-1}
                 >
-                  Preis & Projektanfrage.
+                  Preis & Projektanfrage
                 </h2>
                 <p>
                   Prüfen Sie die automatisch beigefügte Zusammenfassung und

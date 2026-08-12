@@ -79,7 +79,7 @@ export type StatusMessage = Readonly<{
 export const transformation = {
   intro: {
     eyebrow: "Gestaltung",
-    title: "Eine Fassade. Zwei Ansichten.",
+    title: "Eine Fassade – zwei Ansichten",
     body:
       "Die Gestaltung wird für den Auftritt am Tag und als Lichtfläche bei Dunkelheit entwickelt. Ob Motiv, Kontrast und Einbausituation dafür geeignet sind, wird objektbezogen geprüft."
   },
@@ -126,7 +126,7 @@ export const transformation = {
 export const engineeredPrecision = {
   intro: {
     eyebrow: "Technische Präzision",
-    title: "Engineered Precision.",
+    title: "Engineered Precision",
     body:
       "Drei schematische Ansichten zeigen Lichtbild, Gestaltung und die für das Aufmaß relevanten Abmessungen. Die konkrete Ausführung wird objektbezogen geprüft."
   },
@@ -171,8 +171,8 @@ export const compatibility = {
   intro: {
     eyebrow: "Eignung",
     titleLines: [
-      "Konstruktion prüfen.",
-      "Volant erneuern."
+      "Konstruktion prüfen",
+      "Volant erneuern"
     ],
     body:
       "Die vorhandene Markise bleibt bestehen, wenn ihre Konstruktion und Mechanik für die Nachrüstung geeignet sind."
@@ -418,7 +418,7 @@ export const faqItems = [
 export const evidenceMessages = {
   intro: {
     eyebrow: "Nachweise",
-    title: "Erst prüfen, dann veröffentlichen.",
+    title: "Erst prüfen, dann veröffentlichen",
     body:
       "Objektive Aussagen werden erst übernommen, wenn Quelle, Verantwortlichkeit und zulässige Formulierung bestätigt sind."
   },

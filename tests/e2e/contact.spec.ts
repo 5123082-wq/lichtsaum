@@ -9,7 +9,7 @@ test("renders the Berlin contact scene without unconfirmed service claims", asyn
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle(/Kontakt \| LICHTSAUM/);
   await expect(
-    page.getByRole("heading", { level: 1, name: "Kontakt." })
+    page.getByRole("heading", { level: 1, name: "Kontakt" })
   ).toBeVisible();
   await expect(page.locator(".contact-atlas__image")).toHaveAttribute(
     "src",
@@ -27,7 +27,7 @@ test("renders the Berlin contact scene without unconfirmed service claims", asyn
   ).toHaveAttribute("href", "/#projekt-pruefen");
   await expect(
     page.getByRole("link", { name: "Anbieterangaben im Impressum" })
-  ).toHaveAttribute("href", "/impressum");
+  ).toHaveCount(0);
 
   await expect(page.getByText("Dannenwalder Weg 110")).toHaveCount(0);
   await expect(page.getByText("Montage in Berlin und Brandenburg")).toHaveCount(0);

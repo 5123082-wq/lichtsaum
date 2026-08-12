@@ -31,7 +31,7 @@ export function ReferencesSection() {
             <p className="eyebrow eyebrow--marker-loop">
               <span>Galerie</span>
             </p>
-            <h2 id="references-title">Ausgewählte Ansichten.</h2>
+            <h2 id="references-title">Ausgewählte Ansichten</h2>
           </div>
           <div>
             <p>

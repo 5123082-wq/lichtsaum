@@ -13,7 +13,7 @@ test("serves a substantive server-rendered configurator route", async ({
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Leuchtvolant konfigurieren."
+      name: "Leuchtvolant konfigurieren"
     })
   ).toBeVisible();
   await expect(
@@ -209,7 +209,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   await nextButton.click();
 
   await expect(
-    configurator.getByRole("heading", { name: "Weitere Optionen." })
+    configurator.getByRole("heading", { name: "Weitere Optionen" })
   ).toBeFocused();
 
   const compositionDisclosure = configurator.getByRole("button", {
@@ -268,7 +268,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   await priceStepButton.click();
 
   await expect(
-    configurator.getByRole("heading", { name: "Preis & Projektanfrage." })
+    configurator.getByRole("heading", { name: "Preis & Projektanfrage" })
   ).toBeFocused();
   const summary = configurator.locator("#configuratorProject");
   await expect(summary).toBeVisible();
@@ -480,7 +480,7 @@ test("honors reduced motion and remains usable with enlarged text", async ({
     .getByRole("button", { name: "Preis & Projektanfrage", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Preis & Projektanfrage." })
+    page.getByRole("heading", { name: "Preis & Projektanfrage" })
   ).toBeVisible();
 
   const reflow = await page.evaluate(() => ({

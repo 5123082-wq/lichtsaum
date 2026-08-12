@@ -20,7 +20,7 @@ export default function NotFoundPage() {
   return (
     <main className="plain-page">
       <p className="eyebrow">404</p>
-      <h1>Diese Seite gibt es nicht.</h1>
+      <h1>Diese Seite gibt es nicht</h1>
       <p>Die angeforderte Seite ist nicht verfügbar.</p>
       <Link className="button button--primary" href="/">
         Zur Startseite

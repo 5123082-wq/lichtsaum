@@ -3,9 +3,11 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-08-11
-- Current stage: public LICHTSAUM site exists; newer application and documentation work remains in
-  the local working tree and has not been published as one verified release.
+- Last updated: 2026-08-12
+- Current stage: public LICHTSAUM site exists; the full configurator now has a locally verified
+  fixed technical intro background based on the existing concept asset, while the SEO canonical
+  guard, apex redirect contract and route social metadata remain local and unpublished as one
+  verified release.
 - Active track: complete only the site work requested by the owner. Before any concrete deployment,
   indexing, Search Console/DNS, GTM/Ads, production-form or attachment action, show the current
   evidence and use `Спросить у пользователя` under
@@ -20,6 +22,82 @@
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20260812-06 — Compact fixed scene height
+
+- Scope: `/konfigurator` fixed-background scene height across desktop and mobile.
+- Outcome: the current intro was reduced by another 30%; the stage now uses a responsive compact
+  height while preserving the full copy, fixed technical background and lower-content overlap.
+- Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
+  8/8, in-app browser review at 1440×900 and 390×844, static-media checks and zero overflow passed.
+- Follow-up: none.
+
+### CHG-20260812-05 — Fixed configurator background
+
+- Scope: `/konfigurator` intro scroll mechanics and upper-block height.
+- Outcome: the technical visual and scrim remain fixed as the intro background; normal-flow copy
+  and calculator content move over it, the calculator covers it from below, and the background is
+  hidden once the intro fully leaves the viewport. The intro is now one viewport tall, roughly 40%
+  shorter than the previous desktop scene.
+- Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
+  8/8, in-app browser desktop/mobile fixed-position checks, overlap checks and zero mobile overflow
+  passed.
+- Follow-up: none.
+
+### CHG-20260812-04 — Sticky scene crop refinement
+
+- Scope: `/konfigurator` intro scene height, technical-image placement and edge treatment.
+- Outcome: the sticky stage is slightly shorter; the technical visual is statically positioned a
+  little higher and farther right; layered vignette gradients hide crop edges across responsive
+  widths while the calculator still rises over the scene from below.
+- Verification: typecheck, lint, `git diff --check`, production build, targeted configurator e2e
+  8/8, in-app browser review at 1508×938 and 390×844, static-media checks, overlap checks and
+  zero mobile overflow passed.
+- Follow-up: none.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
+
+### CHG-20260812-03 — Sticky configurator concept scene
+
+- Scope: `/konfigurator` intro visual, image treatment and scroll behavior.
+- Outcome: the rejected inline SVG was replaced by the existing technical concept visual on the
+  right; a left fade, sticky stage, upward-moving copy and calculator-surface overlap now mirror
+  the main-page scroll language.
+- Verification: 162 unit tests, typecheck, lint, production build, targeted configurator e2e 8/8,
+  in-app browser desktop/mobile review, mid-scroll sticky checks, end-of-scene overlap checks and
+  no horizontal overflow at 390px passed.
+- Follow-up: none.
+
+### CHG-20260812-02 — SEO canonical and social metadata hardening
+
+- Scope: canonical-origin validation, apex-host redirect contract, route-specific Twitter metadata
+  and favicon asset.
+- Outcome: production indexing fails closed for noncanonical `SITE_URL` values, Vercel redirects
+  `lichtsaum.com` to `www.lichtsaum.com`, and public inner routes no longer inherit homepage
+  Twitter cards.
+- Verification: targeted SEO suite passed 162 tests, typecheck and lint passed; production deploy
+  and one-hop external redirect remain unverified.
+- Follow-up: deploy owner-approved release, then verify production redirects, CWV and Search Console.
+
+### CHG-20260812-01 — Compact configurator introduction
+
+- Scope: `/konfigurator` server-rendered introduction, German copy and technical SVG example.
+- Outcome: the oversized hero became a compact responsive composition with a two-line H1, shorter
+  explanation, accessible front-view dimensions and an example `Montserrat` label.
+- Verification: 156 unit tests, typecheck, lint, targeted configurator e2e 8/8, in-app browser
+  desktop/mobile review and no horizontal overflow at 390px passed.
+- Follow-up: none.
+
+### CHG-20260811-05 — Unit suite is smaller and domain-correct
+
+- Scope: Vitest environments, duplicated tests, live integration routing and obsolete legal gate.
+- Outcome: unit tests run in Node by default, browser suites opt into jsdom, duplicate tests were
+  consolidated, and the live lead flow has a separate explicit integration command.
+- Verification: 156 unit tests, typecheck, lint, integration discovery and production build passed.
+- Follow-up: run `pnpm test:integration:live` only with owner-approved synthetic credentials.
 
 ### CHG-20260811-04 — Progress history is preserved
 
@@ -42,10 +120,6 @@
 - Outcome: closed phases were removed from active reading paths; old handoffs are tombstones only.
 - Verification: all Markdown relative links passed and `git diff --check` was clean.
 - Follow-up: none.
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260811-01 — Publication decisions returned to the owner
 
@@ -71,7 +145,8 @@
   visual approved by the owner for public use. Public copy does not describe them as completed
   LICHTSAUM projects.
 - The homepage mini-configurator and the full `/konfigurator` route are implemented locally. The
-  full route uses server-reproduced font metrics, geometry and pricing version `2026-08-11.v1`.
+  full route uses server-reproduced font metrics, geometry and pricing version `2026-08-11.v1`; its
+  server-rendered intro now uses a fixed technical concept background before the calculator.
 - The configurator displays the restricted commercial-project `Vorläufiger Nettopreis` defined by
   CLM-029; B2C/PAngV and Ads price use remain legal questions to show the owner.
 
@@ -123,6 +198,9 @@
 
 - The latest implementation milestone recorded passing unit, typecheck, lint, production build,
   accessibility and responsive browser checks.
+- The latest configurator-intro revision passed 162 unit tests, typecheck, lint, production build,
+  targeted e2e 8/8, and in-app browser desktop/mobile and scroll checks; these results describe the
+  local state only.
 - These results describe the local state at the time they were run. Re-run checks proportional to
   any new change and revalidate the actual production deployment before relying on it.
 

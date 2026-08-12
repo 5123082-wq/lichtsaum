@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import {
   cleanup,
   fireEvent,
@@ -100,6 +102,15 @@ describe("LeadForm measurement", () => {
     expect(generateLeadEvents()).toEqual([]);
     await submitMinimalForm();
 
+    const successTitle = screen.getByRole("heading", {
+      name: "Anfrage übermittelt."
+    });
+
+    expect(successTitle).toBeVisible();
+    expect(successTitle.closest("[role='status']")).toHaveFocus();
+    expect(screen.getByText(/Vielen Dank für Ihre Anfrage/)).toBeInTheDocument();
+    expect(screen.getByText("Anfragenummer: LS-2026-000123")).toBeVisible();
+
     await waitFor(() => expect(generateLeadEvents("ads")).toHaveLength(1));
     expect(generateLeadEvents("analytics")).toEqual([
       {
@@ -117,6 +128,22 @@ describe("LeadForm measurement", () => {
       lead_type: "awning_inquiry"
     });
     expect(window.sessionStorage).toHaveLength(0);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Weitere Anfrage senden" })
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("textbox", { name: /E-Mail-Adresse/ })
+      ).toHaveValue("");
+      expect(
+        screen.getByRole("textbox", { name: /E-Mail-Adresse/ })
+      ).toHaveFocus();
+    });
+    expect(
+      screen.queryByRole("heading", { name: "Anfrage übermittelt." })
+    ).not.toBeInTheDocument();
   });
 
   it("never copies configurator values, services or postal code into analytics", async () => {

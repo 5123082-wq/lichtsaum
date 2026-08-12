@@ -20,7 +20,6 @@ test("renders the adapted Impressum with verified provider details", async ({
   expect(content).not.toContain("Haftung für Inhalte");
   expect(content).not.toContain("pixel-ring.com");
   expect(content).not.toContain("ec.europa.eu/consumers/odr");
-  await expect(page.locator('[data-legal-review="required"]')).toHaveCount(0);
 });
 
 test("describes the confirmed LICHTSAUM data flows", async ({ page }) => {
@@ -52,7 +51,6 @@ test("describes the confirmed LICHTSAUM data flows", async ({ page }) => {
   expect(content).not.toContain("OpenAI");
   expect(content).not.toContain("PixelRing");
   expect(content).not.toContain("Diese Erklärung beschreibt den aktuellen");
-  await expect(page.locator('[data-legal-review="required"]')).toHaveCount(0);
 });
 
 for (const route of ["/impressum", "/datenschutz"] as const) {

@@ -60,6 +60,17 @@ export function generateMetadata(): Metadata {
       title,
       description,
       url: "/referenzen"
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [
+        {
+          url: "/brand/lichtsaum-og-1200x630.png",
+          alt: "LICHTSAUM — Markise wird Markenlicht."
+        }
+      ]
     }
   };
 }
@@ -80,7 +91,7 @@ export default function ReferencesPage() {
           <p className="eyebrow">
             Galerie
           </p>
-          <h1>Referenzen.</h1>
+          <h1>Referenzen</h1>
           <p>
             Ausgewählte Ansichten mit beleuchteten Markisen-Volants in
             unterschiedlichen Objekt- und Einbausituationen.

@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { createEvent, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { CSSProperties } from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";

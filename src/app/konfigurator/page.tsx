@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { GlobalSiteHeader } from "@/components/layout/global-site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { ConfiguratorIntroScene } from "@/components/sections/configurator-intro-scene";
 import {
   displaysLeadAttachmentPicker,
   isIndexable,
@@ -76,14 +77,12 @@ export default async function ConfiguratorPage() {
       </a>
       <GlobalSiteHeader />
       <main className="configurator-page" id="main-content">
-        <header className="configurator-page__intro container">
-          <p className="eyebrow">{configuratorPageContent.eyebrow}</p>
-          <h1>{configuratorPageContent.title}</h1>
-          <div className="configurator-page__intro-copy">
-            <p>{configuratorPageContent.intro}</p>
-            <p>{configuratorPageContent.explanation}</p>
-          </div>
-        </header>
+        <ConfiguratorIntroScene
+          eyebrow={configuratorPageContent.eyebrow}
+          explanation={configuratorPageContent.explanation}
+          intro={configuratorPageContent.intro}
+          title={configuratorPageContent.title}
+        />
 
         <ConfiguratorWizard
           attachmentsEnabled={displaysLeadAttachmentPicker}

@@ -160,7 +160,7 @@ test("renders only the selected hero statement in one H1", async ({
   const h1 = page.getByRole("heading", { level: 1 });
 
   await expect(h1).toHaveCount(1);
-  await expect(h1).toHaveText("Markise wird Markenlicht.");
+  await expect(h1).toHaveText("Markise wird Markenlicht");
   await expect(page.locator(".hero").getByRole("link")).toHaveCount(0);
 
   const serverResponse = await request.get("/");
@@ -171,7 +171,7 @@ test("renders only the selected hero statement in one H1", async ({
     "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen."
   );
   expect(serverHtml).toContain("Markise wird");
-  expect(serverHtml).toContain("Markenlicht.");
+  expect(serverHtml).toContain("Markenlicht</span>");
 });
 
 test("transitions the hero from day to night and respects reduced motion", async ({
@@ -702,7 +702,7 @@ test("renders the concise object-specific FAQ with the approved marker treatment
   await expect(
     section.getByRole("heading", {
       level: 2,
-      name: "Fragen.",
+      name: "Fragen",
       exact: true
     })
   ).toBeVisible();
@@ -761,8 +761,12 @@ test("shows the local reference review gallery on the homepage and dedicated rou
   const cards = section.locator(".reference-card");
 
   await expect(
-    section.getByRole("heading", { name: "Ausgewählte Ansichten." })
+    section.getByRole("heading", { name: "Ausgewählte Ansichten" })
   ).toBeVisible();
+  await expect(section.locator("#references-title")).toHaveCSS(
+    "text-transform",
+    "uppercase"
+  );
   await expect(cards).toHaveCount(4);
   await expect(section.locator(".reference-card__badge")).toHaveCount(1);
   await expect(cards.nth(0)).toHaveAttribute(
@@ -797,12 +801,12 @@ test("shows the local reference review gallery on the homepage and dedicated rou
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await expect(
-    dialog.getByRole("heading", { name: "Licht über drei Fenstern." })
+    dialog.getByRole("heading", { name: "Licht über drei Fenstern" })
   ).toBeVisible();
 
   await page.keyboard.press("ArrowRight");
   await expect(
-    dialog.getByRole("heading", { name: "Licht entlang der Terrasse." })
+    dialog.getByRole("heading", { name: "Licht entlang der Terrasse" })
   ).toBeVisible();
 
   await page.keyboard.press("Escape");
@@ -813,14 +817,14 @@ test("shows the local reference review gallery on the homepage and dedicated rou
   const html = await response.text();
 
   expect(response.status()).toBe(200);
-  expect(html).toContain("Referenzen.");
+  expect(html).toContain("Referenzen</h1>");
   expect(html).toContain("references-page__context");
   expect(html).not.toContain("01 /");
   expect(html).not.toContain("02 /");
   expect(html).not.toContain("03 /");
   expect(html).not.toContain("04 /");
   expect(html).toContain("Konzeptvisualisierung");
-  expect(html).toContain("Zwei Lichtfelder. Eine Fassade.");
+  expect(html).toContain("Zwei Lichtfelder – eine Fassade");
   expect(html).toMatch(/noindex/i);
 });
 
@@ -1111,7 +1115,7 @@ test("combines retrofit and compatibility into one Eignung section", async ({
   await expect(page.locator("#retrofit")).toHaveCount(0);
   await expect(
     section.getByRole("heading", {
-      name: "Konstruktion prüfen. Volant erneuern.",
+      name: "Konstruktion prüfen Volant erneuern",
       exact: true
     })
   ).toBeVisible();
