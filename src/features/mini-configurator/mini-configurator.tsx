@@ -6,11 +6,13 @@ import {
   useMemo,
   useRef,
   useState,
-  type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent
 } from "react";
-import { CaretDown, Check, Diamond } from "@phosphor-icons/react";
 
+import {
+  ConfiguratorPicker,
+  ConfiguratorPickerGroup
+} from "@/features/configurator/configurator-picker";
 import {
   MINI_CONFIGURATOR_CONSTRAINTS,
   isWithinMiniConfiguratorConstraint
@@ -34,7 +36,6 @@ import {
 } from "@/features/mini-configurator/storage";
 import type {
   MiniConfiguratorConfig,
-  MiniConfiguratorCompositionMode,
   MiniConfiguratorGeometry,
   MiniConfiguratorTextMeasurement
 } from "@/features/mini-configurator/types";
@@ -69,31 +70,6 @@ type NumberFieldProps = Readonly<{
   min?: number;
   max?: number;
 }>;
-
-type CompositionDiagramProps = Readonly<{
-  mode: MiniConfiguratorCompositionMode;
-}>;
-
-function CompositionDiagram({ mode }: CompositionDiagramProps) {
-  const hasLeftLogo = mode !== "text-only";
-  const hasRightLogo = mode === "logo-both";
-
-  return (
-    <span
-      aria-hidden="true"
-      className="configurator-composition-diagram"
-      data-mode={mode}
-    >
-      <span>
-        {hasLeftLogo ? <Diamond size={15} weight="bold" /> : null}
-      </span>
-      <span>NAME</span>
-      <span>
-        {hasRightLogo ? <Diamond size={15} weight="bold" /> : null}
-      </span>
-    </span>
-  );
-}
 
 function NumberField({
   id,
@@ -180,22 +156,10 @@ export function MiniConfigurator() {
   );
   const [storageIsReady, setStorageIsReady] = useState(false);
   const [continuationMessage, setContinuationMessage] = useState("");
-  const [compositionMenuIsOpen, setCompositionMenuIsOpen] = useState(false);
-  const [fontMenuIsOpen, setFontMenuIsOpen] = useState(false);
-  const [awningColorMenuIsOpen, setAwningColorMenuIsOpen] = useState(false);
-  const [lightColorMenuIsOpen, setLightColorMenuIsOpen] = useState(false);
   const [measurementState, setMeasurementState] = useState<MeasurementState>({
     status: "idle",
     measurement: null
   });
-  const compositionPickerRef = useRef<HTMLDivElement>(null);
-  const compositionTriggerRef = useRef<HTMLButtonElement>(null);
-  const fontPickerRef = useRef<HTMLDivElement>(null);
-  const fontTriggerRef = useRef<HTMLButtonElement>(null);
-  const awningColorPickerRef = useRef<HTMLDivElement>(null);
-  const awningColorTriggerRef = useRef<HTMLButtonElement>(null);
-  const lightColorPickerRef = useRef<HTMLDivElement>(null);
-  const lightColorTriggerRef = useRef<HTMLButtonElement>(null);
   const userHasInteractedRef = useRef(false);
   const deferredText = useDeferredValue(draft.text);
   const configuration = useMemo(() => configurationFromDraft(draft), [draft]);
@@ -206,18 +170,6 @@ export function MiniConfigurator() {
   const selectedFont =
     MINI_CONFIGURATOR_FONTS.find((font) => font.id === draft.fontId) ??
     MINI_CONFIGURATOR_FONTS[0];
-  const selectedComposition =
-    MINI_CONFIGURATOR_COMPOSITION_MODES.find(
-      (option) => option.id === draft.compositionMode
-    ) ?? MINI_CONFIGURATOR_COMPOSITION_MODES[0];
-  const selectedAwningColor =
-    MINI_CONFIGURATOR_AWNING_COLORS.find(
-      (option) => option.id === draft.awningColorId
-    ) ?? MINI_CONFIGURATOR_AWNING_COLORS[0];
-  const selectedLightColor =
-    MINI_CONFIGURATOR_LIGHT_COLORS.find(
-      (option) => option.id === draft.lightColorId
-    ) ?? MINI_CONFIGURATOR_LIGHT_COLORS[0];
   const letterHeightMm = configuration?.letterHeightMm ?? null;
   const textIsSupported = SUPPORTED_MINI_CONFIGURATOR_TEXT.test(draft.text);
   const textIsEmpty = draft.text.trim().length === 0;
@@ -304,150 +256,6 @@ export function MiniConfigurator() {
       cancelled = true;
     };
   }, [deferredText, letterHeightMm, selectedFont, textIsSupported]);
-
-  useEffect(() => {
-    if (!compositionMenuIsOpen) {
-      return;
-    }
-
-    const selectedOption = compositionPickerRef.current?.querySelector<HTMLElement>(
-      '[role="option"][aria-selected="true"]'
-    );
-
-    selectedOption?.focus();
-
-    function closeOnOutsidePointer(event: PointerEvent) {
-      if (
-        event.target instanceof Node &&
-        !compositionPickerRef.current?.contains(event.target)
-      ) {
-        setCompositionMenuIsOpen(false);
-      }
-    }
-
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setCompositionMenuIsOpen(false);
-        compositionTriggerRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("pointerdown", closeOnOutsidePointer);
-    document.addEventListener("keydown", closeOnEscape);
-
-    return () => {
-      document.removeEventListener("pointerdown", closeOnOutsidePointer);
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [compositionMenuIsOpen]);
-
-  useEffect(() => {
-    if (!fontMenuIsOpen) {
-      return;
-    }
-
-    const selectedOption = fontPickerRef.current?.querySelector<HTMLElement>(
-      '[role="option"][aria-selected="true"]'
-    );
-
-    selectedOption?.focus();
-
-    function closeOnOutsidePointer(event: PointerEvent) {
-      if (
-        event.target instanceof Node &&
-        !fontPickerRef.current?.contains(event.target)
-      ) {
-        setFontMenuIsOpen(false);
-      }
-    }
-
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setFontMenuIsOpen(false);
-        fontTriggerRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("pointerdown", closeOnOutsidePointer);
-    document.addEventListener("keydown", closeOnEscape);
-
-    return () => {
-      document.removeEventListener("pointerdown", closeOnOutsidePointer);
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [fontMenuIsOpen]);
-
-  useEffect(() => {
-    if (!awningColorMenuIsOpen) {
-      return;
-    }
-
-    const selectedOption = awningColorPickerRef.current?.querySelector<HTMLElement>(
-      '[role="option"][aria-selected="true"]'
-    );
-
-    selectedOption?.focus();
-
-    function closeOnOutsidePointer(event: PointerEvent) {
-      if (
-        event.target instanceof Node &&
-        !awningColorPickerRef.current?.contains(event.target)
-      ) {
-        setAwningColorMenuIsOpen(false);
-      }
-    }
-
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setAwningColorMenuIsOpen(false);
-        awningColorTriggerRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("pointerdown", closeOnOutsidePointer);
-    document.addEventListener("keydown", closeOnEscape);
-
-    return () => {
-      document.removeEventListener("pointerdown", closeOnOutsidePointer);
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [awningColorMenuIsOpen]);
-
-  useEffect(() => {
-    if (!lightColorMenuIsOpen) {
-      return;
-    }
-
-    const selectedOption = lightColorPickerRef.current?.querySelector<HTMLElement>(
-      '[role="option"][aria-selected="true"]'
-    );
-
-    selectedOption?.focus();
-
-    function closeOnOutsidePointer(event: PointerEvent) {
-      if (
-        event.target instanceof Node &&
-        !lightColorPickerRef.current?.contains(event.target)
-      ) {
-        setLightColorMenuIsOpen(false);
-      }
-    }
-
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setLightColorMenuIsOpen(false);
-        lightColorTriggerRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("pointerdown", closeOnOutsidePointer);
-    document.addEventListener("keydown", closeOnEscape);
-
-    return () => {
-      document.removeEventListener("pointerdown", closeOnOutsidePointer);
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [lightColorMenuIsOpen]);
 
   const matchingMeasurement =
     configuration &&
@@ -556,31 +364,6 @@ export function MiniConfigurator() {
     }
   }
 
-  function moveListboxOptionFocus(event: ReactKeyboardEvent<HTMLDivElement>) {
-    if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
-      return;
-    }
-
-    const options = Array.from(
-      event.currentTarget.querySelectorAll<HTMLElement>('[role="option"]')
-    );
-    const currentIndex = options.indexOf(document.activeElement as HTMLElement);
-    let nextIndex = currentIndex;
-
-    if (event.key === "Home") {
-      nextIndex = 0;
-    } else if (event.key === "End") {
-      nextIndex = options.length - 1;
-    } else if (event.key === "ArrowDown") {
-      nextIndex = Math.min(options.length - 1, Math.max(0, currentIndex + 1));
-    } else if (event.key === "ArrowUp") {
-      nextIndex = Math.max(0, currentIndex <= 0 ? 0 : currentIndex - 1);
-    }
-
-    event.preventDefault();
-    options[nextIndex]?.focus();
-  }
-
   return (
     <form
       className="mini-configurator"
@@ -594,6 +377,7 @@ export function MiniConfigurator() {
         statusText={statusText}
       />
 
+      <ConfiguratorPickerGroup>
       <div className="configurator-controls">
         <fieldset
           aria-label="01 Gestaltung"
@@ -605,90 +389,24 @@ export function MiniConfigurator() {
 
           <div className="configurator-composition-field">
             <span id="configurator-composition-label">Komposition</span>
-            <div
-              className="configurator-composition-picker"
-              data-open={compositionMenuIsOpen || undefined}
-              onBlur={(event) => {
-                if (
-                  !(event.relatedTarget instanceof Node) ||
-                  !event.currentTarget.contains(event.relatedTarget)
-                ) {
-                  setCompositionMenuIsOpen(false);
-                }
-              }}
-              ref={compositionPickerRef}
-            >
-              <button
-                aria-controls="configurator-composition-listbox"
-                aria-describedby={
-                  draft.compositionMode === "text-only"
-                    ? undefined
-                    : "configurator-composition-note"
-                }
-                aria-expanded={compositionMenuIsOpen}
-                aria-haspopup="listbox"
-                aria-label={`Komposition: ${selectedComposition.label}`}
-                className="configurator-composition-trigger"
-                onClick={() => {
-                  setFontMenuIsOpen(false);
-                  setAwningColorMenuIsOpen(false);
-                  setLightColorMenuIsOpen(false);
-                  setCompositionMenuIsOpen((current) => !current);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-                    event.preventDefault();
-                    setFontMenuIsOpen(false);
-                    setAwningColorMenuIsOpen(false);
-                    setLightColorMenuIsOpen(false);
-                    setCompositionMenuIsOpen(true);
-                  }
-                }}
-                ref={compositionTriggerRef}
-                type="button"
-              >
-                <CompositionDiagram mode={selectedComposition.id} />
-                <span className="configurator-composition-copy">
-                  <strong>{selectedComposition.label}</strong>
-                </span>
-                <CaretDown aria-hidden="true" size={18} weight="bold" />
-              </button>
-              <div
-                aria-label="Komposition auswählen"
-                className="configurator-composition-listbox"
-                hidden={!compositionMenuIsOpen}
-                id="configurator-composition-listbox"
-                onKeyDown={moveListboxOptionFocus}
-                role="listbox"
-              >
-                {MINI_CONFIGURATOR_COMPOSITION_MODES.map((option) => (
-                  <button
-                    aria-selected={draft.compositionMode === option.id}
-                    key={option.id}
-                    onClick={() => {
-                      updateDraft("compositionMode", option.id);
-                      setCompositionMenuIsOpen(false);
-                      compositionTriggerRef.current?.focus();
-                    }}
-                    role="option"
-                    tabIndex={draft.compositionMode === option.id ? 0 : -1}
-                    type="button"
-                  >
-                    <CompositionDiagram mode={option.id} />
-                    <span className="configurator-composition-copy">
-                      <strong>{option.label}</strong>
-                      <span>{option.description}</span>
-                    </span>
-                    <Check
-                      aria-hidden="true"
-                      className="configurator-composition-check"
-                      size={18}
-                      weight="bold"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+            <ConfiguratorPicker
+              ariaLabel={`Komposition: ${MINI_CONFIGURATOR_COMPOSITION_MODES.find((option) => option.id === draft.compositionMode)?.label ?? draft.compositionMode}`}
+              describedBy={
+                draft.compositionMode === "text-only"
+                  ? undefined
+                  : "configurator-composition-note"
+              }
+              id="configurator-composition"
+              kind="composition"
+              onChange={(value) =>
+                updateDraft(
+                  "compositionMode",
+                  value as MiniConfiguratorConfig["compositionMode"]
+                )
+              }
+              options={MINI_CONFIGURATOR_COMPOSITION_MODES}
+              value={draft.compositionMode}
+            />
           </div>
 
           <div className="configurator-text-field">
@@ -718,75 +436,19 @@ export function MiniConfigurator() {
 
           <div className="configurator-select-field">
             <span id="configurator-font-label">Schriftstil</span>
-            <div
-              className="configurator-font-picker"
-              data-open={fontMenuIsOpen || undefined}
-              onBlur={(event) => {
-                if (
-                  !(event.relatedTarget instanceof Node) ||
-                  !event.currentTarget.contains(event.relatedTarget)
-                ) {
-                  setFontMenuIsOpen(false);
-                }
-              }}
-              ref={fontPickerRef}
-            >
-              <button
-                aria-controls="configurator-font-listbox"
-                aria-expanded={fontMenuIsOpen}
-                aria-haspopup="listbox"
-                aria-label={`Schriftstil: ${selectedFont.label} · ${selectedFont.direction}`}
-                className="configurator-font-trigger"
-                onClick={() => {
-                  setCompositionMenuIsOpen(false);
-                  setAwningColorMenuIsOpen(false);
-                  setLightColorMenuIsOpen(false);
-                  setFontMenuIsOpen((current) => !current);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-                    event.preventDefault();
-                    setCompositionMenuIsOpen(false);
-                    setAwningColorMenuIsOpen(false);
-                    setLightColorMenuIsOpen(false);
-                    setFontMenuIsOpen(true);
-                  }
-                }}
-                ref={fontTriggerRef}
-                type="button"
-              >
-                <span>
-                  {selectedFont.label} · {selectedFont.direction}
-                </span>
-                <CaretDown aria-hidden="true" size={18} weight="bold" />
-              </button>
-              <div
-                aria-label="Schriftstil auswählen"
-                className="configurator-font-listbox"
-                hidden={!fontMenuIsOpen}
-                id="configurator-font-listbox"
-                onKeyDown={moveListboxOptionFocus}
-                role="listbox"
-              >
-                {MINI_CONFIGURATOR_FONTS.map((font) => (
-                  <button
-                    aria-selected={draft.fontId === font.id}
-                    key={font.id}
-                    onClick={() => {
-                      updateDraft("fontId", font.id);
-                      setFontMenuIsOpen(false);
-                      fontTriggerRef.current?.focus();
-                    }}
-                    role="option"
-                    tabIndex={draft.fontId === font.id ? 0 : -1}
-                    type="button"
-                  >
-                    <strong>{font.label}</strong>
-                    <span>{font.direction}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+            <ConfiguratorPicker
+              ariaLabel={`Schriftstil: ${selectedFont.label} · ${selectedFont.direction}`}
+              id="configurator-font"
+              kind="font"
+              onChange={(value) =>
+                updateDraft(
+                  "fontId",
+                  value as MiniConfiguratorConfig["fontId"]
+                )
+              }
+              options={MINI_CONFIGURATOR_FONTS}
+              value={draft.fontId}
+            />
           </div>
 
           {draft.compositionMode !== "text-only" ? (
@@ -876,189 +538,44 @@ export function MiniConfigurator() {
           </legend>
 
           <div className="configurator-option-block">
-            <span
-              className="configurator-option-label"
-              id="configurator-awning-color-label"
-            >
-              Markisenfarbe
-            </span>
-            <div
-              className="configurator-awning-color-picker"
-              data-open={awningColorMenuIsOpen || undefined}
-              onBlur={(event) => {
-                if (
-                  !(event.relatedTarget instanceof Node) ||
-                  !event.currentTarget.contains(event.relatedTarget)
-                ) {
-                  setAwningColorMenuIsOpen(false);
-                }
-              }}
-              ref={awningColorPickerRef}
-            >
-              <button
-                aria-controls="configurator-awning-color-listbox"
-                aria-expanded={awningColorMenuIsOpen}
-                aria-haspopup="listbox"
-                aria-label={`Markisenfarbe: ${selectedAwningColor.label}`}
-                className="configurator-awning-color-trigger"
-                onClick={() => {
-                  setCompositionMenuIsOpen(false);
-                  setFontMenuIsOpen(false);
-                  setLightColorMenuIsOpen(false);
-                  setAwningColorMenuIsOpen((current) => !current);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-                    event.preventDefault();
-                    setCompositionMenuIsOpen(false);
-                    setFontMenuIsOpen(false);
-                    setLightColorMenuIsOpen(false);
-                    setAwningColorMenuIsOpen(true);
-                  }
-                }}
-                ref={awningColorTriggerRef}
-                type="button"
-              >
-                <span
-                  aria-hidden="true"
-                  className="configurator-color-swatch"
-                  style={{ backgroundColor: selectedAwningColor.value }}
-                />
-                <span>{selectedAwningColor.label}</span>
-                <CaretDown aria-hidden="true" size={18} weight="bold" />
-              </button>
-              <div
-                aria-label="Markisenfarbe auswählen"
-                className="configurator-awning-color-listbox"
-                hidden={!awningColorMenuIsOpen}
-                id="configurator-awning-color-listbox"
-                onKeyDown={moveListboxOptionFocus}
-                role="listbox"
-              >
-                {MINI_CONFIGURATOR_AWNING_COLORS.map((option) => (
-                  <button
-                    aria-selected={draft.awningColorId === option.id}
-                    key={option.id}
-                    onClick={() => {
-                      updateDraft("awningColorId", option.id);
-                      setAwningColorMenuIsOpen(false);
-                      awningColorTriggerRef.current?.focus();
-                    }}
-                    role="option"
-                    tabIndex={draft.awningColorId === option.id ? 0 : -1}
-                    type="button"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="configurator-color-swatch"
-                      style={{ backgroundColor: option.value }}
-                    />
-                    <span>{option.label}</span>
-                    <Check
-                      aria-hidden="true"
-                      className="configurator-awning-color-check"
-                      size={18}
-                      weight="bold"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+            <span className="configurator-option-label">Markisenfarbe</span>
+            <ConfiguratorPicker
+              ariaLabel={`Markisenfarbe: ${MINI_CONFIGURATOR_AWNING_COLORS.find((option) => option.id === draft.awningColorId)?.label ?? draft.awningColorId}`}
+              id="configurator-awning-color"
+              kind="color"
+              listboxLabel="Markisenfarbe auswählen"
+              onChange={(value) =>
+                updateDraft(
+                  "awningColorId",
+                  value as MiniConfiguratorConfig["awningColorId"]
+                )
+              }
+              options={MINI_CONFIGURATOR_AWNING_COLORS}
+              value={draft.awningColorId}
+            />
           </div>
 
           <div className="configurator-option-block">
-            <span
-              className="configurator-option-label"
-              id="configurator-light-color-label"
-            >
-              Lichtwirkung
-            </span>
-            <div
-              className="configurator-light-color-picker"
-              data-open={lightColorMenuIsOpen || undefined}
-              onBlur={(event) => {
-                if (
-                  !(event.relatedTarget instanceof Node) ||
-                  !event.currentTarget.contains(event.relatedTarget)
-                ) {
-                  setLightColorMenuIsOpen(false);
-                }
-              }}
-              ref={lightColorPickerRef}
-            >
-              <button
-                aria-controls="configurator-light-color-listbox"
-                aria-expanded={lightColorMenuIsOpen}
-                aria-haspopup="listbox"
-                aria-label={`Lichtwirkung: ${selectedLightColor.label}`}
-                className="configurator-light-color-trigger"
-                onClick={() => {
-                  setCompositionMenuIsOpen(false);
-                  setFontMenuIsOpen(false);
-                  setAwningColorMenuIsOpen(false);
-                  setLightColorMenuIsOpen((current) => !current);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-                    event.preventDefault();
-                    setCompositionMenuIsOpen(false);
-                    setFontMenuIsOpen(false);
-                    setAwningColorMenuIsOpen(false);
-                    setLightColorMenuIsOpen(true);
-                  }
-                }}
-                ref={lightColorTriggerRef}
-                type="button"
-              >
-                <span
-                  aria-hidden="true"
-                  className="configurator-color-swatch"
-                  style={{ backgroundColor: selectedLightColor.value }}
-                />
-                <span>{selectedLightColor.label}</span>
-                <CaretDown aria-hidden="true" size={18} weight="bold" />
-              </button>
-              <div
-                aria-label="Lichtwirkung auswählen"
-                className="configurator-light-color-listbox"
-                hidden={!lightColorMenuIsOpen}
-                id="configurator-light-color-listbox"
-                onKeyDown={moveListboxOptionFocus}
-                role="listbox"
-              >
-                {MINI_CONFIGURATOR_LIGHT_COLORS.map((option) => (
-                  <button
-                    aria-selected={draft.lightColorId === option.id}
-                    key={option.id}
-                    onClick={() => {
-                      updateDraft("lightColorId", option.id);
-                      setLightColorMenuIsOpen(false);
-                      lightColorTriggerRef.current?.focus();
-                    }}
-                    role="option"
-                    tabIndex={draft.lightColorId === option.id ? 0 : -1}
-                    type="button"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="configurator-color-swatch"
-                      style={{ backgroundColor: option.value }}
-                    />
-                    <span>{option.label}</span>
-                    <Check
-                      aria-hidden="true"
-                      className="configurator-light-color-check"
-                      size={18}
-                      weight="bold"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+            <span className="configurator-option-label">Lichtwirkung</span>
+            <ConfiguratorPicker
+              ariaLabel={`Lichtwirkung: ${MINI_CONFIGURATOR_LIGHT_COLORS.find((option) => option.id === draft.lightColorId)?.label ?? draft.lightColorId}`}
+              id="configurator-light-color"
+              kind="color"
+              listboxLabel="Lichtwirkung auswählen"
+              onChange={(value) =>
+                updateDraft(
+                  "lightColorId",
+                  value as MiniConfiguratorConfig["lightColorId"]
+                )
+              }
+              options={MINI_CONFIGURATOR_LIGHT_COLORS}
+              value={draft.lightColorId}
+            />
           </div>
 
         </fieldset>
       </div>
+      </ConfiguratorPickerGroup>
 
       <div className="configurator-footer">
         <p aria-live="polite" className="visually-hidden">

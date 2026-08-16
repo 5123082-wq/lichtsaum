@@ -967,6 +967,10 @@ test("configures the physical SVG valance and enforces its height limits", async
   await fontTrigger.click();
   await expect(fontListbox.getByRole("option")).toHaveCount(8);
   await fontTrigger.click();
+  await compositionTrigger.click();
+  await expect(compositionListbox).toBeVisible();
+  await compositionTrigger.click();
+  await expect(compositionListbox).toBeHidden();
   await compositionTrigger.focus();
   await compositionTrigger.press("Enter");
   await expect(compositionListbox.getByRole("option")).toHaveCount(3);

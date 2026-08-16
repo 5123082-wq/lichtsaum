@@ -194,9 +194,6 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     { timeout: 15_000 }
   );
   await expect(
-    configurator.locator(".full-configurator__calculation-message")
-  ).toHaveCount(0);
-  await expect(
     configurator.locator(".full-configurator-preview > svg")
   ).toBeVisible();
 
@@ -221,8 +218,69 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   await expect(configurator.getByLabel("02 Maße")).toBeVisible();
   await expect(configurator.getByLabel("03 Farbe & Licht")).toBeVisible();
 
-  await configurator.getByLabel("Komposition").selectOption("logo-left");
-  await configurator.getByLabel("Markisenfarbe").selectOption("night-blue");
+  const fullCompositionTrigger = configurator.getByRole("button", {
+    name: /Komposition:/
+  });
+  const fullCompositionListbox = configurator.getByRole("listbox", {
+    name: "Komposition auswählen"
+  });
+  await fullCompositionTrigger.click();
+  await expect(fullCompositionListbox).toBeVisible();
+  await fullCompositionTrigger.click();
+  await expect(fullCompositionListbox).toBeHidden();
+  await fullCompositionTrigger.click();
+  await fullCompositionListbox
+    .getByRole("option", { name: /Logo links/ })
+    .click();
+  await expect(
+    configurator.getByText("Komposition wird geprüft …", { exact: true })
+  ).toHaveCount(0);
+  await expect(configurator.locator(".full-configurator-preview")).toBeVisible();
+
+  const fullAwningColorTrigger = configurator.getByRole("button", {
+    name: /Markisenfarbe:/
+  });
+  const fullAwningColorListbox = configurator.getByRole("listbox", {
+    name: "Markisenfarbe auswählen"
+  });
+  await fullAwningColorTrigger.click();
+  const colorMenuLayer = await configurator.evaluate(() => {
+    const listbox = document.querySelector(
+      ".configurator-color-listbox:not([hidden])"
+    );
+    const actionButton = document.querySelector(
+      ".full-configurator__step-actions .button"
+    );
+
+    if (!listbox || !actionButton) {
+      return { overlaps: false, listboxIsTopmost: false };
+    }
+
+    const listboxRect = listbox.getBoundingClientRect();
+    const actionRect = actionButton.getBoundingClientRect();
+    const overlapTop = Math.max(listboxRect.top, actionRect.top);
+    const overlapBottom = Math.min(listboxRect.bottom, actionRect.bottom);
+
+    if (overlapBottom <= overlapTop) {
+      return { overlaps: false, listboxIsTopmost: false };
+    }
+
+    const point = document.elementFromPoint(
+      Math.max(listboxRect.left + 8, actionRect.left + 8),
+      overlapTop + 8
+    );
+
+    return {
+      overlaps: true,
+      listboxIsTopmost: Boolean(point && listbox.contains(point))
+    };
+  });
+  if (colorMenuLayer.overlaps) {
+    expect(colorMenuLayer.listboxIsTopmost).toBe(true);
+  }
+  await fullAwningColorListbox
+    .getByRole("option", { name: "Nachtblau" })
+    .click();
   await expect(
     configurator.locator(".configurator-preview__product > rect").first()
   ).toHaveAttribute("fill", "#263746");
@@ -320,7 +378,7 @@ test("blocks preview, price and continuation for an impossible composition", asy
   );
   await expect(
     configurator
-      .locator(".full-configurator__calculation-message")
+      .getByRole("status")
       .getByText(/passt nicht in die verfügbare Volantbreite/i)
   ).toBeVisible();
   await expect(configurator.locator("#configuratorProject")).toHaveCount(0);

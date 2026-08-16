@@ -31,6 +31,40 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
     : siteConfig.navigation;
 
   useEffect(() => {
+    const root = document.documentElement;
+    const markPointerInput = () => {
+      root.dataset.inputModality = "pointer";
+    };
+    const markKeyboardInput = (event: KeyboardEvent) => {
+      if (
+        [
+          " ",
+          "ArrowDown",
+          "ArrowLeft",
+          "ArrowRight",
+          "ArrowUp",
+          "End",
+          "Enter",
+          "Escape",
+          "Home",
+          "Tab"
+        ].includes(event.key)
+      ) {
+        root.dataset.inputModality = "keyboard";
+      }
+    };
+
+    window.addEventListener("pointerdown", markPointerInput, true);
+    window.addEventListener("keydown", markKeyboardInput, true);
+
+    return () => {
+      window.removeEventListener("pointerdown", markPointerInput, true);
+      window.removeEventListener("keydown", markKeyboardInput, true);
+      delete root.dataset.inputModality;
+    };
+  }, []);
+
+  useEffect(() => {
     const dialog = dialogRef.current;
 
     if (!dialog) {
@@ -55,10 +89,16 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
 
       if (!dialog.open) {
         setMobileMenuState("closed");
+        // Safari can paint a dialog immediately after showModal() before the
+        // React state update reaches the DOM. Set the initial CSS state
+        // synchronously, then promote it to open after two paint opportunities.
+        dialog.dataset.state = "closed";
         dialog.showModal();
         openAnimationFrameRef.current = window.requestAnimationFrame(() => {
-          openAnimationFrameRef.current = null;
-          setMobileMenuState("open");
+          openAnimationFrameRef.current = window.requestAnimationFrame(() => {
+            openAnimationFrameRef.current = null;
+            setMobileMenuState("open");
+          });
         });
       } else {
         setMobileMenuState("open");
@@ -176,7 +216,12 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
     setIsMenuOpen(false);
     setMobileMenuState("closed");
     document.documentElement.classList.remove("mobile-menu-open");
+
     menuButtonRef.current?.focus();
+  };
+
+  const openMenu = () => {
+    setIsMenuOpen(true);
   };
 
   return (
@@ -214,7 +259,7 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
           aria-expanded={isMenuOpen}
           aria-label="Menü öffnen"
           className="mobile-menu-trigger"
-          onClick={() => setIsMenuOpen(true)}
+          onClick={openMenu}
           ref={menuButtonRef}
           type="button"
         >

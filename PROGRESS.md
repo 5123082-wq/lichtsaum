@@ -3,13 +3,16 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-08-12
-- Current stage: public LICHTSAUM site exists; its mobile menu now uses a locally verified smooth
-  two-way drawer transition with one stable header wordmark and no underlying layout shift. The
+- Last updated: 2026-08-14
+- Current stage: public LICHTSAUM site exists; its mobile menu now uses a smooth two-way drawer
+  transition with a Safari-safe right anchor, one stable header wordmark and global input-modality
+  focus handling. Pointer/touch actions no longer leave orange focus styling; keyboard focus remains
+  visible. Safari-specific behavior remains unverified on a real device. The
   full configurator has a locally verified
   fixed technical intro background and a sequential calculator layout: the schematic preview spans
-  the width, step 01 repeats the homepage three-group control layout, step 02 exposes all services,
-  and price plus specification remain hidden until step 03. The server-authoritative configurator
+  the width, and step 01 now uses the same canonical visual picker controls as the homepage;
+  step 02 exposes all services, and price plus specification remain hidden until step 03. The
+  server-authoritative configurator
   pricing is version `2026-08-12.v2` with a server-only 100% commercial coefficient; the SEO
   canonical guard, apex redirect contract and route social metadata remain local and unpublished.
 - Active track: complete only the site work requested by the owner. Before any concrete deployment,
@@ -27,6 +30,38 @@
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
+### CHG-20260814-02 — Canonical configurator pickers
+
+- Scope: homepage mini-configurator and `/konfigurator` step 01 option controls.
+- Outcome: composition, font, awning-color and light-color menus now use one shared accessible
+  picker implementation with the homepage's diagrams, descriptions, swatches, selection states
+  and keyboard behavior; native full-route `<select>` controls were removed. Routine selection
+  changes no longer insert a transient calculation message into the controls layout, and picker
+  option clicks do not trigger browser focus scrolling. The full-route preview now keeps the last
+  valid SVG mounted during recalculation, matching the mini-configurator's stable preview model.
+  Trigger clicks now prevent the focus/blur race that could reopen an already closed menu, and
+  full-route dropdowns retain the overlay design while their triggers stay clickable above the
+  list layer. An open full-route picker now also owns a stacking context above the step action,
+  so a downward menu cannot be painted underneath the `Weitere Optionen` button.
+- Verification: typecheck, lint, `git diff --check`, 163 unit tests and live in-app verification
+  on both routes passed; the four picker menus opened and closed without selection, the full-route
+  preview remained mounted during a normal selection, an actual arrow-coordinate click closed the
+  open menu, and the color list remained topmost where it overlapped the step action. Targeted
+  Playwright could not launch Chromium because of the sandbox's macOS process restriction.
+- Follow-up: rerun the targeted Playwright interaction suite when the local runner is permitted.
+
+### CHG-20260814-01 — Harden mobile drawer for Safari focus and anchoring
+
+- Scope: mobile header drawer positioning, opening synchronization and pointer-close focus state.
+- Outcome: the panel is fixed to the dialog's right edge, starts closed synchronously before a
+  two-frame open transition, and a global pointer-versus-keyboard input modality prevents false
+  orange focus styling across menus and controls. Keyboard focus indication and focus return remain
+  available.
+- Verification: targeted TypeScript lint and `git diff --check` passed. Full typecheck/lint are
+  blocked by pre-existing errors in `mini-configurator.tsx`; Playwright is blocked by the shared
+  port and macOS Chromium process restrictions. Real Safari verification remains open.
+- Follow-up: verify open/close and focus behavior on the owner's Safari device.
+
 ### CHG-20260812-09 — Stable mobile menu drawer
 
 - Scope: mobile header wordmark, drawer entry/exit motion, scroll locking and accessibility.
@@ -40,6 +75,11 @@
   that runner unhydrated; the shared server was not restarted.
 - Follow-up: rerun the targeted mobile-navigation Playwright test when the shared dev runtime is
   healthy; no product-code follow-up is currently identified.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
 
 ### CHG-20260812-08 — Sequential full-width configurator
 
@@ -65,11 +105,6 @@
   in the shared local dev-server/font-storage hydration path and had no pricing assertion failure.
 - Follow-up: none for the pricing change; the unrelated local e2e hydration timeouts remain
   unverified.
-
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260812-06 — Compact fixed scene height
 

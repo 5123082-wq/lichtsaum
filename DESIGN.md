@@ -16,8 +16,11 @@ they do not decide publication. Concrete public actions follow
 
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
 - Current: production UI follows the approved dark architectural direction. The mobile menu uses
-  a two-way 260ms drawer transition, a separately fading backdrop and one unchanged header
-  wordmark; reduced motion removes lateral travel. The full configurator
+  a Safari-safe right-anchored two-way 260ms drawer transition, a separately fading backdrop and
+  one unchanged header wordmark; global input-modality handling prevents pointer-close focus
+  styling while keyboard focus remains visible, and reduced motion removes lateral travel. Real
+  Safari verification is open.
+  The full configurator
   opens with a fixed technical concept background that fades into the left background while intro
   content and the calculator scroll upward. Inside the calculator, one full-width preview precedes
   the compact three-step controls on desktop and mobile. Step 01 repeats the homepage

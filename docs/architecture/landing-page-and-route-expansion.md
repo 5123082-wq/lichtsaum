@@ -68,6 +68,9 @@ gallery, modal routing and Search boundaries
 
 - `/konfigurator` is a separate server-rendered German route with a three-step calculator, one
   authoritative pricing version and the shared project-inquiry form.
+- On 2026-08-14, step 01 and the homepage teaser use one shared accessible visual-picker
+  implementation for composition, font, awning color and light color; the route keeps its own
+  calculation, services and inquiry state.
 - The route is added to the production-gated sitemap but no deployment, Search Console submission,
   GTM publication or Ads activation is authorized by this implementation.
 
