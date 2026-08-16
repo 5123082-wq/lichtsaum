@@ -899,6 +899,56 @@ test("shows the local reference review gallery on the homepage and dedicated rou
   expect(html).toMatch(/noindex/i);
 });
 
+test("keeps the dedicated references page inside compact mobile viewports", async ({
+  page
+}) => {
+  for (const viewport of [
+    { width: 320, height: 800 },
+    { width: 375, height: 812 },
+    { width: 393, height: 852 },
+    { width: 414, height: 896 },
+    { width: 430, height: 932 },
+    { width: 480, height: 932 }
+  ]) {
+    await page.setViewportSize(viewport);
+
+    const response = await page.goto("/referenzen");
+    expect(response?.status()).toBe(200);
+
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+    });
+
+    const layout = await page.evaluate(() => {
+      const title = document.querySelector<HTMLElement>(
+        ".references-page__intro h1"
+      );
+      const media = document.querySelector<HTMLElement>(
+        ".references-page__media"
+      );
+      const titleBounds = title?.getBoundingClientRect();
+      const mediaBounds = media?.getBoundingClientRect();
+
+      return {
+        viewportWidth: document.documentElement.clientWidth,
+        scrollWidth: Math.max(
+          document.documentElement.scrollWidth,
+          document.body.scrollWidth
+        ),
+        titleRight: titleBounds?.right ?? Number.POSITIVE_INFINITY,
+        mediaAspectRatio:
+          mediaBounds && mediaBounds.height > 0
+            ? mediaBounds.width / mediaBounds.height
+            : Number.NaN
+      };
+    });
+
+    expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(layout.titleRight).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(layout.mediaAspectRatio).toBeCloseTo(4 / 3, 2);
+  }
+});
+
 test("configures the physical SVG valance and enforces its height limits", async ({
   page
 }) => {
