@@ -94,6 +94,14 @@ textarea {
   box-shadow: var(--focus-ring);
 }
 
+/* Safari may keep :focus-visible after a pointer click. The input modality
+   guard keeps focus styling for keyboard navigation without leaving an
+   interaction highlight behind after taps or mouse clicks. */
+html[data-input-modality="pointer"] :focus-visible {
+  outline: none;
+  box-shadow: none !important;
+}
+
 .container {
   width: min(100%, var(--container));
   margin-inline: auto;
@@ -573,15 +581,19 @@ textarea {
 }
 
 .mobile-menu__panel {
+  position: fixed;
+  inset: 0 0 0 auto;
   display: grid;
   grid-template-rows: var(--header-height) minmax(0, 1fr) auto;
   width: 77%;
-  min-height: 100dvh;
-  margin-left: auto;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
   border-left: 1px solid var(--border);
   background: var(--charcoal-deep);
   transform: translate3d(100%, 0, 0);
   transition: transform 260ms var(--ease-drawer);
+  will-change: transform;
 }
 
 .mobile-menu[data-state="open"] .mobile-menu__panel {
@@ -590,6 +602,14 @@ textarea {
 
 .mobile-menu__panel:focus {
   box-shadow: none;
+}
+
+html[data-input-modality="pointer"] .configurator-text-field input:focus,
+html[data-input-modality="pointer"] .full-configurator__field > input:focus,
+html[data-input-modality="pointer"] .full-configurator__field > select:focus,
+html[data-input-modality="pointer"] .full-configurator__postal-code > input:focus,
+html[data-input-modality="pointer"] .configurator-number-input:focus-within {
+  border-color: var(--border);
 }
 
 .mobile-menu__header {
@@ -2246,6 +2266,117 @@ textarea {
   opacity: 1;
 }
 
+/* Shared color picker used by the homepage and full configurator. */
+.configurator-color-picker {
+  position: relative;
+}
+
+.configurator-color-trigger {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  width: 100%;
+  min-height: 3.375rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--surface-low);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.configurator-color-trigger > svg {
+  margin-left: auto;
+  transition: transform 180ms ease-out;
+}
+
+.configurator-color-picker[data-open] .configurator-color-trigger {
+  border-color: var(--accent);
+}
+
+.configurator-color-picker[data-open] .configurator-color-trigger > svg {
+  transform: rotate(180deg);
+}
+
+.configurator-color-trigger:focus-visible,
+.configurator-color-listbox [role="option"]:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 0;
+  box-shadow: var(--focus-ring);
+}
+
+.configurator-color-listbox {
+  position: absolute;
+  z-index: 14;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+  max-height: min(19rem, calc(100dvh - 2rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.35rem;
+  border: 1px solid rgb(229 226 225 / 30%);
+  background: var(--charcoal-deep);
+}
+
+.configurator-color-listbox[hidden] {
+  display: none;
+}
+
+.configurator-color-listbox [role="option"] {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  min-height: 3.25rem;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.configurator-color-listbox [role="option"]:hover {
+  background: var(--surface-highest);
+  color: var(--text-primary);
+}
+
+.configurator-color-listbox [role="option"][aria-selected="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--charcoal-deep);
+}
+
+.configurator-color-listbox
+  [role="option"][aria-selected="true"]
+  .configurator-color-swatch {
+  border-color: rgb(15 15 15 / 45%);
+}
+
+.configurator-color-check {
+  opacity: 0;
+}
+
+.configurator-color-listbox
+  [role="option"][aria-selected="true"]
+  .configurator-color-check {
+  opacity: 1;
+}
+
 .configurator-field-error {
   margin: 0.65rem 0 0;
   color: var(--error);
@@ -3005,6 +3136,32 @@ textarea {
   color: var(--text-muted);
 }
 
+.full-configurator .configurator-composition-trigger,
+.full-configurator .configurator-font-trigger,
+.full-configurator .configurator-color-trigger {
+  position: relative;
+  z-index: 1;
+}
+
+.full-configurator
+  [data-configurator-picker][data-open] {
+  position: relative;
+  z-index: 40;
+}
+
+/* The open listbox is absolutely positioned and therefore does not reserve
+   grid-row height. Keep its whole step above the following action row when
+   those two boxes overlap. */
+.full-configurator__step:has([data-configurator-picker][data-open]) {
+  position: relative;
+  z-index: 30;
+}
+
+.full-configurator__step-actions {
+  position: relative;
+  z-index: 0;
+}
+
 .full-configurator__summary-price > p {
   margin: 0;
   color: var(--text-muted);
@@ -3223,15 +3380,6 @@ textarea {
   line-height: 1.45;
 }
 
-.full-configurator__calculation-message {
-  min-height: 2.8rem;
-  padding: 0.8rem 1rem;
-  border-left: 3px solid var(--accent);
-  background: rgb(255 92 0 / 7%);
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
 .full-configurator__step-actions,
 .full-configurator__summary-actions {
   display: grid;
@@ -3264,29 +3412,6 @@ textarea {
   > legend
   + .configurator-select-field {
   margin-top: 0;
-}
-
-.full-configurator__compact-select {
-  width: 100%;
-  min-height: 3.375rem;
-  padding: 0.75rem 2.5rem 0.75rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: 0;
-  outline: 0;
-  background: var(--surface-low);
-  color: var(--text-primary);
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-.full-configurator__compact-select:hover {
-  border-color: rgb(229 226 225 / 48%);
-  background: var(--surface);
-}
-
-.full-configurator__compact-select:focus-visible {
-  border-color: var(--accent);
-  box-shadow: var(--focus-ring);
 }
 
 .full-configurator__services-block {
@@ -4946,6 +5071,7 @@ textarea {
 
   .configurator-composition-trigger,
   .configurator-font-trigger,
+  .configurator-color-trigger,
   .configurator-awning-color-trigger,
   .configurator-light-color-trigger,
   .configurator-number-input,
@@ -4956,6 +5082,7 @@ textarea {
   .configurator-composition-listbox
     [role="option"][aria-selected="true"],
   .configurator-font-listbox [role="option"][aria-selected="true"],
+  .configurator-color-listbox [role="option"][aria-selected="true"],
   .configurator-awning-color-listbox [role="option"][aria-selected="true"],
   .configurator-light-color-listbox [role="option"][aria-selected="true"] {
     outline: 2px solid Highlight;

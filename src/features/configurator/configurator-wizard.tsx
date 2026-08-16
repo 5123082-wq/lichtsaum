@@ -10,6 +10,10 @@ import {
 
 import { calculateConfigurator } from "@/features/configurator/actions";
 import { loadConfiguratorFont } from "@/features/configurator/client-font";
+import {
+  ConfiguratorPicker,
+  ConfiguratorPickerGroup
+} from "@/features/configurator/configurator-picker";
 import { ConfiguratorPreview } from "@/features/configurator/configurator-preview";
 import {
   CONFIGURATOR_AWNING_COLORS,
@@ -45,13 +49,18 @@ type ConfiguratorDraft = Omit<
     letterHeightMm: NumericDraft;
   }>;
 
+type ReadyCalculationState = Readonly<{
+  status: "ready";
+  configuration: ConfiguratorConfigurationV1;
+  calculation: ConfiguratorCalculation;
+}>;
+
 type CalculationState =
+  | ReadyCalculationState
   | Readonly<{
-      status: "ready";
-      configuration: ConfiguratorConfigurationV1;
-      calculation: ConfiguratorCalculation;
+      status: "loading";
+      previous: ReadyCalculationState | null;
     }>
-  | Readonly<{ status: "loading" }>
   | Readonly<{ status: "invalid"; message: string }>
   | Readonly<{ status: "unavailable"; message: string }>;
 
@@ -113,6 +122,20 @@ function toConfiguration(
 
 function configurationKey(configuration: ConfiguratorConfigurationV1) {
   return JSON.stringify(configuration);
+}
+
+function loadingCalculationState(
+  state: CalculationState
+): Extract<CalculationState, { status: "loading" }> {
+  return {
+    status: "loading",
+    previous:
+      state.status === "ready"
+        ? state
+        : state.status === "loading"
+          ? state.previous
+          : null
+  };
 }
 
 function initialCalculationState(
@@ -327,14 +350,18 @@ export function ConfiguratorWizard({
     calculationState.status === "ready" &&
     currentConfigurationKey !== null &&
     configurationKey(calculationState.configuration) === currentConfigurationKey;
+  const previewCalculation =
+    calculationState.status === "ready"
+      ? calculationState
+      : calculationState.status === "loading"
+        ? calculationState.previous
+        : null;
+  const showPreview =
+    previewCalculation !== null &&
+    fontState !== "error" &&
+    (calculationIsReady || calculationState.status === "loading");
   const canContinue =
     calculationIsReady && fontState === "ready" && postalCodeIsValid;
-  const showCalculationStatus =
-    fontState === "error" ||
-    calculationState.status === "invalid" ||
-    calculationState.status === "unavailable" ||
-    !calculationIsReady ||
-    fontState !== "ready";
 
   useEffect(() => {
     let cancelled = false;
@@ -365,7 +392,9 @@ export function ConfiguratorWizard({
         if (storedKey !== initialKey) {
           calculationRequestIdRef.current += 1;
           calculatedConfigurationKeyRef.current = null;
-          setCalculationState({ status: "loading" });
+          setCalculationState((currentState) =>
+            loadingCalculationState(currentState)
+          );
         }
       }
 
@@ -498,9 +527,9 @@ export function ConfiguratorWizard({
     calculationRequestIdRef.current += 1;
     calculatedConfigurationKeyRef.current = null;
     setDraft(nextDraft);
-    setCalculationState(
+    setCalculationState((currentState) =>
       nextConfiguration
-        ? { status: "loading" }
+        ? loadingCalculationState(currentState)
         : {
             status: "invalid",
             message: "Bitte prüfen Sie die markierten Angaben."
@@ -575,12 +604,16 @@ export function ConfiguratorWizard({
             <span>Live / serverberechnet</span>
           </p>
 
-          {calculationIsReady && fontState === "ready" ? (
+          {showPreview && previewCalculation ? (
             <ConfiguratorPreview
-              configuration={calculationState.configuration}
-              geometry={calculationState.calculation.geometry}
-              measurement={calculationState.calculation.measurement}
-              statusText="Vorschau ist berechnet."
+              configuration={previewCalculation.configuration}
+              geometry={previewCalculation.calculation.geometry}
+              measurement={previewCalculation.calculation.measurement}
+              statusText={
+                calculationState.status === "loading"
+                  ? "Vorschau wird aktualisiert."
+                  : "Vorschau ist berechnet."
+              }
             />
           ) : (
             <div
@@ -647,6 +680,7 @@ export function ConfiguratorWizard({
                 </p>
               </div>
 
+              <ConfiguratorPickerGroup>
               <div className="configurator-controls full-configurator__base-controls">
                 <fieldset
                   aria-label="01 Gestaltung"
@@ -656,28 +690,26 @@ export function ConfiguratorWizard({
                     <span>01</span> Gestaltung
                   </legend>
 
-                  <div className="configurator-select-field">
-                    <label htmlFor="configurator-composition">
-                      Komposition
-                    </label>
-                    <select
-                      className="full-configurator__compact-select"
+                  <div className="configurator-composition-field">
+                    <span>Komposition</span>
+                    <ConfiguratorPicker
+                      ariaLabel={`Komposition: ${compositionsById.get(draft.compositionMode)?.label ?? draft.compositionMode}`}
+                      describedBy={
+                        draft.compositionMode === "text-only"
+                          ? undefined
+                          : "configurator-composition-note"
+                      }
                       id="configurator-composition"
-                      onChange={(event) =>
+                      kind="composition"
+                      onChange={(value) =>
                         updateDraft(
                           "compositionMode",
-                          event.currentTarget
-                            .value as ConfiguratorConfigurationV1["compositionMode"]
+                          value as ConfiguratorConfigurationV1["compositionMode"]
                         )
                       }
+                      options={CONFIGURATOR_COMPOSITION_MODES}
                       value={draft.compositionMode}
-                    >
-                      {CONFIGURATOR_COMPOSITION_MODES.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
 
                   <div className="configurator-text-field">
@@ -709,29 +741,27 @@ export function ConfiguratorWizard({
                   </div>
 
                   <div className="configurator-select-field">
-                    <label htmlFor="configurator-font">Schriftstil</label>
-                    <select
-                      className="full-configurator__compact-select"
+                    <span>Schriftstil</span>
+                    <ConfiguratorPicker
+                      ariaLabel={`Schriftstil: ${selectedFont.label} · ${selectedFont.direction}`}
                       id="configurator-font"
-                      onChange={(event) =>
+                      kind="font"
+                      onChange={(value) =>
                         updateDraft(
                           "fontId",
-                          event.currentTarget
-                            .value as ConfiguratorConfigurationV1["fontId"]
+                          value as ConfiguratorConfigurationV1["fontId"]
                         )
                       }
+                      options={CONFIGURATOR_FONTS}
                       value={draft.fontId}
-                    >
-                      {CONFIGURATOR_FONTS.map((font) => (
-                        <option key={font.id} value={font.id}>
-                          {font.label} — {font.direction}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
 
                   {draft.compositionMode !== "text-only" ? (
-                    <p className="configurator-composition-note">
+                    <p
+                      className="configurator-composition-note"
+                      id="configurator-composition-note"
+                    >
                       Das Logo wird schematisch dargestellt. Die finale Datei
                       wird separat geprüft.
                     </p>
@@ -871,70 +901,48 @@ export function ConfiguratorWizard({
                     <span>03</span> Farbe &amp; Licht
                   </legend>
 
-                  <div className="configurator-select-field">
-                    <label htmlFor="configurator-awning-color">
+                  <div className="configurator-option-block">
+                    <span className="configurator-option-label">
                       Markisenfarbe
-                    </label>
-                    <select
-                      className="full-configurator__compact-select"
+                    </span>
+                    <ConfiguratorPicker
+                      ariaLabel={`Markisenfarbe: ${awningColorsById.get(draft.awningColorId)?.label ?? draft.awningColorId}`}
                       id="configurator-awning-color"
-                      onChange={(event) =>
+                      kind="color"
+                      listboxLabel="Markisenfarbe auswählen"
+                      onChange={(value) =>
                         updateDraft(
                           "awningColorId",
-                          event.currentTarget
-                            .value as ConfiguratorConfigurationV1["awningColorId"]
+                          value as ConfiguratorConfigurationV1["awningColorId"]
                         )
                       }
+                      options={CONFIGURATOR_AWNING_COLORS}
                       value={draft.awningColorId}
-                    >
-                      {CONFIGURATOR_AWNING_COLORS.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
 
-                  <div className="configurator-select-field">
-                    <label htmlFor="configurator-light-color">
+                  <div className="configurator-option-block">
+                    <span className="configurator-option-label">
                       Lichtwirkung
-                    </label>
-                    <select
-                      className="full-configurator__compact-select"
+                    </span>
+                    <ConfiguratorPicker
+                      ariaLabel={`Lichtwirkung: ${lightColorsById.get(draft.lightColorId)?.label ?? draft.lightColorId}`}
                       id="configurator-light-color"
-                      onChange={(event) =>
+                      kind="color"
+                      listboxLabel="Lichtwirkung auswählen"
+                      onChange={(value) =>
                         updateDraft(
                           "lightColorId",
-                          event.currentTarget
-                            .value as ConfiguratorConfigurationV1["lightColorId"]
+                          value as ConfiguratorConfigurationV1["lightColorId"]
                         )
                       }
+                      options={CONFIGURATOR_LIGHT_COLORS}
                       value={draft.lightColorId}
-                    >
-                      {CONFIGURATOR_LIGHT_COLORS.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
                 </fieldset>
               </div>
-
-              {showCalculationStatus ? (
-                <div
-                  className="full-configurator__calculation-message"
-                  role="status"
-                  aria-live="polite"
-                >
-                  {fontState === "error"
-                    ? "Die ausgewählte Schrift konnte nicht geladen werden."
-                    : calculationState.status === "invalid" ||
-                        calculationState.status === "unavailable"
-                      ? calculationState.message
-                      : "Komposition wird geprüft …"}
-                </div>
-              ) : null}
+              </ConfiguratorPickerGroup>
 
               <div className="full-configurator__step-actions full-configurator__step-actions--forward">
                 <button
