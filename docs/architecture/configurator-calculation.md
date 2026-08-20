@@ -3,7 +3,7 @@
 <!-- AGENT_BRIEF:START -->
 ## Agent brief
 - Owns: размерные ограничения, внутренние компонентные inputs, серверный pricing version и scope отображаемого результата конфигуратора.
-- Current: pricing `2026-08-12.v2` применяет server-only надбавку +100%; клиент получает только итоговую цену и расчётные геометрические данные.
+- Current: pricing `2026-08-20.v3` применяет server-only компонентные коэффициенты: электрический комплект +25%, готовый Volant +25%, LED-панели +100%; клиент получает только итоговую цену и расчётные геометрические данные.
 - Open: техническая совместимость, поставщик, монтаж/электрика, consumer/PAngV и публичное расширение цены остаются отдельными вопросами.
 - Read full when: меняются inputs, формула, версия цены, границы результата или persistence contract.
 <!-- AGENT_BRIEF:END -->
@@ -11,15 +11,15 @@
 Status: `Decision`; full server-authoritative calculation implemented locally under restricted
 public claim CLM-029
 
-Last reviewed: 2026-08-12
+Last reviewed: 2026-08-20
 
 Publication choices follow [`publication-governance.md`](publication-governance.md). The claim and
 legal boundaries below are facts to show the owner; they do not autonomously block publication.
 
 Этот документ — единственный источник истины для размерных ограничений конфигуратора,
 компонентных стоимостей и версии предварительного расчёта. Значения подтверждены владельцем
-2026-08-06; явный implementation plan от 2026-08-11, обновлённый распоряжением владельца от
-2026-08-12, разрешил показывать итоговую коммерческую цену на основе этих значений как
+2026-08-06; явный implementation plan от 2026-08-11, обновлённый распоряжениями владельца от
+2026-08-12 и 2026-08-20, разрешил показывать итоговую коммерческую цену на основе этих значений как
 ограниченный `/konfigurator` B2B-netto result. Это не общий клиентский тариф, проверка
 совместимости или обязательное предложение.
 
@@ -59,17 +59,17 @@ range.
 
 ## Implemented pricing version
 
-- `pricingVersion`: `2026-08-12.v2`;
-- server-only commercial coefficient: `100%`;
+- `pricingVersion`: `2026-08-20.v3`;
+- server-only component coefficients: electrical set `25%`, finished valance `25%`, selected panels `100%`;
 - all money arithmetic: integer euro cents;
 - electrical set: `10_000` cents fixed;
 - finished valance: `4` cents per full-width millimetre;
 - selected panel cost: internal catalog above;
-- displayed result: (electrical set + valance + panels) × 2.
+- displayed result: electrical set × `1.25` + finished valance × `1.25` + selected panels × `2`.
 
-The commercial coefficient is intentionally not part of the client-facing calculation result.
+The component coefficients are intentionally not part of the client-facing calculation result.
 The browser receives the authoritative total and panel allocation, but not the component cost
-inputs or the coefficient itself. Future coefficient changes must update `pricingVersion`.
+inputs or the coefficients themselves. Future coefficient changes must update `pricingVersion`.
 
 Selected design, delivery, site measurement, old-valance removal, new-valance installation and
 electrical connection are recorded for manual review and never change this version's displayed
@@ -92,9 +92,9 @@ The authoritative internal component subtotal is:
 
 `EUR 100 + (Volantbreite in m × EUR 40) + selected panel cost`
 
-The displayed net price is the internal subtotal after the server-only commercial coefficient:
+The displayed net price applies the server-only component coefficients to the internal inputs:
 
-`internal component subtotal × 2`
+`EUR 100 × 1.25 + (Volantbreite in m × EUR 40) × 1.25 + selected panel cost × 2`
 
 Maximum panel count, physical joints and mounting gaps remain `TBD`; v1 therefore does not claim
 technical compatibility and routes the result to project review. The solver itself has no arbitrary
@@ -122,7 +122,7 @@ conversion and the application does not log its body. On explicit shared-form su
 validates the raw configuration again, repeats measurement/geometry/pricing and persists only its
 own result in the optional versioned `leads.request_context` snapshot.
 
-If the submitted confirmation version differs from `2026-08-12.v2`, the server returns the current
+If the submitted confirmation version differs from `2026-08-20.v3`, the server returns the current
 authoritative calculation before any lead insert. The UI replaces the displayed result and requires
 an explicit new confirmation.
 

@@ -1,6 +1,6 @@
 # Architecture Decision Log
 
-Last reviewed: 2026-08-11
+Last reviewed: 2026-08-20
 
 Этот файл хранит решения и причины, но не текущий статус выполнения.
 
@@ -22,6 +22,7 @@ Last reviewed: 2026-08-11
 | ADR-014 | 2026-08-11 | Accepted | Use one lead system and one Primary Ads conversion across plain, configurator and calculator inquiries |
 | ADR-015 | 2026-08-11 | Accepted; publication limits superseded | Implement `/konfigurator` with server-reproduced restricted B2B-net pricing |
 | ADR-016 | 2026-08-11 | Accepted | Owner controls every publication decision; repository-imposed release blockers are cancelled |
+| ADR-018 | 2026-08-20 | Accepted by explicit owner request | Use component-specific server-only pricing coefficients calibrated against the observed competitor marginal-price model |
 
 ## ADR-001 — Stitch boundary
 
@@ -152,6 +153,22 @@ behavior and remains replaceable until CMP/legal choices are final.
   VAT, services excluded and non-binding; it does not disclose internal cost structure.
 - Verification: `configurator-calculation.md`, `claims-and-evidence-register.md`,
   `src/features/configurator/pricing.ts` and the configurator/lead unit tests.
+
+## ADR-018 — Component-specific pricing coefficients
+
+- Date: 2026-08-20
+- Status: Accepted by explicit owner request
+- Context: the observed competitor matrix increased by approximately EUR 50 per metre of total
+  Volant width and EUR 450 per metre of illuminated zone. The uniform 100% increase made the
+  LICHTSAUM width component grow too quickly relative to that benchmark.
+- Decision: keep all coefficients server-only and apply `25%` to the electrical set, `25%` to the
+  finished Volant and `100%` to selected LED panels. Bump the pricing version to `2026-08-20.v3`.
+  Do not expose component costs or coefficients in the client-facing result.
+- Consequences: the default 3000 mm / 1000 mm-panel reference falls from EUR 840 to EUR 675 net
+  before manually priced services. The change is a market-calibration decision, not evidence of
+  supplier costs or technical compatibility; those remain separate open questions.
+- Verification: `configurator-calculation.md`, `src/features/configurator/pricing.ts`, the
+  pricing unit tests and the server-authoritative calculation tests.
 
 ## New decision template
 

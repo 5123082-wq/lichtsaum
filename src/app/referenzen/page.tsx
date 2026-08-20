@@ -26,7 +26,7 @@ const visibility = getReferenceGalleryVisibility(
 const orderedReferences = orderReferenceProjects(referenceGallery.items);
 
 export function generateMetadata(): Metadata {
-  const title = `Galerie | ${siteConfig.name}`;
+  const title = `Referenzen | ${siteConfig.name}`;
   const description =
     "Ausgewählte Ansichten beleuchteter Markisen-Volants in unterschiedlichen Objekt- und Einbausituationen.";
 

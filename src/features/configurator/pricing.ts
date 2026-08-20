@@ -5,10 +5,12 @@ import type {
   ConfiguratorPanelCounts
 } from "@/features/configurator/types";
 
-export const CONFIGURATOR_PRICING_VERSION = "2026-08-12.v2" as const;
-// Keep the commercial coefficient server-only. It must never be exposed as
+export const CONFIGURATOR_PRICING_VERSION = "2026-08-20.v3" as const;
+// Keep the commercial coefficients server-only. They must never be exposed as
 // part of the client-facing calculation result.
-export const CONFIGURATOR_MARKUP_PERCENT = 100 as const;
+export const CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT = 25 as const;
+export const CONFIGURATOR_VALANCE_MARKUP_PERCENT = 25 as const;
+export const CONFIGURATOR_PANEL_MARKUP_PERCENT = 100 as const;
 
 const ELECTRICAL_SET_CENTS = 10_000;
 const FINISHED_VALANCE_CENTS_PER_MM = 4;
@@ -171,17 +173,32 @@ export function calculateConfiguratorNet(
     return null;
   }
 
+  const electricalCents = applyMarkupCents(
+    ELECTRICAL_SET_CENTS,
+    CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT
+  );
   const valanceCents = valanceWidthMm * FINISHED_VALANCE_CENTS_PER_MM;
-  const subtotalCents =
-    ELECTRICAL_SET_CENTS +
-    valanceCents +
-    pricedAllocation.panelCostCents;
-  const netTotalCents = applyMarkupCents(
-    subtotalCents,
-    CONFIGURATOR_MARKUP_PERCENT
+  const markedUpValanceCents = applyMarkupCents(
+    valanceCents,
+    CONFIGURATOR_VALANCE_MARKUP_PERCENT
+  );
+  const markedUpPanelCostCents = applyMarkupCents(
+    pricedAllocation.panelCostCents,
+    CONFIGURATOR_PANEL_MARKUP_PERCENT
   );
 
-  if (netTotalCents === null) {
+  if (
+    electricalCents === null ||
+    markedUpValanceCents === null ||
+    markedUpPanelCostCents === null
+  ) {
+    return null;
+  }
+
+  const netTotalCents =
+    electricalCents + markedUpValanceCents + markedUpPanelCostCents;
+
+  if (!Number.isSafeInteger(netTotalCents)) {
     return null;
   }
 

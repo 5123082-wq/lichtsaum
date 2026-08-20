@@ -26,7 +26,7 @@ const configuration = {
 } as const satisfies ConfiguratorConfigurationV1;
 
 const calculation = {
-  pricingVersion: "2026-08-12.v2",
+  pricingVersion: "2026-08-20.v3",
   netTotalCents: 67_000,
   measurement: {
     text: configuration.text,

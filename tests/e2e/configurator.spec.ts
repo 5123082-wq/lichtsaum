@@ -2,13 +2,26 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test("serves a substantive server-rendered configurator route", async ({
-  page
+  page,
+  request
 }) => {
+  const serverResponse = await request.get("/konfigurator?utm_source=qa");
+  const serverHtml = await serverResponse.text();
+
+  expect(serverResponse.status()).toBe(200);
+  expect(serverHtml).toContain("Was der Konfigurator berechnet");
+  expect(serverHtml).toContain(
+    "Was der vorläufige Nettopreis nicht umfasst"
+  );
+  expect(serverHtml).toContain("Warum der Projekt-Check folgt");
+  expect(serverHtml).toContain('href="/#eignung"');
+  expect(serverHtml).toContain('href="/referenzen"');
+
   const response = await page.goto("/konfigurator?utm_source=qa");
 
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle(
-    "Leuchtvolant konfigurieren | LICHTSAUM"
+    "Leuchtvolant konfigurieren: vorläufiger Preis | LICHTSAUM"
   );
   await expect(
     page.getByRole("heading", {
@@ -18,19 +31,36 @@ test("serves a substantive server-rendered configurator route", async ({
   ).toBeVisible();
   await expect(page.locator(".configurator-intro__image")).toHaveAttribute(
     "src",
-    /lichtsaum-konfigurator-markise-leuchtvolant-konzept\.webp/
+    "/images/lichtsaum-konfigurator-header-technical.png"
   );
   await expect(page.locator(".configurator-intro__image")).toHaveAttribute(
     "alt",
-    "Dunkle technische Konzeptzeichnung einer Markise mit beleuchtetem Leuchtvolant vor einer Fassade."
+    "Dunkle technische Konzeptzeichnung einer Markise mit Maßangaben für Volanthöhe und Volantlänge."
   );
   await expect(page.getByText(/gewerbliches Projekt zusammen/i)).toHaveCount(
     0
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
-    /Leuchtvolant für Ihr Projekt konfigurieren/i
+    "Leuchtvolant für eine bestehende Gewerbemarkise konfigurieren, vorläufigen Nettopreis erhalten und das konkrete Projekt anschließend prüfen lassen."
   );
+  await expect(
+    page.getByRole("heading", {
+      level: 2,
+      name: "Was der Konfigurator berechnet"
+    })
+  ).toBeVisible();
+  await expect(
+    page.locator(".full-configurator + .configurator-page__technical")
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: "Eignung bestehender Gewerbemarkisen einordnen"
+    })
+  ).toHaveAttribute("href", "/#eignung");
+  await expect(
+    page.getByRole("link", { name: "Beispiele für Leuchtvolants ansehen" })
+  ).toHaveAttribute("href", "/referenzen");
 
   // Local development follows the central environment policy and adds no
   // deployment canonical. The route metadata supplies /konfigurator once the

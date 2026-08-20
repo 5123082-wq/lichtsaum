@@ -155,10 +155,16 @@ export type ConfiguratorTechnicalSpecRow = Readonly<{
   value: string;
 }>;
 
+export type ConfiguratorTechnicalLink = Readonly<{
+  href: "/#eignung" | "/referenzen";
+  label: string;
+}>;
+
 export type ConfiguratorTechnicalSection = Readonly<{
   title: string;
   intro?: string;
   specRows?: readonly ConfiguratorTechnicalSpecRow[];
   notes?: readonly string[];
+  links?: readonly ConfiguratorTechnicalLink[];
   claimIds?: readonly string[];
 }>;

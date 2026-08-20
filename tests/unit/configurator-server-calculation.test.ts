@@ -54,6 +54,7 @@ describe("authoritative configurator calculation", () => {
       expect(result.calculation.pricingVersion).toBe(
         CONFIGURATOR_PRICING_VERSION
       );
+      expect(result.calculation.netTotalCents).toBe(67_500);
       expect(result.calculation).not.toHaveProperty("markupPercent");
       expect(Number.isSafeInteger(result.calculation.netTotalCents)).toBe(true);
       expect(result.calculation.geometry.issues).toEqual([]);

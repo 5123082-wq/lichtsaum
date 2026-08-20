@@ -19,15 +19,22 @@ describe("configurator search contract", () => {
     const metadata = generateMetadata();
     const entries = sitemap();
 
-    expect(metadata.title).toBe("Leuchtvolant konfigurieren | LICHTSAUM");
+    expect(metadata.title).toBe(
+      "Leuchtvolant konfigurieren: vorläufiger Preis | LICHTSAUM"
+    );
+    expect(metadata.description).toBe(
+      "Leuchtvolant für eine bestehende Gewerbemarkise konfigurieren, vorläufigen Nettopreis erhalten und das konkrete Projekt anschließend prüfen lassen."
+    );
     expect(metadata.alternates).toEqual({ canonical: "/konfigurator" });
     expect(metadata.openGraph).toMatchObject({
-      title: "Leuchtvolant konfigurieren | LICHTSAUM",
+      title:
+        "Leuchtvolant konfigurieren: vorläufiger Preis | LICHTSAUM",
       url: "/konfigurator"
     });
     expect(metadata.twitter).toMatchObject({
       card: "summary_large_image",
-      title: "Leuchtvolant konfigurieren | LICHTSAUM"
+      title:
+        "Leuchtvolant konfigurieren: vorläufiger Preis | LICHTSAUM"
     });
     expect(
       entries.filter(
@@ -35,6 +42,30 @@ describe("configurator search contract", () => {
       )
     ).toHaveLength(1);
     expect(entries.some((entry) => entry.url.includes("?"))).toBe(false);
+  });
+
+  it("keeps the approved lower content and contextual links server-owned", async () => {
+    const { configuratorPageContent } = await import(
+      "@/content/configurator.de"
+    );
+
+    expect(
+      configuratorPageContent.technicalSections.map((section) => section.title)
+    ).toEqual([
+      "Was der Konfigurator berechnet",
+      "Was der vorläufige Nettopreis nicht umfasst",
+      "Warum der Projekt-Check folgt"
+    ]);
+    expect(configuratorPageContent.technicalSections[2]?.links).toEqual([
+      {
+        href: "/#eignung",
+        label: "Eignung bestehender Gewerbemarkisen einordnen"
+      },
+      {
+        href: "/referenzen",
+        label: "Beispiele für Leuchtvolants ansehen"
+      }
+    ]);
   });
 
   it("publishes route-specific Twitter metadata for public routes", async () => {
@@ -63,7 +94,7 @@ describe("configurator search contract", () => {
     ];
     const expectedTitles = [
       "Kontakt | LICHTSAUM",
-      "Galerie | LICHTSAUM",
+      "Referenzen | LICHTSAUM",
       "Impressum | LICHTSAUM",
       "Datenschutzerklärung | LICHTSAUM"
     ];

@@ -42,6 +42,7 @@ Last reviewed: 2026-08-11
 | Crawl, index, metadata, sitemap | `seo/search-foundation.md` |
 | JSON-LD / Schema.org | `seo/structured-data.md` |
 | Keywords и landing-page map | `seo/search-intent-map.md` |
+| Утверждённая SEO-итерация `/konfigurator` и `/referenzen` | `seo/configurator-references-implementation-plan.md` |
 
 ## Ownership
 
@@ -62,6 +63,7 @@ Last reviewed: 2026-08-11
 | Event names and parameters | `marketing/measurement-plan.md` |
 | Search/indexing policy | `seo/search-foundation.md` |
 | Structured data mapping | `seo/structured-data.md` |
+| Approved `/konfigurator` and `/referenzen` SEO implementation sequence | `seo/configurator-references-implementation-plan.md` |
 | Data flows and consent | `legal/data-processing-and-consent.md` |
 | Decisions and consequences | `architecture/decision-log.md` |
 
