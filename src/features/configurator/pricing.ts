@@ -5,7 +5,7 @@ import type {
   ConfiguratorPanelCounts
 } from "@/features/configurator/types";
 
-export const CONFIGURATOR_PRICING_VERSION = "2026-08-20.v3" as const;
+export const CONFIGURATOR_PRICING_VERSION = "2026-08-20.v4" as const;
 // Keep the commercial coefficients server-only. They must never be exposed as
 // part of the client-facing calculation result.
 export const CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT = 25 as const;
@@ -21,12 +21,9 @@ const PANEL_CATALOG = [
   { lengthMm: 1200, costCents: 25_000 }
 ] as const;
 
-type Candidate = Readonly<{
-  costCents: number;
-  totalLengthMm: number;
-  panelCount: number;
-  counts: ConfiguratorPanelCounts;
-}>;
+function roundMillimeters(value: number): number {
+  return Math.round(value * 1_000_000) / 1_000_000;
+}
 
 export type ConfiguratorPricedPanelAllocation = Readonly<{
   allocation: ConfiguratorPanelAllocation;
@@ -38,102 +35,148 @@ export type ConfiguratorNetCalculation = Readonly<{
   panelAllocation: ConfiguratorPanelAllocation;
 }>;
 
-function isBetterCandidate(
-  candidate: Candidate,
-  current: Candidate | null
-): boolean {
-  if (!current) {
-    return true;
-  }
-
-  if (candidate.costCents !== current.costCents) {
-    return candidate.costCents < current.costCents;
-  }
-
-  if (candidate.totalLengthMm !== current.totalLengthMm) {
-    return candidate.totalLengthMm < current.totalLengthMm;
-  }
-
-  if (candidate.panelCount !== current.panelCount) {
-    return candidate.panelCount < current.panelCount;
-  }
-
-  // The specified tie-breaks are exhausted. Prefer longer panels to keep the
-  // otherwise equivalent result deterministic across runtimes.
-  if (candidate.counts[1200] !== current.counts[1200]) {
-    return candidate.counts[1200] > current.counts[1200];
-  }
-
-  return candidate.counts[1000] > current.counts[1000];
-}
-
 export function selectOptimalPanelAllocation(
   requiredLengthMm: number
 ): ConfiguratorPricedPanelAllocation | null {
-  if (!Number.isFinite(requiredLengthMm) || requiredLengthMm <= 0) {
+  if (
+    !Number.isFinite(requiredLengthMm) ||
+    requiredLengthMm <= 0 ||
+    requiredLengthMm > Number.MAX_SAFE_INTEGER
+  ) {
     return null;
   }
 
-  let best: Candidate | null = null;
+  const maximumPanelCount = Math.ceil(requiredLengthMm / PANEL_CATALOG[0].lengthMm);
 
-  // Five 600 mm panels are strictly dominated by three 1000 mm panels;
-  // five 1200 mm panels are strictly dominated by six 1000 mm panels.
-  // Therefore every optimum has at most four of either outer size, while
-  // the unrestricted 1000 mm count covers arbitrarily long compositions.
-  for (let count600 = 0; count600 <= 4; count600 += 1) {
-    for (let count1200 = 0; count1200 <= 4; count1200 += 1) {
-      const outerLengthMm = count600 * 600 + count1200 * 1200;
-      const remainingLengthMm = Math.max(
-        0,
-        requiredLengthMm - outerLengthMm
-      );
-      const count1000 = Math.ceil(remainingLengthMm / 1000);
-      const counts: ConfiguratorPanelCounts = {
-        600: count600,
-        1000: count1000,
-        1200: count1200
-      };
-      const totalLengthMm = outerLengthMm + count1000 * 1000;
-      const panelCount = count600 + count1000 + count1200;
-      const costCents =
-        count600 * PANEL_CATALOG[0].costCents +
-        count1000 * PANEL_CATALOG[1].costCents +
-        count1200 * PANEL_CATALOG[2].costCents;
+  for (let panelCount = 1; panelCount <= maximumPanelCount; panelCount += 1) {
+    // Prefer one complete panel, then two equal panels, then three equal
+    // panels, etc. Within that count, use the smallest panel size that fits.
+    const panel = PANEL_CATALOG.find(
+      (candidate) => panelCount * candidate.lengthMm >= requiredLengthMm
+    );
 
-      if (
-        !Number.isSafeInteger(totalLengthMm) ||
-        !Number.isSafeInteger(panelCount) ||
-        !Number.isSafeInteger(costCents)
-      ) {
-        continue;
-      }
+    if (!panel) {
+      continue;
+    }
 
-      const candidate: Candidate = {
-        costCents,
+    const totalLengthMm = panelCount * panel.lengthMm;
+    const panelCostCents = panelCount * panel.costCents;
+
+    if (
+      !Number.isSafeInteger(totalLengthMm) ||
+      !Number.isSafeInteger(panelCostCents)
+    ) {
+      return null;
+    }
+
+    const counts: ConfiguratorPanelCounts = {
+      600: panel.lengthMm === 600 ? panelCount : 0,
+      1000: panel.lengthMm === 1000 ? panelCount : 0,
+      1200: panel.lengthMm === 1200 ? panelCount : 0
+    };
+
+    return {
+      allocation: {
+        requiredLengthMm,
         totalLengthMm,
+        wasteMm: totalLengthMm - requiredLengthMm,
         panelCount,
         counts
-      };
-
-      if (isBetterCandidate(candidate, best)) {
-        best = candidate;
-      }
-    }
+      },
+      panelCostCents
+    };
   }
 
-  if (!best) {
+  return null;
+}
+
+export function calculateConfiguratorNet(
+  valanceWidthMm: number,
+  requiredPanelLengthsMm: readonly number[]
+): ConfiguratorNetCalculation | null {
+  if (
+    !Number.isSafeInteger(valanceWidthMm) ||
+    valanceWidthMm < 1 ||
+    requiredPanelLengthsMm.length === 0
+  ) {
+    return null;
+  }
+
+  const aggregateCounts = {
+    600: 0,
+    1000: 0,
+    1200: 0
+  };
+  let requiredLengthMm = 0;
+  let totalLengthMm = 0;
+  let panelCount = 0;
+  let panelCostCents = 0;
+
+  for (const requiredLength of requiredPanelLengthsMm) {
+    const pricedAllocation = selectOptimalPanelAllocation(requiredLength);
+
+    if (!pricedAllocation) {
+      return null;
+    }
+
+    requiredLengthMm += pricedAllocation.allocation.requiredLengthMm;
+    totalLengthMm += pricedAllocation.allocation.totalLengthMm;
+    panelCount += pricedAllocation.allocation.panelCount;
+    panelCostCents += pricedAllocation.panelCostCents;
+    aggregateCounts[600] += pricedAllocation.allocation.counts[600];
+    aggregateCounts[1000] += pricedAllocation.allocation.counts[1000];
+    aggregateCounts[1200] += pricedAllocation.allocation.counts[1200];
+  }
+
+  if (
+    !Number.isFinite(requiredLengthMm) ||
+    !Number.isSafeInteger(totalLengthMm) ||
+    !Number.isSafeInteger(panelCount) ||
+    !Number.isSafeInteger(panelCostCents)
+  ) {
+    return null;
+  }
+
+  const roundedRequiredLengthMm = roundMillimeters(requiredLengthMm);
+
+  const electricalCents = applyMarkupCents(
+    ELECTRICAL_SET_CENTS,
+    CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT
+  );
+  const valanceCents = valanceWidthMm * FINISHED_VALANCE_CENTS_PER_MM;
+  const markedUpValanceCents = applyMarkupCents(
+    valanceCents,
+    CONFIGURATOR_VALANCE_MARKUP_PERCENT
+  );
+  const markedUpPanelCostCents = applyMarkupCents(
+    panelCostCents,
+    CONFIGURATOR_PANEL_MARKUP_PERCENT
+  );
+
+  if (
+    electricalCents === null ||
+    markedUpValanceCents === null ||
+    markedUpPanelCostCents === null
+  ) {
+    return null;
+  }
+
+  const netTotalCents =
+    electricalCents + markedUpValanceCents + markedUpPanelCostCents;
+
+  if (!Number.isSafeInteger(netTotalCents)) {
     return null;
   }
 
   return {
-    allocation: {
-      requiredLengthMm,
-      totalLengthMm: best.totalLengthMm,
-      wasteMm: best.totalLengthMm - requiredLengthMm,
-      panelCount: best.panelCount,
-      counts: best.counts
-    },
-    panelCostCents: best.costCents
+    netTotalCents,
+    panelAllocation: {
+      requiredLengthMm: roundedRequiredLengthMm,
+      totalLengthMm,
+      wasteMm: roundMillimeters(totalLengthMm - roundedRequiredLengthMm),
+      panelCount,
+      counts: aggregateCounts
+    }
   };
 }
 
@@ -155,55 +198,4 @@ export function applyMarkupCents(
   );
 
   return Number.isSafeInteger(markedUpCents) ? markedUpCents : null;
-}
-
-export function calculateConfiguratorNet(
-  valanceWidthMm: number,
-  requiredPanelLengthMm: number
-): ConfiguratorNetCalculation | null {
-  if (!Number.isSafeInteger(valanceWidthMm) || valanceWidthMm < 1) {
-    return null;
-  }
-
-  const pricedAllocation = selectOptimalPanelAllocation(
-    requiredPanelLengthMm
-  );
-
-  if (!pricedAllocation) {
-    return null;
-  }
-
-  const electricalCents = applyMarkupCents(
-    ELECTRICAL_SET_CENTS,
-    CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT
-  );
-  const valanceCents = valanceWidthMm * FINISHED_VALANCE_CENTS_PER_MM;
-  const markedUpValanceCents = applyMarkupCents(
-    valanceCents,
-    CONFIGURATOR_VALANCE_MARKUP_PERCENT
-  );
-  const markedUpPanelCostCents = applyMarkupCents(
-    pricedAllocation.panelCostCents,
-    CONFIGURATOR_PANEL_MARKUP_PERCENT
-  );
-
-  if (
-    electricalCents === null ||
-    markedUpValanceCents === null ||
-    markedUpPanelCostCents === null
-  ) {
-    return null;
-  }
-
-  const netTotalCents =
-    electricalCents + markedUpValanceCents + markedUpPanelCostCents;
-
-  if (!Number.isSafeInteger(netTotalCents)) {
-    return null;
-  }
-
-  return {
-    netTotalCents,
-    panelAllocation: pricedAllocation.allocation
-  };
 }

@@ -59,12 +59,48 @@ describe("authoritative configurator calculation", () => {
       expect(Number.isSafeInteger(result.calculation.netTotalCents)).toBe(true);
       expect(result.calculation.geometry.issues).toEqual([]);
       expect(result.calculation.panelAllocation.requiredLengthMm).toBe(
-        result.calculation.geometry.compositionWidthMm
+        result.calculation.geometry.lightSegmentLengthsMm.reduce(
+          (total, lengthMm) => total + lengthMm,
+          0
+        )
       );
       expect(result.calculation.panelAllocation.totalLengthMm).toBeGreaterThanOrEqual(
-        result.calculation.geometry.compositionWidthMm
+        result.calculation.panelAllocation.requiredLengthMm
       );
       expect(() => JSON.stringify(result)).not.toThrow();
+    }
+  });
+
+  it("allocates two minimum logo panels and a separate text panel", async () => {
+    const result = await calculateConfiguratorAuthoritatively({
+      ...DEFAULT_CONFIGURATOR_CONFIGURATION,
+      compositionMode: "logo-both",
+      text: "TSOMI",
+      fontId: "pt-sans",
+      valanceWidthMm: 9500,
+      letterHeightMm: 180
+    });
+
+    expect(result.status).toBe("ok");
+
+    if (result.status === "ok") {
+      expect(result.calculation.measurement.widthMm).toBeCloseTo(
+        709.060773,
+        5
+      );
+      expect(result.calculation.geometry.compositionWidthMm).toBe(8740);
+      expect(result.calculation.geometry.lightSegmentLengthsMm).toEqual([
+        180,
+        709.060773,
+        180
+      ]);
+      expect(result.calculation.panelAllocation).toMatchObject({
+        requiredLengthMm: 1069.060773,
+        totalLengthMm: 2200,
+        panelCount: 3,
+        counts: { 600: 2, 1000: 1, 1200: 0 }
+      });
+      expect(result.calculation.netTotalCents).toBe(160_000);
     }
   });
 

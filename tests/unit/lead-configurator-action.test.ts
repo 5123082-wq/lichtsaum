@@ -73,7 +73,7 @@ describe("configurator lead action", () => {
   it("returns an updated price without creating a lead on mismatch", async () => {
     const mismatch = {
       kind: "pricing_changed",
-      pricingVersion: "2026-08-20.v3",
+      pricingVersion: "2026-08-20.v4",
       calculation: { netTotalCents: 67_000 }
     };
     mocks.prepareConfiguratorProjectContext.mockResolvedValue(mismatch);

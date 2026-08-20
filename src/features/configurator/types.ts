@@ -90,6 +90,7 @@ export type ConfiguratorGeometry = Readonly<{
   logoCentersMm: readonly number[];
   logoSizeMm: number;
   logoGapMm: number;
+  lightSegmentLengthsMm: readonly number[];
   issues: readonly ConfiguratorGeometryIssue[];
 }>;
 

@@ -26,7 +26,7 @@ const configuration = {
 } as const satisfies ConfiguratorConfigurationV1;
 
 const calculation = {
-  pricingVersion: "2026-08-20.v3",
+  pricingVersion: "2026-08-20.v4",
   netTotalCents: 67_000,
   measurement: {
     text: configuration.text,
@@ -48,6 +48,7 @@ const calculation = {
     logoCentersMm: [],
     logoSizeMm: 0,
     logoGapMm: 0,
+    lightSegmentLengthsMm: [900],
     issues: []
   },
   panelAllocation: {

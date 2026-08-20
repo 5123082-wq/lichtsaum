@@ -44,6 +44,11 @@ export function evaluateConfiguratorGeometry(
   ];
   const compositionStartMm = hasLeftLogo ? leftLogoStartMm : textStartMm;
   const compositionEndMm = hasRightLogo ? rightLogoEndMm : textEndMm;
+  const lightSegmentLengthsMm = [
+    ...(hasLeftLogo ? [logoSizeMm] : []),
+    measurement.widthMm,
+    ...(hasRightLogo ? [logoSizeMm] : [])
+  ];
   const issues: ConfiguratorGeometryIssue[] = [];
 
   if (
@@ -104,6 +109,7 @@ export function evaluateConfiguratorGeometry(
     logoCentersMm,
     logoSizeMm,
     logoGapMm,
+    lightSegmentLengthsMm,
     issues
   };
 }

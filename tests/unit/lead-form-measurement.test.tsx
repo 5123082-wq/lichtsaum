@@ -161,7 +161,7 @@ describe("LeadForm measurement", () => {
       },
       services: ["site-measurement"],
       postalCode: "10115",
-      confirmedPricingVersion: "2026-08-20.v3"
+      confirmedPricingVersion: "2026-08-20.v4"
     } as const;
 
     render(<LeadForm configuratorProject={configuratorProject} />);
@@ -179,13 +179,13 @@ describe("LeadForm measurement", () => {
     expect(analyticsPayload).not.toContain("CAFÉ LICHT");
     expect(analyticsPayload).not.toContain("site-measurement");
     expect(analyticsPayload).not.toContain("10115");
-    expect(analyticsPayload).not.toContain("2026-08-20.v3");
+    expect(analyticsPayload).not.toContain("2026-08-20.v4");
   });
 
   it("does not queue a conversion while an updated price awaits reconfirmation", async () => {
     actions.prepareProjectCheckSubmission.mockResolvedValueOnce({
       kind: "pricing_changed",
-        pricingVersion: "2026-08-20.v3",
+        pricingVersion: "2026-08-20.v4",
       calculation: { netTotalCents: 71_000 }
     });
 

@@ -23,6 +23,7 @@ Last reviewed: 2026-08-20
 | ADR-015 | 2026-08-11 | Accepted; publication limits superseded | Implement `/konfigurator` with server-reproduced restricted B2B-net pricing |
 | ADR-016 | 2026-08-11 | Accepted | Owner controls every publication decision; repository-imposed release blockers are cancelled |
 | ADR-018 | 2026-08-20 | Accepted by explicit owner request | Use component-specific server-only pricing coefficients calibrated against the observed competitor marginal-price model |
+| ADR-019 | 2026-08-20 | Accepted by explicit owner request | Allocate minimum panels per logo and separate equal-panel sequences for the inscription; keep one electrical set per valance |
 
 ## ADR-001 — Stitch boundary
 
@@ -169,6 +170,23 @@ behavior and remains replaceable until CMP/legal choices are final.
   supplier costs or technical compatibility; those remain separate open questions.
 - Verification: `configurator-calculation.md`, `src/features/configurator/pricing.ts`, the
   pricing unit tests and the server-authoritative calculation tests.
+
+## ADR-019 — Segment-based light-panel allocation
+
+- Date: 2026-08-20
+- Status: Accepted by explicit owner request
+- Context: a two-logo composition was priced as one continuous 8740 mm illuminated span, even
+  though the logos and central inscription are separate light elements. This produced 4 × 1000 mm
+  plus 4 × 1200 mm panels for the 9500 mm / `TSOMI` example.
+- Decision: allocate one minimum 600 mm panel per logo. Measure the inscription separately and
+  use one fitting panel; when it exceeds the largest single panel, use equal-panel sequences with
+  the smallest panel count and smallest fitting panel size. Count the fixed electrical set once per
+  complete valance. Bump the calculation version to `2026-08-20.v4`.
+- Consequences: the example uses 2 × 600 mm logo panels and 1 × 1000 mm text panel, reducing the
+  calculated net result from EUR 4200 to EUR 1600 under the current component coefficients.
+  Physical panel joints, cable routing and supplier compatibility remain project-review questions.
+- Verification: `configurator-calculation.md`, `src/features/configurator/geometry.ts`,
+  `src/features/configurator/pricing.ts` and the configurator calculation tests.
 
 ## New decision template
 

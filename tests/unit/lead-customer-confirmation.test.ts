@@ -121,7 +121,7 @@ describe("sendLeadCustomerConfirmation", () => {
               counts: { 600: 0, 1000: 1, 1200: 0 }
             }
           },
-          pricingVersion: "2026-08-20.v3",
+          pricingVersion: "2026-08-20.v4",
           netTotalCents: 67_000
         },
         createdAt: new Date("2026-08-10T12:00:00Z")

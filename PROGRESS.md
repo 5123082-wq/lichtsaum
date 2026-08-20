@@ -13,7 +13,7 @@
   the width, and step 01 now uses the same canonical visual picker controls as the homepage;
   step 02 exposes all services, and price plus specification remain hidden until step 03. The
   server-authoritative configurator
-  pricing is version `2026-08-20.v3` with server-only component coefficients: electrical set +25%,
+  pricing is version `2026-08-20.v4` with server-only component coefficients: electrical set +25%,
   finished Volant +25% and LED panels +100%. The owner has
   approved a two-route SEO implementation plan. `/konfigurator` K1–K4 are complete locally: its
   owner-approved three-part German lower block is server-rendered after the wizard, metadata option
@@ -41,6 +41,16 @@
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
+### CHG-20260820-03 — Segment-based light-panel allocation
+
+- Scope: configurator geometry, panel allocation, pricing version and calculation fixtures.
+- Outcome: each logo now receives one minimum panel; inscription length is allocated independently
+  using one fitting panel or equal-panel sequences; the fixed electrical set remains one per valance.
+  Pricing version is now `2026-08-20.v4`.
+- Verification: the 9500 mm / `TSOMI` / two-logo case resolves to 2 × 600 mm + 1 × 1000 mm;
+  targeted 39-test verification, full 165-test suite, typecheck, lint and `git diff --check` passed.
+- Follow-up: none.
+
 ### CHG-20260820-02 — Paused B2B Google Ads campaign
 
 - Scope: first LICHTSAUM Search campaign, B2B keyword structure, exclusions, ads, targeting and
@@ -66,6 +76,11 @@
   passed (164 tests); `git diff --check` passed.
 - Follow-up: none.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
+
 ### CHG-20260819-02 — Server-rendered configurator explanation
 
 - Scope: `/konfigurator` lower content, metadata option A, contextual links, responsive styling and
@@ -79,11 +94,6 @@
   accidental run exposed two unrelated pre-existing configurator interaction assertions recorded
   in the implementation plan.
 - Follow-up: start `/referenzen` R1 only on owner request; no deployment was performed.
-
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260819-01 — Configurator copy approval pack
 

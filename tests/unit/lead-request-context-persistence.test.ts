@@ -76,7 +76,7 @@ describe("lead request-context persistence", () => {
       },
       services: [],
       calculation: {
-        pricingVersion: "2026-08-20.v3",
+        pricingVersion: "2026-08-20.v4",
         netTotalCents: 67_000,
         measurement: {
           text: "CAFÉ LICHT",
@@ -98,6 +98,7 @@ describe("lead request-context persistence", () => {
           logoCentersMm: [],
           logoSizeMm: 0,
           logoGapMm: 0,
+          lightSegmentLengthsMm: [900],
           issues: []
         },
         panelAllocation: {
@@ -108,7 +109,7 @@ describe("lead request-context persistence", () => {
           counts: { 600: 0, 1000: 1, 1200: 0 }
         }
       },
-        pricingVersion: "2026-08-20.v3",
+        pricingVersion: "2026-08-20.v4",
       netTotalCents: 67_000
     } as const satisfies LeadRequestContext;
 

@@ -90,7 +90,7 @@ export async function calculateConfiguratorAuthoritatively(
 
   const pricedCalculation = calculateConfiguratorNet(
     configuration.valanceWidthMm,
-    geometry.compositionWidthMm
+    geometry.lightSegmentLengthsMm
   );
 
   if (!pricedCalculation) {

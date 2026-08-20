@@ -3,7 +3,7 @@
 <!-- AGENT_BRIEF:START -->
 ## Agent brief
 - Owns: размерные ограничения, внутренние компонентные inputs, серверный pricing version и scope отображаемого результата конфигуратора.
-- Current: pricing `2026-08-20.v3` применяет server-only компонентные коэффициенты: электрический комплект +25%, готовый Volant +25%, LED-панели +100%; клиент получает только итоговую цену и расчётные геометрические данные.
+- Current: pricing `2026-08-20.v4` применяет server-only компонентные коэффициенты: электрический комплект +25%, готовый Volant +25%, LED-панели +100%; логотипы и текст получают отдельные световые раскладки; клиент получает только итоговую цену и расчётные геометрические данные.
 - Open: техническая совместимость, поставщик, монтаж/электрика, consumer/PAngV и публичное расширение цены остаются отдельными вопросами.
 - Read full when: меняются inputs, формула, версия цены, границы результата или persistence contract.
 <!-- AGENT_BRIEF:END -->
@@ -59,7 +59,7 @@ range.
 
 ## Implemented pricing version
 
-- `pricingVersion`: `2026-08-20.v3`;
+- `pricingVersion`: `2026-08-20.v4`;
 - server-only component coefficients: electrical set `25%`, finished valance `25%`, selected panels `100%`;
 - all money arithmetic: integer euro cents;
 - electrical set: `10_000` cents fixed;
@@ -77,16 +77,24 @@ amount.
 
 ## Panel allocation
 
-The required panel length is the measured width of the complete illuminated composition:
-inscription, illuminated logo placeholders and the gaps between them. Outer non-illuminated safe
-margins are not part of that length.
+The panel calculation is segment-based. Each illuminated logo receives its own minimum panel, and
+the inscription receives its own panel sequence. The empty distances between the logo and the
+inscription are not priced as illuminated length. Electrical hardware remains one fixed set per
+complete valance, regardless of the number of segments.
 
-For a required length `L`, enumerate combinations of 600, 1000 and 1200 mm panels whose combined
-length is at least `L`, then select in this order:
+For one required segment length `L`, use this order:
 
-1. lowest total panel cost;
-2. lowest unused panel length;
-3. lowest panel count.
+1. select one complete panel if `L` fits into 600, 1000 or 1200 mm;
+2. if one panel does not fit, use two equal panels, preferring 2 × 1000 mm and then 2 × 1200 mm;
+3. if two panels do not fit, use three equal panels and continue the same rule for longer text.
+
+Within a panel count, choose the smallest panel size that covers the segment. This keeps each
+segment's panel composition deterministic and prevents the full distance between two logos from
+being interpreted as illuminated text.
+
+For example, a 180 mm logo uses one 600 mm panel. A 709 mm inscription uses one 1000 mm panel.
+Two such logos plus that inscription therefore use 2 × 600 mm + 1 × 1000 mm, while the electrical
+set is still counted once.
 
 The authoritative internal component subtotal is:
 
@@ -96,10 +104,10 @@ The displayed net price applies the server-only component coefficients to the in
 
 `EUR 100 × 1.25 + (Volantbreite in m × EUR 40) × 1.25 + selected panel cost × 2`
 
-Maximum panel count, physical joints and mounting gaps remain `TBD`; v1 therefore does not claim
-technical compatibility and routes the result to project review. The solver itself has no arbitrary
-panel-count cap and remains valid for the entered positive width. The homepage mini-configurator
-still performs no price or panel allocation.
+Maximum panel count, physical joints, cable routing and mounting gaps remain `TBD`; v1 therefore
+does not claim technical compatibility and routes the result to project review. The solver itself
+has no arbitrary panel-count cap and remains valid for the entered positive width. The homepage
+mini-configurator still performs no price or panel allocation.
 
 The UI may show total panel counts/allocation but does not expose the purchase cost of individual
 components.
@@ -108,8 +116,8 @@ components.
 
 The full configurator opens the same local WOFF2 asset selected for the SVG through `fontkit`
 2.0.4, applies the configured variable-font weight where available and uses shaped glyph layout,
-kerning and visible bounds. The returned width, SVG font size and baseline offset drive both the
-preview geometry and required panel length.
+kerning and visible bounds. The returned width, SVG font size and baseline offset drive the preview
+geometry; the measured inscription width and logo sizes drive the separate panel segments.
 
 Unsupported glyphs, missing/unreadable fonts, non-finite metrics, invalid dimensions and a
 composition crossing the existing safe area fail closed: no price and no configurator submit are
@@ -122,7 +130,7 @@ conversion and the application does not log its body. On explicit shared-form su
 validates the raw configuration again, repeats measurement/geometry/pricing and persists only its
 own result in the optional versioned `leads.request_context` snapshot.
 
-If the submitted confirmation version differs from `2026-08-20.v3`, the server returns the current
+If the submitted confirmation version differs from `2026-08-20.v4`, the server returns the current
 authoritative calculation before any lead insert. The UI replaces the displayed result and requires
 an explicit new confirmation.
 
