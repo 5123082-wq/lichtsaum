@@ -3552,18 +3552,62 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
 
 .configurator-page__technical {
   display: grid;
-  gap: 2rem;
-  padding-block: var(--section-space);
+  gap: 0;
+  padding-block: clamp(4rem, 8vw, 7rem);
 }
 
 .configurator-page__technical section {
-  padding-block: 2rem;
-  border-block: 1px solid var(--border);
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--border);
+}
+
+.configurator-page__technical section:last-child {
+  border-bottom: 1px solid var(--border);
 }
 
 .configurator-page__technical h2 {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 4rem);
+  max-width: 15ch;
+  font-size: clamp(1.9rem, 4vw, 3.5rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.configurator-page__technical-body {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+}
+
+.configurator-page__technical-body > p {
+  max-width: 52rem;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.configurator-page__technical-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.configurator-page__technical-links a {
+  min-height: 2.75rem;
+  align-content: center;
+  color: var(--text-primary);
+  font-weight: 700;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35rem;
+}
+
+.configurator-page__technical-links a:hover {
+  color: var(--accent);
 }
 
 .configurator-page__technical dl > div {
@@ -3642,6 +3686,10 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   .configurator-page__technical dl > div {
     grid-template-columns: minmax(9rem, 0.8fr) minmax(0, 1.2fr);
     gap: 1.5rem;
+  }
+
+  .configurator-page__technical section {
+    grid-template-columns: minmax(15rem, 0.75fr) minmax(0, 1.25fr);
   }
 }
 

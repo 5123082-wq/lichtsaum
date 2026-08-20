@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  CONFIGURATOR_MARKUP_PERCENT,
+  CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT,
+  CONFIGURATOR_PANEL_MARKUP_PERCENT,
+  CONFIGURATOR_VALANCE_MARKUP_PERCENT,
   applyMarkupCents,
   calculateConfiguratorNet,
   selectOptimalPanelAllocation
@@ -119,13 +121,21 @@ describe("configurator panel allocation", () => {
     });
   });
 
-  it("calculates every monetary value in integer cents with the server markup", () => {
-    expect(CONFIGURATOR_MARKUP_PERCENT).toBe(100);
-    expect(applyMarkupCents(47_000, CONFIGURATOR_MARKUP_PERCENT)).toBe(
-      94_000
+  it("calculates component markups and totals in integer cents", () => {
+    expect(CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT).toBe(25);
+    expect(CONFIGURATOR_VALANCE_MARKUP_PERCENT).toBe(25);
+    expect(CONFIGURATOR_PANEL_MARKUP_PERCENT).toBe(100);
+    expect(applyMarkupCents(10_000, CONFIGURATOR_ELECTRICAL_MARKUP_PERCENT)).toBe(
+      12_500
+    );
+    expect(applyMarkupCents(12_000, CONFIGURATOR_VALANCE_MARKUP_PERCENT)).toBe(
+      15_000
+    );
+    expect(applyMarkupCents(20_000, CONFIGURATOR_PANEL_MARKUP_PERCENT)).toBe(
+      40_000
     );
     expect(calculateConfiguratorNet(3000, 1200)).toEqual({
-      netTotalCents: 94_000,
+      netTotalCents: 77_500,
       panelAllocation: {
         requiredLengthMm: 1200,
         totalLengthMm: 1200,
@@ -139,7 +149,7 @@ describe("configurator panel allocation", () => {
     );
 
     expect(calculateConfiguratorNet(2000, 1600)).toMatchObject({
-      netTotalCents: 106_000,
+      netTotalCents: 92_500,
       panelAllocation: {
         counts: { 600: 1, 1000: 1, 1200: 0 }
       }

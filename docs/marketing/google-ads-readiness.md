@@ -1,8 +1,19 @@
 # Google Ads Readiness
 
-Status: `Decision`; O10 account resources are configured locally, while business/release inputs
-remain open user questions
-Last reviewed: 2026-08-11
+Status: `Decision`; the first B2B Search campaign exists in Google Ads but remains paused pending
+policy review, release checks and explicit owner authorization
+Last reviewed: 2026-08-20
+
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+
+- Owns: Google Ads destination, measurement and campaign release gates.
+- Current: campaign `24153758040` is configured for Germany at €20/day and remains paused with
+  zero impressions and zero spend; its three ads are under review.
+- Open: complete the production destination/consent/conversion checks, wait for ad review and get
+  explicit owner authorization before enabling the campaign.
+- Read full when: changing campaign targeting, claims, conversion ownership or launch status.
+<!-- AGENT_BRIEF:END -->
 
 This file is a readiness/evidence checklist. Campaign publication follows
 [`../architecture/publication-governance.md`](../architecture/publication-governance.md) and is
@@ -24,6 +35,29 @@ This file is a readiness/evidence checklist. Campaign publication follows
 - не содержит неподтверждённых преимуществ, цен, сроков, гарантий или отзывов;
 - принимает заявку без обязательного analytics/marketing consent;
 - измеряет подтверждённый лид без передачи персональных данных в аналитику.
+
+## Live campaign record — paused
+
+Verified in Google Ads on 2026-08-20:
+
+| Field | Current value |
+| --- | --- |
+| Account | LICHTSAUM `363-818-4039` |
+| Campaign | `Search \| DE \| B2B \| Leuchtvolant \| 2026-08` (`24153758040`) |
+| Release state | Paused; 0 impressions and €0 spend at verification time |
+| Budget and bidding | €20/day; Maximize clicks |
+| Targeting | Germany, presence-only; German; Google Search only |
+| Automation | AI Max off; automatically created assets off; campaign-level broad match off |
+| Structure | 3 ad groups, 22 exact/phrase keywords, 32 campaign negative keywords |
+| Ads | 3 responsive search ads; all under review and campaign-paused |
+| Final URL | `https://www.lichtsaum.com/` |
+| Primary conversion | `Projektanfrage – serverbestätigt`; Website, Primary, count One |
+
+Ad groups: `Leuchtvolant | Exact+Phrase`, `Gastronomie | Exact+Phrase` and
+`Branding | Exact+Phrase`. This record documents external state; it does not authorize enabling
+the campaign. On 2026-08-20 the three ads were recreated through the Google Ads API to replace the
+direct form anchor with the homepage URL; API verification confirmed all three new URLs and
+`REVIEW_IN_PROGRESS`. The unchecked release gates below remain authoritative.
 
 ## Destination requirements
 

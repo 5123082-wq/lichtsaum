@@ -1,7 +1,20 @@
 # Search Intent Map
 
-Status: `Decision` for current route ownership; volume/CPC remain `TBD`
-Last reviewed: 2026-08-11
+Status: `Decision` for current route ownership; sampled Keyword Planner ranges verified; CPC and
+competition unavailable
+Last reviewed: 2026-08-17
+
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+
+- Owns: German search-intent clusters, dated demand evidence and canonical route ownership.
+- Current: the homepage owns exact product/retrofit intent, `/konfigurator` owns preliminary-price
+  intent and `/referenzen` remains one gallery; the 2026-08-17 Keyword Planner sample does not
+  justify new landing pages.
+- Open: Search Console evidence, buyer vocabulary and detailed Planner metrics after real campaign
+  activity.
+- Read full when: changing route ownership, keyword clusters or adding an indexable search page.
+<!-- AGENT_BRIEF:END -->
 
 ## Purpose
 
@@ -14,13 +27,21 @@ competition или ranking promises не подразумеваются.
 
 ## Search evidence status
 
-Sample date: 2026-07-30  
-Market/language: Germany / German  
+SERP sample date: 2026-07-30
+Market/language: Germany / German
 Method: public result-composition sampling; exact rankings and personalised SERP features not
 asserted
 
-- Exact Google Ads Keyword Planner volume/CPC/competition: `TBD`; seed submission was not
-  authorised.
+- Google Ads Keyword Planner checked 2026-08-17 with Germany, German and Google filters for
+  August 2025–July 2026. All eight submitted B2B seeds returned `0–10` average monthly searches;
+  Google returned no additional keyword ideas. Competition, quarterly/year change and top-of-page
+  bid ranges were unavailable (`—`). Google stated that more detailed statistics require campaign
+  activity; no plan or campaign was created.
+- The checked seeds were `beleuchteter Markisenvolant`, `LED Markisenvolant`, `Leuchtvolant
+  Markise`, `beleuchteter Werbevolant`, `Markisenvolant Beleuchtung nachrüsten`, `Leuchtvolant
+  Gastronomie`, `Leuchtvolant Preis` and `Markisenvolant mit Logo beleuchtet`.
+- The ranges must not be summed: each is Google's broad range for one seed and may represent
+  overlapping demand.
 - Google Trends/seasonality: `TBD`; no reliable numeric result was obtained.
 - Direct exact-category pages were observed for Luminard, Gigacard, Displaylight and other
   suppliers.
@@ -34,11 +55,11 @@ Full dated evidence and URLs are in
 
 | Cluster | Example German queries | Intent | Proposed destination | Evidence/status |
 | --- | --- | --- | --- | --- |
-| Exact illuminated advertising valance | `beleuchteter Markisenvolant`, `LED-Markisenvolant`, `Leuchtvolant Markise`, `beleuchteter Werbevolant` | Commercial investigation | `/` | Highest product fit; homepage owns the exact product intent; volume TBD |
-| Existing-awning retrofit | `beleuchteten Volant nachrüsten`, `bestehende Markise LED Volant`, `Markisenvolant Beleuchtung nachrüsten` | Compatibility/project | `/` | High fit only when `Volant`/existing business awning is explicit |
-| Gastronomy | `beleuchteter Markisenvolant Gastronomie`, `Leuchtvolant Restaurant`, `LED-Markisenvolant Café` | Vertical commercial | Homepage hospitality/product content | Strongest first vertical; separate route needs a real case |
-| Price/quote | `beleuchteter Markisenvolant Preis`, `Leuchtvolant Kosten`, `LED-Markisenvolant Angebot` | Transactional research | `/konfigurator` | Restricted component subtotal for commercial projects under CLM-029; volume TBD |
-| Branding bridge | `Markisenvolant mit Logo beleuchtet`, `Markisenbeschriftung beleuchtet` | Comparison with unlit print | Homepage comparison/explainer | Adjacent print demand is visible; illumination demand unmeasured |
+| Exact illuminated advertising valance | `beleuchteter Markisenvolant`, `LED-Markisenvolant`, `Leuchtvolant Markise`, `beleuchteter Werbevolant` | Commercial investigation | `/` | Highest product fit; each checked seed returned the lowest Planner range; homepage owns the exact product intent |
+| Existing-awning retrofit | `beleuchteten Volant nachrüsten`, `bestehende Markise LED Volant`, `Markisenvolant Beleuchtung nachrüsten` | Compatibility/project | `/` | Checked retrofit seed returned the lowest Planner range; keep within the homepage pillar |
+| Gastronomy | `beleuchteter Markisenvolant Gastronomie`, `Leuchtvolant Restaurant`, `LED-Markisenvolant Café` | Vertical commercial | Homepage hospitality/product content | Checked vertical seed returned the lowest Planner range; no separate route now |
+| Price/quote | `beleuchteter Markisenvolant Preis`, `Leuchtvolant Kosten`, `LED-Markisenvolant Angebot` | Transactional research | `/konfigurator` | Checked price seed returned the lowest Planner range; `/konfigurator` remains the only price-intent route under CLM-029 |
+| Branding bridge | `Markisenvolant mit Logo beleuchtet`, `Markisenbeschriftung beleuchtet` | Comparison with unlit print | Homepage comparison/explainer | Checked branding seed returned the lowest Planner range; keep within existing content |
 | Partner/supplier | `LED-Markisenvolant Hersteller`, `Leuchtvolant Werbetechnik`, `Markisenvolant B2B` | Supplier/partner | Future partner route only after offer exists | Business fit proposed; demand TBD |
 | Projects/evidence | Exact category + `Referenz`, `Beispiel`, day/night variants | Trust validation | `/referenzen` | Public images are factual context, not claimed LICHTSAUM completed projects |
 | Brand/contact | `LICHTSAUM` and contact variants | Navigational | `/` and `/kontakt` | Current canonical routes implemented; trademark availability remains TBD |
@@ -71,8 +92,8 @@ Full dated evidence and URLs are in
 
 ### `/referenzen`
 
-- Job: evaluate real completed work and build trust.
-- Requires substantive, permission-cleared projects with descriptive text and useful imagery.
+- Job: evaluate object views and visual contexts for illuminated valances and build trust.
+- Requires substantive, owner-approved imagery with concise, accurate descriptive text.
 - Do not launch as an empty gallery or stock-photo collection.
 
 ### `/kontakt`
@@ -129,15 +150,15 @@ Completed:
 1. narrowed the product and primary B2B segment;
 2. expanded exact, retrofit, vertical, cost, partner and noise variants;
 3. classified a dated public German result sample;
-4. grouped the viable launch intent into one canonical pillar.
+4. grouped the viable launch intent into one canonical pillar;
+5. checked eight approved B2B seeds in Keyword Planner with Germany/German/Google filters.
 
 Still required:
 
 1. owner acceptance of product and geography;
-2. Google Ads Keyword Planner ranges, only after permission;
-3. buyer/partner vocabulary from interviews and quote calls;
-4. Search Console and Ads search-term evidence after a compliant launch;
-5. rejection of every route that would be thin, duplicate or outside actual service.
+2. buyer/partner vocabulary from interviews and quote calls;
+3. Search Console and Ads search-term evidence after a compliant launch;
+4. rejection of every route that would be thin, duplicate or outside actual service.
 
 Record date, market (`Germany`), language (`German`), device assumptions and source for any volume
 or competition number. Do not copy numbers into evergreen copy without a review date.
@@ -160,3 +181,6 @@ For each approved cluster provide:
 Final public language remains governed by `../content/content-strategy.md`; factual claims remain
 governed by `../content/claims-and-evidence-register.md`. The launch cluster, ad controls and page
 structure are specified in `../strategy/go-to-market-and-landing-brief.md`.
+
+The approved next implementation sequence for `/konfigurator` and `/referenzen` is defined in
+[`configurator-references-implementation-plan.md`](configurator-references-implementation-plan.md).

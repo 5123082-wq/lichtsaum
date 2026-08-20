@@ -3,7 +3,7 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-08-14
+- Last updated: 2026-08-20
 - Current stage: public LICHTSAUM site exists; its mobile menu now uses a smooth two-way drawer
   transition with a Safari-safe right anchor, one stable header wordmark and global input-modality
   focus handling. Pointer/touch actions no longer leave orange focus styling; keyboard focus remains
@@ -13,9 +13,18 @@
   the width, and step 01 now uses the same canonical visual picker controls as the homepage;
   step 02 exposes all services, and price plus specification remain hidden until step 03. The
   server-authoritative configurator
-  pricing is version `2026-08-12.v2` with a server-only 100% commercial coefficient; the SEO
-  canonical guard, apex redirect contract and route social metadata remain local and unpublished.
-- Active track: complete only the site work requested by the owner. Before any concrete deployment,
+  pricing is version `2026-08-20.v3` with server-only component coefficients: electrical set +25%,
+  finished Volant +25% and LED panels +100%. The owner has
+  approved a two-route SEO implementation plan. `/konfigurator` K1–K4 are complete locally: its
+  owner-approved three-part German lower block is server-rendered after the wizard, metadata option
+  A covers configuration plus preliminary-price intent, and two contextual native links point to
+  `/#eignung` and `/referenzen`. `/referenzen` remains the next research/copy track. Keyword Planner
+  evidence does not justify new landing pages. Google Ads campaign `24153758040` now exists as a
+  paused B2B Search campaign: €20/day, Germany presence-only, German, Google Search only, three ad
+  groups, 22 exact/phrase keywords, 32 negative keywords and one Primary server-confirmed lead
+  conversion. Its three ads are under review; verification showed 0 impressions and €0 spend.
+- Active track: follow `docs/seo/configurator-references-implementation-plan.md` only when the owner
+  requests the next implementation step. Before any concrete deployment,
   indexing, Search Console/DNS, GTM/Ads, production-form or attachment action, show the current
   evidence and use `Спросить у пользователя` under
   `docs/architecture/publication-governance.md`.
@@ -23,12 +32,83 @@
   broadly reformat unrelated work.
 - Default context protocol: read this block and the three `RECENT_CHANGES` entries only. Read the
   detailed sections below when the current task needs their domain.
-- Next action: continue the owner's latest concrete site request; ask before a concrete external or
-  production action under `docs/architecture/publication-governance.md`.
+- Next action: begin `/referenzen` Phase R1 only when the owner requests it. Ask before a concrete
+  external or production action under `docs/architecture/publication-governance.md`. Keep Google
+  Ads campaign `24153758040` paused until policy review, production release checks and a separate
+  explicit owner authorization to enable it.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20260820-02 — Paused B2B Google Ads campaign
+
+- Scope: first LICHTSAUM Search campaign, B2B keyword structure, exclusions, ads, targeting and
+  conversion verification.
+- Outcome: campaign `24153758040` is paused at €20/day with Germany presence-only targeting,
+  German language, Google Search only, three ad groups, 22 exact/phrase keywords, 32 negatives and
+  three responsive search ads pointing to `https://www.lichtsaum.com/`; AI Max and automatically created
+  assets are off.
+- Verification: Google Ads UI confirmed the complete campaign structure and the sole Primary
+  conversion `Projektanfrage – serverbestätigt`; a later Google Ads API read confirmed paused
+  state, 0 impressions, €0 spend, all three homepage URLs and `REVIEW_IN_PROGRESS` for each
+  replacement ad.
+- Follow-up: keep paused until policy review, production destination/consent/conversion checks and
+  separate owner authorization to enable.
+
+### CHG-20260820-01 — Component-specific configurator pricing
+
+- Scope: server-authoritative configurator pricing, calculation contract, pricing version and
+  regression fixtures.
+- Outcome: the former uniform +100% coefficient is replaced by electrical +25%, finished Volant
+  +25% and LED-panel +100% coefficients; pricing version is now `2026-08-20.v3`.
+- Verification: targeted pricing/lead tests passed (38 tests); full typecheck, lint and test suite
+  passed (164 tests); `git diff --check` passed.
+- Follow-up: none.
+
+### CHG-20260819-02 — Server-rendered configurator explanation
+
+- Scope: `/konfigurator` lower content, metadata option A, contextual links, responsive styling and
+  SEO verification.
+- Outcome: three owner-approved German sections now render on the server immediately after the
+  wizard; two native links preserve the approved route journey, and Title/Description now qualify
+  configuration with preliminary B2B-price intent. Russian review translations remain internal.
+- Verification: 164 unit tests, typecheck, lint and production build passed; built HTML confirmed
+  all content, one H1, two native links, no Russian copy and no `Product`/`Offer` Schema; targeted
+  Playwright passed SSR/metadata/placement and 320 px accessibility/overflow checks. A broader
+  accidental run exposed two unrelated pre-existing configurator interaction assertions recorded
+  in the implementation plan.
+- Follow-up: start `/referenzen` R1 only on owner request; no deployment was performed.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+## Earlier material changes — read only when required
+
+### CHG-20260819-01 — Configurator copy approval pack
+
+- Scope: Phase K1/K2 research, German lower-block copy, metadata and contextual anchors for
+  `/konfigurator`.
+- Outcome: one proposed owner-review package now separates configuration, the restricted
+  preliminary B2B-net calculation and manual object suitability; every factual sentence has an
+  internal evidence trace, and no production copy or metadata was changed.
+- Verification: cross-checked current configurator behavior, the calculation contract, CLM-029,
+  route intent and metadata rules; checked German configurator/price terminology without importing
+  external product claims; SEO/claims self-review completed.
+- Follow-up: owner approval or revisions are required before K3 implementation.
+
+### CHG-20260817-01 — Approved configurator and references SEO plan
+
+- Scope: dated keyword evidence, route ownership and the next SEO iteration for `/konfigurator`
+  and `/referenzen`.
+- Outcome: a single decision document now fixes the sequence, owner-approved page boundaries,
+  research/approval checkpoints, implementation steps, acceptance criteria and explicit
+  exclusions. The 2026-08-17 Keyword Planner sample records all eight B2B seeds in the `0–10`
+  range with no additional ideas, so no new landing page is planned.
+- Verification: cross-checked the plan against the search-intent map, calculation contract,
+  gallery route contract, claims register and the owner decisions in this task; documentation
+  links and rolling context were updated; `git diff --check` passed.
+- Follow-up: start Phase K1 only on the owner's request and stop for copy approval before code.
 
 ### CHG-20260814-02 — Canonical configurator pickers
 
@@ -75,11 +155,6 @@
   that runner unhydrated; the shared server was not restarted.
 - Follow-up: rerun the targeted mobile-navigation Playwright test when the shared dev runtime is
   healthy; no product-code follow-up is currently identified.
-
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260812-08 — Sequential full-width configurator
 

@@ -29,7 +29,7 @@ const socialPreviewImage = {
 } as const;
 
 export function generateMetadata(): Metadata {
-  const title = `Leuchtvolant konfigurieren | ${siteConfig.name}`;
+  const title = `${configuratorPageContent.metadataTitle} | ${siteConfig.name}`;
   const description = configuratorPageContent.description;
 
   return {
@@ -93,24 +93,35 @@ export default async function ConfiguratorPage() {
             {technicalSections.map((section) => (
               <section key={section.title}>
                 <h2>{section.title}</h2>
-                {section.intro ? <p>{section.intro}</p> : null}
-                {section.specRows?.length ? (
-                  <dl>
-                    {section.specRows.map((row) => (
-                      <div key={`${row.label}-${row.value}`}>
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                ) : null}
-                {section.notes?.length ? (
-                  <ul>
-                    {section.notes.map((note) => (
-                      <li key={note}>{note}</li>
-                    ))}
-                  </ul>
-                ) : null}
+                <div className="configurator-page__technical-body">
+                  {section.intro ? <p>{section.intro}</p> : null}
+                  {section.specRows?.length ? (
+                    <dl>
+                      {section.specRows.map((row) => (
+                        <div key={`${row.label}-${row.value}`}>
+                          <dt>{row.label}</dt>
+                          <dd>{row.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
+                  {section.notes?.length ? (
+                    <ul>
+                      {section.notes.map((note) => (
+                        <li key={note}>{note}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  {section.links?.length ? (
+                    <div className="configurator-page__technical-links">
+                      {section.links.map((link) => (
+                        <a href={link.href} key={link.href}>
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               </section>
             ))}
           </div>
