@@ -12,7 +12,7 @@ export const legalReviewItems = {
   recipientsAndTransfers: {
     title: "Получатели и передача в третьи страны",
     description:
-      "Vendor register заполнен: Vercel Inc., Neon, LLC, Plus Five Five, Inc. (Resend), Cloudflare, Inc. и Google Ireland Limited; регионы и механизмы международной передачи описаны."
+      "Vendor register заполнен: Vercel Inc., Neon, LLC, Plus Five Five, Inc. (Resend), IONOS SE, Cloudflare, Inc. и Google Ireland Limited; регионы и механизмы международной передачи описаны."
   },
   transportSecurity: {
     title: "HTTPS и техническая защита",

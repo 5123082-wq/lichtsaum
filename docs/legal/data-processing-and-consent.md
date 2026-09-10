@@ -3,7 +3,7 @@
 Status: `Decision`; O8 retention/access, O9 consent policy and O10 measurement model approved;
 the owner accepts release risk without an external legal opinion; unresolved technical and
 processor facts are `Спросить у пользователя`
-Last reviewed: 2026-08-11
+Last reviewed: 2026-09-10
 
 This document reports legal/privacy facts and is not an autonomous publication authority. Before a
 related public change, show the applicable facts and use `Спросить у пользователя` under
@@ -13,18 +13,30 @@ consent and PII protections still apply where legally required.
 Этот файл — источник истины для planned/actual data flows. Обновлять до подключения каждого
 vendor.
 
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+
+- Owns: actual personal-data flows, processors, consent boundaries and retention rules.
+- Current: production leads use Neon, Private Vercel Blob and Resend; operational mail for
+  `info@lichtsaum.com` is received and stored in an IONOS Mail Basic mailbox.
+- Open: Vercel Hobby processor coverage, attachment malware handling and final production
+  consent/network evidence remain unresolved.
+- Read full when: adding or replacing a processor, changing retention, consent, lead fields,
+  attachments, analytics or advertising data flows.
+<!-- AGENT_BRIEF:END -->
+
 ## Data inventory
 
 | Processing | Data | Purpose | Basis/status | Consent category | Processor | Retention |
 | --- | --- | --- | --- | --- | --- | --- |
 | Server/security logs | IP, time, request metadata; no form body logged by the application | Delivery, abuse/security | Art. 6(1)(f), legitimate security and delivery interest | Necessary | Vercel Inc.; current Hobby runtime-log access is 1 hour | 1 hour for runtime logs; build/deployment records follow Vercel account retention |
-| Direct email/phone contact | Contact data and request content | Respond/pre-contract steps | Art. 6(1)(b) or (f), case-dependent | Not marketing consent | Cloudflare, Inc. Email Routing; Google Ireland Limited Gmail; telecom provider | Owner-managed; delete when no longer required for the request, subject to active matters, legal claims and applicable statutory duties |
+| Direct email/phone contact | Contact data and request content | Respond/pre-contract steps | Art. 6(1)(b) or (f), case-dependent | Not marketing consent | IONOS SE; telecom provider | Owner-managed; delete when no longer required for the request, subject to active matters, legal claims and applicable statutory duties |
 | Disabled-environment form validation | Email; optional phone, message and selected files | Validate format/size rules without accepting a lead | Used whenever lead feature flags are off | Necessary prototype function | Application runtime only | No persistent storage |
 | Configurator draft and calculation | Inscription, dimensions, design and color choices; no contact, PLZ or files | Preserve the draft for the browser session and reproduce font metrics, geometry and the preliminary price on the application server | `sessionStorage` starts only after interaction; each live calculation is transient, allowlisted, not persisted and not logged by the application | Necessary requested configurator function | Browser and existing Vercel application runtime; no analytics/lead/notification processor | Browser session for the draft; request-lifetime only for server calculation |
 | Attached configurator request context | Versioned configuration, requested services, optional five-digit project PLZ and a server-reproduced preliminary calculation; values include the user-entered inscription | Send the visitor's visible project context with an explicitly submitted inquiry | Implemented locally; no lead record, manager/customer notification or conversion occurs before explicit form submit | Necessary inquiry function; no marketing consent | Existing Neon/Resend lead processors only; no analytics destination | Neon copy deleted with the lead under the approved 90-day deadline; operational manager/customer mailbox copies remain under the existing owner-managed purpose/statutory deletion rule |
 | Enabled lead request | Contact, request details and optional file metadata | Respond/pre-contract steps | Enabled and production-live-tested; owner accepts proceeding without an external legal opinion, but processor onboarding remains open | Not marketing consent | Neon PostgreSQL (`eu-central-1`), onboarding/DPA review pending | 90 days approved by owner decision O8 |
 | Enabled lead files | Up to five JPG/PNG/WebP/PDF files, 15 MB each and 50 MB combined | Object-specific project review | Enabled and production-live-tested through the independent attachment flag | Necessary form function when enabled | Private Vercel Blob (`fra1`), onboarding/DPA review pending | 90 days approved by owner decision O8 |
-| Lead notification and receipt | Internal contact/request notification with signed file links; customer receipt with email address, public request number and, for configurator inquiries, the submitted configuration/services/server-confirmed net summary; customer receipt never includes message text or files | Operational response and confirmation of receipt | Internal notification and customer receipt production-live-tested with controlled synthetic inquiries | Not marketing consent | Plus Five Five, Inc. (Resend), sending region `eu-west-1`; Cloudflare, Inc.; Google Ireland Limited | No automated mailbox deletion; owner-managed deletion when the operational purpose ends, subject to active matters, legal claims and applicable statutory duties. Resend processes while the agreement is active and states deletion within 90 days after account termination |
+| Lead notification and receipt | Internal contact/request notification with signed file links; customer receipt with email address, public request number and, for configurator inquiries, the submitted configuration/services/server-confirmed net summary; customer receipt never includes message text or files | Operational response and confirmation of receipt | Internal notification and customer receipt production-live-tested with controlled synthetic inquiries | Not marketing consent | Plus Five Five, Inc. (Resend), sending region `eu-west-1`; IONOS SE for the internal operational mailbox | No automated mailbox deletion; owner-managed deletion when the operational purpose ends, subject to active matters, legal claims and applicable statutory duties. Resend processes while the agreement is active and states deletion within 90 days after account termination |
 | First-party consent manager | Policy version, decision time, fixed Necessary/External-media states and independent Analytics/Marketing choices; no contact/form data | Remember and respect the browser's choice | Enabled and production-network-tested; no external opinion on the sufficiency of browser-local evidence will be obtained for v1, by owner risk acceptance | Necessary | None; same-site application and browser | 180 days or until the policy version changes |
 | GA4 | Pseudonymous website-usage and funnel events; no form/contact content, filenames or `lead_id` | Usage and funnel analytics | Property/stream and published consent-aware GTM tag active only after explicit Analytics consent | Analytics | Google only after consent | Two months, verified in GA4 on 2026-08-11 |
 | Google Ads | Server-confirmed conversion event with random non-personal `lead_id` used only as Transaction ID | Direct conversion measurement | Account, sole Primary action and published consent-aware GTM tags active only after explicit Marketing consent; no campaign/spend activated | Marketing | Google only after consent | Account policy/settings verified on 2026-08-11; advertiser identity verification remains open |
@@ -62,9 +74,11 @@ contact and file intake still default fail-closed when those flags are absent.
 - File selection includes a concise instruction to upload only project-related files the sender is
   permitted to provide. This does not replace access control, security or deletion duties after
   receipt.
-- Current processors and routing providers are identified by legal entity: Vercel Inc., Neon, LLC,
-  Plus Five Five, Inc. (Resend), Cloudflare, Inc. and Google Ireland Limited. Resend and Cloudflare
-  incorporate DPAs and EU SCC mechanisms into their service terms; Neon publishes a DPA and
+- Current processors and providers are identified by legal entity: Vercel Inc., Neon, LLC,
+  Plus Five Five, Inc. (Resend), IONOS SE, Cloudflare, Inc. for authoritative DNS and Google Ireland
+  Limited for consent-dependent measurement. Resend and Cloudflare incorporate DPAs and EU SCC
+  mechanisms into their service terms; IONOS publishes an AVV covering Mail Basic and states that
+  the AVV forms part of its AGB for new contracts since 19 July 2022; Neon publishes a DPA and
   subprocessor register. Vercel's published DPA currently states that processor coverage applies to
   Pro and Enterprise, not the project's current Hobby plan. On 2026-08-11 the owner chose to retain
   Hobby and accepted this known risk; it must remain labelled `Owner-accepted risk`, not verified

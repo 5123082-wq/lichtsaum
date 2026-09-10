@@ -3,7 +3,7 @@
 Status: `Decision`; local legal pages implemented; on 2026-08-11 the owner accepted the documented
 residual risk without an external legal opinion; publication-affecting legal/technical questions
 are `Спросить у пользователя`
-Last verified against official sources: 2026-08-11
+Last verified against official sources: 2026-09-10
 
 Это инженерный compliance-план, не юридическое заключение.
 
@@ -38,7 +38,7 @@ video changes the legal/data scope and requires this document to be updated firs
 | `Datenschutzerklärung` | Describe all actual processing, processors, transfers, retention and rights | Local page describes the confirmed hosting, lead, upload, email and consent-dependent Google flows without public internal markers | Match the final deployment and verify final production network/cookie evidence |
 | TDDDG / cookies | Non-essential storage/access generally requires informed consent | Custom consent UI and Basic Consent Mode boundary pass local QA; public Google tags remain off | Activate consent UI and optional tags together; verify final network/cookie evidence |
 | GDPR form processing | Purpose, lawful basis, minimization, transparency and security | Implemented locally; required/optional fields, early persistence, abuse check and 90-day retention are disclosed | Verify the production deployment |
-| Processor contracts | DPA/Art. 28 assessment for hosting and lead vendors | Resend, Cloudflare and Neon publish applicable DPA/SCC terms; Vercel's published DPA covers Pro/Enterprise while this project is on Hobby | Ask whether to publish/use the current processor setup after presenting the mismatch |
+| Processor contracts | DPA/Art. 28 assessment for hosting and lead vendors | Resend, Cloudflare and Neon publish applicable DPA/SCC terms; IONOS publishes an AVV covering Mail Basic and states that it forms part of the AGB for new contracts; Vercel's published DPA covers Pro/Enterprise while this project is on Hobby | Ask whether to publish/use the current processor setup after presenting the mismatch |
 | Advertising claims | No misleading price, origin, guarantee, certification or availability claims | Register created | Ask about any claim without recorded approval/evidence; do not invent facts |
 | PAngV / preliminary price | `/konfigurator` shows a server-reproduced net component subtotal with 0% markup for commercial projects; VAT, selected services and binding-offer status are disclosed beside the result | Restricted local implementation under CLM-029 | Before B2C or Ads use, confirm whether a consumer `Gesamtpreis` including VAT and all required price components must replace/supplement the net-only presentation |
 | VSBG | Consumer dispute information may apply; employee threshold/participation facts needed | Owner confirmed no more than ten persons on 2025-12-31 and no voluntary, contractual or statutory participation obligation; the optional website statement was removed | Reassess if participation status changes |
@@ -91,6 +91,12 @@ Source pages checked on 2026-08-04:
 - [Pixel-Ring Datenschutzerklärung](https://www.pixel-ring.com/ru/privacy)
 
 The obsolete EU ODR/OS-platform link present in the source Impressum was deliberately not copied.
+
+The IONOS mailbox processor facts were checked on 2026-09-10 against the official
+[IONOS SE Impressum](https://www.ionos.de/impressum.html), the
+[IONOS AVV guidance](https://www.ionos.de/hilfe/datenschutz/allgemeine-informationen-zur-datenschutz-grundverordnung-dsgvo/vereinbarung-zur-auftragsverarbeitung-avv-mit-ionos-abschliessen/)
+and the published [AVV document](https://www.ionos.de/hilfe/fileadmin/pdf/de_DE/Datenschutz/Vertrag_zur_Auftragsverarbeitung_AVV_.pdf),
+which expressly includes Mail Basic.
 
 ## Remaining company and deployment inputs
 

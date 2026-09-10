@@ -240,11 +240,11 @@ export default function DatenschutzPage() {
                   ausgewählte Leistungen, eine optional eingegebene
                   fünfstellige Objekt-Postleitzahl und die von unserem Server
                   bestätigte vorläufige Berechnung. Zur Bearbeitung erhalten wir
-                  über Resend eine E-Mail-Benachrichtigung. An Ihre E-Mail-Adresse
-                  senden wir über Resend eine Eingangsbestätigung mit der
-                  Anfragenummer. Bei einer Konfigurator-Anfrage enthält sie auch
-                  die Konfigurationszusammenfassung, ausgewählte Leistungen und
-                  den bestätigten vorläufigen Nettopreis, jedoch nicht den freien
+                  eine E-Mail-Benachrichtigung. An Ihre E-Mail-Adresse senden wir
+                  eine Eingangsbestätigung mit der Anfragenummer. Bei einer
+                  Konfigurator-Anfrage enthält sie auch die
+                  Konfigurationszusammenfassung, ausgewählte Leistungen und den
+                  bestätigten vorläufigen Nettopreis, jedoch nicht den freien
                   Nachrichtentext oder angehängte Dateien.
                 </p>
                 <p>
@@ -296,12 +296,12 @@ export default function DatenschutzPage() {
               Neon, LLC in der AWS-Region Frankfurt (eu-central-1) betrieben.
               {leadAttachmentsEnabled
                 ? " Dateien werden in einem privaten Vercel-Blob-Speicher in der Region Frankfurt (fra1) gespeichert."
-                : ""} E-Mail-Benachrichtigungen versendet Plus Five Five, Inc.
-              (Resend) aus der EU-Senderegion eu-west-1. Eingehende Nachrichten
-              an <a href={`mailto:${legal.email}`}>{legal.email}</a> werden
-              durch Cloudflare, Inc. an ein Postfach von Google Ireland Limited
-              weitergeleitet. Für die einwilligungsabhängige Nutzungs- und
-              Conversion-Messung ist Google Ireland Limited Empfängerin.
+                : ""} Für den Versand von E-Mail-Benachrichtigungen aus dem
+              Formular und Eingangsbestätigungen nutzen wir Plus Five Five,
+              Inc. (Resend). Für den Empfang und die Speicherung eingehender
+              E-Mails nutzen wir IONOS SE. Für die einwilligungsabhängige
+              Nutzungs- und Conversion-Messung ist Google Ireland Limited
+              Empfängerin.
             </p>
             <p>
               Die genannten Anbieter haben ihren Sitz teilweise in den USA oder
