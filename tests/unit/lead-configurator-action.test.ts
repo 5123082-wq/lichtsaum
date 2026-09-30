@@ -86,4 +86,22 @@ describe("configurator lead action", () => {
     ).resolves.toBe(mismatch);
     expect(mocks.createLeadUploadPlan).not.toHaveBeenCalled();
   });
+  it("persists a partial mini sketch through the shared pipeline", async () => {
+    const miniProject = { schemaVersion: 1, configuration: {
+      text: "", compositionMode: "text-only", fontId: "montserrat",
+      awningColorId: "anthracite", lightColorId: "warm-white", previewMode: "night"
+    } } as const;
+    await prepareProjectCheckSubmission({ ...plainSubmission, sourcePath: "/", miniProject });
+    expect(mocks.createLeadUploadPlan).toHaveBeenCalledWith(expect.objectContaining({
+      requestContext: { ...miniProject, origin: "mini_configurator", evaluation: "incomplete" }
+    }), expect.any(Object), []);
+    expect(mocks.prepareConfiguratorProjectContext).not.toHaveBeenCalled();
+  });
+
+  it("rejects simultaneous contexts before persistence", async () => {
+    const result = await prepareProjectCheckSubmission({ ...plainSubmission, miniProject: {} as never, configuratorProject: {} as never });
+    expect(result).toMatchObject({ kind: "result", state: { status: "invalid", fieldErrors: { miniProject: expect.any(Array) } } });
+    expect(mocks.createLeadUploadPlan).not.toHaveBeenCalled();
+  });
+
 });

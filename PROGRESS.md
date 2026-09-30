@@ -3,8 +3,12 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-08-20
-- Current stage: public LICHTSAUM site exists; its mobile menu now uses a smooth two-way drawer
+- Last updated: 2026-09-25
+- Current milestone: mini and full configurators now open one shared inquiry dialog locally.
+  Partial mini sketches use a strict server-classified, unpriced JSONB context; existing full pricing,
+  persistence and retry protection remain. Contact/file drafts survive close/edit in page memory.
+  Typed diagnostic events and the GTM setup recipe are ready; this milestone is not deployed.
+- Earlier site context: public LICHTSAUM site exists; its mobile menu now uses a smooth two-way drawer
   transition with a Safari-safe right anchor, one stable header wordmark and global input-modality
   focus handling. Pointer/touch actions no longer leave orange focus styling; keyboard focus remains
   visible. Safari-specific behavior remains unverified on a real device. The
@@ -19,27 +23,132 @@
   owner-approved three-part German lower block is server-rendered after the wizard, metadata option
   A covers configuration plus preliminary-price intent, and two contextual native links point to
   `/#eignung` and `/referenzen`. `/referenzen` remains the next research/copy track. Keyword Planner
-  evidence does not justify new landing pages. Google Ads campaign `24153758040` now exists as a
-  paused B2B Search campaign: €20/day, Germany presence-only, German, Google Search only, three ad
-  groups, 22 exact/phrase keywords, 32 negative keywords and one Primary server-confirmed lead
-  conversion. Its three ads are under review; verification showed 0 impressions and €0 spend.
-- Active track: follow `docs/seo/configurator-references-implementation-plan.md` only when the owner
-  requests the next implementation step. Before any concrete deployment,
-  indexing, Search Console/DNS, GTM/Ads, production-form or attachment action, show the current
-  evidence and use `Спросить у пользователя` under
-  `docs/architecture/publication-governance.md`.
+  evidence does not justify new landing pages. Google Ads campaign `24153758040` remains enabled per owner instruction. The 2026-09-06
+  audit is the historical baseline: 38 impressions, 4 clicks, €12.90 and one owner-confirmed
+  test conversion through September 5, with 0 confirmed customer leads. The owner-approved
+  September 6 changes are applied: Maximize Clicks with €5 CPC ceiling, €20/day budget and a
+  fourth enabled group containing three new Exact keywords and one RSA under review. There are
+  25 enabled and 6 paused keywords; all three new keys are now eligible after initial restrictions,
+  while the new ad is still under review and its group has zero traffic. Production consent
+  checks and owner-submitted test LS-2026-000027 with email receipt succeeded. Google Ads now
+  confirms tag activity today and the inactive warning has cleared; last attributed conversion
+  remains August 22. Transaction-level deduplication remains unverified. See
+  `docs/marketing/google-ads-search-test-2026-09-06.md` for current state and evidence.
+- Operational mail for `info@lichtsaum.com` is now received and stored directly in IONOS Mail
+  Basic. Apple Mail inbound and outbound delivery plus public MX, SPF and DKIM records were verified
+  on 2026-09-10. The website form keeps the same mailbox address and needs no runtime configuration
+  change. The minimal provider disclosure naming Resend and IONOS was published and verified on
+  the production Datenschutz page.
+- Active track: implementation and local QA for configurator inquiries completed. A site release,
+  GTM publication and synthetic production inquiry are separate owner-approved steps.
 - Working tree: intentionally dirty with owner/previous-agent changes. Do not reset, overwrite or
   broadly reformat unrelated work.
 - Default context protocol: read this block and the three `RECENT_CHANGES` entries only. Read the
   detailed sections below when the current task needs their domain.
-- Next action: begin `/referenzen` Phase R1 only when the owner requests it. Ask before a concrete
-  external or production action under `docs/architecture/publication-governance.md`. Keep Google
-  Ads campaign `24153758040` paused until policy review, production release checks and a separate
-  explicit owner authorization to enable it.
+- Next action: owner review of the local interface, then a separately authorized site/GTM release
+  and Tag Assistant/controlled production verification. Real-device mobile keyboard testing remains
+  open; Chromium/WebKit viewport and focus checks passed. Other SEO/Ads tracks remain separate.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20260925-01 — Shared configurator inquiry dialogs
+
+- Scope: mini/full UI, shared lead contract/server validation, emails, idempotency, analytics and
+  GTM recipe; privacy and design documentation.
+- Outcome: incomplete sketches can be requested without price or invented dimensions. Full step 03
+  opens the same persistent form. Close/edit preserves contacts/files; success requires explicit
+  reset. Homepage plain form remains independent. New diagnostics are consent-gated and carry no
+  configuration/contact data; one server-confirmed Primary conversion remains.
+- Verification: 189 unit tests across the suite and added upload-failure check; typecheck/lint and
+  production build passed. Full Playwright run plus focused rerun resolved affected selectors:
+  Chromium/WebKit dialog checks cover 320/390/768/1440 px, axe, focus, Escape, files, detach,
+  200% text, shortened keyboard viewport and event/no-replay semantics. 36 final focused browser
+  checks passed; two environment-gated Google-tag tests remain skipped in local development.
+  Deliveries/database writes were mocked; the local dev server remains available on port 3000.
+- Follow-up: review interface, separately authorize deployment/GTM publication and production test;
+  real mobile keyboard and live Tag Assistant were not exercised.
+
+### CHG-20260910-01 — Migrated operational mailbox to IONOS
+
+- Scope: IONOS mailbox provisioning, Apple Mail, mail DNS, form mail-flow audit and
+  privacy disclosure.
+- Outcome: `info@lichtsaum.com` receives and stores mail directly in IONOS Mail Basic. Resend still
+  delivers form notifications to the same address, and the local public disclosure now names
+  IONOS.
+- Verification: outgoing delivery from the new mailbox and incoming delivery from Yandex passed;
+  public DNS returns both IONOS MX records, the IONOS SPF policy and all three IONOS DKIM CNAMEs.
+  Controlled Resend notifications arrived in the IONOS inbox, and the existing Resend subdomain
+  records remain intact. All 40 relevant form tests and targeted ESLint checks passed. Production
+  `/datenschutz` contains the new minimal Resend/IONOS wording and no reference to the former
+  forwarding arrangement.
+- Follow-up: none.
+
+### CHG-20260906-02 — Applied CPC cap and adjacent-demand test
+
+- Scope: campaign CPC ceiling, three Exact keywords, one RSA and conversion diagnostic follow-up.
+- Outcome: CPC €5, budget €20/day and Maximize Clicks; new group 200547384672 enabled with ad
+  823633352778 under review. Follow-up confirms all three new keys ELIGIBLE and zero traffic. Google Ads tag inactivity warning
+  cleared; latest activity is September 6, while last attributed conversion remains August 22.
+- Verification: validate-only and atomic six-operation mutation succeeded; independent API read
+  confirms cap, budget, three Exact keys, pinned product copy and unchanged existing keyword statuses.
+  Google Ads UI confirms Active goal and No recent conversions with today's tag activity.
+- Follow-up: review moderation, disclosed search terms, CPC and qualified leads; transaction-ID
+  deduplication remains unverified. Proposed first review September 13; no automation created.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
+### CHG-20260906-01 — Audited Google Ads demand and recommendations
+
+- Scope: read-only campaign, keyword, conversion, recommendation and Keyword Planner audit.
+- Outcome: 17/22 enabled keywords rarely served; 38 impressions, 4 clicks, €12.90 and 1 owner-confirmed
+  test conversion through September 5, with 0 confirmed customer leads. Google flags the tag inactive; no CPC cap is set.
+- Verification: API totals reconcile across days, keywords, groups and devices; live UI confirms
+  totals, eight recommendations, CPC settings, tag warning and German Keyword Planner estimates.
+  Production DOM checks confirm consent-dependent GTM/Ads/GA4 insertion and removal.
+- Follow-up: CPC, keyword test and tag-activity follow-up are recorded in CHG-20260906-02;
+  transaction-level deduplication and broader landing/ad improvements remain open. Do not resubmit test LS-2026-000027.
+
+
+### CHG-20260823-01 — Added three Google Ads sitelinks
+
+- Scope: campaign-level sitelink assets for campaign `24153758040`.
+- Outcome: `Konfigurator`, `Referenzen` and `Eignung prüfen` are associated with the campaign and
+  enabled; no other campaign setting was changed.
+- Verification: Google Ads API validate-only passed; the six-operation atomic mutation succeeded;
+  an independent read confirmed exactly three enabled sitelinks and campaign status `ENABLED`.
+- Follow-up: monitor asset-level clicks and qualified leads after sufficient traffic accumulates.
+
+### CHG-20260821-02 — Applied Google Ads keyword cleanup
+
+- Scope: live campaign keyword statuses, Phrase-to-Exact replacement and validated Exact additions.
+- Outcome: the owner explicitly kept campaign `24153758040` enabled; 7 wrong-intent criteria are
+  paused, the mixed Phrase criterion was removed and recreated as Exact, and 7 validated Exact
+  candidates were added; the final set contains 22 enabled and 7 paused criteria.
+- Verification: Google Ads API validate-only passed; the atomic mutation succeeded; an independent
+  post-mutation read and assertions confirmed campaign `ENABLED`, 22 enabled keywords, 7 paused
+  keywords and 0 impressions, clicks or spend.
+- Follow-up: monitor search terms, CPC and qualified leads; do not expand without evidence.
+
+
+### CHG-20260821-01 — Live SERP validation of Google Ads keywords
+
+- Scope: all 18 unique existing Google Ads queries, 20 additional candidates, direct competitors
+  and current campaign state.
+- Outcome: 11 existing queries are product-aligned, 1 is mixed and 6 have wrong intent; across the
+  22 Ads criteria this maps to 14 keep, 1 restrict and 7 pause decisions. Seven controlled Exact
+  candidates are prioritized, but no Ads keyword was changed.
+- Verification: five parallel in-app Google Search tabs checked 38 German/Germany, non-personalized
+  SERPs without CAPTCHA; Luminard appeared for 12/18 existing queries and 18/20 candidates. A Google
+  Ads API read reported the campaign enabled, all three ads approved, and 0 impressions/€0 spend.
+- Follow-up: owner authorization is required to pause the campaign and approve keyword cleanup;
+  SERP relevance does not replace volume, CPC or conversion validation.
+
+
+## Earlier material changes — read only when required
 
 ### CHG-20260820-03 — Segment-based light-panel allocation
 
@@ -75,11 +184,6 @@
 - Verification: targeted pricing/lead tests passed (38 tests); full typecheck, lint and test suite
   passed (164 tests); `git diff --check` passed.
 - Follow-up: none.
-
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
-## Earlier material changes — read only when required
 
 ### CHG-20260819-02 — Server-rendered configurator explanation
 

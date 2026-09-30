@@ -1,0 +1,1372 @@
+{
+  "retrieved_date": "2026-09-06",
+  "performance_period": "2026-08-01 through 2026-09-05; campaign starts 2026-08-20",
+  "timezone": "Europe/Berlin",
+  "source": "Google Ads API v22 read-only searchStream",
+  "reports": {
+    "overview": [
+      {
+        "customer": {
+          "resourceName": "customers/3638184039",
+          "descriptiveName": "LICHTSAUM",
+          "currencyCode": "EUR",
+          "timeZone": "Europe/Berlin"
+        },
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "status": "ENABLED",
+          "biddingStrategyType": "TARGET_SPEND",
+          "name": "Search | DE | B2B | Leuchtvolant | 2026-08",
+          "id": "24153758040",
+          "optimizationScore": 0.8692192101551506,
+          "primaryStatus": "ELIGIBLE"
+        },
+        "metrics": {
+          "clicks": "4",
+          "searchBudgetLostImpressionShare": 0.05714285714285714,
+          "searchImpressionShare": 0.8285714285714286,
+          "searchRankLostImpressionShare": 0.11428571428571428,
+          "conversions": 1,
+          "costMicros": "12900000",
+          "allConversions": 1,
+          "impressions": "38"
+        },
+        "campaignBudget": {
+          "resourceName": "customers/3638184039/campaignBudgets/15803015435",
+          "amountMicros": "20000000"
+        }
+      }
+    ],
+    "daily": [
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "2",
+          "conversions": 1,
+          "costMicros": "7710000",
+          "allConversions": 1,
+          "impressions": "9"
+        },
+        "segments": {
+          "date": "2026-08-22"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "2"
+        },
+        "segments": {
+          "date": "2026-08-23"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "4"
+        },
+        "segments": {
+          "date": "2026-08-24"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "6"
+        },
+        "segments": {
+          "date": "2026-08-26"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "1",
+          "conversions": 0,
+          "costMicros": "2390000",
+          "allConversions": 0,
+          "impressions": "4"
+        },
+        "segments": {
+          "date": "2026-08-31"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "3"
+        },
+        "segments": {
+          "date": "2026-09-01"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "1",
+          "conversions": 0,
+          "costMicros": "2800000",
+          "allConversions": 0,
+          "impressions": "5"
+        },
+        "segments": {
+          "date": "2026-09-04"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "5"
+        },
+        "segments": {
+          "date": "2026-09-05"
+        }
+      }
+    ],
+    "ad_groups": [
+      {
+        "adGroup": {
+          "resourceName": "customers/3638184039/adGroups/194702128770",
+          "status": "ENABLED",
+          "name": "Leuchtvolant | Exact+Phrase",
+          "primaryStatus": "ELIGIBLE"
+        },
+        "metrics": {
+          "clicks": "4",
+          "conversions": 1,
+          "costMicros": "12900000",
+          "allConversions": 1,
+          "impressions": "38"
+        }
+      },
+      {
+        "adGroup": {
+          "resourceName": "customers/3638184039/adGroups/194702269810",
+          "status": "ENABLED",
+          "name": "Branding | Exact+Phrase",
+          "primaryStatus": "ELIGIBLE"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "0"
+        }
+      },
+      {
+        "adGroup": {
+          "resourceName": "customers/3638184039/adGroups/200923240553",
+          "status": "ENABLED",
+          "name": "Gastronomie | Exact+Phrase",
+          "primaryStatus": "ELIGIBLE"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "0"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "networkSettings": {
+            "targetGoogleSearch": true,
+            "targetSearchNetwork": false,
+            "targetContentNetwork": false
+          },
+          "geoTargetTypeSetting": {
+            "positiveGeoTargetType": "PRESENCE"
+          },
+          "name": "Search | DE | B2B | Leuchtvolant | 2026-08",
+          "startDate": "2026-08-20",
+          "endDate": "2037-12-30"
+        }
+      }
+    ],
+    "criteria": [
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~1001",
+          "type": "LANGUAGE",
+          "language": {
+            "languageConstant": "languageConstants/1001"
+          },
+          "status": "ENABLED",
+          "negative": false
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~2276",
+          "type": "LOCATION",
+          "location": {
+            "geoTargetConstant": "geoTargetConstants/2276"
+          },
+          "status": "ENABLED",
+          "negative": false
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~30000",
+          "type": "DEVICE",
+          "device": {
+            "type": "DESKTOP"
+          },
+          "status": "ENABLED",
+          "negative": false
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~30001",
+          "type": "DEVICE",
+          "device": {
+            "type": "MOBILE"
+          },
+          "status": "ENABLED",
+          "negative": false
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~30002",
+          "type": "DEVICE",
+          "device": {
+            "type": "TABLET"
+          },
+          "status": "ENABLED",
+          "negative": false
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10034840",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "camper"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10141411",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "billig"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10154201",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "ebay"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10177651",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "gebraucht"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10254430",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "preisvergleich"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10317231",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "diy"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10549371",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "thule"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10707397",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "reparieren"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~10837581",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "amazon"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~11059311",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "sichtschutz"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~11127401",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "anleitung"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~11481341",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "otto"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~11881086",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "wohnwagen"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~12840773",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "nähen"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~13750316",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "lichtleiste"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~15019811",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "wohnmobil"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~15481821",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "dometic"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~28046983",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "fiamma"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~28304396",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "klemmmarkise"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~47985571",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "lichterkette"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~50215371",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "omnistor"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~60040941",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "idealo"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~108577759",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "montageanleitung"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~120701453",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "PHRASE",
+            "text": "selber machen"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~253576629",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "PHRASE",
+            "text": "led strip"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~695375508",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "PHRASE",
+            "text": "markise kaufen"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~302200087350",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "PHRASE",
+            "text": "neue markise"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~306076823915",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "PHRASE",
+            "text": "led streifen"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~307255170883",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "ersatztuch"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~312889220540",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "ersatzstoff"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~874394781017",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "PHRASE",
+            "text": "volant plus"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      },
+      {
+        "campaignCriterion": {
+          "resourceName": "customers/3638184039/campaignCriteria/24153758040~1964742179743",
+          "type": "KEYWORD",
+          "keyword": {
+            "matchType": "BROAD",
+            "text": "vario-volant"
+          },
+          "status": "ENABLED",
+          "negative": true
+        }
+      }
+    ],
+    "conversions": [
+      {
+        "conversionAction": {
+          "resourceName": "customers/3638184039/conversionActions/7716680762",
+          "status": "ENABLED",
+          "type": "WEBPAGE",
+          "category": "SUBMIT_LEAD_FORM",
+          "countingType": "ONE_PER_CLICK",
+          "name": "Projektanfrage – serverbestätigt",
+          "includeInConversionsMetric": true,
+          "clickThroughLookbackWindowDays": "90",
+          "primaryForGoal": true
+        }
+      },
+      {
+        "conversionAction": {
+          "resourceName": "customers/3638184039/conversionActions/7731265674",
+          "status": "HIDDEN",
+          "type": "UNKNOWN",
+          "category": "CONVERTED_LEAD",
+          "countingType": "MANY_PER_CLICK",
+          "name": "LICHTSAUM Website (web) close_convert_lead",
+          "includeInConversionsMetric": false,
+          "clickThroughLookbackWindowDays": "90",
+          "primaryForGoal": false
+        }
+      },
+      {
+        "conversionAction": {
+          "resourceName": "customers/3638184039/conversionActions/7731265677",
+          "status": "HIDDEN",
+          "type": "UNKNOWN",
+          "category": "QUALIFIED_LEAD",
+          "countingType": "MANY_PER_CLICK",
+          "name": "LICHTSAUM Website (web) qualify_lead",
+          "includeInConversionsMetric": false,
+          "clickThroughLookbackWindowDays": "90",
+          "primaryForGoal": false
+        }
+      },
+      {
+        "conversionAction": {
+          "resourceName": "customers/3638184039/conversionActions/7731265800",
+          "status": "HIDDEN",
+          "type": "GOOGLE_ANALYTICS_4_PURCHASE",
+          "category": "PURCHASE",
+          "countingType": "MANY_PER_CLICK",
+          "name": "LICHTSAUM Website (web) purchase",
+          "includeInConversionsMetric": false,
+          "clickThroughLookbackWindowDays": "90",
+          "primaryForGoal": false
+        }
+      }
+    ],
+    "conversion_days": [
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "conversions": 1,
+          "allConversions": 1,
+          "conversionsByConversionDate": 1
+        },
+        "segments": {
+          "date": "2026-08-22",
+          "conversionActionName": "Projektanfrage – serverbestätigt"
+        }
+      }
+    ],
+    "goals": [
+      {
+        "campaignConversionGoal": {
+          "resourceName": "customers/3638184039/campaignConversionGoals/24153758040~SUBMIT_LEAD_FORM~WEBSITE",
+          "category": "SUBMIT_LEAD_FORM",
+          "origin": "WEBSITE",
+          "biddable": true
+        }
+      }
+    ],
+    "device_network": [
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "2",
+          "conversions": 1,
+          "costMicros": "7710000",
+          "allConversions": 1,
+          "impressions": "16"
+        },
+        "segments": {
+          "device": "DESKTOP",
+          "adNetworkType": "SEARCH"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "1",
+          "conversions": 0,
+          "costMicros": "2800000",
+          "allConversions": 0,
+          "impressions": "17"
+        },
+        "segments": {
+          "device": "MOBILE",
+          "adNetworkType": "SEARCH"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        },
+        "metrics": {
+          "clicks": "1",
+          "conversions": 0,
+          "costMicros": "2390000",
+          "allConversions": 0,
+          "impressions": "5"
+        },
+        "segments": {
+          "device": "TABLET",
+          "adNetworkType": "SEARCH"
+        }
+      }
+    ],
+    "geo": [
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "id": "24153758040"
+        },
+        "metrics": {
+          "clicks": "4",
+          "conversions": 1,
+          "costMicros": "12900000",
+          "allConversions": 1,
+          "impressions": "38"
+        },
+        "geographicView": {
+          "resourceName": "customers/3638184039/geographicViews/2276~LOCATION_OF_PRESENCE",
+          "locationType": "LOCATION_OF_PRESENCE",
+          "countryCriterionId": "2276"
+        }
+      }
+    ],
+    "customer": [
+      {
+        "customer": {
+          "resourceName": "customers/3638184039",
+          "conversionTrackingSetting": {
+            "conversionTrackingStatus": "CONVERSION_TRACKING_MANAGED_BY_SELF"
+          },
+          "descriptiveName": "LICHTSAUM",
+          "autoTaggingEnabled": true
+        }
+      }
+    ],
+    "ads": [
+      {
+        "adGroup": {
+          "resourceName": "customers/3638184039/adGroups/194702269810",
+          "name": "Branding | Exact+Phrase"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "0"
+        },
+        "adGroupAd": {
+          "resourceName": "customers/3638184039/adGroupAds/194702269810~821680868828",
+          "status": "ENABLED",
+          "ad": {
+            "responsiveSearchAd": {
+              "headlines": [
+                {
+                  "text": "Lichtsaum",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Beleuchteter Markisen-Volant",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise wird Markenlicht",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Projekt prüfen lassen",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Für bestehende Markisen",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Leuchtvolant fürs Gewerbe",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise als Markenlicht",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                }
+              ],
+              "descriptions": [
+                {
+                  "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM.",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                }
+              ]
+            },
+            "resourceName": "customers/3638184039/ads/821680868828",
+            "id": "821680868828",
+            "finalUrls": [
+              "https://www.lichtsaum.com/"
+            ]
+          },
+          "policySummary": {
+            "reviewStatus": "REVIEWED",
+            "approvalStatus": "APPROVED"
+          },
+          "adStrength": "POOR"
+        }
+      },
+      {
+        "adGroup": {
+          "resourceName": "customers/3638184039/adGroups/200923240553",
+          "name": "Gastronomie | Exact+Phrase"
+        },
+        "metrics": {
+          "clicks": "0",
+          "conversions": 0,
+          "costMicros": "0",
+          "allConversions": 0,
+          "impressions": "0"
+        },
+        "adGroupAd": {
+          "resourceName": "customers/3638184039/adGroupAds/200923240553~821680868831",
+          "status": "ENABLED",
+          "ad": {
+            "responsiveSearchAd": {
+              "headlines": [
+                {
+                  "text": "Lichtsaum",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Beleuchteter Markisen-Volant",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise wird Markenlicht",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Projekt prüfen lassen",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Für bestehende Markisen",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Leuchtvolant fürs Gewerbe",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise als Markenlicht",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                }
+              ],
+              "descriptions": [
+                {
+                  "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM.",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                }
+              ]
+            },
+            "resourceName": "customers/3638184039/ads/821680868831",
+            "id": "821680868831",
+            "finalUrls": [
+              "https://www.lichtsaum.com/"
+            ]
+          },
+          "policySummary": {
+            "reviewStatus": "REVIEWED",
+            "approvalStatus": "APPROVED"
+          },
+          "adStrength": "POOR"
+        }
+      },
+      {
+        "adGroup": {
+          "resourceName": "customers/3638184039/adGroups/194702128770",
+          "name": "Leuchtvolant | Exact+Phrase"
+        },
+        "metrics": {
+          "clicks": "4",
+          "conversions": 1,
+          "costMicros": "12900000",
+          "allConversions": 1,
+          "impressions": "38"
+        },
+        "adGroupAd": {
+          "resourceName": "customers/3638184039/adGroupAds/194702128770~821680868834",
+          "status": "ENABLED",
+          "ad": {
+            "responsiveSearchAd": {
+              "headlines": [
+                {
+                  "text": "Lichtsaum",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Beleuchteter Markisen-Volant",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise wird Markenlicht",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Projekt prüfen lassen",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Für bestehende Markisen",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Leuchtvolant fürs Gewerbe",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise als Markenlicht",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                }
+              ],
+              "descriptions": [
+                {
+                  "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                },
+                {
+                  "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM.",
+                  "assetPerformanceLabel": "PENDING",
+                  "policySummaryInfo": {
+                    "reviewStatus": "REVIEWED",
+                    "approvalStatus": "APPROVED"
+                  }
+                }
+              ]
+            },
+            "resourceName": "customers/3638184039/ads/821680868834",
+            "id": "821680868834",
+            "finalUrls": [
+              "https://www.lichtsaum.com/"
+            ]
+          },
+          "policySummary": {
+            "reviewStatus": "REVIEWED",
+            "approvalStatus": "APPROVED"
+          },
+          "adStrength": "AVERAGE"
+        }
+      }
+    ],
+    "assets": [
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "id": "24153758040"
+        },
+        "asset": {
+          "resourceName": "customers/3638184039/assets/411833543476",
+          "type": "SITELINK",
+          "finalUrls": [
+            "https://www.lichtsaum.com/#eignung"
+          ],
+          "sitelinkAsset": {
+            "linkText": "Eignung prüfen"
+          }
+        },
+        "campaignAsset": {
+          "resourceName": "customers/3638184039/campaignAssets/24153758040~411833543476~SITELINK",
+          "fieldType": "SITELINK",
+          "status": "ENABLED"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "id": "24153758040"
+        },
+        "asset": {
+          "resourceName": "customers/3638184039/assets/411903436761",
+          "type": "SITELINK",
+          "finalUrls": [
+            "https://www.lichtsaum.com/referenzen"
+          ],
+          "sitelinkAsset": {
+            "linkText": "Referenzen"
+          }
+        },
+        "campaignAsset": {
+          "resourceName": "customers/3638184039/campaignAssets/24153758040~411903436761~SITELINK",
+          "fieldType": "SITELINK",
+          "status": "ENABLED"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "id": "24153758040"
+        },
+        "asset": {
+          "resourceName": "customers/3638184039/assets/411903446253",
+          "type": "SITELINK",
+          "finalUrls": [
+            "https://www.lichtsaum.com/konfigurator"
+          ],
+          "sitelinkAsset": {
+            "linkText": "Konfigurator"
+          }
+        },
+        "campaignAsset": {
+          "resourceName": "customers/3638184039/campaignAssets/24153758040~411903446253~SITELINK",
+          "fieldType": "SITELINK",
+          "status": "ENABLED"
+        }
+      },
+      {
+        "campaign": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "id": "24153758040"
+        },
+        "asset": {
+          "resourceName": "customers/3638184039/assets/411272931297",
+          "type": "IMAGE"
+        },
+        "campaignAsset": {
+          "resourceName": "customers/3638184039/campaignAssets/24153758040~411272931297~BUSINESS_LOGO",
+          "fieldType": "BUSINESS_LOGO",
+          "status": "ENABLED"
+        }
+      }
+    ],
+    "recommendations": [
+      {
+        "recommendation": {
+          "resourceName": "customers/3638184039/recommendations/ODQ2Nzk2MjcwMi0yNjMtMTc4ODE1MjY2OTUwNi0rODQ2Nzk2MjcwMg",
+          "type": "DYNAMIC_IMAGE_EXTENSION_OPT_IN",
+          "dismissed": false
+        }
+      },
+      {
+        "recommendation": {
+          "resourceName": "customers/3638184039/recommendations/ODQ2Nzk2MjcwMi0xMDEtMTc4ODE2NzY5NTYzNy0rMjQxNTM3NTgwNDA",
+          "type": "SITELINK_ASSET",
+          "campaign": "customers/3638184039/campaigns/24153758040",
+          "dismissed": false
+        }
+      },
+      {
+        "recommendation": {
+          "resourceName": "customers/3638184039/recommendations/ODQ2Nzk2MjcwMi0xMTUtMTc4ODY0OTA2Njg0Ny0rMjQxNTM3NTgwNDA",
+          "type": "SEARCH_PARTNERS_OPT_IN",
+          "impact": {
+            "baseMetrics": {
+              "impressions": 12,
+              "clicks": 2,
+              "costMicros": "5190000"
+            },
+            "potentialMetrics": {
+              "impressions": 12,
+              "clicks": 2,
+              "costMicros": "5190000"
+            }
+          },
+          "campaign": "customers/3638184039/campaigns/24153758040",
+          "dismissed": false
+        }
+      },
+      {
+        "recommendation": {
+          "resourceName": "customers/3638184039/recommendations/ODQ2Nzk2MjcwMi0xNzEtMTc4ODA3NjgwNzUzNy0rMjQxNTM3NTgwNDA",
+          "type": "CALLOUT_ASSET",
+          "impact": {
+            "baseMetrics": {
+              "impressions": 12,
+              "clicks": 0,
+              "costMicros": "0"
+            },
+            "potentialMetrics": {
+              "impressions": 12,
+              "clicks": 0,
+              "costMicros": "0"
+            }
+          },
+          "campaign": "customers/3638184039/campaigns/24153758040",
+          "dismissed": false
+        }
+      },
+      {
+        "recommendation": {
+          "resourceName": "customers/3638184039/recommendations/ODQ2Nzk2MjcwMi0yMjYtMTc4ODI5MTk5ODYxNi0rMjQxNTM3NTgwNDAtMTk0NzAyMTI4NzcwLTgyMTY4MDg2ODgzNA",
+          "type": "RESPONSIVE_SEARCH_AD_IMPROVE_AD_STRENGTH",
+          "impact": {
+            "baseMetrics": {
+              "impressions": 7,
+              "clicks": 1,
+              "costMicros": "2390000"
+            },
+            "potentialMetrics": {
+              "clicks": 1,
+              "costMicros": "2455691"
+            }
+          },
+          "campaign": "customers/3638184039/campaigns/24153758040",
+          "adGroup": "customers/3638184039/adGroups/194702128770",
+          "dismissed": false,
+          "responsiveSearchAdImproveAdStrengthRecommendation": {
+            "currentAd": {
+              "responsiveSearchAd": {
+                "headlines": [
+                  {
+                    "text": "Lichtsaum"
+                  },
+                  {
+                    "text": "Beleuchteter Markisen-Volant"
+                  },
+                  {
+                    "text": "Markise wird Markenlicht"
+                  },
+                  {
+                    "text": "Projekt prüfen lassen"
+                  },
+                  {
+                    "text": "Für bestehende Markisen"
+                  },
+                  {
+                    "text": "Leuchtvolant fürs Gewerbe"
+                  },
+                  {
+                    "text": "Markise als Markenlicht"
+                  }
+                ],
+                "descriptions": [
+                  {
+                    "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen."
+                  },
+                  {
+                    "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM."
+                  }
+                ],
+                "path1": "leuchtvolant",
+                "path2": "projekt"
+              },
+              "id": "821680868834",
+              "finalUrls": [
+                "https://www.lichtsaum.com/"
+              ],
+              "finalMobileUrls": [
+                ""
+              ]
+            },
+            "recommendedAd": {
+              "responsiveSearchAd": {
+                "path1": "leuchtvolant",
+                "path2": "projekt"
+              },
+              "finalUrls": [
+                "https://www.lichtsaum.com/"
+              ],
+              "finalMobileUrls": [
+                ""
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "search_terms": [],
+    "adgroup_negatives": [],
+    "shared_sets": []
+  }
+}

@@ -15,6 +15,11 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] }
+    },
+    {
+      name: "webkit",
+      testMatch: /(?:inquiry-dialog|configurator)\.spec\.ts/,
+      use: { ...devices["Desktop Safari"] }
     }
   ],
   webServer: externalBaseUrl

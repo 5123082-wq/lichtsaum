@@ -2,11 +2,21 @@
 
 Status: `Verified`; O10 resources and consent-aware GTM version 2 are published, production
 consent/network checks pass and controlled server-confirmed inquiries completed
-Last reviewed: 2026-08-11
+Last reviewed: 2026-09-25
 
 Publication, GTM activation, advertiser verification and synthetic-QA timing follow
 [`../architecture/publication-governance.md`](../architecture/publication-governance.md). The
 technical/consent contracts remain binding; open execution choices are `Спросить у пользователя`.
+
+<!-- AGENT_BRIEF:START -->
+## Agent brief
+- Owns: event semantics, allowlisted fields, consent, single Primary conversion and GTM mapping.
+- Current: mini/full inquiry and configurator diagnostics implemented locally on 2026-09-25;
+  new GTM tags/custom definitions are instructions only, not published. Historical production
+  evidence below refers to the existing destination-scoped generate_lead setup.
+- Open: approved release, GTM Preview/Tag Assistant and controlled production verification.
+- Read full when: changing events, consent, identity, destinations or account/tag configuration.
+<!-- AGENT_BRIEF:END -->
 
 ## Measurement objective
 
@@ -33,7 +43,9 @@ Status: `Verified` locally and in production on 2026-08-11
   are discarded.
 - The current form queues `generate_lead` only after the normal or recovered server result confirms
   the same accepted `lead_id`. Invalid and failed submissions do not queue it.
-- The `/konfigurator` form remains the same `main_inquiry` / `awning_inquiry` business conversion.
+- Modal forms now identify their surface as `mini_configurator_inquiry` or
+  `full_configurator_inquiry`; the plain homepage keeps `main_inquiry`. All retain the same
+  `awning_inquiry` business conversion.
   Its inscription, dimensions, colours, PLZ, services, panel allocation, filenames and net result
   are request context only and never become analytics or Ads parameters.
 - The adapter uses destination-scoped `generate_lead` records. The Analytics record contains only
@@ -95,7 +107,11 @@ view, email/phone click или неуспешная запись в CRM.
 | Event | Trigger | Allowed parameters | GA4 role | Ads role |
 | --- | --- | --- | --- | --- |
 | `cta_click` | Пользователь активировал CTA | `cta_id`, `cta_location`, `destination_type` | Diagnostic | None |
-| `lead_form_start` | Первое осмысленное взаимодействие с формой | `form_id`, `form_location` | Funnel | None |
+| `configurator_start` | Первое изменение настройки за жизнь страницы; restore/render не считаются | `configurator_type` | Funnel | None |
+| `configurator_step_view` | Начальный показ и реальные переходы полного конфигуратора | `configurator_type`, `step` | Funnel | None |
+| `configurator_result_view` | Готовый server result при входе в шаг 3 | `configurator_type`, `step` | Funnel | None |
+| `lead_form_open` | Каждое явное открытие диалога, включая повторное | `form_id`, `form_location` | Funnel | None |
+| `lead_form_start` | Первое изменение поля/файла в текущем черновике формы | `form_id`, `form_location` | Funnel | None |
 | `lead_form_validation_error` | Submit отклонён валидацией | `form_id`, `error_group`, `error_count` | UX diagnostic | None |
 | `lead_submit_attempt` | Серверный submit начат | `form_id` | Funnel | None |
 | `generate_lead` | Только подтверждённый server success | Analytics: `form_id`, `lead_type`; Ads: `form_id`, `lead_type`, `lead_id` | Key event; never imported to Ads | Direct tag; the only Primary conversion source |
@@ -110,22 +126,25 @@ view, email/phone click или неуспешная запись в CRM.
 
 Allowed values are short controlled enums, not visible copy or arbitrary DOM text.
 
-Proposed enums:
+Implemented form/configurator enums (CTA/contact rows remain proposed):
 
 | Parameter | Values |
 | --- | --- |
 | `cta_id` | `hero_request`, `nav_request`, `final_request`, `project_contact` |
 | `cta_location` / `location` | `header`, `hero`, `benefits`, `references`, `final`, `footer` |
 | `destination_type` | `form_anchor`, `contact_page`, `phone`, `email` |
-| `form_id` | `main_inquiry`, `contact_inquiry` |
-| `form_location` | `landing`, `contact` |
+| `form_id` | `main_inquiry`, `contact_inquiry`, `mini_configurator_inquiry`, `full_configurator_inquiry` |
+| `form_location` | `landing`, `contact`, `mini_configurator`, `full_configurator` |
+| `configurator_type` | `mini`, `full`; step/result events only `full` |
+| `step` | Integers 1, 2, 3; result event only 3 |
 | `lead_type` | `awning_inquiry` initially; expand only with real routing |
 | `error_group` | `validation`, `rate_limited`, `integration`, `network`, `unknown` |
 
-The implemented `/konfigurator` surface deliberately reuses `main_inquiry`; a different
-`calculator_inquiry` enum is not introduced merely because the visible form has more context. A new
-form enum still requires a separately justified diagnostic/operational need and never creates a
-second Primary conversion by itself.
+Different form IDs identify entry surfaces only; they never create a second Primary conversion.
+`contact_inquiry` remains reserved; the contact page currently links to the homepage form.
+Diagnostics require current Analytics consent and are never replayed after late consent. The
+once-only markers advance even when an event is dropped. A new explicit modal opening is a new
+action; React rerenders are not. Form start resets only on explicit new inquiry after success.
 
 Never send:
 
@@ -152,6 +171,10 @@ Conceptual contract:
 ```ts
 type AnalyticsEvent =
   | { name: "cta_click"; cta_id: CtaId; cta_location: Location; destination_type: Destination }
+  | { name: "configurator_start"; configurator_type: "mini" | "full" }
+  | { name: "configurator_step_view"; configurator_type: "full"; step: 1 | 2 | 3 }
+  | { name: "configurator_result_view"; configurator_type: "full"; step: 3 }
+  | { name: "lead_form_open"; form_id: FormId; form_location: FormLocation }
   | { name: "lead_form_start"; form_id: FormId; form_location: FormLocation }
   | { name: "lead_form_validation_error"; form_id: FormId; error_group: "validation"; error_count: number }
   | { name: "lead_submit_attempt"; form_id: FormId }
@@ -262,6 +285,84 @@ diagnostics and persistence evidence. Never paste real lead data into screenshot
   external legal opinion on 2026-08-11. The previous deferral is cancelled; use
   `Спросить у пользователя` before performing verification, using an alias, publishing tags or
   activating Ads.
+
+## GTM implementation recipe — next approved release
+
+Status: `Proposed` account configuration; code implemented locally. Do not publish as part of the
+2026-09-25 implementation. Existing container/stream IDs are recorded above; use the same Google
+tag and GA4 stream, never create another measurement path.
+
+1. In GTM Variables, reuse/create Data Layer Variables (version 2, no default values):
+   `DLV - form_id` → `form_id`; `DLV - form_location` → `form_location`;
+   `DLV - configurator_type` → `configurator_type`; `DLV - step` → `step`;
+   `DLV - error_group` → `error_group`; `DLV - error_count` → `error_count`.
+   Reuse existing destination, lead_type and lead_id variables only in their existing lead tags.
+2. For each row below create one Custom Event trigger named `CE - <event>`: Event name exactly
+   the first column, **Use regex matching off**, All Custom Events. Create one GA4 Event tag named
+   `GA4 - <event>`, event name exactly that column, existing Google tag/measurement ID. Attach only
+   its matching trigger. Map only listed parameters (parameter name → same-name DLV). Do not use
+   a shared all-fields parameter object: GTM data-layer values can persist from earlier events.
+3. All eight diagnostic tags: Additional Consent Checks → Require additional consent →
+   `analytics_storage`. Keep the existing consent-aware loader and Google tag; no All Pages
+   diagnostic triggers, form-submit triggers, Custom HTML or direct gtag calls.
+
+| Exact event / trigger suffix | GA4 parameters (same-name DLV) |
+| --- | --- |
+| `configurator_start` | `configurator_type` |
+| `configurator_step_view` | `configurator_type`, `step` |
+| `configurator_result_view` | `configurator_type`, `step` |
+| `lead_form_open` | `form_id`, `form_location` |
+| `lead_form_start` | `form_id`, `form_location` |
+| `lead_submit_attempt` | `form_id` |
+| `lead_form_validation_error` | `form_id`, `error_group`, `error_count` |
+| `lead_submit_error` | `form_id`, `error_group` |
+
+4. Keep both existing `generate_lead` tags separate: Analytics trigger requires
+   `event = generate_lead` AND `destination = analytics`, maps only form_id/lead_type;
+   direct Ads requires `event = generate_lead` AND `destination = ads`, maps lead_id only as
+   **Transaction ID**. Neither should filter out the new form IDs. Preserve all existing consent
+   requirements and the one Primary action. No diagnostic tag sends lead_id, price, value or currency.
+5. GA4 Admin → Data display → Custom definitions: use existing predefined dimensions where
+   available; reuse/create the missing **event-scoped dimensions** for
+   `form_id`, `form_location`, `configurator_type`, `step`, `error_group`, `lead_type`; use these
+   exact Event parameter names. If numeric error totals are needed, create event-scoped custom
+   metric `error_count`, unit Standard. Never register lead_id/user input. No diagnostic event is
+   a key event, no new Ads import. Keep generate_lead as the existing GA4 key event without Ads import.
+6. Inspect Enhanced measurement → Form interactions. If enabled, disable that automatic form
+   measurement in the approved release: use the typed lead_* events, avoiding duplicate automatic
+   form_start/form_submit and ephemeral DOM form IDs in reports. Other enhanced measurement settings
+   are outside this change.
+
+### Tag Assistant acceptance scenarios
+
+Use a controlled preview with delivery mocked or an explicitly approved synthetic production lead.
+The local prototype validation path deliberately cannot generate a saved-lead conversion.
+
+| Scenario | Expected events/tags |
+| --- | --- |
+| Reject all, then change mini/open/type/submit | Form works; no diagnostic or conversion records/tags |
+| Marketing only | Diagnostics absent; accepted lead has Ads generate_lead only, correct Transaction ID |
+| Analytics only | Diagnostic GA4 tags fire once per action; accepted lead has sanitized GA4 generate_lead only |
+| Both categories | Same diagnostics; one event per lead per destination; lead_id absent from every GA4 request |
+| Full load → edits → 2 → 3 | step_view 1, one start, step_view 2, step_view 3, result_view 3; renders add nothing |
+| Mini edit → modal → fields → close → reopen | one start; open, form_start, open; contact/file draft preserved |
+| Late consent after initial edit | No replay of start/initial step; only future explicit actions are measured |
+| Empty submit | attempt + validation_error; zero generate_lead |
+| Price changed | attempt; zero lead until new price explicitly confirmed and submission accepted |
+| Upload/network failure | attempt + submit_error if unrecovered; no lead conversion for unaccepted request |
+| Double click / accepted response lost / reopen success | One accepted lead, at most one generate_lead per destination |
+
+In Tag Assistant inspect consent state, each event's Variables and Tags fired/not fired. In GA4
+DebugView verify controlled form IDs/type/steps; inspect network payloads for absence of inscription,
+dimensions, colours, price, email, phone, message, filenames and lead_id. The operational request
+payload legitimately contains the user-submitted context; it must not be copied to the data layer.
+Publication and an external end-to-end synthetic submission require a separate approved release.
+
+Implementation references checked 2026-09-25:
+[Custom Event trigger](https://support.google.com/tagmanager/answer/7679219?hl=en),
+[GA4 Event tags](https://support.google.com/tagmanager/answer/13034206?hl=en),
+[event-scoped custom dimensions](https://support.google.com/analytics/answer/14239696?hl=en),
+[data layer](https://developers.google.com/tag-platform/tag-manager/datalayer).
 
 ## Official references
 

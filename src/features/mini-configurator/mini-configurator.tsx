@@ -39,6 +39,10 @@ import type {
   MiniConfiguratorGeometry,
   MiniConfiguratorTextMeasurement
 } from "@/features/mini-configurator/types";
+import { InquiryDialog } from "@/features/lead-form/inquiry-dialog";
+import { miniProjectRows } from "@/features/lead-form/mini-project";
+import type { MiniProjectSubmission } from "@/features/lead-form/request-context";
+import { emitConfiguratorAnalyticsEvent } from "@/features/analytics/events";
 
 type NumericDraft = number | "";
 
@@ -150,7 +154,10 @@ function previewConfigurationFromDraft(
   };
 }
 
-export function MiniConfigurator() {
+export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: boolean }) {
+  const [inquiryOpen, setInquiryOpen] = useState(false);
+  const inquiryTriggerRef = useRef<HTMLButtonElement>(null);
+  const measurementStartedRef = useRef(false);
   const [draft, setDraft] = useState<MiniConfiguratorDraft>(() =>
     toDraft(DEFAULT_MINI_CONFIGURATOR_CONFIG)
   );
@@ -328,6 +335,11 @@ export function MiniConfigurator() {
     key: Key,
     value: MiniConfiguratorDraft[Key]
   ) {
+    if (draft[key] === value) return;
+    if (!measurementStartedRef.current) {
+      measurementStartedRef.current = true;
+      emitConfiguratorAnalyticsEvent({ name: "configurator_start", configurator_type: "mini" });
+    }
     userHasInteractedRef.current = true;
     setContinuationMessage("");
     setDraft((currentDraft) => ({ ...currentDraft, [key]: value }));
@@ -364,7 +376,18 @@ export function MiniConfigurator() {
     }
   }
 
+  const miniProject: MiniProjectSubmission = {
+    schemaVersion: 1,
+    configuration: {
+      ...draft,
+      valanceWidthMm: draft.valanceWidthMm === "" ? undefined : draft.valanceWidthMm,
+      valanceHeightMm: draft.valanceHeightMm === "" ? undefined : draft.valanceHeightMm,
+      letterHeightMm: draft.letterHeightMm === "" ? undefined : draft.letterHeightMm
+    }
+  };
+
   return (
+    <>
     <form
       className="mini-configurator"
       onSubmit={(event) => event.preventDefault()}
@@ -582,21 +605,23 @@ export function MiniConfigurator() {
           {statusText}
         </p>
         <div className="configurator-actions">
+          <button type="button" className="button button--primary" ref={inquiryTriggerRef} onClick={() => setInquiryOpen(true)}>
+            Entwurf anfragen
+          </button>
+          <p className="configurator-actions__note">Ihr Entwurf wird beigefügt. E-Mail genügt.</p>
           <a
             aria-disabled={!canContinue}
-            className="button button--primary"
+            className="configurator-actions__project-link"
             href="/konfigurator"
             onClick={saveForContinuation}
             tabIndex={canContinue ? undefined : -1}
           >
-            Im Konfigurator weiter
-          </a>
-          <a className="configurator-actions__project-link" href="#projekt-pruefen">
-            Projekt prüfen lassen
+            Optionen wählen &amp; Preis berechnen →
           </a>
         </div>
       </div>
 
+      {!canContinue ? <p className="configurator-actions__note">Für die Preisberechnung bitte die markierten Angaben vervollständigen. Ihren Entwurf können Sie bereits anfragen.</p> : null}
       <p className="configurator-disclaimer">
         Diese Vorschau zeigt eine Gestaltungsrichtung. Konstruktion, Maße und
         technische Umsetzung werden objektbezogen geprüft.
@@ -614,5 +639,19 @@ export function MiniConfigurator() {
         </a>
       ) : null}
     </form>
+    <InquiryDialog open={inquiryOpen} onClose={() => setInquiryOpen(false)}
+      onEdit={() => requestAnimationFrame(() => document.getElementById("configurator-text")?.focus())}
+      triggerRef={inquiryTriggerRef} formId="mini_configurator_inquiry" formLocation="mini_configurator"
+      title="Anfrage zu Ihrem Entwurf" miniProject={miniProject} attachmentsEnabled={attachmentsEnabled}>
+      <div className="inquiry-dialog__preview" data-incomplete={!configuration || undefined} aria-hidden="true">
+        <MiniConfiguratorPreview configuration={previewConfiguration} geometry={geometry} measurement={matchingMeasurement} hasError={statusState === "error"} statusText={statusText} />
+      </div>
+      <p className="inquiry-dialog__summary">{draft.text.trim() || "Beschriftung noch offen"}</p>
+      <p>Gestaltungsentwurf ohne Preisberechnung. Maße und technische Umsetzung werden individuell geprüft.</p>
+      <details><summary>Details anzeigen</summary><dl className="inquiry-dialog__details">
+        {miniProjectRows(miniProject.configuration).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
+      </dl></details>
+    </InquiryDialog>
+    </>
   );
 }

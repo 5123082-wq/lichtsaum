@@ -1,0 +1,1080 @@
+{
+  "campaign": [
+    {
+      "customer": {
+        "resourceName": "customers/3638184039",
+        "currencyCode": "EUR"
+      },
+      "campaign": {
+        "resourceName": "customers/3638184039/campaigns/24153758040",
+        "status": "ENABLED",
+        "biddingStrategyType": "TARGET_SPEND",
+        "name": "Search | DE | B2B | Leuchtvolant | 2026-08",
+        "campaignBudget": "customers/3638184039/campaignBudgets/15803015435"
+      },
+      "campaignBudget": {
+        "resourceName": "customers/3638184039/campaignBudgets/15803015435",
+        "amountMicros": "20000000"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "status": "ENABLED",
+        "type": "SEARCH_STANDARD",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "status": "ENABLED",
+        "type": "SEARCH_STANDARD",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "status": "ENABLED",
+        "type": "SEARCH_STANDARD",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      }
+    }
+  ],
+  "keywords": [
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2496305438399",
+        "status": "PAUSED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "beleuchteter werbevolant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2496305439119",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "beleuchteter markisenvolant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2496305443399",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "beleuchteter markisenvolant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2496305443439",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "beleuchtete markisen-volants"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2497240561808",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markisenvolant beleuchtung nachrüsten"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2497240561888",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markisenvolant mit led beleuchtung"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2497240757888",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "beleuchteter markisenvolant nachrüsten"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2497519815507",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "beleuchteten volant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2498126648134",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "leuchtvolant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2499194474391",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "beleuchteter markisenvolant anbieter"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2499413133775",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "led markisenvolant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770",
+        "name": "Leuchtvolant | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702128770~2500455929518",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "bestehende markise led volant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2498478834225",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markisenbeschriftung beleuchtet"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2498478834385",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "markisenbeschriftung beleuchtet"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2498478834425",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "markisenvolant mit logo beleuchtet"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2498478834465",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "led volant logo"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2498478834625",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "beleuchteter volant schriftzug"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2498478834665",
+        "status": "PAUSED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "leuchtvolant werbung"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2498478844785",
+        "status": "PAUSED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "leuchtvolant werbetechnik"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2499194476511",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markisenvolant beleuchtet logo"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810",
+        "name": "Branding | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/194702269810~2499194476551",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markisenvolant beleuchtet schriftzug"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200923240553~2498283806379",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "beleuchteter markisenvolant gastronomie"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200923240553~2498283806539",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "beleuchteter markisenvolant gastronomie"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200923240553~2498283806579",
+        "status": "PAUSED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "leuchtvolant restaurant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200923240553~2498283806619",
+        "status": "PAUSED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "leuchtvolant restaurant"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200923240553~2498283806779",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "led markisenvolant café"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200923240553~2498283806819",
+        "status": "PAUSED",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "beleuchteter werbevolant gastronomie"
+        },
+        "negative": false
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553",
+        "name": "Gastronomie | Exact+Phrase"
+      },
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200923240553~2499194474351",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "beleuchteter markisenvolant restaurant"
+        },
+        "negative": false
+      }
+    }
+  ],
+  "negative": [
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10034840",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "camper"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10141411",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "billig"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10154201",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "ebay"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10177651",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "gebraucht"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10254430",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "preisvergleich"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10317231",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "diy"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10549371",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "thule"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10707397",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "reparieren"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~10837581",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "amazon"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~11059311",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "sichtschutz"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~11127401",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "anleitung"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~11481341",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "otto"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~11881086",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "wohnwagen"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~12840773",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "nähen"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~13750316",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "lichtleiste"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~15019811",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "wohnmobil"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~15481821",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "dometic"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~28046983",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "fiamma"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~28304396",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "klemmmarkise"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~47985571",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "lichterkette"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~50215371",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "omnistor"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~60040941",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "idealo"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~108577759",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "montageanleitung"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~120701453",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "selber machen"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~253576629",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "led strip"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~695375508",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "markise kaufen"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~302200087350",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "neue markise"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~306076823915",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "led streifen"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~307255170883",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "ersatztuch"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~312889220540",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "ersatzstoff"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~874394781017",
+        "keyword": {
+          "matchType": "PHRASE",
+          "text": "volant plus"
+        }
+      }
+    },
+    {
+      "campaignCriterion": {
+        "resourceName": "customers/3638184039/campaignCriteria/24153758040~1964742179743",
+        "keyword": {
+          "matchType": "BROAD",
+          "text": "vario-volant"
+        }
+      }
+    }
+  ],
+  "ads": [
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702128770",
+        "id": "194702128770"
+      },
+      "adGroupAd": {
+        "resourceName": "customers/3638184039/adGroupAds/194702128770~821680868834",
+        "status": "ENABLED",
+        "ad": {
+          "responsiveSearchAd": {
+            "headlines": [
+              {
+                "text": "Lichtsaum",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Beleuchteter Markisen-Volant",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Projekt prüfen lassen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Für bestehende Markisen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Leuchtvolant fürs Gewerbe",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise als Markenlicht",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              }
+            ],
+            "descriptions": [
+              {
+                "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              }
+            ],
+            "path1": "leuchtvolant",
+            "path2": "projekt"
+          },
+          "resourceName": "customers/3638184039/ads/821680868834",
+          "finalUrls": [
+            "https://www.lichtsaum.com/"
+          ]
+        }
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/194702269810",
+        "id": "194702269810"
+      },
+      "adGroupAd": {
+        "resourceName": "customers/3638184039/adGroupAds/194702269810~821680868828",
+        "status": "ENABLED",
+        "ad": {
+          "responsiveSearchAd": {
+            "headlines": [
+              {
+                "text": "Lichtsaum",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Beleuchteter Markisen-Volant",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Projekt prüfen lassen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Für bestehende Markisen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Leuchtvolant fürs Gewerbe",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise als Markenlicht",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              }
+            ],
+            "descriptions": [
+              {
+                "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              }
+            ],
+            "path1": "leuchtvolant",
+            "path2": "projekt"
+          },
+          "resourceName": "customers/3638184039/ads/821680868828",
+          "finalUrls": [
+            "https://www.lichtsaum.com/"
+          ]
+        }
+      }
+    },
+    {
+      "adGroup": {
+        "resourceName": "customers/3638184039/adGroups/200923240553",
+        "id": "200923240553"
+      },
+      "adGroupAd": {
+        "resourceName": "customers/3638184039/adGroupAds/200923240553~821680868831",
+        "status": "ENABLED",
+        "ad": {
+          "responsiveSearchAd": {
+            "headlines": [
+              {
+                "text": "Lichtsaum",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Beleuchteter Markisen-Volant",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Projekt prüfen lassen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Für bestehende Markisen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Leuchtvolant fürs Gewerbe",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise als Markenlicht",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              }
+            ],
+            "descriptions": [
+              {
+                "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEWED",
+                  "approvalStatus": "APPROVED"
+                }
+              }
+            ],
+            "path1": "leuchtvolant",
+            "path2": "projekt"
+          },
+          "resourceName": "customers/3638184039/ads/821680868831",
+          "finalUrls": [
+            "https://www.lichtsaum.com/"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -15,7 +15,8 @@ import {
 
 import { buildLeadFileDownloadUrl } from "./download-security";
 import { formatPublicLeadNumber } from "./public-lead-number";
-import type { ConfiguratorProjectSnapshot } from "./request-context";
+import type { LeadRequestContext } from "./request-context";
+import { miniProjectRows } from "./mini-project";
 
 function requiredEnv(name: string) {
   const value = process.env[name]?.trim();
@@ -67,10 +68,24 @@ function formatNetTotal(cents: number) {
 }
 
 function buildConfiguratorEmailSection(
-  snapshot: ConfiguratorProjectSnapshot | null
+  snapshot: LeadRequestContext | null
 ) {
   if (!snapshot) {
     return null;
+  }
+
+  if (snapshot.origin === "mini_configurator") {
+    const status = {
+      incomplete: "Unvollständiger Entwurf – Angaben noch offen",
+      invalid: "Entwurf mit technischen Unstimmigkeiten – Prüfung erforderlich",
+      manual_review: "Entwurf zur individuellen Prüfung"
+    }[snapshot.evaluation];
+    const rows = miniProjectRows(snapshot.configuration);
+    const note = "Keine Preisberechnung. Maße und technische Umsetzbarkeit sind nicht bestätigt.";
+    return {
+      text: ["Entwurf aus dem Mini-Konfigurator:", status, ...rows.map(([label, value]) => `- ${label}: ${value}`), note].join("\n"),
+      html: `<h2>Entwurf aus dem Mini-Konfigurator</h2><p>${escapeHtml(status)}</p><dl>${rows.map(([label, value]) => `<dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd>`).join("")}</dl><p>${note}</p>`
+    };
   }
 
   const configuration = snapshot.configuration;

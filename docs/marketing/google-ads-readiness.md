@@ -1,17 +1,19 @@
 # Google Ads Readiness
 
-Status: `Decision`; the first B2B Search campaign exists in Google Ads but remains paused pending
-policy review, release checks and explicit owner authorization
-Last reviewed: 2026-08-20
+Status: `Decision`; the first B2B Search campaign remains enabled by explicit owner instruction and
+its SERP-validated keyword cleanup is applied; release checks and performance validation remain
+Last reviewed: 2026-09-06
 
 <!-- AGENT_BRIEF:START -->
 ## Agent brief
 
 - Owns: Google Ads destination, measurement and campaign release gates.
-- Current: campaign `24153758040` is configured for Germany at €20/day and remains paused with
-  zero impressions and zero spend; its three ads are under review.
-- Open: complete the production destination/consent/conversion checks, wait for ad review and get
-  explicit owner authorization before enabling the campaign.
+- Current: the owner-approved [September 6 changes](google-ads-search-test-2026-09-06.md) are applied:
+  CPC ceiling €5, budget €20/day, Maximize Clicks, three new Exact keywords and one RSA in an enabled
+  test group. All three new keys are now eligible; the ad is under review and traffic is zero. Ads tag activity is now today,
+  with the inactive warning cleared. The [audit](google-ads-audit-2026-09-06.md) owns historical metrics.
+- Open: assess moderation, demand and qualified leads; transaction-level conversion deduplication
+  remains unverified. Test LS-2026-000027 succeeded with confirmed email receipt. Remaining QA gates below stay open.
 - Read full when: changing campaign targeting, claims, conversion ownership or launch status.
 <!-- AGENT_BRIEF:END -->
 
@@ -36,20 +38,23 @@ This file is a readiness/evidence checklist. Campaign publication follows
 - принимает заявку без обязательного analytics/marketing consent;
 - измеряет подтверждённый лид без передачи персональных данных в аналитику.
 
-## Live campaign record — paused
+## Live campaign record
 
-Verified in Google Ads on 2026-08-20:
+Current evidence: [applied changes of 2026-09-06](google-ads-search-test-2026-09-06.md), following
+the [read-only audit](google-ads-audit-2026-09-06.md).
+The following table is the historical configuration verified through the API on 2026-08-21;
+subsequent changes to keyword types/statuses and performance are documented in the current audit:
 
 | Field | Current value |
 | --- | --- |
 | Account | LICHTSAUM `363-818-4039` |
 | Campaign | `Search \| DE \| B2B \| Leuchtvolant \| 2026-08` (`24153758040`) |
-| Release state | Paused; 0 impressions and €0 spend at verification time |
+| Release state | Enabled by explicit owner instruction; 0 impressions and €0 spend at verification |
 | Budget and bidding | €20/day; Maximize clicks |
 | Targeting | Germany, presence-only; German; Google Search only |
 | Automation | AI Max off; automatically created assets off; campaign-level broad match off |
-| Structure | 3 ad groups, 22 exact/phrase keywords, 32 campaign negative keywords |
-| Ads | 3 responsive search ads; all under review and campaign-paused |
+| Structure | 3 ad groups; 22 enabled and 7 paused keywords; 32 campaign negative keywords |
+| Ads | 3 responsive search ads; all reviewed and approved |
 | Final URL | `https://www.lichtsaum.com/` |
 | Primary conversion | `Projektanfrage – serverbestätigt`; Website, Primary, count One |
 
@@ -57,7 +62,14 @@ Ad groups: `Leuchtvolant | Exact+Phrase`, `Gastronomie | Exact+Phrase` and
 `Branding | Exact+Phrase`. This record documents external state; it does not authorize enabling
 the campaign. On 2026-08-20 the three ads were recreated through the Google Ads API to replace the
 direct form anchor with the homepage URL; API verification confirmed all three new URLs and
-`REVIEW_IN_PROGRESS`. The unchecked release gates below remain authoritative.
+`REVIEW_IN_PROGRESS`. On 2026-08-21 the same API reported the campaign as `ENABLED` and the ads as
+`APPROVED`; the owner then explicitly instructed that the campaign remain enabled.
+
+The dated live-SERP audit is recorded in
+[`google-ads-keyword-serp-validation-2026-08-21.md`](google-ads-keyword-serp-validation-2026-08-21.md).
+It maps the original 22 criteria to 14 keep, 1 restrict and 7 pause decisions. The Google Ads API
+then applied 7 pauses, replaced the mixed Phrase criterion with Exact, and created 7 validated Exact
+candidates. The unchecked release gates below remain authoritative.
 
 ## Destination requirements
 

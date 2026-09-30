@@ -8,6 +8,7 @@ import {
   waitFor
 } from "@testing-library/react";
 import { useState } from "react";
+import { upload } from "@vercel/blob/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LeadForm } from "@/features/lead-form/lead-form";
@@ -94,6 +95,7 @@ describe("LeadForm measurement", () => {
 
   afterEach(() => {
     cleanup();
+    vi.unstubAllGlobals();
   });
 
   it("queues one sanitized Analytics event and one Ads conversion after server success", async () => {
@@ -189,7 +191,7 @@ describe("LeadForm measurement", () => {
       calculation: { netTotalCents: 71_000 }
     });
 
-    render(<LeadForm />);
+    render(<LeadForm configuratorProject={{ confirmedPricingVersion: "old" } as never} />);
     const email = screen.getByRole("textbox", { name: /E-Mail-Adresse/ });
     fireEvent.change(email, { target: { value: "test@example.test" } });
     fireEvent.submit(email.closest("form")!);
@@ -429,4 +431,30 @@ describe("LeadForm measurement", () => {
     expect(screen.getByRole("heading", { name: "Anfrage übermittelt." })).toBeVisible();
     expect(generateLeadEvents()).toEqual([]);
   });
+  it("keeps an attachment after upload failure and resumes the same attempt without a conversion", async () => {
+    vi.stubGlobal("DataTransfer", class {
+      files: File[] = [];
+      items = { add: (file: File) => { this.files.push(file); } };
+    });
+    const miniProject = { schemaVersion: 1, configuration: { text: "ENTWURF", compositionMode: "text-only", fontId: "montserrat", awningColorId: "anthracite", lightColorId: "warm-white", previewMode: "night" } } as const;
+    actions.prepareProjectCheckSubmission.mockResolvedValue({ kind: "upload", plan: { leadId, uploadToken: "test-upload-token", files: [{ pathname: "leads/test/skizze.pdf", fileId: "test-file", uploaded: false }] } });
+    vi.mocked(upload).mockRejectedValue(new Error("Upload failed"));
+    actions.getProjectCheckSubmissionStatus.mockResolvedValue({ status: "pending" });
+    render(<LeadForm miniProject={miniProject} formId="mini_configurator_inquiry" />);
+    const input = document.querySelector<HTMLInputElement>('input[type="file"]')!;
+    Object.defineProperty(input, "files", { configurable: true, writable: true, value: [] });
+    fireEvent.change(input, { target: { files: [new File(["%PDF-1.4"], "skizze.pdf", { type: "application/pdf" })] } });
+    const email = screen.getByLabelText(/E-Mail-Adresse/);
+    fireEvent.change(email, { target: { value: "test@example.test" } });
+    fireEvent.submit(email.closest("form")!);
+    await screen.findByText(/konnte nicht sicher gespeichert werden/);
+    expect(screen.getByText("skizze.pdf")).toBeVisible();
+    expect(generateLeadEvents()).toEqual([]);
+    expect(actions.finalizeProjectCheckSubmission).not.toHaveBeenCalled();
+    fireEvent.submit(email.closest("form")!);
+    await waitFor(() => expect(actions.getProjectCheckSubmissionStatus).toHaveBeenCalledTimes(2));
+    expect(actions.prepareProjectCheckSubmission.mock.calls[0]?.[0].idempotencyKey).toBe(actions.prepareProjectCheckSubmission.mock.calls[1]?.[0].idempotencyKey);
+    expect(generateLeadEvents()).toEqual([]);
+  });
+
 });

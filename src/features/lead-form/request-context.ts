@@ -4,6 +4,7 @@ import type {
   ConfiguratorProjectSelection,
   ConfiguratorServiceId
 } from "@/features/configurator/types";
+import type { MiniConfiguratorConfig } from "@/features/mini-configurator/types";
 
 export const CONFIGURATOR_PROJECT_SNAPSHOT_SCHEMA_VERSION = 1 as const;
 
@@ -29,4 +30,21 @@ export interface ConfiguratorProjectSnapshot {
   netTotalCents: number;
 }
 
-export type LeadRequestContext = ConfiguratorProjectSnapshot;
+export type MiniProjectConfiguration = Omit<
+  MiniConfiguratorConfig,
+  "valanceWidthMm" | "valanceHeightMm" | "letterHeightMm"
+> & Partial<Pick<MiniConfiguratorConfig,
+  "valanceWidthMm" | "valanceHeightMm" | "letterHeightMm"
+>>;
+
+export interface MiniProjectSubmission {
+  schemaVersion: 1;
+  configuration: MiniProjectConfiguration;
+}
+
+export interface MiniProjectSnapshot extends MiniProjectSubmission {
+  origin: "mini_configurator";
+  evaluation: "incomplete" | "invalid" | "manual_review";
+}
+
+export type LeadRequestContext = ConfiguratorProjectSnapshot | MiniProjectSnapshot;

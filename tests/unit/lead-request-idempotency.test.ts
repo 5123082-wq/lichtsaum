@@ -226,4 +226,16 @@ describe("lead request idempotency", () => {
     ).rejects.toMatchObject({ name: "LeadUploadPlanNotAuthorized" });
     expect(database.getLeadInsertCount()).toBe(1);
   });
+  it("persists and recovers a mini context but rejects a changed sketch on the same key", async () => {
+    const requestContext = { schemaVersion: 1, origin: "mini_configurator", evaluation: "incomplete", configuration: {
+      text: "ENTWURF", compositionMode: "text-only", fontId: "montserrat",
+      awningColorId: "anthracite", lightColorId: "warm-white", previewMode: "night"
+    } } as const;
+    const first = await createLeadUploadPlan({ ...contact, requestContext }, attempt, []);
+    expect(database.getLead()?.requestContext).toEqual(requestContext);
+    expect(await createLeadUploadPlan({ ...contact, requestContext }, attempt, [])).toEqual(first);
+    await expect(createLeadUploadPlan({ ...contact, requestContext: { ...requestContext, configuration: { ...requestContext.configuration, text: "ANDERS" } } }, attempt, [])).rejects.toMatchObject({ name: "LeadUploadPlanNotAuthorized" });
+    expect(database.getLeadInsertCount()).toBe(1);
+  });
+
 });

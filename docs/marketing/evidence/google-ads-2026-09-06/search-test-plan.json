@@ -1,0 +1,116 @@
+{
+  "partialFailure": false,
+  "mutateOperations": [
+    {
+      "campaignOperation": {
+        "update": {
+          "resourceName": "customers/3638184039/campaigns/24153758040",
+          "targetSpend": {
+            "cpcBidCeilingMicros": "5000000"
+          }
+        },
+        "updateMask": "target_spend.cpc_bid_ceiling_micros"
+      }
+    },
+    {
+      "adGroupOperation": {
+        "create": {
+          "resourceName": "customers/3638184039/adGroups/-1",
+          "campaign": "customers/3638184039/campaigns/24153758040",
+          "name": "Markisenwerbung | Exact Test | 2026-09",
+          "status": "ENABLED",
+          "type": "SEARCH_STANDARD"
+        }
+      }
+    },
+    {
+      "adGroupCriterionOperation": {
+        "create": {
+          "adGroup": "customers/3638184039/adGroups/-1",
+          "status": "ENABLED",
+          "keyword": {
+            "text": "markisen werbung",
+            "matchType": "EXACT"
+          }
+        }
+      }
+    },
+    {
+      "adGroupCriterionOperation": {
+        "create": {
+          "adGroup": "customers/3638184039/adGroups/-1",
+          "status": "ENABLED",
+          "keyword": {
+            "text": "markisenbeschriftung",
+            "matchType": "EXACT"
+          }
+        }
+      }
+    },
+    {
+      "adGroupCriterionOperation": {
+        "create": {
+          "adGroup": "customers/3638184039/adGroups/-1",
+          "status": "ENABLED",
+          "keyword": {
+            "text": "markise beschriften",
+            "matchType": "EXACT"
+          }
+        }
+      }
+    },
+    {
+      "adGroupAdOperation": {
+        "create": {
+          "adGroup": "customers/3638184039/adGroups/-1",
+          "status": "ENABLED",
+          "ad": {
+            "finalUrls": [
+              "https://www.lichtsaum.com/"
+            ],
+            "responsiveSearchAd": {
+              "headlines": [
+                {
+                  "text": "Beleuchteter Markisen-Volant",
+                  "pinnedField": "HEADLINE_1"
+                },
+                {
+                  "text": "Leuchtvolant fürs Gewerbe"
+                },
+                {
+                  "text": "Markise wird Markenlicht"
+                },
+                {
+                  "text": "Projekt prüfen lassen"
+                },
+                {
+                  "text": "Bestehende Markise prüfen"
+                },
+                {
+                  "text": "Gestaltung im Konfigurator"
+                },
+                {
+                  "text": "Lichtsaum"
+                }
+              ],
+              "descriptions": [
+                {
+                  "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                  "pinnedField": "DESCRIPTION_1"
+                },
+                {
+                  "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM."
+                },
+                {
+                  "text": "Gestaltung im Konfigurator ansehen und eine Projektanfrage an LICHTSAUM senden."
+                }
+              ],
+              "path1": "leuchtvolant",
+              "path2": "gewerbe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

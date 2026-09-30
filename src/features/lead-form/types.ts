@@ -3,6 +3,7 @@ export const PROJECT_CHECK_FIELD_NAMES = [
   "phone",
   "projectContext",
   "configuratorProject",
+  "miniProject",
   "projectFiles"
 ] as const;
 

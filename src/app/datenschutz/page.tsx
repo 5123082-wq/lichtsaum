@@ -153,8 +153,10 @@ export default function DatenschutzPage() {
               Browserinformationen, Referrer, aufgerufene Seiten, Zeitpunkte,
               pseudonyme Cookie-Kennungen sowie Nutzungs- und Ereignisdaten
               verarbeitet werden. Für Formularereignisse übermitteln wir nur
-              die technischen Parameter <code>form_id</code> und{" "}
-              <code>lead_type</code>. Formularinhalte, Name, E-Mail-Adresse,
+              kontrollierte Angaben zur Formularart und Position, zum Anfragetyp
+              sowie zur Fehlerkategorie und Fehleranzahl. Bei Konfiguratorereignissen
+              erfassen wir nur die Art des Konfigurators und den angezeigten Schritt.
+              Beschriftungen, Maße, Farben, Preise, Formularinhalte, Name, E-Mail-Adresse,
               Telefonnummer, Dateinamen und interne Anfragekennungen werden
               nicht an Google Analytics übermittelt. Zweck ist die statistische
               Auswertung der Websitenutzung. Die nutzer- und ereignisbezogene
@@ -240,11 +242,15 @@ export default function DatenschutzPage() {
                   ausgewählte Leistungen, eine optional eingegebene
                   fünfstellige Objekt-Postleitzahl und die von unserem Server
                   bestätigte vorläufige Berechnung. Zur Bearbeitung erhalten wir
-                  eine E-Mail-Benachrichtigung. An Ihre E-Mail-Adresse senden wir
+                  eine E-Mail-Benachrichtigung. Bei einer Anfrage aus dem
+                  Mini-Konfigurator speichern und übermitteln wir stattdessen den
+                  sichtbaren Entwurf mit den angegebenen Maßen und einem Prüfstatus,
+                  ohne Preisberechnung. An Ihre E-Mail-Adresse senden wir
                   eine Eingangsbestätigung mit der Anfragenummer. Bei einer
                   Konfigurator-Anfrage enthält sie auch die
                   Konfigurationszusammenfassung, ausgewählte Leistungen und den
-                  bestätigten vorläufigen Nettopreis, jedoch nicht den freien
+                  bestätigten vorläufigen Nettopreis oder den Mini-Entwurf ohne Preis,
+                  jedoch nicht den freien
                   Nachrichtentext oder angehängte Dateien.
                 </p>
                 <p>

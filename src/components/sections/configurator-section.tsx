@@ -1,4 +1,5 @@
 import { MiniConfigurator } from "@/features/mini-configurator/mini-configurator";
+import { displaysLeadAttachmentPicker } from "@/config/environment";
 
 export function ConfiguratorSection() {
   return (
@@ -22,7 +23,7 @@ export function ConfiguratorSection() {
           </div>
         </header>
 
-        <MiniConfigurator />
+        <MiniConfigurator attachmentsEnabled={displaysLeadAttachmentPicker} />
       </div>
     </section>
   );

@@ -29,7 +29,8 @@ import {
   leadSubmissionAttemptSchema,
   uploadManifestSchema
 } from "./upload-contract";
-import type { ConfiguratorProjectSubmission } from "./request-context";
+import type { ConfiguratorProjectSubmission, MiniProjectSubmission } from "./request-context";
+import { prepareMiniProjectContext } from "./server-mini-project";
 import type {
   ProjectCheckFieldErrors,
   ProjectCheckFieldName,
@@ -41,14 +42,18 @@ const submissionSchema = projectCheckContactSchema.extend({
   idempotencyKey: leadSubmissionAttemptSchema.shape.idempotencyKey,
   uploadToken: leadSubmissionAttemptSchema.shape.uploadToken,
   sourcePath: z.unknown().optional(),
-  configuratorProject: z.unknown().optional()
-}).strict();
+  configuratorProject: z.unknown().optional(),
+  miniProject: z.unknown().optional()
+}).strict().refine((value) => value.configuratorProject === undefined || value.miniProject === undefined, {
+  path: ["miniProject"], message: "Bitte fügen Sie nur einen Entwurf oder eine Konfiguration bei."
+});
 
 const projectCheckFieldNames = new Set<ProjectCheckFieldName>([
   "email",
   "phone",
   "projectContext",
   "configuratorProject",
+  "miniProject",
   "projectFiles"
 ]);
 
@@ -62,6 +67,7 @@ export interface ProjectCheckSubmissionInput {
   uploadToken: string;
   files: Array<{ name: string; type: string; size: number }>;
   configuratorProject?: ConfiguratorProjectSubmission;
+  miniProject?: MiniProjectSubmission;
 }
 
 export type PrepareProjectCheckResult =
@@ -123,9 +129,9 @@ export async function prepareProjectCheckSubmission(
     };
   }
 
-  const preparedContext = await prepareConfiguratorProjectContext(
-    parsed.data.configuratorProject
-  );
+  const preparedContext = parsed.data.miniProject !== undefined
+    ? prepareMiniProjectContext(parsed.data.miniProject)
+    : await prepareConfiguratorProjectContext(parsed.data.configuratorProject);
 
   if (preparedContext.kind === "pricing_changed") {
     return preparedContext;
@@ -136,9 +142,11 @@ export async function prepareProjectCheckSubmission(
       kind: "result",
       state: {
         status: "invalid",
-        message: "Bitte prüfen Sie die Konfiguration und Preisbestätigung.",
+        message: parsed.data.miniProject !== undefined
+          ? "Bitte prüfen Sie den beigefügten Entwurf."
+          : "Bitte prüfen Sie die Konfiguration und Preisbestätigung.",
         fieldErrors: {
-          configuratorProject: [preparedContext.message]
+          [parsed.data.miniProject !== undefined ? "miniProject" : "configuratorProject"]: [preparedContext.message]
         }
       }
     };

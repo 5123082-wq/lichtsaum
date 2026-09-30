@@ -10,13 +10,14 @@ import {
 import { upload } from "@vercel/blob/client";
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   useTransition,
   type FormEvent
 } from "react";
 
-import { emitGenerateLeadOnce } from "@/features/analytics/events";
+import { emitGenerateLeadOnce, emitLeadAnalyticsEvent, type FormId, type FormLocation } from "@/features/analytics/events";
 import type { ConfiguratorCalculation } from "@/features/configurator/types";
 
 import {
@@ -26,7 +27,7 @@ import {
   MAX_PROJECT_FILES_TOTAL_SIZE,
   PROJECT_FILE_ACCEPT
 } from "./file-rules";
-import type { ConfiguratorProjectSubmission } from "./request-context";
+import type { ConfiguratorProjectSubmission, MiniProjectSubmission } from "./request-context";
 import {
   confirmProjectFileUpload,
   finalizeProjectCheckSubmission,
@@ -58,6 +59,11 @@ type ConfiguratorPricingChange = Readonly<{
 type LeadFormProps = Readonly<{
   attachmentsEnabled?: boolean;
   configuratorProject?: ConfiguratorProjectSubmission;
+  miniProject?: MiniProjectSubmission;
+  formId?: FormId;
+  formLocation?: FormLocation;
+  onSubmittedChange?: (submitted: boolean) => void;
+  submitLabel?: string;
   labelledById?: string;
   onConfiguratorPricingConfirmed?: (
     change: ConfiguratorPricingChange
@@ -167,14 +173,15 @@ function errorsFor(
   return state.fieldErrors[field] ?? [];
 }
 
-function describedBy(
+function fieldDescribedBy(
+  idPrefix: string,
   state: ProjectCheckFormState,
   field: ProjectCheckFieldName,
   hintId?: string
 ) {
   const ids = [
     hintId,
-    errorsFor(state, field).length > 0 ? field + "-error" : undefined
+    errorsFor(state, field).length > 0 ? idPrefix + field + "-error" : undefined
   ].filter(Boolean);
 
   return ids.length > 0 ? ids.join(" ") : undefined;
@@ -182,8 +189,10 @@ function describedBy(
 
 function FieldError({
   field,
-  state
+  state,
+  idPrefix
 }: {
+  idPrefix: string;
   field: ProjectCheckFieldName;
   state: ProjectCheckFormState;
 }) {
@@ -196,14 +205,14 @@ function FieldError({
   return (
     <p
       className="mt-2 text-sm font-semibold text-[var(--error)]"
-      id={field + "-error"}
+      id={idPrefix + field + "-error"}
     >
       {errors.join(" ")}
     </p>
   );
 }
 
-function ErrorSummary({ state }: { state: ProjectCheckFormState }) {
+function ErrorSummary({ state, idPrefix }: { state: ProjectCheckFormState; idPrefix: string }) {
   const fields = Object.entries(state.fieldErrors) as Array<
     [ProjectCheckFieldName, string[]]
   >;
@@ -216,11 +225,11 @@ function ErrorSummary({ state }: { state: ProjectCheckFormState }) {
     <div
       className="border-l-4 border-[var(--error)] bg-[rgb(255_180_171_/_8%)] p-5"
       role="alert"
-      aria-labelledby="project-check-error-title"
+      aria-labelledby={idPrefix + "project-check-error-title"}
     >
       <h3
         className="m-0 text-lg font-bold text-[var(--text-primary)]"
-        id="project-check-error-title"
+        id={idPrefix + "project-check-error-title"}
       >
         Bitte prüfen Sie Ihre Angaben
       </h3>
@@ -230,7 +239,7 @@ function ErrorSummary({ state }: { state: ProjectCheckFormState }) {
           <li key={field}>
             <a
               className="underline decoration-1 underline-offset-4"
-              href={"#" + field}
+              href={"#" + idPrefix + field}
             >
               {errors[0]}
             </a>
@@ -278,13 +287,37 @@ function SubmissionLoader({ active }: { active: boolean }) {
 export function LeadForm({
   attachmentsEnabled = true,
   configuratorProject,
+  miniProject,
+  formId = "main_inquiry",
+  formLocation = "landing",
+  onSubmittedChange,
+  submitLabel = "Projekt prüfen lassen",
   labelledById = "project-check-title",
   onConfiguratorPricingConfirmed,
   onSubmissionPendingChange
 }: LeadFormProps) {
+  const idPrefix = useId().replaceAll(":", "") + "-";
+  const startedRef = useRef(false);
+  const describedBy = (state: ProjectCheckFormState, field: ProjectCheckFieldName, hintId?: string) => fieldDescribedBy(idPrefix, state, field, hintId);
   const [state, setState] = useState(initialProjectCheckFormState);
-  const [configuratorPricingChange, setConfiguratorPricingChange] =
-    useState<ConfiguratorPricingChange | null>(null);
+  function updateState(next: ProjectCheckFormState) {
+    setState(next);
+    onSubmittedChange?.(next.status === "submitted");
+    if (next.status === "invalid") {
+      emitLeadAnalyticsEvent({ name: "lead_form_validation_error", form_id: formId, error_group: "validation", error_count: Math.max(1, Object.values(next.fieldErrors).flat().length) });
+    } else if (next.status === "prototype_unavailable") {
+      emitLeadAnalyticsEvent({ name: "lead_submit_error", form_id: formId, error_group: "integration" });
+    }
+  }
+  function markStarted(event: FormEvent<HTMLFormElement>) {
+    if (startedRef.current || !(event.target instanceof HTMLElement) || event.target.getAttribute("name") === "website") return;
+    startedRef.current = true;
+    emitLeadAnalyticsEvent({ name: "lead_form_start", form_id: formId, form_location: formLocation });
+  }
+  const [pendingPricingChange, setConfiguratorPricingChange] =
+    useState<(ConfiguratorPricingChange & { submissionKey: string }) | null>(null);
+  const configuratorPricingChange = pendingPricingChange?.submissionKey === submissionFingerprint(configuratorProject)
+    ? pendingPricingChange : null;
   const [isPending, startTransition] = useTransition();
   const [attachments, setAttachments] = useState<ProjectAttachment[]>([]);
   const [fileSelectionError, setFileSelectionError] = useState("");
@@ -428,7 +461,7 @@ export function LeadForm({
   }, [state.status]);
 
   useEffect(() => {
-    if (!isPending) {
+    if (!isPending || formRef.current?.closest("dialog")) {
       return;
     }
 
@@ -455,7 +488,8 @@ export function LeadForm({
     setAttachments([]);
     setFileSelectionError("");
     setConfiguratorPricingChange(null);
-    setState(initialProjectCheckFormState);
+    updateState(initialProjectCheckFormState);
+    startedRef.current = false;
     submissionAttemptRef.current = null;
 
     requestAnimationFrame(() => emailInputRef.current?.focus());
@@ -484,6 +518,7 @@ export function LeadForm({
       website: String(formData.get("website") ?? ""),
       sourcePath,
       configuratorProject,
+      miniProject,
       files: attachments.map((attachment) => ({
         name: attachment.file.name,
         type: attachment.file.type,
@@ -502,6 +537,7 @@ export function LeadForm({
       submissionAttemptRef.current = attempt;
     }
 
+    emitLeadAnalyticsEvent({ name: "lead_submit_attempt", form_id: formId });
     onSubmissionPendingChange?.(true);
     startTransition(async () => {
       let leadIdForRecovery: string | null = null;
@@ -516,20 +552,22 @@ export function LeadForm({
           idempotencyKey: attempt.idempotencyKey,
           uploadToken: attempt.uploadToken,
           configuratorProject,
+          miniProject,
           files
         });
 
         if (prepared.kind === "result") {
           if (prepared.state.status === "submitted" && prepared.state.leadId) {
-            emitGenerateLeadOnce(prepared.state.leadId);
+            emitGenerateLeadOnce(prepared.state.leadId, formId);
           }
 
-          setState(prepared.state);
+          updateState(prepared.state);
           return;
         }
 
         if (prepared.kind === "pricing_changed") {
           setConfiguratorPricingChange({
+            submissionKey: submissionFingerprint(configuratorProject),
             pricingVersion: prepared.pricingVersion,
             calculation: prepared.calculation
           });
@@ -539,7 +577,7 @@ export function LeadForm({
 
         leadIdForRecovery = prepared.plan.leadId;
 
-        setState({
+        updateState({
           status: "uploading",
           message: "Ihre Dateien werden sicher übertragen.",
           fieldErrors: {}
@@ -580,10 +618,10 @@ export function LeadForm({
         );
 
         if (finalizedState.status === "submitted" && finalizedState.leadId) {
-          emitGenerateLeadOnce(finalizedState.leadId);
+          emitGenerateLeadOnce(finalizedState.leadId, formId);
         }
 
-        setState(finalizedState);
+        updateState(finalizedState);
       } catch {
         if (leadIdForRecovery) {
           try {
@@ -592,8 +630,8 @@ export function LeadForm({
             );
 
             if (recoveredStatus.status === "submitted") {
-              emitGenerateLeadOnce(leadIdForRecovery);
-              setState({
+              emitGenerateLeadOnce(leadIdForRecovery, formId);
+              updateState({
                 status: "submitted",
                 message:
                   "Ihre Projektanfrage wurde sicher gespeichert. Wir melden uns über den von Ihnen angegebenen Kontaktweg.",
@@ -608,7 +646,7 @@ export function LeadForm({
           }
         }
 
-        setState({
+        updateState({
           status: "prototype_unavailable",
           message:
             "Die Projektanfrage konnte nicht sicher gespeichert werden. Bitte versuchen Sie es später erneut.",
@@ -624,14 +662,17 @@ export function LeadForm({
   return (
     <form
       className="lead-form border-y border-[var(--border)]"
-      id="project-check-form"
+      id={idPrefix + "project-check-form"}
       name="project-check-form"
       ref={formRef}
       onSubmit={submitForm}
+      onChangeCapture={markStarted}
       aria-labelledby={labelledById}
       aria-busy={isPending}
       noValidate
     >
+      <span id={idPrefix + "miniProject"} tabIndex={-1} />
+      <span id={idPrefix + "configuratorProject"} tabIndex={-1} />
       <div className="lead-form__stage" data-submitted={isSubmitted}>
         <div
           className="lead-form__entry"
@@ -655,18 +696,18 @@ export function LeadForm({
             </h3>
           </div>
 
-          {state.status !== "idle" || configuratorPricingChange ? (
+          {state.status !== "idle" || (configuratorProject && configuratorPricingChange) ? (
             <div ref={resultRef} tabIndex={-1}>
-              <ErrorSummary state={state} />
-              {configuratorPricingChange ? (
+              <ErrorSummary state={state} idPrefix={idPrefix} />
+              {configuratorProject && configuratorPricingChange ? (
                 <div
                   className="border-l-4 border-[var(--accent)] bg-[rgb(255_92_0_/_8%)] p-5"
                   role="alert"
-                  aria-labelledby="configurator-pricing-change-title"
+                  aria-labelledby={idPrefix + "configurator-pricing-change-title"}
                 >
                   <h3
                     className="m-0 text-lg font-bold text-[var(--text-primary)]"
-                    id="configurator-pricing-change-title"
+                    id={idPrefix + "configurator-pricing-change-title"}
                   >
                     Kalkulation wurde aktualisiert
                   </h3>
@@ -685,7 +726,7 @@ export function LeadForm({
                         configuratorPricingChange
                       );
                       setConfiguratorPricingChange(null);
-                      setState(initialProjectCheckFormState);
+                      updateState(initialProjectCheckFormState);
                     }}
                     type="button"
                   >
@@ -715,7 +756,7 @@ export function LeadForm({
           ) : null}
 
           <div>
-            <label className={labelClassName} htmlFor="email">
+            <label className={labelClassName} htmlFor={idPrefix + "email"}>
               E-Mail-Adresse{" "}
               <span className="font-normal text-[var(--accent)]">
                 (Pflichtfeld)
@@ -723,7 +764,7 @@ export function LeadForm({
             </label>
             <input
               className={fieldClassName}
-              id="email"
+              id={idPrefix + "email"}
               name="email"
               ref={emailInputRef}
               type="email"
@@ -735,11 +776,11 @@ export function LeadForm({
               aria-invalid={errorsFor(state, "email").length > 0}
               aria-describedby={describedBy(state, "email")}
             />
-            <FieldError field="email" state={state} />
+            <FieldError idPrefix={idPrefix} field="email" state={state} />
           </div>
 
           <div>
-            <label className={labelClassName} htmlFor="phone">
+            <label className={labelClassName} htmlFor={idPrefix + "phone"}>
               Telefonnummer{" "}
               <span className="font-normal text-[var(--text-muted)]">
                 (optional)
@@ -747,7 +788,7 @@ export function LeadForm({
             </label>
             <input
               className={fieldClassName}
-              id="phone"
+              id={idPrefix + "phone"}
               name="phone"
               type="tel"
               autoComplete="tel"
@@ -756,11 +797,11 @@ export function LeadForm({
               aria-invalid={errorsFor(state, "phone").length > 0}
               aria-describedby={describedBy(state, "phone")}
             />
-            <FieldError field="phone" state={state} />
+            <FieldError idPrefix={idPrefix} field="phone" state={state} />
           </div>
 
           <div>
-            <label className={labelClassName} htmlFor="projectContext">
+            <label className={labelClassName} htmlFor={idPrefix + "projectContext"}>
               Kurze Nachricht{" "}
               <span className="font-normal text-[var(--text-muted)]">
                 (optional)
@@ -768,7 +809,7 @@ export function LeadForm({
             </label>
             <textarea
               className={fieldClassName + " min-h-32 resize-y"}
-              id="projectContext"
+              id={idPrefix + "projectContext"}
               name="projectContext"
               maxLength={1000}
               placeholder="Was möchten Sie prüfen lassen?"
@@ -776,16 +817,16 @@ export function LeadForm({
               aria-describedby={describedBy(
                 state,
                 "projectContext",
-                "projectContext-hint"
+                idPrefix + "projectContext-hint"
               )}
             />
             <p
               className="mb-0 mt-2 text-sm leading-6 text-[var(--text-muted)]"
-              id="projectContext-hint"
+              id={idPrefix + "projectContext-hint"}
             >
               Bitte keine Zugangsdaten, Zahlungsdaten oder sensiblen Angaben.
             </p>
-            <FieldError field="projectContext" state={state} />
+            <FieldError idPrefix={idPrefix} field="projectContext" state={state} />
           </div>
         </div>
 
@@ -806,7 +847,7 @@ export function LeadForm({
             >
               <input
                 className="sr-only"
-                id="projectFiles"
+                id={idPrefix + "projectFiles"}
                 name="projectFiles"
                 type="file"
                 multiple
@@ -820,8 +861,8 @@ export function LeadForm({
                   state,
                   "projectFiles",
                   fileSelectionError
-                    ? "projectFiles-hint projectFiles-selection-error"
-                    : "projectFiles-hint"
+                    ? idPrefix + "projectFiles-hint " + idPrefix + "projectFiles-selection-error"
+                    : idPrefix + "projectFiles-hint"
                 )}
                 onChange={(event) =>
                   selectFiles(Array.from(event.currentTarget.files ?? []))
@@ -831,7 +872,7 @@ export function LeadForm({
               {attachments.length === 0 ? (
                 <label
                   className="group flex min-h-40 cursor-pointer flex-col items-center justify-center p-5 text-center hover:border-[var(--accent)]"
-                  htmlFor="projectFiles"
+                  htmlFor={idPrefix + "projectFiles"}
                 >
                   <span className="flex size-12 items-center justify-center border border-[var(--border)] text-[var(--accent)] transition-colors group-hover:border-[var(--accent)]">
                     <Paperclip aria-hidden="true" size={24} weight="light" />
@@ -841,7 +882,7 @@ export function LeadForm({
                   </span>
                   <span
                     className="mt-2 max-w-sm text-sm leading-6 text-[var(--text-muted)]"
-                    id="projectFiles-hint"
+                    id={idPrefix + "projectFiles-hint"}
                   >
                     JPG, PNG, WebP oder PDF · maximal 15 MB je Datei · bis zu 5
                     Dateien · zusammen maximal 50 MB · optional
@@ -891,7 +932,7 @@ export function LeadForm({
                       <li className="aspect-square">
                         <label
                           className="group flex size-full cursor-pointer flex-col items-center justify-center border border-[var(--border)] bg-[var(--surface)] p-3 text-center transition-colors hover:border-[var(--accent)]"
-                          htmlFor="projectFiles"
+                          htmlFor={idPrefix + "projectFiles"}
                         >
                           <span className="flex size-11 items-center justify-center border border-[var(--border)] text-[var(--accent)] transition-colors group-hover:border-[var(--accent)]">
                             <Paperclip
@@ -909,7 +950,7 @@ export function LeadForm({
                   </ul>
                   <p
                     className="mb-0 mt-3 text-center text-xs leading-5 text-[var(--text-muted)]"
-                    id="projectFiles-hint"
+                    id={idPrefix + "projectFiles-hint"}
                   >
                     {attachments.length}/5 Dateien · maximal 15 MB je Datei ·
                     zusammen maximal 50 MB
@@ -920,13 +961,13 @@ export function LeadForm({
             {fileSelectionError ? (
               <p
                 className="mt-2 text-sm font-semibold text-[var(--error)]"
-                id="projectFiles-selection-error"
+                id={idPrefix + "projectFiles-selection-error"}
                 role="alert"
               >
                 {fileSelectionError}
               </p>
             ) : null}
-            <FieldError field="projectFiles" state={state} />
+            <FieldError idPrefix={idPrefix} field="projectFiles" state={state} />
             <p className="mt-2 text-xs leading-5 text-[var(--text-muted)]">
               Bitte laden Sie nur projektbezogene Dateien hoch, die Sie uns
               zur Bearbeitung Ihrer Anfrage übermitteln dürfen.
@@ -940,9 +981,9 @@ export function LeadForm({
         className="absolute left-[-10000px] top-auto size-px overflow-hidden"
         aria-hidden="true"
       >
-        <label htmlFor="website">Website</label>
+        <label htmlFor={idPrefix + "website"}>Website</label>
         <input
-          id="website"
+          id={idPrefix + "website"}
           name="website"
           type="text"
           autoComplete="off"
@@ -965,13 +1006,13 @@ export function LeadForm({
           <button
             className="button button--primary min-w-60 disabled:cursor-not-allowed disabled:opacity-60"
             type="submit"
-            disabled={isPending || configuratorPricingChange !== null}
+            disabled={isPending || (configuratorProject !== undefined && configuratorPricingChange !== null)}
           >
             {state.status === "uploading"
               ? "Dateien werden übertragen…"
               : isPending
                 ? "Formular wird geprüft…"
-                : "Projekt prüfen lassen"}
+                : submitLabel}
           </button>
         </div>
         <p className="sr-only" aria-live="polite">

@@ -2,7 +2,7 @@
 
 Status: `Decision`
 
-Last reviewed: 2026-08-11
+Last reviewed: 2026-09-25
 
 > Publication and production-form choices follow
 > [`publication-governance.md`](publication-governance.md). Gaps below are evidence to show the
@@ -14,7 +14,8 @@ Last reviewed: 2026-08-11
 - Owns: one shared inquiry contract across plain and configurator entry points, including attached
   context and the server-confirmed Primary Ads conversion boundary.
 - Current: shared validation, persistence/result contract, notifications and optional files are
-  implemented; configurator input is not a lead before explicit form submission.
+  implemented. Mini sketches and full calculations use one persistent inquiry dialog; mini inputs
+  are server-classified without price. Opening a dialog never creates a lead.
 - Open: release-state, abuse hardening and attachment malware/processor choices remain current work.
 - Read full when: changing form fields, schema, configurator snapshot, persistence, notifications,
   idempotency, files or conversion semantics.
@@ -62,18 +63,52 @@ pipeline и одну Primary conversion action Google Ads.
 | Entry context | Visible form behavior | Attached lead context |
 | --- | --- | --- |
 | Обычная заявка | Текущая low-friction форма: обязательный e-mail, необязательные телефон, сообщение и файлы | `plain`; конфигурация отсутствует |
-| Мини-конфигуратор | Crawlable CTA переносит browser-local draft на `/konfigurator`; homepage project-check сам по себе остаётся plain | Контекст не прикладывается напрямую; после migration и submit создаётся full snapshot |
-| Полный конфигуратор/калькулятор | Общий контактный блок в третьем шаге после видимых исходных данных и preliminary result | Версионированный server-authoritative snapshot полной конфигурации, services, optional PLZ и calculation |
+| Мини-конфигуратор | `Entwurf anfragen` открывает общую форму; неполный эскиз допустим. Вторичная ссылка переносит корректный draft в `/konfigurator` | `mini_configurator`, schemaVersion 1; без цены |
+| Полный конфигуратор/калькулятор | `Konfiguration anfragen` в третьем шаге открывает общую форму после видимого preliminary result | Версионированный server-authoritative snapshot полной конфигурации, services, optional PLZ и calculation |
 
 Пользователь не вводит повторно размеры, оформление или результат расчёта в контактной части.
 Контекст показывается перед submit как неизменяемая сводка и предоставляет понятный путь `Ändern`
 / «изменить» через предыдущие шаги. Plain inquiry без контекста остаётся доступна через обычный
-homepage project-check. Конкретная визуальная композиция определяется `DESIGN.md`, но видимость
+homepage project-check, а также через явное удаление контекста в диалоге. Конкретная визуальная композиция определяется `DESIGN.md`, но видимость
 прикладываемых данных обязательна.
 
 Контактная форма остаётся low-friction. Начать заявку без конфигурации всегда можно. Размеры,
 файлы, тип объекта, завершённая конфигурация и marketing consent не становятся обязательными
 только из-за расширения конфигуратора.
+
+## Inquiry dialog lifecycle
+
+Status: `Decision`, implemented locally 2026-09-25.
+
+- Один mounted `LeadForm` на диалог сохраняет контакты, файлы и результат при закрытии. Обычная
+  форма главной независима; мини-эскиз к ней автоматически не прикрепляется.
+- Повторное открытие после редактирования показывает текущий контекст и прежние контакты/файлы.
+  `Ändern` (изменить) возвращает к настройкам; контекст можно удалить и явно вернуть.
+- Submit блокирует закрытие/редактирование и повторный вызов. Успех и номер заявки сохраняются;
+  новая заявка начинается только кнопкой `Weitere Anfrage senden` (отправить ещё одну заявку).
+- Fingerprint включает mini/full context, контакты и manifest файлов. Неизменённый повтор
+  использует прежний ключ, изменённый контекст — новый. Сервер дополнительно сравнивает payload.
+- Контакты/файлы живут только в памяти страницы до отправки, без browser storage. Каждый экземпляр
+  формы имеет уникальные ID полей, hints, ошибок и заголовков; вложенные HTML-формы запрещены.
+- Responsive, focus, Escape и scroll contract принадлежит [DESIGN.md](../../DESIGN.md#shared-inquiry-dialog).
+
+## Implemented mini snapshot
+
+`miniProject` взаимоисключающий с `configuratorProject`. Оба необязательны; отсутствие обоих —
+обычная заявка. `miniProject` принимает только `schemaVersion: 1` и `configuration` с compositionMode,
+text (до 60 символов, без управляющих символов), fontId, awningColorId, lightColorId, previewMode и
+необязательными valanceWidthMm/valanceHeightMm/letterHeightMm. Enum берутся из mini options;
+числа конечные в пределах безопасного числового диапазона. Неизвестные поля/версии отклоняются.
+Пустой размер отсутствует в JSON: preview fallback не передаётся.
+
+Сервер добавляет `origin: mini_configurator` и `evaluation`: `invalid` для известных ошибок размеров,
+глифов/геометрии; иначе `incomplete` при отсутствующих тексте/размерах; иначе `manual_review`.
+При недоступности измерения полный эскиз остаётся `manual_review`. Все три статуса означают
+необходимость проверки; ни один не подтверждает совместимость. Цена не принимается и не считается.
+
+Хранение — существующий JSONB `request_context`, без миграции. Full snapshot v1, server reprice,
+price-version confirmation и старые записи остаются совместимыми. Новый мини-контекст не
+ослабляет строгую проверку полного расчёта.
 
 ## Transmission boundary
 
@@ -158,6 +193,8 @@ Customer receipt (подтверждение клиенту) для plain inquir
 `full_configurator` snapshot оно дополнительно повторяет видимую конфигурацию, выбранные услуги и
 зафиксированный server net total, чтобы клиент мог проверить отправленный контекст. Свободное
 сообщение, filename, содержимое файлов и download links в customer receipt не включаются.
+Для `mini_configurator` оба письма содержат эскиз, отсутствующие размеры, серверный статус и явное
+`Keine Preisberechnung` (без расчёта цены); параметры HTML-экранируются.
 
 ## Google Ads conversion contract
 
@@ -228,7 +265,7 @@ flowchart LR
 
 ## Current implementation and release gaps
 
-Status: `Verified` on 2026-08-11
+Status: `Verified` locally on 2026-09-25; database migration evidence is historical.
 
 - Мини-конфигуратор создаёт versioned non-personal `sessionStorage` snapshot, а полный
   `/konfigurator` мигрирует совместимый v2-черновик в свой v1-контракт; PLZ, контакты и файлы в
@@ -239,12 +276,13 @@ Status: `Verified` on 2026-08-11
   повторного подтверждения.
 - Успешная configurator request сохраняет authoritative v1 snapshot в nullable
   `leads.request_context`; plain lead сохраняет `null`. Additive Drizzle migration применена к
-  production Neon 2026-08-11; marker и nullable `jsonb` column независимо проверены. Само
-  configurator application deployment ещё не выполнено.
+  production Neon 2026-08-11; marker и nullable `jsonb` column независимо проверены. Новый mini
+  snapshot использует эту же колонку без миграции. Текущий dialog/mini milestone ещё не опубликован.
 - Общий manager notification и customer receipt показывают номер заявки, конфигурацию, услуги,
   распределение панелей и preliminary net result. Customer receipt по-прежнему не содержит текст
   сообщения или файлы.
-- Существующий analytics adapter остаётся единственным путём `main_inquiry` / `awning_inquiry` и
+- Существующий analytics adapter остаётся единственным путём `awning_inquiry` с контролируемым
+  form_id из [measurement plan](../marketing/measurement-plan.md) и
   не получает конфигурацию, PLZ, услуги, pricing version или estimate value; pricing mismatch даёт
   zero conversion.
 - LeadForm создаёт high-entropy attempt key/token для canonical fingerprint текущего payload и
@@ -258,9 +296,9 @@ Status: `Verified` on 2026-08-11
   no trusted network/global circuit-breaker dimension; that hardening remains a named production
   open security finding to show the owner rather than a claim that the local configurator is
   bot-proof.
-- The Google Ads action and consent-aware GTM workspace are configured, but the container remains
-  unpublished and production Google tag flags remain disabled. This architecture decision does not
-  authorize publication or production activation.
+- Existing production tag evidence belongs to [measurement plan](../marketing/measurement-plan.md).
+  The new diagnostic tags are not published by this implementation. No production deployment,
+  Google Ads change or synthetic production lead was performed.
 - Production application deployment, controlled real-delivery verification, rendered production
   crawl, Tag Assistant and Ads Diagnostics remain release work outside this local implementation.
 

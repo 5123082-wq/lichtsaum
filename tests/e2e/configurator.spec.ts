@@ -116,7 +116,7 @@ test("migrates the homepage teaser and opens the clean configurator URL", async 
 
   const teaserLink = page
     .locator("#konfigurator")
-    .getByRole("link", { name: "Im Konfigurator weiter" });
+    .getByRole("link", { name: "Optionen wählen & Preis berechnen →" });
 
   await expect(teaserLink).toHaveAttribute("href", "/konfigurator");
   await expect(teaserLink).toHaveAttribute("aria-disabled", "false");
@@ -126,9 +126,7 @@ test("migrates the homepage teaser and opens the clean configurator URL", async 
   await expect(page.getByLabel("Text auf dem Volant")).toHaveValue(
     "ABENDLICHT"
   );
-  await expect(page.getByLabel("Schrift", { exact: true })).toHaveValue(
-    "oswald"
-  );
+  await expect(page.getByRole("button", { name: /Schriftstil: Oswald/ })).toBeVisible();
   await expect(page.getByLabel("Volantbreite")).toHaveValue("2600");
 
   await expect(page.locator(".full-configurator")).toHaveAttribute(
@@ -167,7 +165,7 @@ test("offers an explicit defaults path when teaser storage cannot be written", a
 
   const teaserLink = page
     .locator("#konfigurator")
-    .getByRole("link", { name: "Im Konfigurator weiter" });
+    .getByRole("link", { name: "Optionen wählen & Preis berechnen →" });
   await expect(teaserLink).toHaveAttribute("aria-disabled", "false", {
     timeout: 15_000
   });
@@ -224,7 +222,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     { timeout: 15_000 }
   );
   await expect(
-    configurator.locator(".full-configurator-preview > svg")
+    configurator.locator(".full-configurator-preview:visible > svg")
   ).toBeVisible();
 
   const inscriptionInput = configurator.getByLabel("Text auf dem Volant");
@@ -235,14 +233,14 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     { timeout: 15_000 }
   );
   const previewInscription = configurator.locator(
-    ".full-configurator-preview text[data-configurator-text]"
+    ".full-configurator-preview:visible text[data-configurator-text]"
   );
   await expect(previewInscription).toHaveText("LICHT  2026");
   await expect(previewInscription).toHaveAttribute("xml:space", "preserve");
 
-  await expect(configurator.locator("#configuratorProject")).toHaveCount(0);
+  await expect(configurator.locator(".full-configurator__summary:not(dialog *)")).toHaveCount(0);
   await expect(
-    configurator.getByText("Vorläufiger Nettopreis")
+    configurator.getByText("Vorläufiger Nettopreis", { exact: true }).filter({ visible: true })
   ).toHaveCount(0);
   await expect(configurator.getByLabel("01 Gestaltung")).toBeVisible();
   await expect(configurator.getByLabel("02 Maße")).toBeVisible();
@@ -265,7 +263,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   await expect(
     configurator.getByText("Komposition wird geprüft …", { exact: true })
   ).toHaveCount(0);
-  await expect(configurator.locator(".full-configurator-preview")).toBeVisible();
+  await expect(configurator.locator(".full-configurator-preview:visible")).toBeVisible();
 
   const fullAwningColorTrigger = configurator.getByRole("button", {
     name: /Markisenfarbe:/
@@ -288,8 +286,8 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
 
     const listboxRect = listbox.getBoundingClientRect();
     const actionRect = actionButton.getBoundingClientRect();
-    const overlapTop = Math.max(listboxRect.top, actionRect.top);
-    const overlapBottom = Math.min(listboxRect.bottom, actionRect.bottom);
+    const overlapTop = Math.max(0, listboxRect.top, actionRect.top);
+    const overlapBottom = Math.min(window.innerHeight, listboxRect.bottom, actionRect.bottom);
 
     if (overlapBottom <= overlapTop) {
       return { overlaps: false, listboxIsTopmost: false };
@@ -333,7 +331,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   );
   await configurator.getByRole("checkbox", { name: "Gestaltung" }).check();
   await expect(
-    configurator.getByText("Vorläufiger Nettopreis")
+    configurator.getByText("Vorläufiger Nettopreis", { exact: true }).filter({ visible: true })
   ).toHaveCount(0);
 
   const postalCode = configurator.getByLabel("PLZ des Objekts (optional)");
@@ -352,7 +350,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   await expect(
     configurator.getByRole("heading", { name: "Preis & Projektanfrage" })
   ).toBeFocused();
-  const summary = configurator.locator("#configuratorProject");
+  const summary = configurator.locator(".full-configurator__summary:not(dialog *)");
   await expect(summary).toBeVisible();
   await expect(summary.getByText("12345", { exact: true })).toBeVisible();
   await expect(summary.getByText("Gestaltung", { exact: true })).toBeVisible();
@@ -366,6 +364,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   ).toBeVisible();
 
   await expect(configurator.locator("form.lead-form")).toHaveCount(1);
+  await configurator.getByRole("button", { name: "Konfiguration anfragen", exact: true }).click();
   const leadForm = configurator.locator("form.lead-form");
   await expect(
     leadForm.getByLabel("E-Mail-Adresse (Pflichtfeld)")
@@ -381,7 +380,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     .getByLabel("E-Mail-Adresse (Pflichtfeld)")
     .fill("projekt@example.com");
   await leadForm
-    .getByRole("button", { name: "Projekt prüfen lassen" })
+    .getByRole("button", { name: "Anfrage senden" })
     .click();
   await expect(
     leadForm.getByText(/wurden nicht gespeichert und nicht als Projektanfrage/i)
@@ -411,9 +410,9 @@ test("blocks preview, price and continuation for an impossible composition", asy
       .getByRole("status")
       .getByText(/passt nicht in die verfügbare Volantbreite/i)
   ).toBeVisible();
-  await expect(configurator.locator("#configuratorProject")).toHaveCount(0);
+  await expect(configurator.locator(".full-configurator__summary:not(dialog *)")).toHaveCount(0);
   await expect(
-    configurator.getByText("Vorläufiger Nettopreis")
+    configurator.getByText("Vorläufiger Nettopreis", { exact: true }).filter({ visible: true })
   ).toHaveCount(0);
   await expect(
     configurator.getByRole("button", {
@@ -481,7 +480,7 @@ test("keeps the full-width preview before the controls at the required QA widths
       { timeout: 15_000 }
     );
     await expect(
-      configurator.locator(".full-configurator-preview > svg")
+      configurator.locator(".full-configurator-preview:visible > svg")
     ).toBeVisible();
 
     const layout = await page.evaluate(() => {
@@ -565,6 +564,7 @@ test("honors reduced motion and remains usable with enlarged text", async ({
   }));
 
   expect(reflow.scrollWidth).toBeLessThanOrEqual(reflow.viewport + 1);
-  await expect(page.locator("#configuratorProject")).toBeVisible();
+  await expect(page.locator(".full-configurator__summary:not(dialog *)")).toBeVisible();
+  await page.getByRole("button", { name: "Konfiguration anfragen", exact: true }).click();
   await expect(page.locator("form.lead-form")).toBeVisible();
 });

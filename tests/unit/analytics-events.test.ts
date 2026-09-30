@@ -3,6 +3,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import {
+  emitConfiguratorAnalyticsEvent,
   emitGenerateLeadOnce,
   emitLeadAnalyticsEvent
 } from "../../src/features/analytics/events";
@@ -136,5 +137,20 @@ describe("lead analytics event boundary", () => {
       })
     ).toBe(false);
     expect(currentDataLayer()).toEqual([]);
+  });
+});
+
+
+describe("configurator diagnostic boundary", () => {
+  it("drops denied events and copies only controlled type and step", () => {
+    delete (window as TestWindow).dataLayer;
+    persistConsentRecord(createConsentRecord({ analytics: false, marketing: true }));
+    expect(emitConfiguratorAnalyticsEvent({ name: "configurator_start", configurator_type: "mini" })).toBe(false);
+    persistConsentRecord(createConsentRecord({ analytics: true, marketing: false }));
+    expect(currentDataLayer()).toEqual([]);
+    emitConfiguratorAnalyticsEvent({ name: "configurator_step_view", configurator_type: "full", step: 2, text: "SECRET", email: "test@example.test", price: 400 } as never);
+    expect(currentDataLayer()).toEqual([{ event: "configurator_step_view", configurator_type: "full", step: 2 }]);
+    expect(emitConfiguratorAnalyticsEvent({ name: "configurator_result_view", configurator_type: "full", step: 2 } as never)).toBe(false);
+    expect(emitConfiguratorAnalyticsEvent({ name: "configurator_start", configurator_type: "SECRET" } as never)).toBe(false);
   });
 });

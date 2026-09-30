@@ -7,8 +7,6 @@ export type LandingSectionIntro = Readonly<{
 export type TransformationCardContent = Readonly<{
   title: string;
   alt: string;
-  showColorLabel: string;
-  showMonochromeLabel: string;
 }>;
 
 export type StaticTransformationCardContent = Readonly<{
@@ -87,39 +85,25 @@ export const transformation = {
     day: {
       label: "Klassisch",
       alt:
-        "Konzeptvisualisierung einer klassischen Restaurantfassade bei Nacht mit dunkelblauen Markisen und den warm leuchtenden Schriftzügen „RESTAURANT“ und „LUCHINA“.",
-      showColorLabel: "Farbdarstellung anzeigen.",
-      showMonochromeLabel: "Schwarz-Weiß-Darstellung wiederherstellen."
+        "Konzeptvisualisierung einer klassischen Restaurantfassade bei Nacht mit dunkelblauen Markisen und den warm leuchtenden Schriftzügen „RESTAURANT“ und „LUCHINA“."
     },
     comparison: {
       title: "Modern",
       alt:
-        "Konzeptvisualisierung einer Café-Restaurant-Fassade bei Nacht mit besetzter Terrasse; die Aufschrift „CAFÉ RESTAURANT“ am dunklen Volant leuchtet warmweiß.",
-      showColorLabel: "Farbdarstellung anzeigen.",
-      showMonochromeLabel: "Schwarz-Weiß-Darstellung wiederherstellen."
+        "Konzeptvisualisierung einer Café-Restaurant-Fassade bei Nacht mit besetzter Terrasse; die Aufschrift „CAFÉ RESTAURANT“ am dunklen Volant leuchtet warmweiß."
     },
     context: {
       label: "High-Tech",
       alt:
-        "Konzeptvisualisierung einer städtischen Café- und Bistrofassade am Abend mit dunklem Markisenvolant und warm leuchtender Beschriftung.",
-      showColorLabel: "Farbdarstellung anzeigen.",
-      showMonochromeLabel: "Schwarz-Weiß-Darstellung wiederherstellen."
+        "Konzeptvisualisierung einer städtischen Café- und Bistrofassade am Abend mit dunklem Markisenvolant und warm leuchtender Beschriftung."
     }
   }
 } as const satisfies Readonly<{
   intro: LandingSectionIntro;
   cards: Readonly<{
-    day: StaticTransformationCardContent &
-      Pick<
-        TransformationCardContent,
-        "showColorLabel" | "showMonochromeLabel"
-      >;
+    day: StaticTransformationCardContent;
     comparison: TransformationCardContent;
-    context: StaticTransformationCardContent &
-      Pick<
-        TransformationCardContent,
-        "showColorLabel" | "showMonochromeLabel"
-      >;
+    context: StaticTransformationCardContent;
   }>;
 }>;
 

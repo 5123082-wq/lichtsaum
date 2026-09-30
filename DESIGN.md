@@ -27,6 +27,8 @@ they do not decide publication. Concrete public actions follow
   mini-configurator's three-group layout, step 02 keeps all service choices visible, and price plus
   specification appear only after both steps. Internal legal review markers are not part of the
   visual system.
+- Current inquiry flow: mini and full configurators use a shared native dialog (desktop max 48rem,
+  below 64rem full screen); the homepage plain inquiry stays independent.
 - Open: working brand and remaining content inputs stay `TBD` where not owner-confirmed.
 - Read full when: changing the visual system, major page composition or cross-route UI contracts.
 <!-- AGENT_BRIEF:END -->
@@ -364,8 +366,30 @@ remains a separate unresolved check.
 - Loading, font-measurement, invalid-geometry, calculation and stale-pricing states fail closed:
   price and submit remain unavailable until a current server result is explicitly confirmed.
 - The contact block is an instance of the existing unified lead form, not a separate form system.
-  The existing submission overlay, error/focus behavior, optional attachments and success state
-  remain consistent with the homepage form.
+  It lives in the shared inquiry dialog. The existing submission overlay, error/focus behavior,
+  optional attachments and success state remain consistent with the homepage form.
+
+### Shared inquiry dialog
+
+- Mini preview/control area ends with orange `Entwurf anfragen`, the caption
+  `Ihr Entwurf wird beigefügt. E-Mail genügt.` and the secondary text link
+  `Optionen wählen & Preis berechnen →`. Incomplete input blocks only price continuation and
+  explains what to complete; it does not block the inquiry. Missing dimensions are omitted from
+  the attached sketch and dimension lines are hidden in its schematic modal preview.
+- Full step 03 retains specification, price and edit controls. Its orange `Konfiguration anfragen`
+  beside the price opens the shared dialog; the inline contact form is removed.
+- Native `<dialog>` uses the existing surfaces, border, typography and orange submit. At 64rem and
+  above it is centered, at most 48rem wide and viewport minus 4rem high; below it fills 100dvh,
+  including safe-area padding and internal scrolling for a shortened keyboard viewport.
+- Order: focusable title → compact schematic preview/summary → `Details anzeigen` (показать детали)
+  → email/optional phone/message → optional files → privacy → submit. Full price retains VAT/scope
+  disclaimers. Mini copy promises neither compatibility nor a price.
+- Opening focuses the heading, never an input. Native focus containment, visible focus and Escape
+  work; close/back return to the trigger. `Ändern` closes and focuses the configuration controls.
+  Backdrop clicks do not dismiss. Closing restores page scrolling; drafts remain in memory.
+- Pending disables close/edit and shows the existing brand spinner within the dialog layer.
+  Reduced motion keeps the static mark. Success retains its number until explicit new inquiry.
+- Homepage final form keeps its existing two-column desktop composition and independent draft.
 
 ### References gallery
 
@@ -433,6 +457,10 @@ remains a separate unresolved check.
 
 ## Image direction
 
+- В секции `#wirkung` три концепт-сцены показываются в цвете постоянно. Для будущего эффекта
+  включения букв на световом волане нужны точно совмещённые пары цветных кадров с погашенными и
+  светящимися буквами; hover/focus может плавно раскрывать светящийся слой, а touch — переключать
+  его нажатием.
 - Изображения, предоставленные владельцем проекта или прямо одобренные им для сайта, считаются
   разрешёнными к использованию в проекте. Исключение: AI-концепты внутри proof/reference-
   композиции всегда явно маркируются `Konzeptvisualisierung`, чтобы не имитировать выполненный
@@ -484,7 +512,8 @@ remains a separate unresolved check.
 
 - Один primary CTA: необязательный запрос предложения.
 - Secondary CTA: проекты/детали продукта.
-- Primary CTA wording остаётся одинаковым по странице.
+- Contextual primary wording: mini `Entwurf anfragen` (запрос по эскизу), full
+  `Konfiguration anfragen` (запрос по конфигурации), plain `Projekt prüfen lassen`.
 - Успех формы подтверждается сервером.
 - Dark patterns, искусственная срочность и неподтверждённые scarcity claims запрещены.
 

@@ -120,16 +120,16 @@ export function ConsentManager() {
             <button
               className="consent-manager__decision"
               type="button"
-              onClick={() => saveChoice(false, false)}
+              onClick={() => saveChoice(true, true)}
             >
-              Alle ablehnen
+              Alle akzeptieren
             </button>
             <button
               className="consent-manager__decision"
               type="button"
-              onClick={() => saveChoice(true, true)}
+              onClick={() => saveChoice(false, false)}
             >
-              Alle akzeptieren
+              Alle ablehnen
             </button>
           </div>
         </section>

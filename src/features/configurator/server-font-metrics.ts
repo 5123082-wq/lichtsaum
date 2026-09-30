@@ -74,7 +74,7 @@ function hasEveryVisibleGlyph(font: Font, text: string): boolean {
 }
 
 export function measureConfiguratorTextOnServer(
-  configuration: ConfiguratorConfigurationV1
+  configuration: Pick<ConfiguratorConfigurationV1, "fontId" | "text" | "letterHeightMm">
 ): ConfiguratorFontMeasurementResult {
   try {
     const font = getFont(configuration.fontId);

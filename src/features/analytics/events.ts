@@ -2,8 +2,8 @@
 
 import { readConsentRecord } from "@/features/consent/consent-storage";
 
-const FORM_IDS = ["main_inquiry", "contact_inquiry"] as const;
-const FORM_LOCATIONS = ["landing", "contact"] as const;
+const FORM_IDS = ["main_inquiry", "contact_inquiry", "mini_configurator_inquiry", "full_configurator_inquiry"] as const;
+const FORM_LOCATIONS = ["landing", "contact", "mini_configurator", "full_configurator"] as const;
 const LEAD_TYPES = ["awning_inquiry"] as const;
 const ERROR_GROUPS = [
   "validation",
@@ -13,13 +13,14 @@ const ERROR_GROUPS = [
   "unknown"
 ] as const;
 
-type FormId = (typeof FORM_IDS)[number];
-type FormLocation = (typeof FORM_LOCATIONS)[number];
+export type FormId = (typeof FORM_IDS)[number];
+export type FormLocation = (typeof FORM_LOCATIONS)[number];
 type LeadType = (typeof LEAD_TYPES)[number];
 type ErrorGroup = (typeof ERROR_GROUPS)[number];
 type LeadEventDestination = "analytics" | "ads";
 
 export type LeadAnalyticsEvent =
+  | { name: "lead_form_open"; form_id: FormId; form_location: FormLocation }
   | {
       name: "lead_form_start";
       form_id: FormId;
@@ -45,6 +46,7 @@ export type LeadAnalyticsEvent =
     };
 
 export type AnalyticsDataLayerEntry =
+  | { event: "lead_form_open"; form_id: FormId; form_location: FormLocation }
   | {
       event: "lead_form_start";
       form_id: FormId;
@@ -99,11 +101,12 @@ function toDataLayerEntry(
   const candidate = event as unknown as Record<string, unknown>;
 
   switch (candidate.name) {
+    case "lead_form_open":
     case "lead_form_start":
       return isAllowedValue(FORM_IDS, candidate.form_id) &&
         isAllowedValue(FORM_LOCATIONS, candidate.form_location)
         ? {
-            event: "lead_form_start",
+            event: candidate.name,
             form_id: candidate.form_id,
             form_location: candidate.form_location
           }
@@ -220,7 +223,7 @@ export function emitLeadAnalyticsEvent(event: LeadAnalyticsEvent) {
   return true;
 }
 
-export function emitGenerateLeadOnce(leadId: string) {
+export function emitGenerateLeadOnce(leadId: string, formId: FormId = "main_inquiry") {
   if (typeof window === "undefined" || !isLeadId(leadId)) {
     return false;
   }
@@ -242,8 +245,29 @@ export function emitGenerateLeadOnce(leadId: string) {
 
   return emitLeadAnalyticsEvent({
     name: "generate_lead",
-    form_id: "main_inquiry",
+    form_id: formId,
     lead_id: leadId,
     lead_type: "awning_inquiry"
   });
+}
+
+export type ConfiguratorAnalyticsEvent =
+  | { name: "configurator_start"; configurator_type: "mini" | "full" }
+  | { name: "configurator_step_view"; configurator_type: "full"; step: 1 | 2 | 3 }
+  | { name: "configurator_result_view"; configurator_type: "full"; step: 3 };
+
+export function emitConfiguratorAnalyticsEvent(event: ConfiguratorAnalyticsEvent) {
+  if (typeof window === "undefined" || readConsentRecord()?.analytics !== true) return false;
+  if (event.name === "configurator_start" && (event.configurator_type === "mini" || event.configurator_type === "full")) {
+    dataLayer().push({ event: event.name, configurator_type: event.configurator_type });
+    return true;
+  }
+  if (event.configurator_type === "full" && (
+    (event.name === "configurator_step_view" && [1, 2, 3].includes(event.step)) ||
+    (event.name === "configurator_result_view" && event.step === 3)
+  )) {
+    dataLayer().push({ event: event.name, configurator_type: "full", step: event.step });
+    return true;
+  }
+  return false;
 }

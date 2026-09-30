@@ -2,6 +2,8 @@
 
 import {
   useEffect,
+  useId,
+  type ReactNode,
   useMemo,
   useRef,
   useState,
@@ -34,7 +36,8 @@ import type {
   ConfiguratorServiceId
 } from "@/features/configurator/types";
 import { parseConfiguratorConfiguration } from "@/features/configurator/validation";
-import { LeadForm } from "@/features/lead-form/lead-form";
+import { InquiryDialog } from "@/features/lead-form/inquiry-dialog";
+import { emitConfiguratorAnalyticsEvent } from "@/features/analytics/events";
 import type { ConfiguratorProjectSubmission } from "@/features/lead-form/request-context";
 
 type NumericDraft = number | "";
@@ -204,13 +207,16 @@ function PriceSummary({
   calculation,
   configuration,
   postalCode,
-  services
+  services,
+  action
 }: {
   calculation: ConfiguratorCalculation;
   configuration: ConfiguratorConfigurationV1;
   postalCode: string;
   services: readonly ConfiguratorServiceId[];
+  action?: ReactNode;
 }) {
+  const summaryId = useId();
   const font = fontsById.get(configuration.fontId);
   const composition = compositionsById.get(configuration.compositionMode);
   const awningColor = awningColorsById.get(configuration.awningColorId);
@@ -228,7 +234,7 @@ function PriceSummary({
     <div
       aria-label="Konfigurationsübersicht"
       className="full-configurator__summary"
-      id="configuratorProject"
+      id={summaryId}
       tabIndex={-1}
     >
       <div className="full-configurator__summary-heading">
@@ -301,6 +307,7 @@ function PriceSummary({
           {euroCurrencyFormatter.format(calculation.netTotalCents / 100)}
         </strong>
         <PriceScopeNotice />
+        {action}
       </div>
     </div>
   );
@@ -316,6 +323,11 @@ export function ConfiguratorWizard({
   );
   const [services, setServices] = useState<readonly ConfiguratorServiceId[]>([]);
   const [postalCode, setPostalCode] = useState("");
+  const [inquiryOpen, setInquiryOpen] = useState(false);
+  const inquiryTriggerRef = useRef<HTMLButtonElement>(null);
+  const measurementStartedRef = useRef(false);
+  const measuredStepRef = useRef<StepNumber | null>(null);
+  const measuredResultRef = useRef(false);
   const [submissionIsPending, setSubmissionIsPending] = useState(false);
   const [activeStep, setActiveStep] = useState<StepNumber>(1);
   const [highestAvailableStep, setHighestAvailableStep] =
@@ -516,10 +528,30 @@ export function ConfiguratorWizard({
     });
   }, [configuration, services, storageIsReady]);
 
+  useEffect(() => {
+    if (measuredStepRef.current !== activeStep) {
+      measuredStepRef.current = activeStep;
+      emitConfiguratorAnalyticsEvent({ name: "configurator_step_view", configurator_type: "full", step: activeStep });
+    }
+    if (activeStep !== 3) measuredResultRef.current = false;
+    if (activeStep === 3 && calculationIsReady && !measuredResultRef.current) {
+      measuredResultRef.current = true;
+      emitConfiguratorAnalyticsEvent({ name: "configurator_result_view", configurator_type: "full", step: 3 });
+    }
+  }, [activeStep, calculationIsReady]);
+
+  function markStarted() {
+    if (measurementStartedRef.current) return;
+    measurementStartedRef.current = true;
+    emitConfiguratorAnalyticsEvent({ name: "configurator_start", configurator_type: "full" });
+  }
+
   function updateDraft<Key extends keyof ConfiguratorDraft>(
     key: Key,
     value: ConfiguratorDraft[Key]
   ) {
+    if (draft[key] === value) return;
+    markStarted();
     const nextDraft = { ...draft, [key]: value };
     const nextConfiguration = toConfiguration(nextDraft);
 
@@ -538,6 +570,7 @@ export function ConfiguratorWizard({
   }
 
   function toggleService(serviceId: ConfiguratorServiceId) {
+    markStarted();
     userHasInteractedRef.current = true;
     setServices((currentServices) =>
       currentServices.includes(serviceId)
@@ -1013,7 +1046,7 @@ export function ConfiguratorWizard({
                   id="configurator-postal-code"
                   inputMode="numeric"
                   maxLength={5}
-                  onChange={(event) => setPostalCode(event.currentTarget.value)}
+                  onChange={(event) => { markStarted(); setPostalCode(event.currentTarget.value); }}
                   pattern="[0-9]{5}"
                   type="text"
                   value={postalCode}
@@ -1097,30 +1130,39 @@ export function ConfiguratorWizard({
                 configuration={calculationState.configuration}
                 postalCode={postalCode}
                 services={services}
+                action={<button type="button" ref={inquiryTriggerRef} className="button button--primary" onClick={() => setInquiryOpen(true)}>Konfiguration anfragen</button>}
               />
 
-              <div className="full-configurator__lead-form">
-                <LeadForm
-                  attachmentsEnabled={attachmentsEnabled}
-                  configuratorProject={submission}
-                  labelledById="configurator-inquiry-title"
-                  onConfiguratorPricingConfirmed={(change) => {
-                    calculatedConfigurationKeyRef.current =
-                      currentConfigurationKey;
-                    setCalculationState({
-                      status: "ready",
-                      configuration: calculationState.configuration,
-                      calculation: change.calculation
-                    });
-                    setConfirmedPricingVersion(change.pricingVersion);
-                  }}
-                  onSubmissionPendingChange={setSubmissionIsPending}
-                />
-              </div>
+
             </section>
           ) : null}
         </div>
       </div>
+      <InquiryDialog open={inquiryOpen} onClose={() => setInquiryOpen(false)} onEdit={() => showStep(1)}
+        triggerRef={inquiryTriggerRef} formId="full_configurator_inquiry" formLocation="full_configurator"
+        title="Anfrage zu Ihrer Konfiguration" configuratorProject={submission} attachmentsEnabled={attachmentsEnabled}
+                  onConfiguratorPricingConfirmed={(change) => {
+                    calculatedConfigurationKeyRef.current =
+                      currentConfigurationKey;
+                    setCalculationState((current) => current.status === "ready"
+                      ? { ...current, calculation: change.calculation }
+                      : current);
+                    setConfirmedPricingVersion(change.pricingVersion);
+                  }}
+        onSubmissionPendingChange={setSubmissionIsPending}>
+        {calculationState.status === "ready" ? <>
+          <div className="inquiry-dialog__preview" aria-hidden="true">
+            <ConfiguratorPreview configuration={calculationState.configuration} geometry={calculationState.calculation.geometry}
+              measurement={calculationState.calculation.measurement} statusText="Konfiguration" />
+          </div>
+          <p className="inquiry-dialog__summary">{calculationState.configuration.text} · {calculationState.configuration.valanceWidthMm} × {calculationState.configuration.valanceHeightMm} mm</p>
+          <p>Vorläufiger Nettopreis: <strong>{euroCurrencyFormatter.format(calculationState.calculation.netTotalCents / 100)}</strong></p>
+          <PriceScopeNotice />
+          <details><summary>Details anzeigen</summary>
+            <PriceSummary calculation={calculationState.calculation} configuration={calculationState.configuration} postalCode={postalCode} services={services} />
+          </details>
+        </> : null}
+      </InquiryDialog>
     </div>
   );
 }

@@ -1,0 +1,37 @@
+{
+  "time": "2026-09-06T18:53:19.329771+00:00",
+  "response": {
+    "mutateOperationResponses": [
+      {
+        "campaignResult": {
+          "resourceName": "customers/3638184039/campaigns/24153758040"
+        }
+      },
+      {
+        "adGroupResult": {
+          "resourceName": "customers/3638184039/adGroups/200547384672"
+        }
+      },
+      {
+        "adGroupCriterionResult": {
+          "resourceName": "customers/3638184039/adGroupCriteria/200547384672~359631975515"
+        }
+      },
+      {
+        "adGroupCriterionResult": {
+          "resourceName": "customers/3638184039/adGroupCriteria/200547384672~470957823026"
+        }
+      },
+      {
+        "adGroupCriterionResult": {
+          "resourceName": "customers/3638184039/adGroupCriteria/200547384672~424828110894"
+        }
+      },
+      {
+        "adGroupAdResult": {
+          "resourceName": "customers/3638184039/adGroupAds/200547384672~823633352778"
+        }
+      }
+    ]
+  }
+}

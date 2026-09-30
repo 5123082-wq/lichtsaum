@@ -1,0 +1,175 @@
+{
+  "time": "2026-09-06T18:53:39.154996+00:00",
+  "campaign": [
+    {
+      "customer": {
+        "resourceName": "customers/3638184039",
+        "currencyCode": "EUR"
+      },
+      "campaign": {
+        "resourceName": "customers/3638184039/campaigns/24153758040",
+        "status": "ENABLED",
+        "biddingStrategyType": "TARGET_SPEND",
+        "targetSpend": {
+          "cpcBidCeilingMicros": "5000000"
+        }
+      },
+      "campaignBudget": {
+        "resourceName": "customers/3638184039/campaignBudgets/15803015435",
+        "amountMicros": "20000000"
+      }
+    }
+  ],
+  "group": [
+    {
+      "resourceName": "customers/3638184039/adGroups/200547384672",
+      "status": "ENABLED",
+      "id": "200547384672",
+      "name": "Markisenwerbung | Exact Test | 2026-09",
+      "primaryStatus": "ELIGIBLE"
+    }
+  ],
+  "keywords": [
+    {
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200547384672~359631975515",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markisen werbung"
+        },
+        "primaryStatus": "PENDING",
+        "primaryStatusReasons": [
+          "AD_GROUP_CRITERION_UNDER_REVIEW"
+        ]
+      }
+    },
+    {
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200547384672~424828110894",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markise beschriften"
+        },
+        "primaryStatus": "NOT_ELIGIBLE",
+        "primaryStatusReasons": [
+          "AD_GROUP_CRITERION_RARELY_SERVED",
+          "AD_GROUP_CRITERION_UNDER_REVIEW"
+        ]
+      }
+    },
+    {
+      "adGroupCriterion": {
+        "resourceName": "customers/3638184039/adGroupCriteria/200547384672~470957823026",
+        "status": "ENABLED",
+        "keyword": {
+          "matchType": "EXACT",
+          "text": "markisenbeschriftung"
+        },
+        "primaryStatus": "NOT_ELIGIBLE",
+        "primaryStatusReasons": [
+          "AD_GROUP_CRITERION_RARELY_SERVED",
+          "AD_GROUP_CRITERION_UNDER_REVIEW"
+        ]
+      }
+    }
+  ],
+  "ads": [
+    {
+      "adGroupAd": {
+        "resourceName": "customers/3638184039/adGroupAds/200547384672~823633352778",
+        "status": "ENABLED",
+        "ad": {
+          "responsiveSearchAd": {
+            "headlines": [
+              {
+                "pinnedField": "HEADLINE_1",
+                "text": "Beleuchteter Markisen-Volant",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Leuchtvolant fürs Gewerbe",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Projekt prüfen lassen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Bestehende Markise prüfen",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Gestaltung im Konfigurator",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Lichtsaum",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              }
+            ],
+            "descriptions": [
+              {
+                "pinnedField": "DESCRIPTION_1",
+                "text": "Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen. Projekt prüfen lassen.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Markise wird Markenlicht. Prüfen Sie Ihr Projekt direkt bei LICHTSAUM.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              },
+              {
+                "text": "Gestaltung im Konfigurator ansehen und eine Projektanfrage an LICHTSAUM senden.",
+                "assetPerformanceLabel": "PENDING",
+                "policySummaryInfo": {
+                  "reviewStatus": "REVIEW_IN_PROGRESS"
+                }
+              }
+            ]
+          },
+          "resourceName": "customers/3638184039/ads/823633352778",
+          "finalUrls": [
+            "https://www.lichtsaum.com/"
+          ]
+        },
+        "policySummary": {
+          "reviewStatus": "REVIEW_IN_PROGRESS",
+          "approvalStatus": "UNKNOWN"
+        }
+      }
+    }
+  ],
+  "oldKeywordStatusesUnchanged": true
+}

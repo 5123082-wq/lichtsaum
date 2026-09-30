@@ -486,34 +486,17 @@ test("lets the following block fully cover the desktop hero scene", async ({
   expect(stripBackground).not.toBe("rgba(0, 0, 0, 0)");
 });
 
-test("keeps all three Wirkung cards and reveals their color on hover, keyboard and touch", async ({
+test("shows all three Wirkung images in color without inactive controls", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 
   const section = page.locator("#wirkung");
-  const classicMedia = section.locator(
-    ".transformation__figure--day .transformation__media--interactive"
-  );
-  const classicImage = classicMedia.locator(".transformation__image--reveal");
-  const modernMedia = section.locator(
-    ".transformation__figure--night .transformation__media--interactive"
-  );
-  const modernImage = modernMedia.locator(".transformation__image--reveal");
-  const contextMedia = section.locator(
-    ".transformation__figure--context .transformation__media--interactive"
-  );
-  const contextImage = contextMedia.locator(".transformation__image--reveal");
+  const images = section.locator(".transformation__figure img");
 
   await expect(section.locator(".transformation__figure")).toHaveCount(3);
-  await expect(
-    section.locator(".transformation__media--interactive")
-  ).toHaveCount(3);
-  await expect(section.getByRole("slider")).toHaveCount(0);
-  await expect(
-    section.locator(".transformation__figure--night img")
-  ).toHaveCount(1);
-  await expect(section.locator(".transformation__caption")).toHaveCount(0);
+  await expect(section.locator(".transformation__media button")).toHaveCount(0);
+  await expect(images).toHaveCount(3);
   await expect(section.locator(".transformation__marker")).toHaveText([
     "01 / Klassisch",
     "02 / Modern",
@@ -528,87 +511,12 @@ test("keeps all three Wirkung cards and reveals their color on hover, keyboard a
   await expect(
     section.locator(".transformation__figure--context .transformation__media")
   ).toHaveCSS("aspect-ratio", "21 / 7");
-  await expect(classicMedia).toHaveAttribute("aria-pressed", "false");
-  await expect(classicMedia).toHaveAttribute(
-    "aria-label",
-    /klassischen Restaurantfassade bei Nacht/
-  );
-  await expect(classicImage).toHaveAttribute(
-    "alt",
-    /klassischen Restaurantfassade bei Nacht/
-  );
-  await expect(classicImage).toHaveAttribute(
-    "src",
-    /lichtsaum-konzept-klassische-restaurantfassade-beleuchtete-markisenvolants-nacht/
-  );
-  await expect(modernMedia).toHaveAttribute("aria-pressed", "false");
-  await expect(modernMedia).toHaveAttribute("aria-label", /bei Nacht/);
-  await expect(contextMedia).toHaveAttribute("aria-pressed", "false");
-  await expect(contextMedia).toHaveAttribute(
-    "aria-label",
-    /städtischen Café- und Bistrofassade/
-  );
-  await expect(contextImage).toHaveAttribute(
-    "alt",
-    /städtischen Café- und Bistrofassade/
-  );
-  await expect(contextImage).toHaveAttribute(
-    "src",
-    /lichtsaum-konzept-beleuchteter-markisenvolant-cafe-bistro-stadt-abend/
-  );
-  await expect(classicImage).toHaveCSS(
-    "filter",
-    "grayscale(1) contrast(1.03)"
-  );
-  await expect(modernImage).toHaveCSS(
-    "filter",
-    "grayscale(1) contrast(1.03)"
-  );
-  await expect(contextImage).toHaveCSS(
-    "filter",
-    "grayscale(1) contrast(1.03)"
-  );
 
-  await classicMedia.hover();
-  await expect(classicImage).toHaveCSS("filter", "none");
-
-  await section.locator(".section-heading").hover();
-  await expect(classicImage).toHaveCSS(
-    "filter",
-    "grayscale(1) contrast(1.03)"
-  );
-
-  await modernMedia.hover();
-  await expect(modernImage).toHaveCSS("filter", "none");
-
-  await section.locator(".section-heading").hover();
-  await expect(modernImage).toHaveCSS(
-    "filter",
-    "grayscale(1) contrast(1.03)"
-  );
-
-  await classicMedia.click();
-  await section.locator(".section-heading").hover();
-  await expect(classicMedia).toHaveAttribute("aria-pressed", "true");
-  await expect(classicImage).toHaveCSS("filter", "none");
-
-  await classicMedia.press("Enter");
-  await expect(classicMedia).toHaveAttribute("aria-pressed", "false");
-
-  await contextMedia.hover();
-  await expect(contextImage).toHaveCSS("filter", "none");
-
-  await contextMedia.click();
-
-  await expect(contextMedia).toHaveAttribute("aria-pressed", "true");
-  await expect(contextMedia).toHaveAttribute(
-    "aria-label",
-    /Schwarz-Weiß-Darstellung wiederherstellen/
-  );
-  await expect(contextImage).toHaveCSS("filter", "none");
-
-  await contextMedia.press("Enter");
-  await expect(contextMedia).toHaveAttribute("aria-pressed", "false");
+  for (const image of await images.all()) {
+    await expect(image).toHaveCSS("filter", "none");
+    await image.hover();
+    await expect(image).toHaveCSS("filter", "none");
+  }
 });
 
 test("centers the compact Wirkung slogan without changing the photo grid", async ({
@@ -691,7 +599,7 @@ test("keeps the simplified hero free of CTAs and preserves the form target", asy
 }) => {
   await expect(page.locator(".hero").getByRole("link")).toHaveCount(0);
   await expect(page.locator("#projekt-pruefen")).toHaveCount(1);
-  await expect(page.locator("#project-check-form")).toHaveAttribute(
+  await expect(page.locator("#projekt-pruefen form.lead-form")).toHaveAttribute(
     "aria-labelledby",
     "project-check-title"
   );
@@ -953,10 +861,10 @@ test("configures the physical SVG valance and enforces its height limits", async
   page
 }) => {
   const section = page.locator("#konfigurator");
-  const preview = section.locator(".configurator-preview");
+  const preview = section.locator(".configurator-preview:visible");
   const previewImage = preview.getByRole("img");
   const continuationButton = section.getByRole("link", {
-    name: "Im Konfigurator weiter"
+    name: "Optionen wählen & Preis berechnen →"
   });
 
   await expect(
@@ -1090,7 +998,7 @@ test("configures the physical SVG valance and enforces its height limits", async
   await expect(lightColorTrigger).toHaveAccessibleName(
     "Lichtwirkung: Neutralweiß"
   );
-  await expect(section.getByText("Ansicht", { exact: true })).toHaveCount(0);
+  await expect(section.getByText("Ansicht", { exact: true }).filter({ visible: true })).toHaveCount(0);
   await expect(section.getByRole("radio", { name: "Neutralweiß" })).toHaveCount(
     0
   );
@@ -1366,7 +1274,7 @@ test("uses opacity-only precision transitions with reduced motion", async ({ pag
 test("reports accessible validation errors for an empty project check", async ({
   page
 }) => {
-  const form = page.locator("#project-check-form");
+  const form = page.locator("#projekt-pruefen form.lead-form");
 
   await expect(form).toBeVisible();
   await expect(
@@ -1393,7 +1301,7 @@ test("reports accessible validation errors for an empty project check", async ({
 test("validates complete prototype input without claiming lead success", async ({
   page
 }) => {
-  const form = page.locator("#project-check-form");
+  const form = page.locator("#projekt-pruefen form.lead-form");
 
   await form
     .getByLabel(/^(Geschäftliche )?E-Mail-Adresse\b/)
