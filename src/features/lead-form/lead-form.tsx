@@ -63,6 +63,7 @@ type LeadFormProps = Readonly<{
   formId?: FormId;
   formLocation?: FormLocation;
   onSubmittedChange?: (submitted: boolean) => void;
+  onSuccessClose?: () => void;
   submitLabel?: string;
   labelledById?: string;
   onConfiguratorPricingConfirmed?: (
@@ -291,6 +292,7 @@ export function LeadForm({
   formId = "main_inquiry",
   formLocation = "landing",
   onSubmittedChange,
+  onSuccessClose,
   submitLabel = "Projekt prüfen lassen",
   labelledById = "project-check-title",
   onConfiguratorPricingConfirmed,
@@ -453,12 +455,23 @@ export function LeadForm({
   }, []);
 
   useEffect(() => {
-    if (state.status === "submitted") {
-      successRef.current?.focus();
-    } else if (state.status !== "idle") {
-      resultRef.current?.focus();
+    // Feedback inside the entry cannot receive focus while submission makes it inert.
+    if (isPending) {
+      return;
     }
-  }, [state.status]);
+
+    const result = state.status === "submitted"
+      ? successRef.current
+      : state.status === "invalid" ||
+          state.status === "prototype_validated" ||
+          state.status === "prototype_unavailable" ||
+          configuratorPricingChange
+        ? resultRef.current
+        : null;
+
+    result?.focus({ preventScroll: true });
+    result?.scrollIntoView({ behavior: "instant", block: "center" });
+  }, [state, isPending, configuratorPricingChange]);
 
   useEffect(() => {
     if (!isPending || formRef.current?.closest("dialog")) {
@@ -571,7 +584,6 @@ export function LeadForm({
             pricingVersion: prepared.pricingVersion,
             calculation: prepared.calculation
           });
-          requestAnimationFrame(() => resultRef.current?.focus());
           return;
         }
 
@@ -1057,9 +1069,9 @@ export function LeadForm({
               <button
                 className="button button--secondary lead-form__success-reset"
                 type="button"
-                onClick={resetForm}
+                onClick={onSuccessClose ?? resetForm}
               >
-                Weitere Anfrage senden
+                {onSuccessClose ? "Schließen" : "Weitere Anfrage senden"}
               </button>
             </>
           ) : null}

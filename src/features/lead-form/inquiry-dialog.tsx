@@ -54,7 +54,7 @@ export function InquiryDialog({ open, onClose, onEdit, triggerRef, formId, formL
   }
 
   return (
-    <dialog ref={dialogRef} className="inquiry-dialog" aria-labelledby={titleId}
+    <dialog ref={dialogRef} className="inquiry-dialog" data-submitted={submitted} aria-labelledby={titleId}
       onCancel={(event) => { event.preventDefault(); close(); }}>
       <div className="inquiry-dialog__surface">
         <header className="inquiry-dialog__header">
@@ -79,9 +79,10 @@ export function InquiryDialog({ open, onClose, onEdit, triggerRef, formId, formL
             configuratorProject={attached ? configuratorProject : undefined}
             attachmentsEnabled={attachmentsEnabled} formId={formId} formLocation={formLocation}
             submitLabel="Anfrage senden" onSubmittedChange={setSubmitted}
+            onSuccessClose={close}
             onSubmissionPendingChange={(value) => { setPending(value); onSubmissionPendingChange?.(value); }}
             onConfiguratorPricingConfirmed={onConfiguratorPricingConfirmed} />
-          <button type="button" className="inquiry-dialog__back" disabled={pending} onClick={close}>Zurück zur Konfiguration</button>
+          {!submitted ? <button type="button" className="inquiry-dialog__back" disabled={pending} onClick={close}>Zurück zur Konfiguration</button> : null}
         </div>
       </div>
     </dialog>

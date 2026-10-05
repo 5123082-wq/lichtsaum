@@ -3,55 +3,196 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-09-25
-- Current milestone: mini and full configurators now open one shared inquiry dialog locally.
-  Partial mini sketches use a strict server-classified, unpriced JSONB context; existing full pricing,
-  persistence and retry protection remain. Contact/file drafts survive close/edit in page memory.
-  Typed diagnostic events and the GTM setup recipe are ready; this milestone is not deployed.
-- Earlier site context: public LICHTSAUM site exists; its mobile menu now uses a smooth two-way drawer
-  transition with a Safari-safe right anchor, one stable header wordmark and global input-modality
-  focus handling. Pointer/touch actions no longer leave orange focus styling; keyboard focus remains
-  visible. Safari-specific behavior remains unverified on a real device. The
-  full configurator has a locally verified
-  fixed technical intro background and a sequential calculator layout: the schematic preview spans
-  the width, and step 01 now uses the same canonical visual picker controls as the homepage;
-  step 02 exposes all services, and price plus specification remain hidden until step 03. The
-  server-authoritative configurator
-  pricing is version `2026-08-20.v4` with server-only component coefficients: electrical set +25%,
-  finished Volant +25% and LED panels +100%. The owner has
-  approved a two-route SEO implementation plan. `/konfigurator` K1–K4 are complete locally: its
-  owner-approved three-part German lower block is server-rendered after the wizard, metadata option
-  A covers configuration plus preliminary-price intent, and two contextual native links point to
-  `/#eignung` and `/referenzen`. `/referenzen` remains the next research/copy track. Keyword Planner
-  evidence does not justify new landing pages. Google Ads campaign `24153758040` remains enabled per owner instruction. The 2026-09-06
-  audit is the historical baseline: 38 impressions, 4 clicks, €12.90 and one owner-confirmed
-  test conversion through September 5, with 0 confirmed customer leads. The owner-approved
-  September 6 changes are applied: Maximize Clicks with €5 CPC ceiling, €20/day budget and a
-  fourth enabled group containing three new Exact keywords and one RSA under review. There are
-  25 enabled and 6 paused keywords; all three new keys are now eligible after initial restrictions,
-  while the new ad is still under review and its group has zero traffic. Production consent
-  checks and owner-submitted test LS-2026-000027 with email receipt succeeded. Google Ads now
-  confirms tag activity today and the inactive warning has cleared; last attributed conversion
-  remains August 22. Transaction-level deduplication remains unverified. See
-  `docs/marketing/google-ads-search-test-2026-09-06.md` for current state and evidence.
-- Operational mail for `info@lichtsaum.com` is now received and stored directly in IONOS Mail
-  Basic. Apple Mail inbound and outbound delivery plus public MX, SPF and DKIM records were verified
-  on 2026-09-10. The website form keeps the same mailbox address and needs no runtime configuration
-  change. The minimal provider disclosure naming Resend and IONOS was published and verified on
-  the production Datenschutz page.
-- Active track: implementation and local QA for configurator inquiries completed. A site release,
-  GTM publication and synthetic production inquiry are separate owner-approved steps.
-- Working tree: intentionally dirty with owner/previous-agent changes. Do not reset, overwrite or
-  broadly reformat unrelated work.
-- Default context protocol: read this block and the three `RECENT_CHANGES` entries only. Read the
-  detailed sections below when the current task needs their domain.
-- Next action: owner review of the local interface, then a separately authorized site/GTM release
-  and Tag Assistant/controlled production verification. Real-device mobile keyboard testing remains
-  open; Chromium/WebKit viewport and focus checks passed. Other SEO/Ads tracks remain separate.
+- Last updated: 2026-10-05
+- Active release: owner explicitly authorised publishing all current site changes and production
+  deployment on 2026-10-05. Candidate includes the illuminated hero/header, Wirkung concept
+  viewer and revised images, shared ten-colour palette, mini price/inquiry actions and compact
+  inquiry receipt with visible submission feedback. Existing production flags and providers
+  remain unchanged. GTM/Ads publication and real synthetic inquiries are separate actions.
+- Verification: 196 unit tests, typecheck, full lint and production build passed. Chromium/WebKit
+  suite passed 151 checks; all three stale colour/delay expectation failures passed on rerun. Two local consent tests skipped because optional tags are dormant locally.
+- Publication: preparing a scoped commit on the current checkout, then direct Git push to fresh
+  origin/main and production deployment verification. Local screenshots, unrelated agent output,
+  tmp/, secrets and environment files are excluded. No database migration is needed.
+- Evidence boundaries: generated images are concepts, not customer projects. Owner publication
+  authority is recorded separately from documentary verification of underlying media rights.
+  Real-device Safari, mobile keyboard, field CWV and conversion deduplication remain unverified.
+- Existing production: LICHTSAUM on Vercel; lead persistence/notifications use Neon/Resend, files
+  use private Blob. Mail for info@lichtsaum.com is received/stored by IONOS. Google Ads remains
+  under its separately approved settings; see docs/marketing/google-ads-search-test-2026-09-06.md.
+- Other tracks: /konfigurator SEO K1–K4 is implemented; /referenzen research/copy remains open.
+  Keyword Planner evidence does not justify additional landing pages.
+- Next action: push the verified candidate, confirm Vercel READY for its SHA and domain assignment,
+  then check production pages, media, dialogs, consent and canonical/robots/sitemap without
+  creating a real lead. Keep the shared localhost server available.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20261005-03 — Authorised production release candidate
+
+- Scope: all accumulated site changes, generated media/provenance, regression checks and release.
+- Outcome: owner authorised Git publication and production deployment. Temporary agent output
+  and tmp/ are ignored. Two stale browser expectations now match the accepted palette and timing.
+  Production deployment is pending; runtime flags/providers and GTM/Ads settings are unchanged.
+- Verification: 196 unit tests, typecheck, full lint and production build passed. Full browser run
+  had 151 passes and two consent skips; all three stale-expectation failures passed on focused rerun.
+- Follow-up: confirm Git/Vercel release and production smoke checks; real-device/field checks remain open.
+
+### CHG-20261005-02 — Straight, spaced hero lettering
+
+- Scope: hero background cleanup, vector typography, visual contract and asset provenance.
+- Outcome: old raster letters are removed; actual Hanken Grotesk 800 outlines use 0.12em tracking
+  and one perspective transform. A crisp core retains the footer glow palette. Footer typography
+  is unchanged. Source assets are retained; implementation remains local.
+- Verification: 30 Chromium/WebKit hero checks across nine viewports passed; desktop screenshot
+  reviewed. Typecheck, scoped lint and production build passed. Bounds checks reflect the new SVG.
+- Follow-up: owner visual review and separately authorized release; real-device Safari and field
+  CWV remain unverified.
+### CHG-20261005-01 — Compact close-only inquiry confirmation
+
+- Scope: shared mini/full inquiry success presentation, close lifecycle and focused regression checks.
+- Outcome: accepted inquiries show a centered content-height receipt, maximum 36rem wide, with
+  small check, confirmation, request number and Schließen. Hidden fields no longer contribute
+  height. Repeat-send and bottom return actions are absent in the dialog; cross, close and Escape
+  return focus to the configuration. Reopening preserves the receipt. Implementation is local.
+- Verification: 15 unit tests and 10 Chromium/WebKit acceptance checks passed at 320, 390, 1135,
+  1440 and 1920px, covering content height, centering, no overflow, accessibility and all closing
+  methods. Desktop/mobile screenshots reviewed; typecheck, scoped ESLint and production build
+  passed. Browser acceptance was simulated after local validation, without creating a real lead.
+  The previously inactive dev server was started with dev:watch for local review.
+- Follow-up: owner visual review and separately authorized release.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
+### CHG-20261004-07 — Visible inquiry submission feedback
+
+- Scope: shared lead-form focus/scroll lifecycle, mini/full inquiry dialogs and regression checks.
+- Outcome: validation errors, local test/unavailable results, pricing confirmation and accepted
+  success become visible after pending settles; repeated responses regain focus on every retry.
+  The focus race against the inert entry is removed. Localhost still validates without creating
+  a lead; the owner reports live-site submission works. The change is local.
+- Verification: reproduced the desktop full-dialog failure with a regression test before fixing
+  it. All 21 focused unit tests and 22 Chromium/WebKit dialog checks passed, including mobile/desktop
+  feedback, retries, drafts/files, focus, accessibility and consent diagnostics. Typecheck,
+  scoped ESLint, production build and screenshot review passed; the existing dev server remains
+  available. No real lead was submitted and no deployment was performed.
+- Follow-up: none.
+
+
+### CHG-20261004-06 — Original hero photograph with vector lettering light
+
+- Scope: hero image source, crop-aware responsive delivery, SVG illumination, provenance and QA.
+- Outcome: one quality-95 derivative from the exact-viewpoint PNG remains the constant background.
+  The source is 1672 × 941; matching smoothed SVG letters and warm glow alone brighten on scroll.
+  A warm-white gradient and blurred light core remove the traced pixel steps, with a gradual halo.
+  Quality 90 and sizes based on full cropped width restore available detail on Retina phones.
+  Existing headline, header, parallax and shorter mobile transition remain. Old sources and
+  derivatives are retained; unrelated local work is preserved. No deployment or Git publication.
+- Verification: 30 Chromium/WebKit hero/header checks including 2× Retina source decoding,
+  nine viewports, SVG-only content and native/fallback motion; 7 existing hero/menu checks plus
+  12 responsive/accessibility checks passed (49 total). Typecheck, full lint and production build
+  passed; desktop/mobile Retina screenshots were inspected. Source/asset links resolve and the
+  shared dev server remains available on port 3000. After the glow revision, all 30 hero/header
+  checks passed again; entry/full light were inspected at 5× enlargement in both browser engines
+  and in desktop/Retina phone page previews.
+- Follow-up: owner visual review and separately authorized release. The original source resolution
+  and rights boundary are recorded in the asset provenance; real-device Safari and field CWV
+  remain unverified.
+
+
+### CHG-20261004-05 — Shared fabric-inspired configurator palette
+
+- Scope: canonical colour registry, legacy white compatibility, mini/full pickers and previews,
+  design documentation and regression checks.
+- Outcome: ten owner-approved plain screen colours use generic German names in both configurators.
+  Existing colour IDs remain stable; retired white maps to Naturweiß on draft restoration and both
+  server submission boundaries. Graphit remains the default. No supplier identities or copied
+  fabric/stripe images were added. Implementation is local, with no deployment or Git publication.
+- Verification: 196 unit tests, typecheck, scoped ESLint and production build passed. Eight
+  Chromium/WebKit checks verify all ten swatches, trigger colours and SVG fills at 320, 390, 1440
+  and 1920 px; the existing mini selection/continuation browser scenario also passed. Desktop
+  picker visually inspected. Build completed with local process access after the sandbox attempt
+  was stopped; the shared dev server remains available.
+- Follow-up: owner visual review; actual supplier fabric samples remain unconfirmed.
+
+### CHG-20261004-04 — Clear price and inquiry actions below the mini configurator
+
+- Scope: homepage mini footer, responsive button layout, supporting copy and visual-system documentation.
+- Outcome: outlined `Entwurf anfragen` sits left of orange `Preis berechnen` on desktop; both are
+  44px high and the price button shares the header CTA's right edge. Mobile stacks price first.
+  Both routine footer sentences were removed at the owner's request; schematic context remains
+  in the section intro and technical review information remains in the inquiry dialog.
+  Price continuation, draft transfer, incomplete inquiries and the existing route remain intact.
+- Verification: 15 focused Chromium/WebKit checks passed for transfer, storage failure, input limits,
+  inquiry drafts/focus/files and consent diagnostics. In-app browser review at 320–1920px confirms
+  button size, stacking/row layout, common right edge and no horizontal overflow. Desktop/mobile
+  screenshots reviewed; typecheck, scoped ESLint, production build and diff whitespace checks passed.
+  The existing dev server remains accessible; sandbox-only port failures were resolved by running
+  checks with local access, without restarting the server.
+  After caption removal, direct desktop/mobile review confirms both texts are absent, the button
+  layout and inquiry dialog work, and no dangling ARIA references remain; typecheck and scoped lint passed again.
+- Follow-up: owner visual review and separately authorized production release; real-device Safari
+  and the effect on visitor behaviour were not tested.
+
+### CHG-20261004-03 — Fabric-inspired palette proposal
+
+- Scope: shared mini/full configurator colours, manufacturer visual references and design ownership.
+- Outcome: eight plain colours plus two optional extensions are proposed with our generic German
+  names. Owner decisions permit plain-colour references but exclude copying third-party fabric
+  photographs or striped designs and presenting selections as a supplier's named fabric.
+  No supplier, material availability or exact fabric match is promised; the option registry is unchanged.
+- Verification: checked the shared colour registry and both SVG previews; reviewed the manufacturer's
+  live gallery and sampled eleven web photographs for approximate screen colours. Research visuals
+  contain colour fields only and no copied fabric photographs or stripe images; all ten colour
+  comparisons and selection-state restoration passed direct DOM checks.
+- Follow-up: review palette for local implementation; actual supplier samples and any later striped
+  assortment remain unconfirmed.
+
+### CHG-20261004-02 — Overlay navigation and a brighter homepage hero
+
+- Scope: homepage header surface, hero crop/light/headline motion, responsive and accessibility QA;
+  visual-system documentation.
+- Outcome: entry navigation overlays the image; its dark surface fades in over 160px. The raised
+  lettering starts softly lit and reaches full warm brightness on scroll. H1 scrolls upward,
+  stays fully visible through 100px and fades by 320px; the background drifts more slowly downward
+  until fully covered. The sticky stage stays pinned through that overlap, removing the visible
+  reversal without adding scroll distance or a background fade.
+  CSS scroll timelines own supported-browser motion; the fallback never compensates headline
+  position. Phones use a shorter scene: the following block enters after about 10svh of scroll,
+  half the earlier entry distance, while the slower background drift stays consistent.
+  The following block enters before the headline finishes fading instead of
+  leaving a long empty scroll. Other routes retain their header surface. Reduced motion stays illuminated
+  without parallax. Existing image assets are reused and other local work is preserved.
+- Verification: 28 Chromium/WebKit hero/header checks across nine viewports from 320–1920px,
+  including immediate/next-frame position consistency, scroll reversal and downward image motion
+  through the entire section overlap in native/fallback modes,
+  7 existing Chromium hero/menu checks and 12 responsive/accessibility checks passed (47 total).
+  Typecheck, full lint and production build passed; final desktop/mobile WebKit screenshots were
+  reviewed. The existing dev server still responds on port 3000.
+- Follow-up: owner visual review and separately authorized production release; real-device Safari
+  and production field Core Web Vitals were not exercised.
+
+
+### CHG-20261004-01 — Wirkung image viewer and revised concept series
+
+- Scope: three Wirkung images, enlargement controls, native modal, captions, image provenance
+  and design documentation; existing photo/slogan grid retained.
+- Outcome: rich original scenes guide the revised classical, modern and high-tech concepts after
+  the sparse first series was rejected. Cards show concept disclosure and enlargement affordance;
+  full images open with captions, cyclic buttons/arrows, Escape/backdrop close and focus return.
+  Native links remain usable without JavaScript/dialog API and with modified clicks. Original
+  assets are preserved; new images remain local visual review. The original section heading
+  is restored per owner instruction. No deployment/push.
+- Verification: 24 Chromium/WebKit checks at 320–1920 px plus 200% text/short viewport, axe,
+  keyboard/focus, no-JS/no-API/new-tab fallback and reduced motion; four existing grid/gallery/homepage
+  accessibility checks passed. Typecheck, lint and production build passed. Screenshots inspected;
+  optimized WebP assets total about 630 KB. The local dev server remains available on port 3000.
+- Follow-up: owner visual review of the revised series; separate approval before release.
+  Real-device Safari and public production behavior were not exercised.
 
 ### CHG-20260925-01 — Shared configurator inquiry dialogs
 
@@ -70,6 +211,7 @@
 - Follow-up: review interface, separately authorize deployment/GTM publication and production test;
   real mobile keyboard and live Tag Assistant were not exercised.
 
+
 ### CHG-20260910-01 — Migrated operational mailbox to IONOS
 
 - Scope: IONOS mailbox provisioning, Apple Mail, mail DNS, form mail-flow audit and
@@ -85,6 +227,7 @@
   forwarding arrangement.
 - Follow-up: none.
 
+
 ### CHG-20260906-02 — Applied CPC cap and adjacent-demand test
 
 - Scope: campaign CPC ceiling, three Exact keywords, one RSA and conversion diagnostic follow-up.
@@ -97,9 +240,6 @@
 - Follow-up: review moderation, disclosed search terms, CPC and qualified leads; transaction-ID
   deduplication remains unverified. Proposed first review September 13; no automation created.
 
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20260906-01 — Audited Google Ads demand and recommendations
 

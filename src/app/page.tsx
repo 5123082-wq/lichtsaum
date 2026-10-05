@@ -15,7 +15,7 @@ export default function HomePage() {
       <a className="skip-link" href="#main-content">
         Zum Inhalt springen
       </a>
-      <GlobalSiteHeader />
+      <GlobalSiteHeader overlayHero />
       <main id="main-content">
         <HeroSection />
         <section className="signal-strip" aria-label="Projektgrundsätze">

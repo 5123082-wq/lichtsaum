@@ -8,12 +8,17 @@ import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
 
 type SiteHeaderProps = Readonly<{
+  overlayHero?: boolean;
   showReferences?: boolean;
 }>;
 
 type MobileMenuState = "closed" | "open";
 
-export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
+export function SiteHeader({
+  overlayHero = false,
+  showReferences = false
+}: SiteHeaderProps) {
+  const headerRef = useRef<HTMLElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mobileMenuState, setMobileMenuState] =
     useState<MobileMenuState>("closed");
@@ -29,6 +34,45 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
         ...siteConfig.navigation.slice(2)
       ]
     : siteConfig.navigation;
+
+  useEffect(() => {
+    const header = headerRef.current;
+
+    if (
+      !overlayHero ||
+      !header ||
+      CSS.supports("animation-timeline: scroll(root block)")
+    ) {
+      return;
+    }
+
+    let animationFrame: number | null = null;
+    const updateSurface = () => {
+      animationFrame = null;
+      const progress = Math.min(1, Math.max(0, window.scrollY / 160));
+      header.style.setProperty(
+        "--header-surface-opacity",
+        String(progress * progress * (3 - 2 * progress))
+      );
+    };
+    const scheduleUpdate = () => {
+      if (animationFrame === null) {
+        animationFrame = window.requestAnimationFrame(updateSurface);
+      }
+    };
+
+    updateSurface();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      header.style.removeProperty("--header-surface-opacity");
+
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [overlayHero]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -225,7 +269,11 @@ export function SiteHeader({ showReferences = false }: SiteHeaderProps) {
   };
 
   return (
-    <header className="site-header">
+    <header
+      className="site-header"
+      data-overlay-hero={overlayHero ? "true" : undefined}
+      ref={headerRef}
+    >
       <div className="site-header__inner">
         <Link className="brand-link" href="/" aria-label="LICHTSAUM Startseite">
           <Image

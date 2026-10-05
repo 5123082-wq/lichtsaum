@@ -1,5 +1,7 @@
 # Local temporary workspace
 temp/
+tmp/
+.codex_artifacts/
 
 # Local-only review and generation output
 artifacts/

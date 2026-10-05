@@ -7,7 +7,8 @@ import {
   MINI_CONFIGURATOR_COMPOSITION_MODES,
   MINI_CONFIGURATOR_FONTS,
   MINI_CONFIGURATOR_LIGHT_COLORS,
-  MINI_CONFIGURATOR_PREVIEW_MODES
+  MINI_CONFIGURATOR_PREVIEW_MODES,
+  normalizeAwningColorId
 } from "@/features/mini-configurator/options";
 import {
   MINI_CONFIGURATOR_STATE_VERSION,
@@ -84,15 +85,24 @@ export function parseMiniConfiguratorStoredState(
 
   try {
     const storedState = JSON.parse(rawValue) as Partial<MiniConfiguratorStoredState>;
+    const configuration =
+      storedState.configuration && typeof storedState.configuration === "object"
+        ? {
+            ...storedState.configuration,
+            awningColorId: normalizeAwningColorId(
+              storedState.configuration.awningColorId
+            )
+          }
+        : storedState.configuration;
 
     if (
       storedState.version !== MINI_CONFIGURATOR_STATE_VERSION ||
-      !isMiniConfiguratorConfig(storedState.configuration)
+      !isMiniConfiguratorConfig(configuration)
     ) {
       return null;
     }
 
-    return storedState.configuration;
+    return configuration;
   } catch {
     return null;
   }

@@ -28,14 +28,18 @@ function submit() { fireEvent.submit(document.querySelector("form")!); }
 
 beforeEach(() => {
   vi.clearAllMocks();
+  Object.defineProperty(HTMLElement.prototype, "scrollIntoView", { configurable: true, value: vi.fn() });
   HTMLDialogElement.prototype.showModal = function () { this.setAttribute("open", ""); };
   HTMLDialogElement.prototype.close = function () { this.removeAttribute("open"); };
   persistConsentRecord(createConsentRecord({ analytics: true, marketing: true }));
   (window as Window & { dataLayer?: unknown[] }).dataLayer = [];
 });
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  Reflect.deleteProperty(HTMLElement.prototype, "scrollIntoView");
+});
 
-it("locks dismissal during submit and preserves success across reopen until explicit reset", async () => {
+it("locks dismissal during submit and preserves the receipt across close and reopen", async () => {
   let resolve!: (value: unknown) => void;
   actions.prepareProjectCheckSubmission.mockReturnValue(new Promise((done) => { resolve = done; }));
   render(<Harness />);
@@ -48,14 +52,21 @@ it("locks dismissal during submit and preserves success across reopen until expl
   expect(document.querySelector("dialog")).toHaveAttribute("open");
   expect(actions.prepareProjectCheckSubmission).toHaveBeenCalledTimes(1);
   resolve({ kind: "result", state: { status: "submitted", fieldErrors: {}, message: "Gespeichert", leadId: crypto.randomUUID(), publicLeadNumber: "LS-2026-000042" } });
-  await screen.findByRole("heading", { name: "Anfrage übermittelt." });
+  const successTitle = await screen.findByRole("heading", { name: "Anfrage übermittelt." });
+  await waitFor(() => expect(successTitle.closest("[role='status']")).toHaveFocus());
   fireEvent.click(screen.getByRole("button", { name: "Anfrage schließen" }));
   fireEvent.click(screen.getByText("Öffnen"));
   expect(screen.getByText("Anfragenummer: LS-2026-000042")).toBeVisible();
   expect(actions.prepareProjectCheckSubmission).toHaveBeenCalledTimes(1);
   expect(layer().filter((entry) => entry.event === "generate_lead" && entry.destination === "ads")).toHaveLength(1);
-  fireEvent.click(screen.getByRole("button", { name: "Weitere Anfrage senden" }));
-  expect(screen.getByLabelText(/E-Mail-Adresse/)).toHaveValue("");
+  expect(screen.queryByRole("button", { name: "Weitere Anfrage senden" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Zurück zur Konfiguration" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Schließen" }));
+  expect(document.querySelector("dialog")).not.toHaveAttribute("open");
+  expect(screen.getByText("Öffnen")).toHaveFocus();
+  fireEvent.click(screen.getByText("Öffnen"));
+  expect(screen.getByText("Anfragenummer: LS-2026-000042")).toBeVisible();
+  expect(actions.prepareProjectCheckSubmission).toHaveBeenCalledTimes(1);
   expect(JSON.stringify(layer())).not.toContain("draft@example.test");
 });
 

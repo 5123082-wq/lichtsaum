@@ -1,6 +1,124 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+for (const viewport of [
+  { width: 320, height: 640 },
+  { width: 390, height: 844 },
+  { width: 1135, height: 853 },
+  { width: 1440, height: 900 },
+  { width: 1920, height: 1080 }
+]) {
+  test(`accepted inquiry fits a compact dialog at ${viewport.width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/konfigurator");
+    await expect(page.locator(".full-configurator")).toHaveAttribute("data-calculation-status", "ready");
+    await page.getByRole("button", { name: "Weitere Optionen", exact: true }).click();
+    await page.getByRole("button", { name: "Preis & Projektanfrage", exact: true }).click();
+    const trigger = page.getByRole("button", { name: "Konfiguration anfragen", exact: true });
+    await trigger.click();
+    const dialog = page.locator("dialog[open]");
+    await dialog.getByLabel(/E-Mail-Adresse/).fill("receipt@example.test");
+
+    // Exercise the real UI with a simulated acceptance; localhost still only validates.
+    let simulatedAcceptance = false;
+    await page.route("**/konfigurator", async (route) => {
+      if (route.request().method() !== "POST" || !route.request().headers()["next-action"]) {
+        await route.continue();
+        return;
+      }
+      const response = await route.fetch();
+      const body = await response.text();
+      const marker = '"status":"prototype_validated"';
+      if (body.includes(marker)) {
+        simulatedAcceptance = true;
+        await route.fulfill({ response, body: body.replace(marker, '"status":"submitted","leadId":"00000000-0000-4000-8000-000000000032","publicLeadNumber":"LS-TEST-000032"') });
+      } else {
+        await route.fulfill({ response });
+      }
+    });
+    await dialog.getByRole("button", { name: "Anfrage senden", exact: true }).click();
+    const heading = dialog.getByRole("heading", { name: "Anfrage übermittelt." });
+    await expect(heading).toBeInViewport();
+    expect(simulatedAcceptance).toBe(true);
+    await expect(dialog.locator(".lead-form__success")).toBeFocused();
+    await expect(dialog.getByText("Anfragenummer: LS-TEST-000032")).toBeInViewport();
+    await expect(dialog.getByRole("button", { name: "Schließen", exact: true })).toBeInViewport();
+    await expect(dialog.getByRole("button", { name: "Anfrage schließen", exact: true })).toBeInViewport();
+    await expect(dialog.getByRole("button", { name: "Weitere Anfrage senden" })).toHaveCount(0);
+    await expect(dialog.getByRole("button", { name: "Zurück zur Konfiguration" })).toHaveCount(0);
+    const geometry = await dialog.evaluate((element) => ({
+      height: element.clientHeight, scrollHeight: element.scrollHeight,
+      width: element.clientWidth, scrollWidth: element.scrollWidth,
+      top: element.getBoundingClientRect().top, bottom: element.getBoundingClientRect().bottom
+    }));
+    expect(geometry.scrollHeight).toBeLessThanOrEqual(geometry.height + 1);
+    expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width + 1);
+    expect(geometry.top).toBeGreaterThanOrEqual(15);
+    expect(geometry.bottom).toBeLessThanOrEqual(viewport.height - 15);
+    expect(geometry.width).toBeLessThanOrEqual(576);
+    expect(geometry.height).toBeLessThan(560);
+    expect(Math.abs(geometry.top - (viewport.height - (geometry.bottom - geometry.top)) / 2)).toBeLessThanOrEqual(1);
+    await page.mouse.move(0, 0);
+    await dialog.evaluate(async (element) => {
+      await Promise.all(element.getAnimations({ subtree: true })
+        .filter((animation) => animation.effect?.getComputedTiming().iterations !== Infinity)
+        .map((animation) => animation.finished.catch(() => {})));
+    });
+    const audit = await new AxeBuilder({ page }).include("dialog[open]").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+    expect(audit.violations).toEqual([]);
+    await page.screenshot({ path: testInfo.outputPath("compact-confirmation.png"), animations: "disabled" });
+    for (const method of ["button", "cross", "escape"]) {
+      if (method === "escape") await page.keyboard.press("Escape");
+      else await dialog.getByRole("button", { name: method === "button" ? "Schließen" : "Anfrage schließen", exact: true }).click();
+      await expect(page.locator("dialog.inquiry-dialog")).not.toBeVisible();
+      await expect(trigger).toBeFocused();
+      await expect(page.locator("html")).not.toHaveCSS("overflow", "hidden");
+      await trigger.click();
+      await expect(dialog.getByText("Anfragenummer: LS-TEST-000032")).toBeInViewport();
+    }
+  });
+}
+
+for (const entry of ["mini", "full"] as const) {
+  for (const width of [390, 1135]) {
+    test(`${entry} inquiry reveals submission feedback and retries at ${width}px`, async ({ page }, testInfo) => {
+      await page.setViewportSize({ width, height: 853 });
+      await page.goto(entry === "mini" ? "/" : "/konfigurator");
+      const reject = page.getByRole("button", { name: "Nur notwendige" });
+      if (await reject.isVisible()) await reject.click();
+      if (entry === "full") {
+        await expect(page.locator(".full-configurator")).toHaveAttribute("data-calculation-status", "ready");
+        await page.getByRole("button", { name: "Weitere Optionen", exact: true }).click();
+        await page.getByRole("button", { name: "Preis & Projektanfrage", exact: true }).click();
+      }
+      await page.getByRole("button", {
+        name: entry === "mini" ? "Entwurf anfragen" : "Konfiguration anfragen",
+        exact: true
+      }).click();
+      const dialog = page.locator("dialog[open]");
+      const submit = dialog.getByRole("button", { name: "Anfrage senden", exact: true });
+      await submit.click();
+      const errorTitle = dialog.getByRole("heading", { name: "Bitte prüfen Sie Ihre Angaben" });
+      await expect(errorTitle).toBeInViewport();
+      await expect(errorTitle.locator("../..")).toBeFocused();
+      await dialog.getByLabel(/E-Mail-Adresse/).fill("feedback@example.test");
+      const resultTitle = dialog.getByRole("heading", { name: "Prototyp-Prüfung abgeschlossen" });
+      for (let attempt = 0; attempt < 2; attempt++) {
+        await submit.click();
+        await expect(resultTitle).toBeInViewport();
+        await expect(resultTitle.locator("../..")).toBeFocused();
+        await expect(dialog.getByRole("button", { name: "Anfrage schließen" })).toBeEnabled();
+      }
+      await expect(dialog.getByText(/wurden nicht gespeichert und nicht als Projektanfrage/i)).toBeInViewport();
+      await expect(dialog.getByLabel(/E-Mail-Adresse/)).toHaveValue("feedback@example.test");
+      expect(await page.evaluate(() => ((window as Window & { dataLayer?: Record<string, unknown>[] }).dataLayer ?? []).filter((entry) => entry.event === "generate_lead"))).toEqual([]);
+      if (entry === "full" && width === 1135) {
+        await page.screenshot({ path: `/tmp/lichtsaum-inquiry-feedback-${testInfo.project.name}.png` });
+      }
+    });
+  }
+}
+
 for (const width of [320, 390, 768, 1440]) {
   test(`mini inquiry preserves drafts, focus and files at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -8,7 +126,7 @@ for (const width of [320, 390, 768, 1440]) {
     await page.goto("/");
     const reject = page.getByRole("button", { name: "Nur notwendige" });
     if (await reject.isVisible()) await reject.click();
-    await expect(page.getByRole("link", { name: "Optionen wählen & Preis berechnen →" })).toHaveAttribute("aria-disabled", "false");
+    await expect(page.getByRole("link", { name: "Preis berechnen" })).toHaveAttribute("aria-disabled", "false");
     const text = page.getByLabel("Text auf dem Volant");
     await text.fill("MEIN ENTWURF");
     await page.getByLabel("Volantbreite").fill("");
@@ -107,7 +225,7 @@ test("does not replay mini start or form start after late Analytics consent", as
   const cookie = (analytics: boolean) => ({ name: CONSENT_COOKIE_NAME, value: encodeURIComponent(JSON.stringify(createConsentRecord({ analytics, marketing: false }))), url: "http://127.0.0.1:3000" });
   await context.addCookies([cookie(false)]);
   await page.goto("/");
-  await expect(page.getByRole("link", { name: "Optionen wählen & Preis berechnen →" })).toHaveAttribute("aria-disabled", "false");
+  await expect(page.getByRole("link", { name: "Preis berechnen" })).toHaveAttribute("aria-disabled", "false");
   await page.getByLabel("Text auf dem Volant").fill("ERSTER ENTWURF");
   await page.getByRole("button", { name: "Entwurf anfragen", exact: true }).click();
   await page.locator("dialog[open]").getByLabel(/E-Mail-Adresse/).fill("private@example.test");

@@ -147,7 +147,7 @@ test("illuminates the footer wordmark on entry and keeps only legal links", asyn
   const transitionDelay = await wordmark.evaluate((element) =>
     getComputedStyle(element, "::after").transitionDelay
   );
-  expect(transitionDelay).toBe("1.5s");
+  expect(transitionDelay).toBe("1s");
 
   await expect(
     footer.getByRole("navigation", { name: "Rechtliche Informationen" })
@@ -178,12 +178,12 @@ test("renders only the selected hero statement in one H1", async ({
   expect(serverHtml).toContain("Markenlicht</span>");
 });
 
-test("transitions the hero from day to night and respects reduced motion", async ({
+test("brightens the illuminated hero and respects reduced motion", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 
-  const media = page.locator("[data-parallax-media]");
+  const media = page.locator(".hero__media");
   const dayImage = page.locator(".hero__image--day");
   const nightImage = page.locator("[data-hero-night]");
   const hero = page.locator(".hero");
@@ -198,20 +198,16 @@ test("transitions the hero from day to night and respects reduced motion", async
   expect(await hero.evaluate((element) => element.clientHeight)).toBeGreaterThan(
     900
   );
-  await expect(nightImage).toHaveCSS("opacity", "0");
+  await expect(nightImage).toHaveCSS("opacity", "0.35");
+  const initialMediaTop = (await media.boundingBox())?.y ?? 0;
 
   await page.evaluate(() => window.scrollTo({ top: 240, behavior: "instant" }));
 
   await expect
     .poll(() =>
-      media.evaluate((element) => {
-        const transform = getComputedStyle(element).transform;
-        const matrix = new DOMMatrixReadOnly(transform);
-
-        return matrix.m42;
-      })
+      media.evaluate((element) => element.getBoundingClientRect().top)
     )
-    .toBeGreaterThan(25);
+    .toBeGreaterThan(initialMediaTop + 25);
 
   await expect
     .poll(() =>
@@ -236,27 +232,25 @@ test("transitions the hero from day to night and respects reduced motion", async
 
   await expect(stage).toHaveCSS("position", "sticky");
   await expect(heroContent).toHaveCSS("transform", "none");
-  await expect
-    .poll(() =>
-      media.evaluate((element) => (element as HTMLElement).style.transform)
-    )
-    .not.toBe("");
+  await expect.poll(() => media.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBe(0);
   const mobileScrollTravel =
     (await hero.evaluate((element) => element.clientHeight)) - 844;
 
-  expect(mobileScrollTravel).toBeGreaterThan(650);
-  expect(mobileScrollTravel).toBeLessThan(700);
-  await expect(nightImage).toHaveCSS("opacity", "0");
+  expect(mobileScrollTravel).toBeGreaterThan(410);
+  expect(mobileScrollTravel).toBeLessThan(430);
+  await expect(nightImage).toHaveCSS("opacity", "0.35");
   const mobileImageBounds = await dayImage.boundingBox();
 
-  expect(mobileImageBounds?.height).toBeGreaterThan(530);
-  expect(mobileImageBounds?.height).toBeLessThan(550);
+  expect(mobileImageBounds?.height).toBeGreaterThan(600);
+  expect(mobileImageBounds?.height).toBeLessThan(620);
   expect(
     (mobileImageBounds?.y ?? 0) + (mobileImageBounds?.height ?? 0) * 0.66
-  ).toBeGreaterThan(410);
+  ).toBeGreaterThan(390);
   expect(
     (mobileImageBounds?.y ?? 0) + (mobileImageBounds?.height ?? 0) * 0.66
-  ).toBeLessThan(440);
+  ).toBeLessThan(420);
   await expect
     .poll(() => signalStrip.evaluate((element) => element.getBoundingClientRect().top))
     .toBeGreaterThanOrEqual(840);
@@ -286,14 +280,9 @@ test("transitions the hero from day to night and respects reduced motion", async
 
   await expect
     .poll(() =>
-      media.evaluate((element) => {
-        const transform = getComputedStyle(element).transform;
-        const matrix = new DOMMatrixReadOnly(transform);
-
-        return matrix.m42;
-      })
+      media.evaluate((element) => element.getBoundingClientRect().top)
     )
-    .toBeGreaterThan(40);
+    .toBeGreaterThan(20);
   await expect
     .poll(() =>
       nightImage.evaluate((element) =>
@@ -303,24 +292,26 @@ test("transitions the hero from day to night and respects reduced motion", async
     .toBeGreaterThan(0.9);
   await expect
     .poll(() => signalStrip.evaluate((element) => element.getBoundingClientRect().top))
-    .toBeGreaterThan(500);
+    .toBeGreaterThan(710);
   await expect
     .poll(() => signalStrip.evaluate((element) => element.getBoundingClientRect().top))
-    .toBeLessThan(520);
+    .toBeLessThan(725);
   await expect(heroContent).toHaveCSS("transform", "none");
 
   await page.evaluate(
     (scrollTop) => window.scrollTo({ top: scrollTop, behavior: "instant" }),
-    mobileHeroTop + mobileScrollTravel
+    mobileHeroTop + 844 * 1.2
   );
   await expect
     .poll(async () => {
-      const [signalTop, imageTop] = await Promise.all([
+      const [signalTop, headerBottom] = await Promise.all([
         signalStrip.evaluate((element) => element.getBoundingClientRect().top),
-        dayImage.evaluate((element) => element.getBoundingClientRect().top)
+        page.locator(".site-header").evaluate(
+          (element) => element.getBoundingClientRect().bottom
+        )
       ]);
 
-      return signalTop - imageTop;
+      return signalTop - headerBottom;
     })
     .toBeLessThanOrEqual(0);
 
@@ -332,7 +323,7 @@ test("transitions the hero from day to night and respects reduced motion", async
       media.evaluate((element) => getComputedStyle(element).transform)
     )
     .toBe("none");
-  await expect(nightImage).toHaveCSS("opacity", "0");
+  await expect(nightImage).toHaveCSS("opacity", "1");
   await expect(stage).toHaveCSS("position", "relative");
 });
 
@@ -373,7 +364,6 @@ test("keeps the mobile hero title above its boundary in a compact Safari viewpor
   await page.setViewportSize({ width: 390, height: 664 });
   await page.goto("/");
 
-  const hero = page.locator(".hero");
   const stage = page.locator(".hero__stage");
   const content = page.locator(".hero__content");
   const title = page.locator(".hero__title");
@@ -398,17 +388,13 @@ test("keeps the mobile hero title above its boundary in a compact Safari viewpor
 
   await assertTitleGap();
 
-  const scrollTravel = await hero.evaluate(
-    (element) =>
-      element.clientHeight -
-      (element.querySelector<HTMLElement>(".hero__stage")?.clientHeight ?? 0)
-  );
-
-  await page.evaluate(
-    (distance) => window.scrollTo({ top: distance * 0.5, behavior: "instant" }),
-    scrollTravel
-  );
+  await page.evaluate(() => window.scrollTo({ top: 100, behavior: "instant" }));
+  await expect(content).toHaveCSS("opacity", "1");
   await assertTitleGap();
+
+  await page.evaluate(() => window.scrollTo({ top: 320, behavior: "instant" }));
+  await expect(content).toHaveCSS("opacity", "0");
+  expect((await signalStrip.boundingBox())?.y).toBeLessThan(664);
 });
 
 test("lets the following block fully cover the desktop hero scene", async ({
@@ -417,7 +403,7 @@ test("lets the following block fully cover the desktop hero scene", async ({
   await page.setViewportSize({ width: 1440, height: 900 });
 
   const hero = page.locator(".hero");
-  const media = page.locator("[data-parallax-media]");
+  const media = page.locator(".hero__media");
   const heroContent = page.locator(".hero__content");
   const stage = page.locator(".hero__stage");
   const signalStrip = page.locator(".signal-strip");
@@ -433,11 +419,9 @@ test("lets the following block fully cover the desktop hero scene", async ({
     firstOverlapScroll
   );
 
-  const firstOffset = await media.evaluate((element) => {
-    const matrix = new DOMMatrixReadOnly(getComputedStyle(element).transform);
-
-    return matrix.m42;
-  });
+  const firstMediaTop = await media.evaluate(
+    (element) => element.getBoundingClientRect().top
+  );
   const firstContentTop = await heroContent.evaluate(
     (element) => element.getBoundingClientRect().top
   );
@@ -457,19 +441,15 @@ test("lets the following block fully cover the desktop hero scene", async ({
 
   await expect
     .poll(() =>
-      media.evaluate((element) => {
-        const matrix = new DOMMatrixReadOnly(getComputedStyle(element).transform);
-
-        return matrix.m42;
-      })
+      media.evaluate((element) => element.getBoundingClientRect().top)
     )
-    .toBeGreaterThan(firstOffset + 40);
+    .toBeGreaterThan(firstMediaTop + 40);
 
   await expect
     .poll(() =>
       heroContent.evaluate((element) => element.getBoundingClientRect().top)
     )
-    .toBeLessThan(firstContentTop - 300);
+    .toBeLessThan(firstContentTop - 200);
 
   await page.evaluate(
     (scrollTop) => window.scrollTo({ top: scrollTop, behavior: "instant" }),
@@ -486,7 +466,7 @@ test("lets the following block fully cover the desktop hero scene", async ({
   expect(stripBackground).not.toBe("rgba(0, 0, 0, 0)");
 });
 
-test("shows all three Wirkung images in color without inactive controls", async ({
+test("shows all three Wirkung images in color with enlargement links", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -496,6 +476,7 @@ test("shows all three Wirkung images in color without inactive controls", async 
 
   await expect(section.locator(".transformation__figure")).toHaveCount(3);
   await expect(section.locator(".transformation__media button")).toHaveCount(0);
+  await expect(section.locator("a.transformation__media")).toHaveCount(3);
   await expect(images).toHaveCount(3);
   await expect(section.locator(".transformation__marker")).toHaveText([
     "01 / Klassisch",
@@ -864,7 +845,7 @@ test("configures the physical SVG valance and enforces its height limits", async
   const preview = section.locator(".configurator-preview:visible");
   const previewImage = preview.getByRole("img");
   const continuationButton = section.getByRole("link", {
-    name: "Optionen wählen & Preis berechnen →"
+    name: "Preis berechnen"
   });
 
   await expect(
@@ -987,9 +968,9 @@ test("configures the physical SVG valance and enforces its height limits", async
     centeredTextX ?? ""
   );
   await awningColorTrigger.click();
-  await expect(awningColorListbox.getByRole("option")).toHaveCount(11);
-  await awningColorListbox.getByRole("option", { name: "Sand" }).click();
-  await expect(awningColorTrigger).toHaveAccessibleName("Markisenfarbe: Sand");
+  await expect(awningColorListbox.getByRole("option")).toHaveCount(10);
+  await awningColorListbox.getByRole("option", { name: "Sandbeige" }).click();
+  await expect(awningColorTrigger).toHaveAccessibleName("Markisenfarbe: Sandbeige");
   await lightColorTrigger.click();
   await expect(lightColorListbox.getByRole("option")).toHaveCount(8);
   await lightColorListbox

@@ -28,8 +28,26 @@ they do not decide publication. Concrete public actions follow
   specification appear only after both steps. Internal legal review markers are not part of the
   visual system.
 - Current inquiry flow: mini and full configurators use a shared native dialog (desktop max 48rem,
-  below 64rem full screen); the homepage plain inquiry stays independent.
+  below 64rem full screen while editing, compact and centered after acceptance); submission feedback becomes visible and receives focus after pending
+  settles, including retries. The homepage plain inquiry stays independent. The mini footer
+  prioritizes price continuation with a two-button desktop row and price-first mobile stack,
+  without routine captions below the buttons.
+- Current Wirkung: three rich concept scenes now open a native image viewer;
+  the original `Eine Fassade. Zwei Ansichten.` heading is retained; publication of the revised images was authorised on 2026-10-05.
+- Current hero: the homepage header overlays the raised image and gains its surface on
+  scroll; the headline scrolls upward naturally, stays fully visible through 100px and fades by
+  320px as the next block enters, earlier on phones. The image slowly drifts downward until the following sections
+  fully cover its sticky stage, without a visible upward reversal, while the
+  softly lit lettering becomes bright. Native CSS scroll timelines own motion in supported browsers;
+  the fallback never compensates headline position. One cleaned derivative of the original PNG stays constant;
+  a transparent SVG uses Hanken Grotesk 800 outlines with 0.12em tracking and one perspective
+  transform. A crisp warm-white core and gradual halo use the footer light palette. Crop-aware image sizes and quality 90
+  preserve the available source detail on Retina phones. Reduced motion keeps a static illuminated scene.
+  Production publication was authorised on 2026-10-05; release evidence belongs to `PROGRESS.md`.
 - Open: working brand and remaining content inputs stay `TBD` where not owner-confirmed.
+- Current palette: both configurators use ten fabric-inspired colours from one registry, with
+  generic German names and no supplier identity. Legacy white drafts migrate to Naturweiß.
+  Supplier independence and no copied fabric photos/striped designs are owner decisions (2026-10-04).
 - Read full when: changing the visual system, major page composition or cross-route UI contracts.
 <!-- AGENT_BRIEF:END -->
 
@@ -186,12 +204,16 @@ remains a separate unresolved check.
   one third of the earlier oversized concept, so it reads as a quiet closing signature rather than
   another hero.
 - The wordmark is dim on approach and gently increases in luminosity as a whole when at least one
-  quarter enters the viewport. The opacity transition starts after a `1500ms` pause and runs over
+  quarter enters the viewport. The opacity transition starts after a `1000ms` pause and runs over
   `1600ms`; there is no directional wipe, bright lamp-like flash, background light pool, loop or
   flicker.
 - Under `prefers-reduced-motion` the wordmark is shown immediately in its illuminated end state.
 - The illuminated end state uses a controlled neutral-warm light, visually approximating `4000 K`.
   It is brighter than the dim base wordmark but remains soft enough not to become a second CTA.
+- The hero lettering uses this same light palette (owner decision, 2026-10-05): core `#FFF7EB`,
+  close halo `#FFFAF2` at 60%, middle halo `#FFE0BA` at 43%, outer halo `#FFBE82` at 26%.
+  The photo and its overlay still influence perceived brightness; this is a shared screen palette,
+  not a measured product colour temperature. The hero SVG derives these colours from this rule.
 - Only `Impressum` and `Datenschutz` remain below the wordmark as one quiet unboxed legal row.
   Product, studio, contact and prototype-status copy are not repeated in the footer.
 - The local prototype shows that no optional analysis or marketing tags are active. A consent
@@ -229,6 +251,10 @@ remains a separate unresolved check.
 ### Navigation
 
 - Desktop navigation минимальна.
+- `Decision / local` — на главной меню располагается поверх hero без отдельной чёрной полосы.
+  За первые `160px` прокрутки плавно появляется тёмная подложка с нижней границей
+  и blur; возврат к началу снова раскрывает изображение. На остальных маршрутах подложка
+  видна сразу. Верхний градиент hero сохраняет читаемость навигации над изображением.
 - Approved information links are `Produkt` → `/#wirkung`, `Konfigurator` → `/konfigurator`,
   conditional `Referenzen` → `/referenzen` and `Kontakt` → `/kontakt`; `Projekt prüfen lassen`
   remains the separate primary CTA. `Eignung` and `FAQ` stay in the homepage flow but are not
@@ -277,6 +303,14 @@ remains a separate unresolved check.
   без горизонтальной прокрутки. Минимальная ширина проверки — 320px. Порядок и смысл колонок:
   `01 Gestaltung` содержит композицию, текст и выбор шрифта; `02 Maße` — только физические
   размеры и ошибки вместимости; `03 Farbe & Licht` — цвет волана и световой эффект.
+- `Decision / local` — нижний action-блок содержит две кнопки: контурную `Entwurf anfragen`
+  (запрос по эскизу) слева и оранжевую `Preis berechnen` (рассчитать цену) справа. От `48rem`
+  они стоят в одном ряду одинаковой высоты `44px` с промежутком `12px`; правый край расчёта
+  совпадает с правым краем CTA в шапке. Ниже `48rem` кнопки занимают всю ширину, расчёт идёт
+  первым. По решению владельца от 2026-10-04 обе постоянные поясняющие строки под кнопками
+  удалены. Схематический характер превью обозначен во вступлении к секции; индивидуальная
+  проверка размеров и технического исполнения объясняется в диалоге заявки. Расчёт ведёт на
+  существующий `/konfigurator` с переносом эскиза.
 - На desktop все три колонки используют один control-grid rhythm: подпись, ячейка высотой `54px`
   и интервал `0.8rem` до следующего ряда. Это выравнивает реальные control-ячейки по горизонтали;
   пустой третий ряд в `Farbe & Licht` остаётся намеренным, пока для него нет подтверждённого
@@ -291,8 +325,8 @@ remains a separate unresolved check.
   В закрытом состоянии trigger равен по высоте числовым полям и показывает только схему и название;
   пояснения к вариантам видны внутри открытого списка.
 - `Markisenfarbe` использует такой же компактный listbox: закрытый trigger показывает выбранный
-  swatch и название, а открытый список выводит одиннадцать цветовых вариантов в две колонки,
-  включая белый, кремово-белый, светло-серый, ночной синий и терракотовый. `Lichtwirkung`
+  swatch и название, а открытый список выводит десять цветовых вариантов в две колонки
+  из общей тканевой палитры ниже. `Lichtwirkung`
   использует такой же компактный listbox: тёплый/нейтральный белый и RGB-палитру из красного,
   зелёного, синего, жёлтого, cyan и фиолетового. Закрытый trigger всегда показывает выбранный
   цвет и название; выбор меняет цвет световой надписи в preview.
@@ -322,8 +356,58 @@ remains a separate unresolved check.
 - Световая композиция состоит из читаемого ядра, узкого glow и слабого отражения на ткани.
   Изменение физических размеров и света получает короткую `transform`/opacity-анимацию около
   `220–240ms`; при `prefers-reduced-motion` она отключается. Постоянное мерцание запрещено.
-- Блок не показывает цену, совместимость, сроки или готовый проект и заканчивается object-specific
-  disclaimer.
+- Блок не показывает цену, совместимость, сроки или готовый проект. Его нижняя часть содержит
+  две кнопки и только необходимые сообщения об ошибках.
+
+### Fabric-inspired configurator palette
+
+- `Decision` — owner instruction, 2026-10-04: existing plain fabric colours may inform the
+  background palette. Use our generic German colour names, without copying collection names or
+  presenting a colour as a particular supplier's fabric. Research references do not select a
+  supplier, confirm availability or establish an exact material match.
+- `Decision` — do not copy third-party fabric photographs or striped designs into the product.
+  Any later striped option needs an independently drawn schematic with its own stripe spacing
+  and proportions, plus confirmation against the actual supplier's available fabric.
+- `Verified` — mini and full configurators share the colour registry in
+  `src/features/mini-configurator/options.ts`. Its ten colours are defined only there; the
+  schematic preview applies an 8% black overlay and a separate light spill. Perceived colour
+  therefore differs from the picker swatch, even before screen and ambient-light differences.
+- `Decision / Verified` — owner approved implementation on 2026-10-04. The eight base colours
+  and both extensions (Schwarz and Terrakotta) are available in the shared picker. These remain
+  schematic colour directions, not a confirmed fabric assortment. Existing persisted IDs are
+  retained; the retired `white` ID maps to `cream-white` (Naturweiß) in both storage parsers
+  and both server submission boundaries, preserving drafts and older open clients.
+
+| Role | Generic German label | Meaning | Approximate screen colour |
+| --- | --- | --- | --- |
+| Base | Naturweiß | Тёплый естественный белый | `#E8DED3` |
+| Base | Sandbeige | Светлый песочно-бежевый | `#D6C6B9` |
+| Base | Taupe | Тёплый серо-коричневый | `#7B7168` |
+| Base | Hellgrau | Светлый серый с тёплым подтоном | `#A29A97` |
+| Base | Graphit | Средне-тёмный графитовый | `#5F5F61` |
+| Base | Nachtblau | Глубокий тёмно-синий | `#27283C` |
+| Base | Waldgrün | Глубокий лесной зелёный | `#153F3A` |
+| Base | Bordeaux | Глубокий бордовый | `#580C11` |
+| Extension | Schwarz | Чёрный | `#0E0E0E` |
+| Extension | Terrakotta | Кирпично-красный | `#8D352C` |
+
+`Verified` — visual research on 2026-10-04 used
+[Rollo Rieper's fabric page](https://www.rollorieper.de/markise/markisentuch.html) to identify
+real fabric collections, then the manufacturer’s
+[plain-fabric gallery](https://www.dickson-constant.com/de/orchestra-grege-6020.html) and
+[fabric simulator](https://www.dicksondesigner.com/de/design-studio) to check colour families.
+Approximate HEX values were obtained from the per-channel median of the central 50% of eleven
+manufacturer web photographs: ten small swatches (83 × 59 px) and one large photograph
+(680 × 480 px). Eight form the base palette and two the extension; the remaining
+orange sand reference was excluded from the neutral group. No photographs were added to the
+repository or product. These are uncalibrated screen approximations, not physical colour
+measurements, RAL matches or guarantees of the delivered fabric's appearance.
+
+Both configurators use one palette, preserve compatible saved colour IDs and retain the
+existing flat schematic geometry. Graphit remains the default through the `anthracite` ID.
+Do not attach manufacturer names, article numbers, certifications or availability claims to
+customer selections. Final material and colour need confirmation using the actual supplier's
+physical sample; colour of the awning frame and colour of the fabric are separate concepts.
 
 ### Full configurator `/konfigurator`
 
@@ -371,10 +455,9 @@ remains a separate unresolved check.
 
 ### Shared inquiry dialog
 
-- Mini preview/control area ends with orange `Entwurf anfragen`, the caption
-  `Ihr Entwurf wird beigefügt. E-Mail genügt.` and the secondary text link
-  `Optionen wählen & Preis berechnen →`. Incomplete input blocks only price continuation and
-  explains what to complete; it does not block the inquiry. Missing dimensions are omitted from
+- Mini footer composition follows the homepage mini-configurator section above. Incomplete input
+  blocks only price continuation and explains what to complete; it does not block the inquiry.
+  Missing dimensions are omitted from
   the attached sketch and dimension lines are hidden in its schematic modal preview.
 - Full step 03 retains specification, price and edit controls. Its orange `Konfiguration anfragen`
   beside the price opens the shared dialog; the inline contact form is removed.
@@ -388,7 +471,17 @@ remains a separate unresolved check.
   work; close/back return to the trigger. `Ändern` closes and focuses the configuration controls.
   Backdrop clicks do not dismiss. Closing restores page scrolling; drafts remain in memory.
 - Pending disables close/edit and shows the existing brand spinner within the dialog layer.
-  Reduced motion keeps the static mark. Success retains its number until explicit new inquiry.
+  Reduced motion keeps the static mark.
+- Owner decision, 2026-10-05: accepted success becomes a centered, content-height dialog, at most
+  36rem wide with 1rem minimum viewport margins. The hidden form no longer contributes height.
+  A small check, compact confirmation, supporting copy, receipt number and `Schließen` (закрыть)
+  fit without scrolling at standard desktop/mobile viewports. Short or zoomed viewports retain
+  internal overflow access. Close button, cross and Escape return focus to the configuration;
+  no repeat-inquiry button or bottom return link is shown. Reopening retains the receipt.
+- When pending ends, validation errors, unavailable/test results, updated-price confirmation and
+  accepted success receive focus and are scrolled into view immediately. An unchanged retry does
+  this again; feedback cannot receive focus while its form entry is inert. Uploading alone does
+  not focus an empty result. This behavior also applies to the independent homepage form.
 - Homepage final form keeps its existing two-column desktop composition and independent draft.
 
 ### References gallery
@@ -433,7 +526,7 @@ remains a separate unresolved check.
   исходный масштаб.
 - После объединения прежних блоков Retrofit и Eignung компактный loop перенесён на короткий
   mono eyebrow `EIGNUNG`. По отдельным решениям владельца такой же акцент применён к eyebrow
-  `PRODUKT` перед `Eine Fassade. Zwei Ansichten.`, к `VISUELLER MINI-KONFIGURATOR` и к первой
+  `PRODUKT` перед заголовком `#wirkung`, к `VISUELLER MINI-KONFIGURATOR` и к первой
   малой строке фотогалереи (`TEMPORÄRE VORSCHAU` в local review, `REALISIERTE PROJEKTE` после
   публикации), к короткому eyebrow `FAQ` перед заголовком `Fragen.`, а также к финальному
   `PROJEKT-CHECK`: все подписи остаются HTML-текстом JetBrains Mono в `architectural-orange`, а
@@ -457,10 +550,26 @@ remains a separate unresolved check.
 
 ## Image direction
 
-- В секции `#wirkung` три концепт-сцены показываются в цвете постоянно. Для будущего эффекта
-  включения букв на световом волане нужны точно совмещённые пары цветных кадров с погашенными и
-  светящимися буквами; hover/focus может плавно раскрывать светящийся слой, а touch — переключать
-  его нажатием.
+- `Decision` — `#wirkung` сохраняет существующую сетку из трёх цветных сцен: `Klassisch`,
+  `Modern`, `High-Tech`. После обратной связи владельца от 2026-10-04 изображения должны
+  сохранять насыщенность старых кадров: детали архитектуры, людей, отражения и глубину улицы.
+  Пустая упрощённая серия отклонена. Локальная новая серия переработана из старых кадров:
+  исторический ресторан, современная каменно-деревянная фасада и городской стеклянно-металлический
+  контекст. Надпись на волане усилена; в Modern приглушён декоративный свет.
+- `Decision` — исходный заголовок `Eine Fassade. Zwei Ansichten.` сохранён по указанию владельца;
+  задача просмотра и обновления изображений не включает изменение этого текста.
+  Файлы, происхождение и точные prompts новой серии находятся в
+  [`DesignPrototip/assets/lichtsaum-wirkung-series-2026-10-04.md`](DesignPrototip/assets/lichtsaum-wirkung-series-2026-10-04.md).
+  Старые assets сохранены; визуальное одобрение новой серии и production release остаются открыты.
+- `Verified locally` — карточка имеет постоянные disclosure `Konzeptvisualisierung` и значок
+  увеличения. Обычный click открывает нативный modal с целым изображением (`object-fit: contain`),
+  подписью и счётчиком. Previous/Next и клавиши Left/Right циклически переключают три сцены;
+  Close, Escape и click по фону закрывают просмотр. Focus начинается на Close, Tab/Shift+Tab
+  циклически обходят controls, закрытие возвращает focus на исходную карточку без скачка scroll.
+  Modified click, отсутствие JavaScript или dialog API открывают реальный файл через `<a href>`.
+  При 200% текста и коротком viewport поверхность прокручивается, Close остаётся сверху.
+- `Verified locally` — 24 проверки Chromium/WebKit покрывают 320–1920 px, клавиатуру,
+  fallback, reduced motion и axe с 200% текста. Real-device Safari остаётся непроверенным.
 - Изображения, предоставленные владельцем проекта или прямо одобренные им для сайта, считаются
   разрешёнными к использованию в проекте. Исключение: AI-концепты внутри proof/reference-
   композиции всегда явно маркируются `Konzeptvisualisierung`, чтобы не имитировать выполненный
@@ -477,13 +586,33 @@ remains a separate unresolved check.
 - Движение быстрое, точное и редкое.
 - Default transition: около 200ms ease-out.
 - Анимировать преимущественно opacity и transform.
-- Hero — управляемая прокруткой responsive-сцена: дневной кадр плавно переходит в вечерний с
-  зажиганием светового волана, media смещается внутри sticky-stage, а следующий непрозрачный
-  блок полностью перекрывает сцену. Desktop использует около `150vh` активной прокрутки; mobile —
-  уменьшенный до `64svh` кадр с центром световой надписи около средней горизонтали viewport и
-  укороченную сцену около `80vh`. Только
-  `prefers-reduced-motion` получает статичный дневной кадр
-  без увеличенной scroll-distance.
+- `Decision / local` — Hero показывает читаемый LICHTSAUM на воланте уже при входе: тёплый
+  отдельный SVG-слой букв раскрыт на `35%` и плавно достигает полной яркости при прокрутке. Затемнение
+  не гасит буквенную композицию; desktop-кадр поднят, а размер H1 учитывает высоту viewport.
+  H1 находится в отдельном от media слое, естественно поднимается вместе со страницей и
+  полностью виден до `100px`, затем плавно исчезает до `320px`. Его положение не компенсируется
+  JavaScript-трансформацией. Media медленно смещается вниз внутри sticky-stage: до `192px`
+  на desktop и `104px` на mobile. Движение растянуто до полного перекрытия следующими
+  непрозрачными блоками — около `120svh` прокрутки на desktop и `110svh` на mobile;
+  фон не разворачивается вверх, пока виден.
+  Sticky-stage имеет нижний запас `40svh` на desktop и `60svh` на mobile, который не увеличивает
+  высоту страницы. Hero имеет высоту `180svh` (desktop, минимум `72rem`) и `150svh` (mobile);
+  mobile-кадр занимает `72svh` от верхней границы. Следующий блок начинает входить после около
+  `20svh` прокрутки на desktop и `10svh` на mobile,
+  до полного исчезновения H1, без длинной пустой паузы. В поддерживающих браузерах CSS root scroll
+  timeline управляет transform только media и opacity текста, света и подложки меню. Подложка
+  раскрывается за `160px`, свет — за `26svh`; повторно запускаемой CSS transition поверх них нет.
+  В остальных браузерах используется requestAnimationFrame-fallback; CSS и JavaScript не управляют
+  одной анимацией одновременно. Ни один режим не меняет позицию заголовка при прокрутке.
+  `prefers-reduced-motion` получает статичный полностью светящийся кадр с видимым H1,
+  без увеличенной scroll-distance. Один растровый фон подготовлен из исходного PNG `1672 × 941`
+  с удалённой старой надписью и не меняется при усилении света. SVG содержит контуры Hanken
+  Grotesk 800, межбуквенный интервал `0.12em` и единую перспективу плоскости маркизы.
+  Чёткое световое ядро и плавно затухающий ореол используют палитру подвала, без фотографии,
+  embedded raster и зависимости от шрифта. База preloaded с quality `90`;
+  `sizes` учитывает полную ширину кадра (`128svh` на mobile, `max(263svh, 100vw)` на desktop),
+  а не ширину видимой области. SVG загружается сразу. Происхождение и ограничения исходника —
+  [`DesignPrototip/assets/lichtsaum-hero-layers-2026-10-04.md`](DesignPrototip/assets/lichtsaum-hero-layers-2026-10-04.md).
 - Не вводить motion library без доказанной необходимости.
 - `prefers-reduced-motion` отключает необязательное движение.
 - Motion не должен задерживать content visibility или CTA.
@@ -510,9 +639,10 @@ remains a separate unresolved check.
 
 ## Conversion hierarchy
 
-- Один primary CTA: необязательный запрос предложения.
+- Основная бизнес-конверсия: необязательный запрос предложения. В mini-configurator локальный
+  визуальный приоритет получает переход к расчёту; он не создаёт заявку или новую конверсию.
 - Secondary CTA: проекты/детали продукта.
-- Contextual primary wording: mini `Entwurf anfragen` (запрос по эскизу), full
+- Contextual inquiry wording: mini `Entwurf anfragen` (запрос по эскизу), full
   `Konfiguration anfragen` (запрос по конфигурации), plain `Projekt prüfen lassen`.
 - Успех формы подтверждается сервером.
 - Dark patterns, искусственная срочность и неподтверждённые scarcity claims запрещены.

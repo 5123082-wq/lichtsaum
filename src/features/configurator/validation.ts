@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { normalizeAwningColorId } from "@/features/mini-configurator/options";
+
 import {
   CONFIGURATOR_AWNING_COLORS,
   CONFIGURATOR_COMPOSITION_MODES,
@@ -46,7 +48,7 @@ export const configuratorConfigurationSchema = z.strictObject({
   letterHeightMm: millimeterSchema
     .min(CONFIGURATOR_CONSTRAINTS.letterHeightMm.min)
     .max(CONFIGURATOR_CONSTRAINTS.letterHeightMm.max),
-  awningColorId: z.enum(awningColorIds),
+  awningColorId: z.preprocess(normalizeAwningColorId, z.enum(awningColorIds)),
   lightColorId: z.enum(lightColorIds)
 }) satisfies z.ZodType<ConfiguratorConfigurationV1>;
 

@@ -75,6 +75,10 @@ function PendingConfiguratorHarness() {
 describe("LeadForm measurement", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+      configurable: true,
+      value: vi.fn()
+    });
     delete (window as TestWindow).dataLayer;
     persistConsentRecord(
       createConsentRecord({ analytics: true, marketing: true })
@@ -95,6 +99,7 @@ describe("LeadForm measurement", () => {
 
   afterEach(() => {
     cleanup();
+    Reflect.deleteProperty(HTMLElement.prototype, "scrollIntoView");
     vi.unstubAllGlobals();
   });
 
@@ -109,7 +114,7 @@ describe("LeadForm measurement", () => {
     });
 
     expect(successTitle).toBeVisible();
-    expect(successTitle.closest("[role='status']")).toHaveFocus();
+    await waitFor(() => expect(successTitle.closest("[role='status']")).toHaveFocus());
     expect(screen.getByText(/Vielen Dank für Ihre Anfrage/)).toBeInTheDocument();
     expect(screen.getByText("Anfragenummer: LS-2026-000123")).toBeVisible();
 
@@ -196,9 +201,10 @@ describe("LeadForm measurement", () => {
     fireEvent.change(email, { target: { value: "test@example.test" } });
     fireEvent.submit(email.closest("form")!);
 
-    await screen.findByRole("button", {
+    const confirmPrice = await screen.findByRole("button", {
       name: "Aktualisierten Preis bestätigen"
     });
+    await waitFor(() => expect(confirmPrice.parentElement?.parentElement).toHaveFocus());
     expect(actions.finalizeProjectCheckSubmission).not.toHaveBeenCalled();
     expect(generateLeadEvents()).toEqual([]);
   });
@@ -308,6 +314,7 @@ describe("LeadForm measurement", () => {
     );
     const retry = actions.prepareProjectCheckSubmission.mock.calls[1]?.[0];
 
+    await waitFor(() => expect(screen.getByText(unavailable.state.message).parentElement?.parentElement).toHaveFocus());
     expect(retry?.idempotencyKey).toBe(first?.idempotencyKey);
     expect(retry?.uploadToken).toBe(first?.uploadToken);
     expect(first?.idempotencyKey).toMatch(

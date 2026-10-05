@@ -15,6 +15,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {
+    qualities: [75, 90]
+  },
   async headers() {
     return [
       {

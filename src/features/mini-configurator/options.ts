@@ -96,19 +96,24 @@ export const MINI_CONFIGURATOR_COMPOSITION_MODES = [
   description: string;
 }>;
 
+// Shared by both configurators. Names describe colour directions, not supplier fabrics.
+// Keep persisted IDs stable when changing their display names or screen colours.
 export const MINI_CONFIGURATOR_AWNING_COLORS = [
-  { id: "anthracite", label: "Anthrazit", value: "#34383A" },
-  { id: "deep-black", label: "Tiefschwarz", value: "#171717" },
-  { id: "white", label: "Weiß", value: "#E7E4DF" },
-  { id: "cream-white", label: "Cremeweiß", value: "#DED5C3" },
-  { id: "light-grey", label: "Hellgrau", value: "#B7B6B2" },
-  { id: "sand", label: "Sand", value: "#C5B7A2" },
-  { id: "warm-grey", label: "Warmgrau", value: "#827C74" },
-  { id: "night-blue", label: "Nachtblau", value: "#263746" },
-  { id: "dark-green", label: "Dunkelgrün", value: "#263D32" },
-  { id: "terracotta", label: "Terrakotta", value: "#914936" },
-  { id: "bordeaux", label: "Bordeaux", value: "#57272B" }
+  { id: "cream-white", label: "Naturweiß", value: "#E8DED3" },
+  { id: "sand", label: "Sandbeige", value: "#D6C6B9" },
+  { id: "warm-grey", label: "Taupe", value: "#7B7168" },
+  { id: "light-grey", label: "Hellgrau", value: "#A29A97" },
+  { id: "anthracite", label: "Graphit", value: "#5F5F61" },
+  { id: "night-blue", label: "Nachtblau", value: "#27283C" },
+  { id: "dark-green", label: "Waldgrün", value: "#153F3A" },
+  { id: "bordeaux", label: "Bordeaux", value: "#580C11" },
+  { id: "deep-black", label: "Schwarz", value: "#0E0E0E" },
+  { id: "terracotta", label: "Terrakotta", value: "#8D352C" }
 ] as const;
+
+export function normalizeAwningColorId(value: unknown): unknown {
+  return value === "white" ? "cream-white" : value;
+}
 
 export const MINI_CONFIGURATOR_LIGHT_COLORS = [
   { id: "warm-white", label: "Warmweiß", value: "#FFD6A1" },

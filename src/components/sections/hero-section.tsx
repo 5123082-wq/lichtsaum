@@ -1,20 +1,13 @@
-import { HeroParallaxMedia } from "@/components/sections/hero-parallax-media";
+import { HeroScrollScene } from "@/components/sections/hero-scroll-scene";
 
 export function HeroSection() {
   return (
-    <section className="hero" id="produkt" aria-labelledby="hero-title">
-      <div className="hero__stage">
-        <HeroParallaxMedia />
-        <div className="hero__overlay" aria-hidden="true" />
-      </div>
-
-      <div className="container hero__content">
-        <h1 className="hero__title" id="hero-title">
-          <span className="hero__display">
-            Markise wird <span className="text-accent">Markenlicht</span>
-          </span>
-        </h1>
-      </div>
-    </section>
+    <HeroScrollScene>
+      <h1 className="hero__title" id="hero-title">
+        <span className="hero__display">
+          Markise wird <span className="text-accent">Markenlicht</span>
+        </span>
+      </h1>
+    </HeroScrollScene>
   );
 }

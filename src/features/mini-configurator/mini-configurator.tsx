@@ -605,27 +605,27 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
           {statusText}
         </p>
         <div className="configurator-actions">
-          <button type="button" className="button button--primary" ref={inquiryTriggerRef} onClick={() => setInquiryOpen(true)}>
-            Entwurf anfragen
-          </button>
-          <p className="configurator-actions__note">Ihr Entwurf wird beigefügt. E-Mail genügt.</p>
           <a
             aria-disabled={!canContinue}
-            className="configurator-actions__project-link"
+            className="button button--primary configurator-actions__price"
             href="/konfigurator"
             onClick={saveForContinuation}
             tabIndex={canContinue ? undefined : -1}
           >
-            Optionen wählen &amp; Preis berechnen →
+            Preis berechnen
           </a>
+          <button
+            type="button"
+            className="button button--secondary configurator-actions__inquiry"
+            ref={inquiryTriggerRef}
+            onClick={() => setInquiryOpen(true)}
+          >
+            Entwurf anfragen
+          </button>
         </div>
       </div>
 
       {!canContinue ? <p className="configurator-actions__note">Für die Preisberechnung bitte die markierten Angaben vervollständigen. Ihren Entwurf können Sie bereits anfragen.</p> : null}
-      <p className="configurator-disclaimer">
-        Diese Vorschau zeigt eine Gestaltungsrichtung. Konstruktion, Maße und
-        technische Umsetzung werden objektbezogen geprüft.
-      </p>
       <p aria-live="polite" className="configurator-continuation-message">
         {continuationMessage}
       </p>

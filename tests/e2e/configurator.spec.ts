@@ -116,7 +116,7 @@ test("migrates the homepage teaser and opens the clean configurator URL", async 
 
   const teaserLink = page
     .locator("#konfigurator")
-    .getByRole("link", { name: "Optionen wählen & Preis berechnen →" });
+    .getByRole("link", { name: "Preis berechnen" });
 
   await expect(teaserLink).toHaveAttribute("href", "/konfigurator");
   await expect(teaserLink).toHaveAttribute("aria-disabled", "false");
@@ -165,7 +165,7 @@ test("offers an explicit defaults path when teaser storage cannot be written", a
 
   const teaserLink = page
     .locator("#konfigurator")
-    .getByRole("link", { name: "Optionen wählen & Preis berechnen →" });
+    .getByRole("link", { name: "Preis berechnen" });
   await expect(teaserLink).toHaveAttribute("aria-disabled", "false", {
     timeout: 15_000
   });
@@ -311,7 +311,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     .click();
   await expect(
     configurator.locator(".configurator-preview__product > rect").first()
-  ).toHaveAttribute("fill", "#263746");
+  ).toHaveAttribute("fill", "#27283C");
 
   const nextButton = configurator.getByRole("button", {
     name: "Weitere Optionen",

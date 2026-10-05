@@ -6,12 +6,17 @@ import {
 import { referenceGallery } from "@/content/references.de";
 import { getReferenceGalleryVisibility } from "@/features/references/types";
 
-export function GlobalSiteHeader() {
+export function GlobalSiteHeader({ overlayHero = false }: { overlayHero?: boolean }) {
   const referenceVisibility = getReferenceGalleryVisibility(
     referenceGallery,
     deploymentEnvironment,
     isIndexable
   );
 
-  return <SiteHeader showReferences={referenceVisibility.render} />;
+  return (
+    <SiteHeader
+      overlayHero={overlayHero}
+      showReferences={referenceVisibility.render}
+    />
+  );
 }

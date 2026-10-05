@@ -10,7 +10,8 @@ import {
   MINI_CONFIGURATOR_FONTS,
   MINI_CONFIGURATOR_LIGHT_COLORS,
   MINI_CONFIGURATOR_PREVIEW_MODES,
-  SUPPORTED_MINI_CONFIGURATOR_TEXT
+  SUPPORTED_MINI_CONFIGURATOR_TEXT,
+  normalizeAwningColorId
 } from "@/features/mini-configurator/options";
 import type { MiniProjectSubmission, MiniProjectSnapshot } from "./request-context";
 import type { PreparedConfiguratorProjectContext } from "./server-request-context";
@@ -26,7 +27,7 @@ const miniProjectSubmissionSchema = z.strictObject({
     valanceWidthMm: dimension,
     valanceHeightMm: dimension,
     letterHeightMm: dimension,
-    awningColorId: z.enum(MINI_CONFIGURATOR_AWNING_COLORS.map((option) => option.id)),
+    awningColorId: z.preprocess(normalizeAwningColorId, z.enum(MINI_CONFIGURATOR_AWNING_COLORS.map((option) => option.id))),
     lightColorId: z.enum(MINI_CONFIGURATOR_LIGHT_COLORS.map((option) => option.id)),
     previewMode: z.enum(MINI_CONFIGURATOR_PREVIEW_MODES.map((option) => option.id))
   })

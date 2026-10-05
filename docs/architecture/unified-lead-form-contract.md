@@ -15,8 +15,11 @@ Last reviewed: 2026-09-25
   context and the server-confirmed Primary Ads conversion boundary.
 - Current: shared validation, persistence/result contract, notifications and optional files are
   implemented. Mini sketches and full calculations use one persistent inquiry dialog; mini inputs
-  are server-classified without price. Opening a dialog never creates a lead.
-- Open: release-state, abuse hardening and attachment malware/processor choices remain current work.
+  are server-classified without price. Accepted dialog inquiries show a compact close-only receipt
+  retained across reopening. Opening a dialog never creates a lead.
+- Release: owner authorised the current inquiry UI publication on 2026-10-05; deployment evidence
+  belongs to `../../PROGRESS.md`.
+- Open: abuse hardening and attachment malware/processor choices remain current work.
 - Read full when: changing form fields, schema, configurator snapshot, persistence, notifications,
   idempotency, files or conversion semantics.
 <!-- AGENT_BRIEF:END -->
@@ -85,7 +88,9 @@ Status: `Decision`, implemented locally 2026-09-25.
 - Повторное открытие после редактирования показывает текущий контекст и прежние контакты/файлы.
   `Ändern` (изменить) возвращает к настройкам; контекст можно удалить и явно вернуть.
 - Submit блокирует закрытие/редактирование и повторный вызов. Успех и номер заявки сохраняются;
-  новая заявка начинается только кнопкой `Weitere Anfrage senden` (отправить ещё одну заявку).
+  по решению владельца от 2026-10-05 подтверждение диалога завершается кнопкой `Schließen`
+  (закрыть), крестиком или Escape. Повторное открытие показывает ту же квитанцию. Кнопка
+  `Weitere Anfrage senden` (отправить ещё одну заявку) остаётся только у независимой формы главной.
 - Fingerprint включает mini/full context, контакты и manifest файлов. Неизменённый повтор
   использует прежний ключ, изменённый контекст — новый. Сервер дополнительно сравнивает payload.
 - Контакты/файлы живут только в памяти страницы до отправки, без browser storage. Каждый экземпляр

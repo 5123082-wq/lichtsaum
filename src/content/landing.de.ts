@@ -5,13 +5,11 @@ export type LandingSectionIntro = Readonly<{
 }>;
 
 export type TransformationCardContent = Readonly<{
-  title: string;
   alt: string;
-}>;
-
-export type StaticTransformationCardContent = Readonly<{
-  label: string;
-  alt: string;
+  caption: string;
+  image: string;
+  width: number;
+  height: number;
 }>;
 
 export type EngineeredPrecisionView = Readonly<{
@@ -84,26 +82,38 @@ export const transformation = {
   cards: {
     day: {
       label: "Klassisch",
+      image: "/images/lichtsaum-konzept-klassisch-leuchtvolant-abend-v2.webp",
+      width: 1911,
+      height: 823,
+      caption: "Restaurantfassade mit dunkelblauen Markisen und warm leuchtender Serifenschrift.",
       alt:
         "Konzeptvisualisierung einer klassischen Restaurantfassade bei Nacht mit dunkelblauen Markisen und den warm leuchtenden Schriftzügen „RESTAURANT“ und „LUCHINA“."
     },
     comparison: {
       title: "Modern",
+      image: "/images/lichtsaum-konzept-modern-leuchtvolant-abend-v2.webp",
+      width: 1122,
+      height: 1402,
+      caption: "Zeitgenössische Fassade aus Stein, Holz und Glas mit belebter Terrasse und geradem Leuchtvolant.",
       alt:
-        "Konzeptvisualisierung einer Café-Restaurant-Fassade bei Nacht mit besetzter Terrasse; die Aufschrift „CAFÉ RESTAURANT“ am dunklen Volant leuchtet warmweiß."
+        "Konzeptvisualisierung einer modernen Café-Restaurant-Fassade aus Stein, Holz und Glas mit besetzter Terrasse; am geraden dunklen Volant leuchtet „CAFÉ RESTAURANT“ warmweiß."
     },
     context: {
       label: "High-Tech",
+      image: "/images/lichtsaum-konzept-high-tech-leuchtvolant-abend-v2.webp",
+      width: 1672,
+      height: 941,
+      caption: "Glas-Metall-Fassade im Stadtraum mit dunklem Volant und leuchtenden Café- und Bistro-Schriftzügen.",
       alt:
-        "Konzeptvisualisierung einer städtischen Café- und Bistrofassade am Abend mit dunklem Markisenvolant und warm leuchtender Beschriftung."
+        "Konzeptvisualisierung einer städtischen Glas-Metall-Fassade bei Nacht mit belebtem Café, dunklem Markisenvolant und warm leuchtenden Schriftzügen „CAFÉ“ und „BISTRO“."
     }
   }
 } as const satisfies Readonly<{
   intro: LandingSectionIntro;
   cards: Readonly<{
-    day: StaticTransformationCardContent;
-    comparison: TransformationCardContent;
-    context: StaticTransformationCardContent;
+    day: TransformationCardContent & Readonly<{ label: string }>;
+    comparison: TransformationCardContent & Readonly<{ title: string }>;
+    context: TransformationCardContent & Readonly<{ label: string }>;
   }>;
 }>;
 
