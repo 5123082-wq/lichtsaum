@@ -33,7 +33,7 @@ they do not decide publication. Concrete public actions follow
   prioritizes price continuation with a two-button desktop row and price-first mobile stack,
   without routine captions below the buttons.
 - Current Wirkung: three rich concept scenes now open a native image viewer;
-  the original `Eine Fassade. Zwei Ansichten.` heading is retained; publication of the revised images was authorised on 2026-10-05.
+  the original `Eine Fassade. Zwei Ansichten.` heading is retained; the revised images were published on 2026-10-05.
 - Current hero: the homepage header overlays the raised image and gains its surface on
   scroll; the headline scrolls upward naturally, stays fully visible through 100px and fades by
   320px as the next block enters, earlier on phones. The image slowly drifts downward until the following sections
@@ -43,7 +43,8 @@ they do not decide publication. Concrete public actions follow
   a transparent SVG uses Hanken Grotesk 800 outlines with 0.12em tracking and one perspective
   transform. A crisp warm-white core and gradual halo use the footer light palette. Crop-aware image sizes and quality 90
   preserve the available source detail on Retina phones. Reduced motion keeps a static illuminated scene.
-  Production publication was authorised on 2026-10-05; release evidence belongs to `PROGRESS.md`.
+  Published on 2026-10-05; Chromium/WebKit production screenshots were reviewed.
+  Release evidence and remaining real-device/field checks belong to `PROGRESS.md`.
 - Open: working brand and remaining content inputs stay `TBD` where not owner-confirmed.
 - Current palette: both configurators use ten fabric-inspired colours from one registry, with
   generic German names and no supplier identity. Legacy white drafts migrate to Naturweiß.

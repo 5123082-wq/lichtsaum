@@ -1,8 +1,8 @@
 # Wirkung concept series — 2026-10-04
 
-Status: `Decision / local review`; generated with the built-in OpenAI imagegen tool at the owner's request. Original site assets remain preserved. The first sparse generated series was rejected and is not used.
+Status: `Decision / owner-authorised publication 2026-10-05`; generated with the built-in OpenAI imagegen tool at the owner's request. Original site assets remain preserved. The first sparse generated series was rejected and is not used.
 
-The revised direction preserves rich, lived-in architectural photography: street depth, guests, reflections, tactile materials and controlled night exposure. Classical uses the original historic scene; Modern changes the facade to contemporary travertine/oak/glazing; High-Tech retains the original complex glass/metal city scene. All are concept visuals, not completed projects or technical/performance evidence. Public deployment remains a separate approval.
+The revised direction preserves rich, lived-in architectural photography: street depth, guests, reflections, tactile materials and controlled night exposure. Classical uses the original historic scene; Modern changes the facade to contemporary travertine/oak/glazing; High-Tech retains the original complex glass/metal city scene. All are concept visuals, not completed projects or technical/performance evidence. The owner separately authorised public deployment on 2026-10-05; source-rights evidence remains as recorded in the source register.
 
 | Style | Source | Optimized site asset |
 | --- | --- | --- |

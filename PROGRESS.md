@@ -4,16 +4,16 @@
 ## Context Beacon
 
 - Last updated: 2026-10-05
-- Active release: owner explicitly authorised publishing all current site changes and production
-  deployment on 2026-10-05. Candidate includes the illuminated hero/header, Wirkung concept
+- Current release: owner-authorised site changes were published on 2026-10-05. Release includes the illuminated hero/header, Wirkung concept
   viewer and revised images, shared ten-colour palette, mini price/inquiry actions and compact
   inquiry receipt with visible submission feedback. Existing production flags and providers
   remain unchanged. GTM/Ads publication and real synthetic inquiries are separate actions.
 - Verification: 196 unit tests, typecheck, full lint and production build passed. Chromium/WebKit
   suite passed 151 checks; all three stale colour/delay expectation failures passed on rerun. Two local consent tests skipped because optional tags are dormant locally.
-- Publication: preparing a scoped commit on the current checkout, then direct Git push to fresh
-  origin/main and production deployment verification. Local screenshots, unrelated agent output,
-  tmp/, secrets and environment files are excluded. No database migration is needed.
+- Publication: site commit `a4675154eaafa5cb26296772a204659a80d25806` matches origin/main
+  after direct Git push/fetch. Vercel deployment `dpl_DKGhCFd6CP7THxtCBFXHNGuYcKvD` is READY
+  and assigned to www.lichtsaum.com and lichtsaum.com. Local screenshots, unrelated agent output,
+  tmp/, secrets and environment files were excluded. No database migration was performed.
 - Evidence boundaries: generated images are concepts, not customer projects. Owner publication
   authority is recorded separately from documentary verification of underlying media rights.
   Real-device Safari, mobile keyboard, field CWV and conversion deduplication remain unverified.
@@ -22,23 +22,32 @@
   under its separately approved settings; see docs/marketing/google-ads-search-test-2026-09-06.md.
 - Other tracks: /konfigurator SEO K1–K4 is implemented; /referenzen research/copy remains open.
   Keyword Planner evidence does not justify additional landing pages.
-- Next action: push the verified candidate, confirm Vercel READY for its SHA and domain assignment,
-  then check production pages, media, dialogs, consent and canonical/robots/sitemap without
-  creating a real lead. Keep the shared localhost server available.
+- Production QA: Chromium/WebKit at 390px and 1440px passed homepage/configurator, media,
+  gallery and inquiry dialogs, absolute self-canonicals, zero detected WCAG violations and zero
+  runtime errors. Consent rejection works; no optional Google request occurred before consent
+  or after rejection. Other public routes/media return 200; robots allows Googlebot/AdsBot,
+  sitemap uses the production domain, missing page returns 404 and apex redirects with 308.
+  Screenshots reviewed. No real lead, file upload or email delivery was tested in this release.
+- Next action: real-device/field checks and controlled delivery/conversion verification remain
+  separate work. Keep the shared localhost server available.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
-### CHG-20261005-03 — Authorised production release candidate
+### CHG-20261005-03 — Production release and live-site verification
 
 - Scope: all accumulated site changes, generated media/provenance, regression checks and release.
-- Outcome: owner authorised Git publication and production deployment. Temporary agent output
-  and tmp/ are ignored. Two stale browser expectations now match the accepted palette and timing.
-  Production deployment is pending; runtime flags/providers and GTM/Ads settings are unchanged.
+- Outcome: site commit `a467515` was pushed to main; Vercel deployment
+  `dpl_DKGhCFd6CP7THxtCBFXHNGuYcKvD` is READY on both production domains. Temporary output
+  and tmp/ are ignored. Runtime flags/providers and GTM/Ads settings were unchanged.
 - Verification: 196 unit tests, typecheck, full lint and production build passed. Full browser run
   had 151 passes and two consent skips; all three stale-expectation failures passed on focused rerun.
-- Follow-up: confirm Git/Vercel release and production smoke checks; real-device/field checks remain open.
+- Verification (production): four Chromium/WebKit desktop/mobile runs passed dialogs, canonical,
+  consent rejection, zero optional Google traffic before consent/after rejection, zero runtime errors
+  and zero detected WCAG violations. Public pages/media, robots and sitemap return 200; missing
+  route returns 404 and apex redirects with 308. Screenshots reviewed; localhost remains available.
+- Follow-up: real-device Safari/mobile keyboard, field CWV and real delivery/conversion checks remain open.
 
 ### CHG-20261005-02 — Straight, spaced hero lettering
 
@@ -50,6 +59,7 @@
   reviewed. Typecheck, scoped lint and production build passed. Bounds checks reflect the new SVG.
 - Follow-up: owner visual review and separately authorized release; real-device Safari and field
   CWV remain unverified.
+
 ### CHG-20261005-01 — Compact close-only inquiry confirmation
 
 - Scope: shared mini/full inquiry success presentation, close lifecycle and focused regression checks.

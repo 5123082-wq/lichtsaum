@@ -17,7 +17,8 @@ Last reviewed: 2026-09-25
   implemented. Mini sketches and full calculations use one persistent inquiry dialog; mini inputs
   are server-classified without price. Accepted dialog inquiries show a compact close-only receipt
   retained across reopening. Opening a dialog never creates a lead.
-- Release: owner authorised the current inquiry UI publication on 2026-10-05; deployment evidence
+- Release: current inquiry UI published on 2026-10-05; production dialog checks passed without
+  submitting a real lead. Deployment evidence
   belongs to `../../PROGRESS.md`.
 - Open: abuse hardening and attachment malware/processor choices remain current work.
 - Read full when: changing form fields, schema, configurator snapshot, persistence, notifications,
@@ -282,7 +283,8 @@ Status: `Verified` locally on 2026-09-25; database migration evidence is histori
 - Успешная configurator request сохраняет authoritative v1 snapshot в nullable
   `leads.request_context`; plain lead сохраняет `null`. Additive Drizzle migration применена к
   production Neon 2026-08-11; marker и nullable `jsonb` column независимо проверены. Новый mini
-  snapshot использует эту же колонку без миграции. Текущий dialog/mini milestone ещё не опубликован.
+  snapshot использует эту же колонку без миграции. Текущий dialog/mini milestone опубликован 2026-10-05; deployment evidence находится в
+  `../../PROGRESS.md`.
 - Общий manager notification и customer receipt показывают номер заявки, конфигурацию, услуги,
   распределение панелей и preliminary net result. Customer receipt по-прежнему не содержит текст
   сообщения или файлы.
@@ -302,10 +304,11 @@ Status: `Verified` locally on 2026-09-25; database migration evidence is histori
   open security finding to show the owner rather than a claim that the local configurator is
   bot-proof.
 - Existing production tag evidence belongs to [measurement plan](../marketing/measurement-plan.md).
-  The new diagnostic tags are not published by this implementation. No production deployment,
-  Google Ads change or synthetic production lead was performed.
-- Production application deployment, controlled real-delivery verification, rendered production
-  crawl, Tag Assistant and Ads Diagnostics remain release work outside this local implementation.
+  The new diagnostic tags are not published by this implementation. The owner-authorised site
+  release on 2026-10-05 did not change GTM/Google Ads or submit a synthetic production lead.
+- Production application deployment and rendered production route/dialog checks passed on
+  2026-10-05; see `../../PROGRESS.md`. Controlled real-delivery verification, Tag Assistant and
+  Ads Diagnostics remain separate work.
 
 ## Verification gate for implementation
 

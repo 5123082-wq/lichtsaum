@@ -1,11 +1,11 @@
 # Homepage hero: one photograph and vector illumination
 
-Status: `Candidate / owner-authorised local revision`
+Status: `Decision / owner-authorised publication 2026-10-05`
 Created: 2026-10-04
 
 The owner requested restored image quality and illumination of the existing lettering without
 switching the facade photograph. Public/production rights retain the source's `TBD` boundary;
-this record does not constitute deployment approval or installation evidence.
+the owner separately authorised deployment on 2026-10-05. This is not installation evidence.
 
 ## Sources and derivatives
 
