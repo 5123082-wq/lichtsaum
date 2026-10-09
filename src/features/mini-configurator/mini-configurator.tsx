@@ -410,28 +410,6 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
             <span>01</span> Gestaltung
           </legend>
 
-          <div className="configurator-composition-field">
-            <span id="configurator-composition-label">Komposition</span>
-            <ConfiguratorPicker
-              ariaLabel={`Komposition: ${MINI_CONFIGURATOR_COMPOSITION_MODES.find((option) => option.id === draft.compositionMode)?.label ?? draft.compositionMode}`}
-              describedBy={
-                draft.compositionMode === "text-only"
-                  ? undefined
-                  : "configurator-composition-note"
-              }
-              id="configurator-composition"
-              kind="composition"
-              onChange={(value) =>
-                updateDraft(
-                  "compositionMode",
-                  value as MiniConfiguratorConfig["compositionMode"]
-                )
-              }
-              options={MINI_CONFIGURATOR_COMPOSITION_MODES}
-              value={draft.compositionMode}
-            />
-          </div>
-
           <div className="configurator-text-field">
             <label htmlFor="configurator-text">Text auf dem Volant</label>
             <input
@@ -471,6 +449,28 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
               }
               options={MINI_CONFIGURATOR_FONTS}
               value={draft.fontId}
+            />
+          </div>
+
+          <div className="configurator-composition-field">
+            <span id="configurator-composition-label">Komposition</span>
+            <ConfiguratorPicker
+              ariaLabel={`Komposition: ${MINI_CONFIGURATOR_COMPOSITION_MODES.find((option) => option.id === draft.compositionMode)?.label ?? draft.compositionMode}`}
+              describedBy={
+                draft.compositionMode === "text-only"
+                  ? undefined
+                  : "configurator-composition-note"
+              }
+              id="configurator-composition"
+              kind="composition"
+              onChange={(value) =>
+                updateDraft(
+                  "compositionMode",
+                  value as MiniConfiguratorConfig["compositionMode"]
+                )
+              }
+              options={MINI_CONFIGURATOR_COMPOSITION_MODES}
+              value={draft.compositionMode}
             />
           </div>
 

@@ -12,8 +12,8 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/konfigurator");
     await expect(page.locator(".full-configurator")).toHaveAttribute("data-calculation-status", "ready");
-    await page.getByRole("button", { name: "Weitere Optionen", exact: true }).click();
-    await page.getByRole("button", { name: "Preis & Projektanfrage", exact: true }).click();
+    await page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen", exact: true }).click();
+    await page.getByRole("button", { name: "Schritt 3 von 3: Preis & Projektanfrage", exact: true }).click();
     const trigger = page.getByRole("button", { name: "Konfiguration anfragen", exact: true });
     await trigger.click();
     const dialog = page.locator("dialog[open]");
@@ -88,8 +88,8 @@ for (const entry of ["mini", "full"] as const) {
       if (await reject.isVisible()) await reject.click();
       if (entry === "full") {
         await expect(page.locator(".full-configurator")).toHaveAttribute("data-calculation-status", "ready");
-        await page.getByRole("button", { name: "Weitere Optionen", exact: true }).click();
-        await page.getByRole("button", { name: "Preis & Projektanfrage", exact: true }).click();
+        await page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen", exact: true }).click();
+        await page.getByRole("button", { name: "Schritt 3 von 3: Preis & Projektanfrage", exact: true }).click();
       }
       await page.getByRole("button", {
         name: entry === "mini" ? "Entwurf anfragen" : "Konfiguration anfragen",
@@ -198,9 +198,9 @@ test("measures real transitions and inquiry actions without configuration data",
   await expect(configurator).toHaveAttribute("data-calculation-status", "ready");
   await page.getByLabel("Text auf dem Volant").fill("TEST ENTWURF");
   await expect(configurator).toHaveAttribute("data-calculation-status", "ready");
-  await page.getByRole("button", { name: "Weitere Optionen", exact: true }).click();
+  await page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen", exact: true }).click();
   await page.getByRole("checkbox", { name: "Gestaltung", exact: true }).check();
-  await page.getByRole("button", { name: "Preis & Projektanfrage", exact: true }).click();
+  await page.getByRole("button", { name: "Schritt 3 von 3: Preis & Projektanfrage", exact: true }).click();
   await page.getByRole("button", { name: "Konfiguration anfragen", exact: true }).click();
   const dialog = page.locator("dialog[open]");
   await dialog.getByLabel(/E-Mail-Adresse/).fill("analytics@example.test");

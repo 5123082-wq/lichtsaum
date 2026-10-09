@@ -242,9 +242,9 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
   await expect(
     configurator.getByText("Vorläufiger Nettopreis", { exact: true }).filter({ visible: true })
   ).toHaveCount(0);
-  await expect(configurator.getByLabel("01 Gestaltung")).toBeVisible();
-  await expect(configurator.getByLabel("02 Maße")).toBeVisible();
-  await expect(configurator.getByLabel("03 Farbe & Licht")).toBeVisible();
+  await expect(configurator.getByRole("group", { name: "Gestaltung", exact: true })).toBeVisible();
+  await expect(configurator.getByRole("group", { name: "Maße", exact: true })).toBeVisible();
+  await expect(configurator.getByRole("group", { name: "Farbe & Licht", exact: true })).toBeVisible();
 
   const fullCompositionTrigger = configurator.getByRole("button", {
     name: /Komposition:/
@@ -272,40 +272,6 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     name: "Markisenfarbe auswählen"
   });
   await fullAwningColorTrigger.click();
-  const colorMenuLayer = await configurator.evaluate(() => {
-    const listbox = document.querySelector(
-      ".configurator-color-listbox:not([hidden])"
-    );
-    const actionButton = document.querySelector(
-      ".full-configurator__step-actions .button"
-    );
-
-    if (!listbox || !actionButton) {
-      return { overlaps: false, listboxIsTopmost: false };
-    }
-
-    const listboxRect = listbox.getBoundingClientRect();
-    const actionRect = actionButton.getBoundingClientRect();
-    const overlapTop = Math.max(0, listboxRect.top, actionRect.top);
-    const overlapBottom = Math.min(window.innerHeight, listboxRect.bottom, actionRect.bottom);
-
-    if (overlapBottom <= overlapTop) {
-      return { overlaps: false, listboxIsTopmost: false };
-    }
-
-    const point = document.elementFromPoint(
-      Math.max(listboxRect.left + 8, actionRect.left + 8),
-      overlapTop + 8
-    );
-
-    return {
-      overlaps: true,
-      listboxIsTopmost: Boolean(point && listbox.contains(point))
-    };
-  });
-  if (colorMenuLayer.overlaps) {
-    expect(colorMenuLayer.listboxIsTopmost).toBe(true);
-  }
   await fullAwningColorListbox
     .getByRole("option", { name: "Nachtblau" })
     .click();
@@ -313,16 +279,21 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
     configurator.locator(".configurator-preview__product > rect").first()
   ).toHaveAttribute("fill", "#27283C");
 
+  const basePanelHeight = await configurator.locator('.full-configurator__panel[data-active="true"]').evaluate((element) => element.getBoundingClientRect().height);
   const nextButton = configurator.getByRole("button", {
-    name: "Weitere Optionen",
+    name: "Schritt 2 von 3: Weitere Optionen",
     exact: true
   });
   await expect(nextButton).toBeEnabled();
-  await nextButton.click();
+  await nextButton.focus();
+  await page.keyboard.press("Enter");
 
   await expect(
     configurator.getByRole("heading", { name: "Weitere Optionen" })
   ).toBeFocused();
+
+  const optionsPanelHeight = await configurator.locator('.full-configurator__panel[data-active="true"]').evaluate((element) => element.getBoundingClientRect().height);
+  expect(optionsPanelHeight).toBeCloseTo(basePanelHeight, 0);
 
   const serviceCheckboxes = configurator.getByRole("checkbox");
   await expect(serviceCheckboxes).toHaveCount(6);
@@ -336,7 +307,7 @@ test("supports the three keyboard-accessible steps and one shared inquiry form",
 
   const postalCode = configurator.getByLabel("PLZ des Objekts (optional)");
   const priceStepButton = configurator.getByRole("button", {
-    name: "Preis & Projektanfrage",
+    name: "Schritt 3 von 3: Preis & Projektanfrage",
     exact: true
   });
   await postalCode.fill("1234");
@@ -416,7 +387,7 @@ test("blocks preview, price and continuation for an impossible composition", asy
   ).toHaveCount(0);
   await expect(
     configurator.getByRole("button", {
-      name: "Weitere Optionen",
+      name: "Schritt 2 von 3: Weitere Optionen",
       exact: true
     })
   ).toBeDisabled();
@@ -433,7 +404,7 @@ test("has no detectable A/AA violations or horizontal overflow at 320px", async 
     { timeout: 15_000 }
   );
   await expect(
-    page.getByRole("button", { name: "Weitere Optionen", exact: true })
+    page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen", exact: true })
   ).toBeEnabled();
   await page.waitForTimeout(250);
 
@@ -531,7 +502,7 @@ test("honors reduced motion and remains usable with enlarged text", async ({
     { timeout: 15_000 }
   );
   await page
-    .getByRole("button", { name: "Weitere Optionen", exact: true })
+    .getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen", exact: true })
     .click();
 
   const motion = await page.evaluate(() => ({
@@ -549,7 +520,7 @@ test("honors reduced motion and remains usable with enlarged text", async ({
   });
 
   await page
-    .getByRole("button", { name: "Preis & Projektanfrage", exact: true })
+    .getByRole("button", { name: "Schritt 3 von 3: Preis & Projektanfrage", exact: true })
     .click();
   await expect(
     page.getByRole("heading", { name: "Preis & Projektanfrage" })
@@ -567,4 +538,128 @@ test("honors reduced motion and remains usable with enlarged text", async ({
   await expect(page.locator(".full-configurator__summary:not(dialog *)")).toBeVisible();
   await page.getByRole("button", { name: "Konfiguration anfragen", exact: true }).click();
   await expect(page.locator("form.lead-form")).toBeVisible();
+});
+
+for (const width of [320, 390, 768, 1024, 1440, 1920]) {
+  test(`panel deck keeps usable controls and visible progression at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/konfigurator");
+    const configurator = page.locator(".full-configurator");
+    await expect(configurator).toHaveAttribute("data-calculation-status", "ready");
+    const tabs = configurator.locator(".full-configurator__panel-tab");
+    await expect(tabs).toHaveCount(3);
+    await expect(tabs.nth(0)).toHaveAttribute("aria-current", "step");
+    await expect(tabs.nth(1)).toBeEnabled();
+    await expect(tabs.nth(2)).toBeDisabled();
+    await expect(configurator.locator("#configurator-panel-1 .full-configurator__step-actions")).toHaveCount(0);
+    await expect(configurator.locator('.full-configurator__panel[data-next="true"]')).toHaveCount(1);
+    await expect(tabs.nth(1)).toHaveCSS("color", "rgb(255, 92, 0)");
+
+    await configurator.evaluate((element) => {
+      window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY - 85, behavior: "instant" });
+    });
+    const layout = await configurator.evaluate((element) => {
+      const deck = element.querySelector(".full-configurator__deck")!.getBoundingClientRect();
+      const preview = element.querySelector(".full-configurator-preview")!.getBoundingClientRect();
+      const panels = [...element.querySelectorAll(".full-configurator__panel")].map((panel) => {
+        const bounds = panel.getBoundingClientRect();
+        return { left: bounds.left, right: bounds.right, top: bounds.top, bottom: bounds.bottom, width: bounds.width };
+      });
+      return {
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+        deckBottom: deck.bottom,
+        previewTop: preview.top,
+        panels
+      };
+    });
+    expect(layout.overflow).toBe(false);
+    if (width >= 1024) {
+      expect(layout.panels[0].right).toBeLessThanOrEqual(layout.panels[1].left);
+      expect(layout.panels[1].width).toBeGreaterThanOrEqual(44);
+      expect(layout.panels[2].width).toBeGreaterThanOrEqual(44);
+      expect(layout.panels[1].width).toBeCloseTo(56 * 1.1, 1);
+      expect(layout.panels[2].width).toBeCloseTo(56 * 0.9, 1);
+    } else {
+      expect(layout.panels[0].bottom).toBeLessThanOrEqual(layout.panels[1].top);
+      expect(layout.panels[0].width).toBeGreaterThan(width * 0.85);
+    }
+    if (width >= 1440) {
+      expect(layout.previewTop).toBeGreaterThanOrEqual(85);
+      expect(layout.deckBottom).toBeLessThanOrEqual(900);
+    }
+    if (width === 1440 || width === 390) {
+      await page.screenshot({ path: testInfo.outputPath(`deck-${width}.png`), fullPage: width === 390, animations: "disabled" });
+    }
+
+    await page.getByLabel("Text auf dem Volant").fill("");
+    await expect(tabs.nth(1)).toBeDisabled();
+    await expect(configurator.locator('.full-configurator__panel[data-next="true"]')).toHaveCount(0);
+    await page.getByLabel("Text auf dem Volant").fill("CAFE TEST");
+    await expect(tabs.nth(1)).toBeEnabled();
+    await tabs.nth(1).click();
+    await expect(configurator).toHaveAttribute("data-active-step", "2");
+    await expect(configurator.locator("#configurator-panel-2 .full-configurator__step-actions")).toHaveCount(0);
+    await expect(configurator.locator("#configurator-panel-2 button")).toHaveCount(0);
+    if (width >= 1024) {
+      const nextPanel = await tabs.nth(2).boundingBox();
+      expect(nextPanel!.width).toBeCloseTo(56 * 1.1 - 2, 1);
+      const activePanel = await configurator.locator('.full-configurator__panel[data-active="true"]').boundingBox();
+      expect(activePanel!.height).toBeCloseTo(layout.panels[0].bottom - layout.panels[0].top, 0);
+      const serviceCell = await configurator.locator(".full-configurator__service-grid label").first().boundingBox();
+      const postalInput = await page.getByLabel("PLZ des Objekts (optional)").boundingBox();
+      expect(postalInput!.y).toBeCloseTo(serviceCell!.y, 0);
+      expect(postalInput!.height).toBeCloseTo(serviceCell!.height, 0);
+      expect(postalInput!.width).toBeCloseTo(serviceCell!.width, 0);
+    }
+    if (width >= 1440) {
+      const deck = await configurator.locator(".full-configurator__deck").boundingBox();
+      expect(deck!.y + deck!.height).toBeLessThanOrEqual(900);
+    }
+    if (width === 1440 || width === 390) {
+      await page.screenshot({ path: testInfo.outputPath(`deck-options-${width}.png`), fullPage: width === 390, animations: "disabled" });
+    }
+    await page.getByRole("checkbox", { name: "Gestaltung", exact: true }).check();
+    await page.getByLabel("PLZ des Objekts (optional)").fill("1234");
+    await expect(tabs.nth(2)).toBeDisabled();
+    await tabs.nth(0).click();
+    await expect(tabs.nth(1)).toBeEnabled();
+    await tabs.nth(1).click();
+    await expect(page.getByLabel("PLZ des Objekts (optional)")).toHaveValue("1234");
+    await expect(tabs.nth(2)).toBeDisabled();
+    await page.getByLabel("PLZ des Objekts (optional)").fill("12345");
+    await expect(tabs.nth(2)).toBeEnabled();
+    await tabs.nth(2).focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#configurator-inquiry-title")).toBeFocused();
+    expect(await page.locator('.full-configurator__panel[data-active="true"]').evaluate((element) => element.getAnimations().filter((animation) => {
+      const effect = animation.effect as KeyframeEffect | null;
+      return effect?.target === element && effect.getKeyframes().some((frame) => frame.transform && frame.transform !== "none");
+    }).length)).toBe(0);
+    await expect(configurator).toHaveAttribute("data-active-step", "3");
+    await expect(configurator.locator(".full-configurator__summary:not(dialog *)")).toBeVisible();
+    await tabs.nth(0).click();
+    await expect(tabs.nth(2)).toBeDisabled();
+    await expect(page.getByLabel("Text auf dem Volant")).toHaveValue("CAFE TEST");
+    await tabs.nth(1).click();
+    await expect(page.getByRole("checkbox", { name: "Gestaltung", exact: true })).toBeChecked();
+    await expect(page.getByLabel("PLZ des Objekts (optional)")).toHaveValue("12345");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+}
+
+test("panel deck respects reduced motion and exposes an accessible active sheet", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/konfigurator");
+  const configurator = page.locator(".full-configurator");
+  const next = configurator.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen" });
+  await expect(next).toBeEnabled();
+  await next.click();
+  await expect(page.locator("#configurator-step-2-title")).toBeFocused();
+  expect(await page.locator('.full-configurator__panel[data-active="true"]').evaluate((element) => element.getAnimations().filter((animation) => {
+      const effect = animation.effect as KeyframeEffect | null;
+      return effect?.target === element && effect.getKeyframes().some((frame) => frame.transform && frame.transform !== "none");
+    }).length)).toBe(0);
+  const audit = await new AxeBuilder({ page }).include(".full-configurator")
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+  expect(audit.violations).toEqual([]);
 });

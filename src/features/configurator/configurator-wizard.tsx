@@ -330,8 +330,6 @@ export function ConfiguratorWizard({
   const measuredResultRef = useRef(false);
   const [submissionIsPending, setSubmissionIsPending] = useState(false);
   const [activeStep, setActiveStep] = useState<StepNumber>(1);
-  const [highestAvailableStep, setHighestAvailableStep] =
-    useState<StepNumber>(1);
   const [storageIsReady, setStorageIsReady] = useState(false);
   const [fontState, setFontState] = useState<FontState>("loading");
   const [calculationState, setCalculationState] = useState<CalculationState>(
@@ -344,6 +342,7 @@ export function ConfiguratorWizard({
   );
   const [, startCalculationTransition] = useTransition();
   const activeStepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const deckRef = useRef<HTMLDivElement>(null);
   const userHasInteractedRef = useRef(false);
   const calculationRequestIdRef = useRef(0);
   const calculatedConfigurationKeyRef = useRef(
@@ -372,8 +371,16 @@ export function ConfiguratorWizard({
     previewCalculation !== null &&
     fontState !== "error" &&
     (calculationIsReady || calculationState.status === "loading");
-  const canContinue =
-    calculationIsReady && fontState === "ready" && postalCodeIsValid;
+  const canOpenOptions = calculationIsReady && fontState === "ready";
+  const canContinue = canOpenOptions && postalCodeIsValid;
+
+  useEffect(() => {
+    const resetSheetHeight = () => {
+      deckRef.current?.style.removeProperty("--configurator-step-min-height");
+    };
+    window.addEventListener("resize", resetSheetHeight);
+    return () => window.removeEventListener("resize", resetSheetHeight);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -580,15 +587,54 @@ export function ConfiguratorWizard({
   }
 
   function showStep(step: StepNumber) {
-    if (submissionIsPending) {
+    if (
+      submissionIsPending ||
+      step === activeStep ||
+      step > activeStep + 1 ||
+      (step > activeStep && !(step === 2 ? canOpenOptions : canContinue))
+    ) {
       return;
     }
 
+    const currentBody = activeStepHeadingRef.current
+      ?.closest(".full-configurator__panel")
+      ?.querySelector<HTMLElement>(".full-configurator__step");
+    if (activeStep <= 2 && step <= 2 && currentBody) {
+      deckRef.current?.style.setProperty(
+        "--configurator-step-min-height",
+        `${currentBody.getBoundingClientRect().height}px`
+      );
+    } else {
+      deckRef.current?.style.removeProperty("--configurator-step-min-height");
+    }
     setActiveStep(step);
-    setHighestAvailableStep((current) =>
-      Math.max(current, step) as StepNumber
-    );
-    requestAnimationFrame(() => activeStepHeadingRef.current?.focus());
+    requestAnimationFrame(() => {
+      const heading = activeStepHeadingRef.current;
+      if (!heading) return;
+      // A fast interaction may already have focused a field in the new sheet.
+      // Keep that focus instead of interrupting input on the next frame.
+      if (heading.closest(".full-configurator__panel")
+        ?.querySelector(".full-configurator__step")
+        ?.contains(document.activeElement)) return;
+
+      heading.focus({ preventScroll: true });
+      const bounds = heading.getBoundingClientRect();
+      if (bounds.top < 88 || bounds.bottom > window.innerHeight) {
+        heading.scrollIntoView({ block: "start", behavior: "instant" });
+      }
+      if (
+        document.documentElement.dataset.inputModality === "pointer" &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        heading.closest(".full-configurator__panel")?.animate(
+          [
+            { transform: `translateX(${step > activeStep ? 24 : -24}px)`, opacity: 0.65 },
+            { transform: "translateX(0)", opacity: 1 }
+          ],
+          { duration: 240, easing: "cubic-bezier(0.32, 0.72, 0, 1)" }
+        );
+      }
+    });
   }
 
   const textIsInvalid =
@@ -667,475 +713,430 @@ export function ConfiguratorWizard({
         </section>
 
         <div className="full-configurator__controls-column">
-          <nav aria-label="Konfigurationsschritte">
-            <ol className="full-configurator__steps">
-              {STEPS.map((step) => {
-                const isAvailable =
-                  step.number <= highestAvailableStep &&
-                  (step.number !== 3 || canContinue);
+          <div className="full-configurator__deck" ref={deckRef} role="group" aria-label="Konfigurationsschritte">
+            {STEPS.map((step) => {
+              const isActive = activeStep === step.number;
+              const isAvailable = !submissionIsPending && (
+                step.number <= activeStep ||
+                (step.number === activeStep + 1 &&
+                  (step.number === 2 ? canOpenOptions : canContinue))
+              );
+              const titleId = step.number === 3
+                ? "configurator-inquiry-title"
+                : `configurator-step-${step.number}-title`;
 
-                return (
-                  <li key={step.number}>
+              return (
+                <div
+                  className="full-configurator__panel"
+                  data-active={isActive}
+                  data-next={isAvailable && step.number === activeStep + 1}
+                  data-position={step.number < activeStep ? "previous" : "next"}
+                  key={step.number}
+                >
+                  <h2
+                    className="full-configurator__panel-heading"
+                    id={titleId}
+                    ref={isActive ? activeStepHeadingRef : undefined}
+                    tabIndex={-1}
+                  >
                     <button
-                      aria-current={
-                        activeStep === step.number ? "step" : undefined
-                      }
-                      disabled={!isAvailable || submissionIsPending}
+                      aria-controls={`configurator-panel-${step.number}`}
+                      aria-current={isActive ? "step" : undefined}
+                      aria-expanded={isActive}
+                      aria-label={`Schritt ${step.number} von 3: ${step.label}`}
+                      className="full-configurator__panel-tab"
+                      disabled={!isAvailable}
                       onClick={() => showStep(step.number)}
                       type="button"
                     >
-                      <span>{String(step.number).padStart(2, "0")}</span>
-                      {step.label}
+                      <span className="full-configurator__panel-number" aria-hidden="true">
+                        {String(step.number).padStart(2, "0")}
+                        {isActive ? <span> / 03</span> : null}
+                      </span>
+                      <span className="full-configurator__panel-label">{step.label}</span>
+                      <span className="full-configurator__panel-arrow" aria-hidden="true">
+                        {isActive ? "" : step.number < activeStep ? "←" : "→"}
+                      </span>
                     </button>
-                  </li>
-                );
-              })}
-            </ol>
-          </nav>
-
-          {activeStep === 1 ? (
-            <section
-              aria-labelledby="configurator-step-1-title"
-              className="full-configurator__step"
-            >
-              <div className="full-configurator__step-heading">
-                <p>01 / Basis</p>
-                <h2
-                  id="configurator-step-1-title"
-                  ref={activeStepHeadingRef}
-                  tabIndex={-1}
-                >
-                  Grundkonfiguration
-                </h2>
-                <p>
-                  Geben Sie die sichtbare Beschriftung und die Grundmaße des
-                  Volants ein.
-                </p>
-              </div>
-
-              <ConfiguratorPickerGroup>
-              <div className="configurator-controls full-configurator__base-controls">
-                <fieldset
-                  aria-label="01 Gestaltung"
-                  className="configurator-control-group"
-                >
-                  <legend>
-                    <span>01</span> Gestaltung
-                  </legend>
-
-                  <div className="configurator-composition-field">
-                    <span>Komposition</span>
-                    <ConfiguratorPicker
-                      ariaLabel={`Komposition: ${compositionsById.get(draft.compositionMode)?.label ?? draft.compositionMode}`}
-                      describedBy={
-                        draft.compositionMode === "text-only"
-                          ? undefined
-                          : "configurator-composition-note"
-                      }
-                      id="configurator-composition"
-                      kind="composition"
-                      onChange={(value) =>
-                        updateDraft(
-                          "compositionMode",
-                          value as ConfiguratorConfigurationV1["compositionMode"]
-                        )
-                      }
-                      options={CONFIGURATOR_COMPOSITION_MODES}
-                      value={draft.compositionMode}
-                    />
-                  </div>
-
-                  <div className="configurator-text-field">
-                    <label htmlFor="configurator-text">
-                      Text auf dem Volant
-                    </label>
-                    <input
-                      aria-describedby={
-                        textIsInvalid ? "configurator-text-error" : undefined
-                      }
-                      aria-invalid={textIsInvalid}
-                      id="configurator-text"
-                      maxLength={60}
-                      onChange={(event) =>
-                        updateDraft("text", event.currentTarget.value)
-                      }
-                      spellCheck="false"
-                      type="text"
-                      value={draft.text}
-                    />
-                    {textIsInvalid ? (
-                      <p
-                        className="configurator-field-error"
-                        id="configurator-text-error"
+                  </h2>
+                  <div id={`configurator-panel-${step.number}`} hidden={!isActive}>
+                    {isActive && step.number === 1 ? (
+                      <section
+                        aria-labelledby="configurator-step-1-title"
+                        className="full-configurator__step"
                       >
-                        Bitte geben Sie bis zu 60 unterstützte Zeichen ein.
-                      </p>
+                        <ConfiguratorPickerGroup>
+                        <div className="configurator-controls full-configurator__base-controls">
+                          <fieldset
+                            aria-label="Gestaltung"
+                            className="configurator-control-group"
+                          >
+                            <legend>
+                              Gestaltung
+                            </legend>
+
+                            <div className="configurator-text-field">
+                              <label htmlFor="configurator-text">
+                                Text auf dem Volant
+                              </label>
+                              <input
+                                aria-describedby={
+                                  textIsInvalid ? "configurator-text-error" : undefined
+                                }
+                                aria-invalid={textIsInvalid}
+                                id="configurator-text"
+                                maxLength={60}
+                                onChange={(event) =>
+                                  updateDraft("text", event.currentTarget.value)
+                                }
+                                spellCheck="false"
+                                type="text"
+                                value={draft.text}
+                              />
+                              {textIsInvalid ? (
+                                <p
+                                  className="configurator-field-error"
+                                  id="configurator-text-error"
+                                >
+                                  Bitte geben Sie bis zu 60 unterstützte Zeichen ein.
+                                </p>
+                              ) : null}
+                            </div>
+
+                            <div className="configurator-select-field">
+                              <span>Schriftstil</span>
+                              <ConfiguratorPicker
+                                ariaLabel={`Schriftstil: ${selectedFont.label} · ${selectedFont.direction}`}
+                                id="configurator-font"
+                                kind="font"
+                                onChange={(value) =>
+                                  updateDraft(
+                                    "fontId",
+                                    value as ConfiguratorConfigurationV1["fontId"]
+                                  )
+                                }
+                                options={CONFIGURATOR_FONTS}
+                                value={draft.fontId}
+                              />
+                            </div>
+
+                            <div className="configurator-composition-field">
+                              <span>Komposition</span>
+                              <ConfiguratorPicker
+                                ariaLabel={`Komposition: ${compositionsById.get(draft.compositionMode)?.label ?? draft.compositionMode}`}
+                                describedBy={
+                                  draft.compositionMode === "text-only"
+                                    ? undefined
+                                    : "configurator-composition-note"
+                                }
+                                id="configurator-composition"
+                                kind="composition"
+                                onChange={(value) =>
+                                  updateDraft(
+                                    "compositionMode",
+                                    value as ConfiguratorConfigurationV1["compositionMode"]
+                                  )
+                                }
+                                options={CONFIGURATOR_COMPOSITION_MODES}
+                                value={draft.compositionMode}
+                              />
+                            </div>
+
+                            {draft.compositionMode !== "text-only" ? (
+                              <p
+                                className="configurator-composition-note"
+                                id="configurator-composition-note"
+                              >
+                                Das Logo wird schematisch dargestellt. Die finale Datei
+                                wird separat geprüft.
+                              </p>
+                            ) : null}
+                          </fieldset>
+
+                          <fieldset
+                            aria-label="Maße"
+                            className="configurator-control-group"
+                          >
+                            <legend>
+                              Maße
+                            </legend>
+                            <div className="configurator-number-grid">
+                              <div className="configurator-number-field">
+                                <label htmlFor="configurator-width">Volantbreite</label>
+                                <span className="configurator-number-input">
+                                  <input
+                                    aria-describedby={
+                                      widthIsInvalid
+                                        ? "configurator-width-error"
+                                        : undefined
+                                    }
+                                    aria-invalid={widthIsInvalid}
+                                    id="configurator-width"
+                                    inputMode="numeric"
+                                    min={1}
+                                    onChange={(event) =>
+                                      updateDraft(
+                                        "valanceWidthMm",
+                                        event.currentTarget.value === ""
+                                          ? ""
+                                          : event.currentTarget.valueAsNumber
+                                      )
+                                    }
+                                    step={1}
+                                    type="number"
+                                    value={draft.valanceWidthMm}
+                                  />
+                                  <span>mm</span>
+                                </span>
+                                {widthIsInvalid ? (
+                                  <p
+                                    className="configurator-field-error"
+                                    id="configurator-width-error"
+                                  >
+                                    Bitte geben Sie eine ganze Breite ab 1 mm ein.
+                                  </p>
+                                ) : null}
+                              </div>
+
+                              <div className="configurator-number-field">
+                                <label htmlFor="configurator-height">Volanthöhe</label>
+                                <span className="configurator-number-input">
+                                  <input
+                                    aria-describedby={
+                                      valanceHeightIsInvalid
+                                        ? "configurator-height-error"
+                                        : undefined
+                                    }
+                                    aria-invalid={valanceHeightIsInvalid}
+                                    id="configurator-height"
+                                    inputMode="numeric"
+                                    max={300}
+                                    min={200}
+                                    onChange={(event) =>
+                                      updateDraft(
+                                        "valanceHeightMm",
+                                        event.currentTarget.value === ""
+                                          ? ""
+                                          : event.currentTarget.valueAsNumber
+                                      )
+                                    }
+                                    step={1}
+                                    type="number"
+                                    value={draft.valanceHeightMm}
+                                  />
+                                  <span>mm</span>
+                                </span>
+                                {valanceHeightIsInvalid ? (
+                                  <p
+                                    className="configurator-field-error"
+                                    id="configurator-height-error"
+                                  >
+                                    Die Volanthöhe muss zwischen 200 und 300 mm liegen.
+                                  </p>
+                                ) : null}
+                              </div>
+
+                              <div className="configurator-number-field">
+                                <label htmlFor="configurator-letter-height">
+                                  Buchstabenhöhe
+                                </label>
+                                <span className="configurator-number-input">
+                                  <input
+                                    aria-describedby={
+                                      letterHeightIsInvalid
+                                        ? "configurator-letter-height-error"
+                                        : undefined
+                                    }
+                                    aria-invalid={letterHeightIsInvalid}
+                                    id="configurator-letter-height"
+                                    inputMode="numeric"
+                                    max={180}
+                                    min={1}
+                                    onChange={(event) =>
+                                      updateDraft(
+                                        "letterHeightMm",
+                                        event.currentTarget.value === ""
+                                          ? ""
+                                          : event.currentTarget.valueAsNumber
+                                      )
+                                    }
+                                    step={1}
+                                    type="number"
+                                    value={draft.letterHeightMm}
+                                  />
+                                  <span>mm</span>
+                                </span>
+                                {letterHeightIsInvalid ? (
+                                  <p
+                                    className="configurator-field-error"
+                                    id="configurator-letter-height-error"
+                                  >
+                                    Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.
+                                  </p>
+                                ) : null}
+                              </div>
+                            </div>
+                          </fieldset>
+
+                          <fieldset
+                            aria-label="Farbe & Licht"
+                            className="configurator-control-group"
+                          >
+                            <legend>
+                              Farbe &amp; Licht
+                            </legend>
+
+                            <div className="configurator-option-block">
+                              <span className="configurator-option-label">
+                                Markisenfarbe
+                              </span>
+                              <ConfiguratorPicker
+                                ariaLabel={`Markisenfarbe: ${awningColorsById.get(draft.awningColorId)?.label ?? draft.awningColorId}`}
+                                id="configurator-awning-color"
+                                kind="color"
+                                listboxLabel="Markisenfarbe auswählen"
+                                onChange={(value) =>
+                                  updateDraft(
+                                    "awningColorId",
+                                    value as ConfiguratorConfigurationV1["awningColorId"]
+                                  )
+                                }
+                                options={CONFIGURATOR_AWNING_COLORS}
+                                value={draft.awningColorId}
+                              />
+                            </div>
+
+                            <div className="configurator-option-block">
+                              <span className="configurator-option-label">
+                                Lichtwirkung
+                              </span>
+                              <ConfiguratorPicker
+                                ariaLabel={`Lichtwirkung: ${lightColorsById.get(draft.lightColorId)?.label ?? draft.lightColorId}`}
+                                id="configurator-light-color"
+                                kind="color"
+                                listboxLabel="Lichtwirkung auswählen"
+                                onChange={(value) =>
+                                  updateDraft(
+                                    "lightColorId",
+                                    value as ConfiguratorConfigurationV1["lightColorId"]
+                                  )
+                                }
+                                options={CONFIGURATOR_LIGHT_COLORS}
+                                value={draft.lightColorId}
+                              />
+                            </div>
+                          </fieldset>
+                        </div>
+                        </ConfiguratorPickerGroup>
+
+                      </section>
+                    ) : null}
+
+                    {isActive && step.number === 2 ? (
+                    <section
+                      aria-labelledby="configurator-step-2-title"
+                      className="full-configurator__step full-configurator__step--options"
+                      >
+                        <fieldset className="full-configurator__services-block">
+                          <legend>Dienstleistungen</legend>
+                          <div className="full-configurator__service-grid">
+                            {CONFIGURATOR_SERVICES.map((service) => (
+                              <label key={service.id}>
+                                <input
+                                  checked={services.includes(service.id)}
+                                  onChange={() => toggleService(service.id)}
+                                  type="checkbox"
+                                  value={service.id}
+                                />
+                                <span>{service.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                          <p className="full-configurator__option-note">
+                            Diese Leistungen werden manuell kalkuliert und sind nicht im
+                            vorläufigen Nettopreis enthalten.
+                          </p>
+                        </fieldset>
+
+                        <fieldset className="full-configurator__postal-code">
+                          <legend>
+                            <label htmlFor="configurator-postal-code">
+                              PLZ des Objekts <span>(optional)</span>
+                            </label>
+                          </legend>
+                          <input
+                            aria-describedby={
+                              postalCodeIsValid
+                                ? "configurator-postal-code-hint"
+                                : "configurator-postal-code-hint configurator-postal-code-error"
+                            }
+                            aria-invalid={!postalCodeIsValid}
+                            autoComplete="postal-code"
+                            id="configurator-postal-code"
+                            inputMode="numeric"
+                            maxLength={5}
+                            onChange={(event) => { markStarted(); setPostalCode(event.currentTarget.value); }}
+                            pattern="[0-9]{5}"
+                            type="text"
+                            value={postalCode}
+                          />
+                          <p id="configurator-postal-code-hint">
+                            Wird nur der Anfrage beigefügt und nicht im Browser-Entwurf
+                            gespeichert.
+                          </p>
+                          {!postalCodeIsValid ? (
+                            <p
+                              className="full-configurator__field-error"
+                              id="configurator-postal-code-error"
+                            >
+                              Bitte geben Sie eine fünfstellige deutsche PLZ ein.
+                            </p>
+                          ) : null}
+                        </fieldset>
+
+                      </section>
+                    ) : null}
+
+                    {isActive && step.number === 3 && calculationIsReady && submission ? (
+                      <section
+                        aria-labelledby="configurator-inquiry-title"
+                        className="full-configurator__step full-configurator__step--inquiry"
+                      >
+                        <div className="full-configurator__summary-actions">
+                          <button
+                            className="button button--secondary"
+                            disabled={submissionIsPending}
+                            onClick={() => showStep(1)}
+                            type="button"
+                          >
+                            Grunddaten ändern
+                          </button>
+                          <button
+                            className="button button--secondary"
+                            disabled={submissionIsPending}
+                            onClick={() => showStep(2)}
+                            type="button"
+                          >
+                            Optionen ändern
+                          </button>
+                        </div>
+
+                        <PriceSummary
+                          calculation={calculationState.calculation}
+                          configuration={calculationState.configuration}
+                          postalCode={postalCode}
+                          services={services}
+                          action={<button type="button" ref={inquiryTriggerRef} className="button button--primary" onClick={() => setInquiryOpen(true)}>Konfiguration anfragen</button>}
+                        />
+
+
+                      </section>
                     ) : null}
                   </div>
-
-                  <div className="configurator-select-field">
-                    <span>Schriftstil</span>
-                    <ConfiguratorPicker
-                      ariaLabel={`Schriftstil: ${selectedFont.label} · ${selectedFont.direction}`}
-                      id="configurator-font"
-                      kind="font"
-                      onChange={(value) =>
-                        updateDraft(
-                          "fontId",
-                          value as ConfiguratorConfigurationV1["fontId"]
-                        )
-                      }
-                      options={CONFIGURATOR_FONTS}
-                      value={draft.fontId}
-                    />
-                  </div>
-
-                  {draft.compositionMode !== "text-only" ? (
-                    <p
-                      className="configurator-composition-note"
-                      id="configurator-composition-note"
-                    >
-                      Das Logo wird schematisch dargestellt. Die finale Datei
-                      wird separat geprüft.
-                    </p>
-                  ) : null}
-                </fieldset>
-
-                <fieldset
-                  aria-label="02 Maße"
-                  className="configurator-control-group"
-                >
-                  <legend>
-                    <span>02</span> Maße
-                  </legend>
-                  <div className="configurator-number-grid">
-                    <div className="configurator-number-field">
-                      <label htmlFor="configurator-width">Volantbreite</label>
-                      <span className="configurator-number-input">
-                        <input
-                          aria-describedby={
-                            widthIsInvalid
-                              ? "configurator-width-error"
-                              : undefined
-                          }
-                          aria-invalid={widthIsInvalid}
-                          id="configurator-width"
-                          inputMode="numeric"
-                          min={1}
-                          onChange={(event) =>
-                            updateDraft(
-                              "valanceWidthMm",
-                              event.currentTarget.value === ""
-                                ? ""
-                                : event.currentTarget.valueAsNumber
-                            )
-                          }
-                          step={1}
-                          type="number"
-                          value={draft.valanceWidthMm}
-                        />
-                        <span>mm</span>
-                      </span>
-                      {widthIsInvalid ? (
-                        <p
-                          className="configurator-field-error"
-                          id="configurator-width-error"
-                        >
-                          Bitte geben Sie eine ganze Breite ab 1 mm ein.
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div className="configurator-number-field">
-                      <label htmlFor="configurator-height">Volanthöhe</label>
-                      <span className="configurator-number-input">
-                        <input
-                          aria-describedby={
-                            valanceHeightIsInvalid
-                              ? "configurator-height-error"
-                              : undefined
-                          }
-                          aria-invalid={valanceHeightIsInvalid}
-                          id="configurator-height"
-                          inputMode="numeric"
-                          max={300}
-                          min={200}
-                          onChange={(event) =>
-                            updateDraft(
-                              "valanceHeightMm",
-                              event.currentTarget.value === ""
-                                ? ""
-                                : event.currentTarget.valueAsNumber
-                            )
-                          }
-                          step={1}
-                          type="number"
-                          value={draft.valanceHeightMm}
-                        />
-                        <span>mm</span>
-                      </span>
-                      {valanceHeightIsInvalid ? (
-                        <p
-                          className="configurator-field-error"
-                          id="configurator-height-error"
-                        >
-                          Die Volanthöhe muss zwischen 200 und 300 mm liegen.
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div className="configurator-number-field">
-                      <label htmlFor="configurator-letter-height">
-                        Buchstabenhöhe
-                      </label>
-                      <span className="configurator-number-input">
-                        <input
-                          aria-describedby={
-                            letterHeightIsInvalid
-                              ? "configurator-letter-height-error"
-                              : undefined
-                          }
-                          aria-invalid={letterHeightIsInvalid}
-                          id="configurator-letter-height"
-                          inputMode="numeric"
-                          max={180}
-                          min={1}
-                          onChange={(event) =>
-                            updateDraft(
-                              "letterHeightMm",
-                              event.currentTarget.value === ""
-                                ? ""
-                                : event.currentTarget.valueAsNumber
-                            )
-                          }
-                          step={1}
-                          type="number"
-                          value={draft.letterHeightMm}
-                        />
-                        <span>mm</span>
-                      </span>
-                      {letterHeightIsInvalid ? (
-                        <p
-                          className="configurator-field-error"
-                          id="configurator-letter-height-error"
-                        >
-                          Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-                </fieldset>
-
-                <fieldset
-                  aria-label="03 Farbe & Licht"
-                  className="configurator-control-group"
-                >
-                  <legend>
-                    <span>03</span> Farbe &amp; Licht
-                  </legend>
-
-                  <div className="configurator-option-block">
-                    <span className="configurator-option-label">
-                      Markisenfarbe
-                    </span>
-                    <ConfiguratorPicker
-                      ariaLabel={`Markisenfarbe: ${awningColorsById.get(draft.awningColorId)?.label ?? draft.awningColorId}`}
-                      id="configurator-awning-color"
-                      kind="color"
-                      listboxLabel="Markisenfarbe auswählen"
-                      onChange={(value) =>
-                        updateDraft(
-                          "awningColorId",
-                          value as ConfiguratorConfigurationV1["awningColorId"]
-                        )
-                      }
-                      options={CONFIGURATOR_AWNING_COLORS}
-                      value={draft.awningColorId}
-                    />
-                  </div>
-
-                  <div className="configurator-option-block">
-                    <span className="configurator-option-label">
-                      Lichtwirkung
-                    </span>
-                    <ConfiguratorPicker
-                      ariaLabel={`Lichtwirkung: ${lightColorsById.get(draft.lightColorId)?.label ?? draft.lightColorId}`}
-                      id="configurator-light-color"
-                      kind="color"
-                      listboxLabel="Lichtwirkung auswählen"
-                      onChange={(value) =>
-                        updateDraft(
-                          "lightColorId",
-                          value as ConfiguratorConfigurationV1["lightColorId"]
-                        )
-                      }
-                      options={CONFIGURATOR_LIGHT_COLORS}
-                      value={draft.lightColorId}
-                    />
-                  </div>
-                </fieldset>
-              </div>
-              </ConfiguratorPickerGroup>
-
-              <div className="full-configurator__step-actions full-configurator__step-actions--forward">
-                <button
-                  className="button button--primary"
-                  disabled={!canContinue}
-                  onClick={() => showStep(2)}
-                  type="button"
-                >
-                  Weitere Optionen
-                </button>
-              </div>
-            </section>
-          ) : null}
-
-          {activeStep === 2 ? (
-            <section
-              aria-labelledby="configurator-step-2-title"
-              className="full-configurator__step"
-            >
-              <div className="full-configurator__step-heading">
-                <p>02 / Auswahl</p>
-                <h2
-                  id="configurator-step-2-title"
-                  ref={activeStepHeadingRef}
-                  tabIndex={-1}
-                >
-                  Weitere Optionen
-                </h2>
-                <p>
-                  Wählen Sie die gewünschten Dienstleistungen für die manuelle
-                  Projektprüfung aus.
-                </p>
-              </div>
-
-              <fieldset className="full-configurator__services-block">
-                <legend>Dienstleistungen</legend>
-                <div className="full-configurator__service-grid">
-                  {CONFIGURATOR_SERVICES.map((service) => (
-                    <label key={service.id}>
-                      <input
-                        checked={services.includes(service.id)}
-                        onChange={() => toggleService(service.id)}
-                        type="checkbox"
-                        value={service.id}
-                      />
-                      <span>{service.label}</span>
-                    </label>
-                  ))}
                 </div>
-                <p className="full-configurator__option-note">
-                  Diese Leistungen werden manuell kalkuliert und sind nicht im
-                  vorläufigen Nettopreis enthalten.
-                </p>
-              </fieldset>
-
-              <div className="full-configurator__postal-code">
-                <label htmlFor="configurator-postal-code">
-                  PLZ des Objekts <span>(optional)</span>
-                </label>
-                <input
-                  aria-describedby={
-                    postalCodeIsValid
-                      ? "configurator-postal-code-hint"
-                      : "configurator-postal-code-hint configurator-postal-code-error"
-                  }
-                  aria-invalid={!postalCodeIsValid}
-                  autoComplete="postal-code"
-                  id="configurator-postal-code"
-                  inputMode="numeric"
-                  maxLength={5}
-                  onChange={(event) => { markStarted(); setPostalCode(event.currentTarget.value); }}
-                  pattern="[0-9]{5}"
-                  type="text"
-                  value={postalCode}
-                />
-                <p id="configurator-postal-code-hint">
-                  Wird nur der Anfrage beigefügt und nicht im Browser-Entwurf
-                  gespeichert.
-                </p>
-                {!postalCodeIsValid ? (
-                  <p
-                    className="full-configurator__field-error"
-                    id="configurator-postal-code-error"
-                  >
-                    Bitte geben Sie eine fünfstellige deutsche PLZ ein.
-                  </p>
-                ) : null}
-              </div>
-
-              <div className="full-configurator__step-actions full-configurator__step-actions--split">
-                <button
-                  className="button button--secondary"
-                  disabled={submissionIsPending}
-                  onClick={() => showStep(1)}
-                  type="button"
-                >
-                  Zurück
-                </button>
-                <button
-                  className="button button--primary"
-                  disabled={!canContinue}
-                  onClick={() => showStep(3)}
-                  type="button"
-                >
-                  Preis & Projektanfrage
-                </button>
-              </div>
-            </section>
-          ) : null}
-
-          {activeStep === 3 && calculationIsReady && submission ? (
-            <section
-              aria-labelledby="configurator-inquiry-title"
-              className="full-configurator__step full-configurator__step--inquiry"
-            >
-              <div className="full-configurator__step-heading">
-                <p>03 / Ergebnis</p>
-                <h2
-                  id="configurator-inquiry-title"
-                  ref={activeStepHeadingRef}
-                  tabIndex={-1}
-                >
-                  Preis & Projektanfrage
-                </h2>
-                <p>
-                  Prüfen Sie die automatisch beigefügte Zusammenfassung und
-                  senden Sie anschließend die gemeinsame Projektanfrage.
-                </p>
-              </div>
-
-              <div className="full-configurator__summary-actions">
-                <button
-                  className="button button--secondary"
-                  disabled={submissionIsPending}
-                  onClick={() => showStep(1)}
-                  type="button"
-                >
-                  Grunddaten ändern
-                </button>
-                <button
-                  className="button button--secondary"
-                  disabled={submissionIsPending}
-                  onClick={() => showStep(2)}
-                  type="button"
-                >
-                  Optionen ändern
-                </button>
-              </div>
-
-              <PriceSummary
-                calculation={calculationState.calculation}
-                configuration={calculationState.configuration}
-                postalCode={postalCode}
-                services={services}
-                action={<button type="button" ref={inquiryTriggerRef} className="button button--primary" onClick={() => setInquiryOpen(true)}>Konfiguration anfragen</button>}
-              />
-
-
-            </section>
-          ) : null}
+              );
+            })}
+          </div>
         </div>
       </div>
       <InquiryDialog open={inquiryOpen} onClose={() => setInquiryOpen(false)} onEdit={() => showStep(1)}

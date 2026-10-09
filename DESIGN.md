@@ -23,7 +23,11 @@ they do not decide publication. Concrete public actions follow
   The full configurator
   opens with a fixed technical concept background that fades into the left background while intro
   content and the calculator scroll upward. Inside the calculator, one full-width preview precedes
-  the compact three-step controls on desktop and mobile. Step 01 repeats the homepage
+  three sequential sheets: an expanded panel and narrow labelled edges on desktop, stacked
+  full-width panels on mobile. Large step introductions and the separate progress strip are removed;
+  steps 01–02 navigate through sheet headers only and share a stable desktop height with aligned
+  service/PLZ rows; forward navigation always opens the adjacent step.
+  Step 01 repeats the homepage
   mini-configurator's three-group layout, step 02 keeps all service choices visible, and price plus
   specification appear only after both steps. Internal legal review markers are not part of the
   visual system.
@@ -302,7 +306,7 @@ remains a separate unresolved check.
   `aria-invalid` и блокирует continuation CTA без автоматического исправления.
 - На desktop controls образуют три равноправные колонки; на mobile они переходят в одну колонку
   без горизонтальной прокрутки. Минимальная ширина проверки — 320px. Порядок и смысл колонок:
-  `01 Gestaltung` содержит композицию, текст и выбор шрифта; `02 Maße` — только физические
+  `01 Gestaltung` содержит сначала текст, затем выбор шрифта и внизу композицию/логотипы; `02 Maße` — только физические
   размеры и ошибки вместимости; `03 Farbe & Licht` — цвет волана и световой эффект.
 - `Decision / local` — нижний action-блок содержит две кнопки: контурную `Entwurf anfragen`
   (запрос по эскизу) слева и оранжевую `Preis berechnen` (рассчитать цену) справа. От `48rem`
@@ -422,18 +426,42 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   `Konzeptvisualisierung / Aufmaß` and is not presented as a completed project.
 - The flow has three numbered steps: `Grundkonfiguration`, `Weitere Optionen` and
   `Preis & Projektanfrage`. The schematic preview spans the calculator width above the controls;
-  the compact step navigation and active control grid follow below it in the same order on desktop
-  and mobile, without duplicated accessible content or horizontal scrolling. Each step keeps its
-  forward action at the trailing edge of the control area; the final shared form keeps its submit
-  action in the corresponding trailing position.
+  three sequential sheets follow below it. From 64rem, the active sheet expands and the other
+  sheets remain visible as edges with a number, vertical label and directional arrow. The next
+  sheet is 61.6px wide (+10%); the distant/previous companion is 50.4px (−10%). On step 03 both
+  previous edges are 56px. Completed
+  sheets sit on the left; upcoming sheets sit on the right. Below 64rem the same sheets stack as
+  full-width rows, preserving input width and DOM order. A compact heading inside each sheet
+  replaces the large step introduction and separate progress strip. The active header says `01 / 03`
+  (or the current step); buttons expose current/expanded state and cannot bypass validation or skip
+  the next step, including after revisiting earlier steps. Only active fields mount; configuration, services and postal code persist in
+  wizard state. Desktop preview height and spacing let the default first step fit with its preview
+  at 1440×900; mobile, zoom and longer/error states retain natural page scrolling.
+- Sheet changes transfer focus to the active H2 without moving an already visible heading out of
+  view; if the visitor has already focused a new field, delayed focus transfer does not interrupt input. An offscreen heading scrolls below the site header. Pointer changes use a 240ms directional
+  transform/opacity entrance; keyboard and reduced-motion changes have no sheet movement. The
+  preview remains outside the sheets and open pickers remain unclipped. Steps 01–02 navigate through
+  sheet edges/headers, with no duplicate bottom forward/back buttons. The next available sheet gets an
+  orange border, label and filled arrow, plus a hover tint on pointer devices; invalid inputs remove
+  this accent and disable progression. The same cue appears on the horizontal mobile row. Previous
+  sheet headers remain available for return; the final shared form keeps its submit action at the trailing edge.
 - Step 01 is the homepage mini-configurator extended into the price flow, not a second layout
-  system. It uses the same three functional groups and responsive order: `01 Gestaltung` contains
-  composition/logo mode, inscription and font; `02 Maße` contains the three physical dimensions;
-  `03 Farbe & Licht` contains awning colour and light effect. Desktop shows three equal columns;
+  system. It uses the same three functional groups and responsive order: `Gestaltung` contains
+  inscription first, font second and composition/logo mode last (also the DOM/keyboard order);
+  `Maße` contains the three physical dimensions;
+  `Farbe & Licht` contains awning colour and light effect. Desktop shows three equal columns;
   mobile stacks the same groups without reordering them.
 - Step 02 contains only manually calculated services and the optional object postal code. All six
   service choices are immediately visible without disclosure/burger interaction; desktop uses two
-  columns and mobile one column.
+  columns and mobile one column. From 64rem, the postal-code field sits beside the service grid.
+  The desktop layout uses three equal columns with matching gutters (services span two columns).
+  Both groups use matching fieldset legends and spacing; the postal input aligns with the top row
+  of service cells, and both use a 4.5rem minimum control height. Steps 01–02 share a minimum body
+  height (24rem on narrower desktops, 22rem from 75rem). Their actual expanded body height is
+  carried between steps so logo notes also retain the lower edge; viewport resizing or entering
+  step 03 clears that measurement. These are minimum heights with natural growth, not clipping;
+  mobile panels keep content-driven height. Both default sheets fit with the preview at 1440×900.
+  An invalid postal code blocks the price step but never prevents returning to options to correct it.
 - The preview remains a schematic front-view SVG. Uploaded logos, object photos and PDFs are
   attachments for manual review and never become simulated geometry in v1; logo modes keep the
   approved geometric placeholder.
