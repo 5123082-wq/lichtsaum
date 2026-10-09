@@ -4,15 +4,15 @@
 ## Context Beacon
 
 - Last updated: 2026-10-09
-- Release candidate: the full configurator uses compact sequential sheets with desktop side edges,
+- Published configurator: the full configurator uses compact sequential sheets with desktop side edges,
   mobile stacked panels and a shared preview. The large step introductions and separate progress
   strip are removed; steps 01–02 use sheet headers without duplicate bottom buttons. The next
   desktop edge is 10% wider, its companion 10% narrower; forward navigation always uses the adjacent step.
   Steps 01–02 share a stable desktop height; larger service cells and the PLZ field use aligned rows. Default steps 01–02 fit with the preview at 1440×900. See `DESIGN.md`.
 - Local verification: 30 configurator Chromium/WebKit checks cover 320–1920px, progression guards,
   state retention, keyboard focus, reduced motion and accessibility. Typecheck, scoped lint and
-  production build pass. Owner authorised publication on 2026-10-09; release verification is in progress.
-- Current release: owner-authorised site changes were published on 2026-10-05. Release includes the illuminated hero/header, Wirkung concept
+  production build pass. Published on 2026-10-09; production smoke checks passed.
+- Previous release: owner-authorised site changes were published on 2026-10-05. Release includes the illuminated hero/header, Wirkung concept
   viewer and revised images, shared ten-colour palette, mini price/inquiry actions and compact
   inquiry receipt with visible submission feedback. Existing production flags and providers
   remain unchanged. GTM/Ads publication and real synthetic inquiries are separate actions.
@@ -36,7 +36,7 @@
   or after rejection. Other public routes/media return 200; robots allows Googlebot/AdsBot,
   sitemap uses the production domain, missing page returns 404 and apex redirects with 308.
   Screenshots reviewed. No real lead, file upload or email delivery was tested in this release.
-- Next action: finish production release verification. Real-device/field checks and
+- Next action: real-device/field and controlled delivery/conversion verification remain separate. Real-device/field checks and
   controlled delivery/conversion verification remain separate work. Keep localhost available.
 <!-- AGENT_CONTEXT:END -->
 
@@ -46,11 +46,15 @@
 ### CHG-20261009-01 — Configurator release
 
 - Scope: sequential configurator sheets, mini-configurator field order and regression checks.
-- Outcome: owner authorised production publication; services prototype excluded.
+- Outcome: owner-authorised configurator commit `33ba888` is on origin/main and live on both
+  production domains; Vercel `dpl_2ZTJD77RujjcVFTWcpqCTDkpGmSB` is READY. Services excluded.
 - Verification: typecheck and lint excluding old temporary artifacts pass; 195 unit tests passed
   initially and the SEO timeout passed separately. Browser suite: 60 passed, two WebKit failures
-  passed on sequential rerun. Production build passed; deployment verification pending.
-- Follow-up: confirm production deployment and smoke checks.
+  passed on sequential rerun. Production build passed. Four production Chromium/WebKit runs
+  at 390/1440px passed transitions, dialogs, canonicals, consent rejection, zero optional Google
+  requests and zero detected accessibility/runtime errors. Routes/media/robots/sitemap passed.
+- Follow-up: real-device Safari/mobile keyboard, field CWV and controlled delivery/conversion QA.
+  No real lead, upload or email delivery was tested.
 
 ### CHG-20261007-01 — Compact sequential configurator sheets
 
@@ -70,7 +74,7 @@
   detected WCAG violations.
   Desktop/mobile screenshots reviewed; typecheck, scoped lint and production build passed.
   The shared dev server remains available. Physical-device Safari and mobile keyboard are unverified.
-- Follow-up: owner authorised publication on 2026-10-09; release verification is in progress.
+- Follow-up: real-device Safari/mobile keyboard and field CWV remain unverified.
 
 ### CHG-20261005-03 — Production release and live-site verification
 
