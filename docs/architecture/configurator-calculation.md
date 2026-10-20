@@ -5,18 +5,18 @@
 - Owns: размерные ограничения, закупочные inputs, серверный pricing version и состав предварительной цены.
 - Current: `2026-10-20.v5`: закупка волана и пяти размеров панелей из Excel поставщика +50%; электрика и услуги исключены. Автоподбор одинаковых панелей на каждый участок сохранён.
 - Current: высота волана 200/250/300 мм; буквы максимум 70/120/170 мм соответственно. Выбор высоты автоматически подставляет максимум, который можно уменьшить.
-- Open: полезная высота/ширина панелей, стыки, комплектность электрики и техническая совместимость требуют проверки поставщика. Публикация только калькулятора разрешена владельцем 2026-10-20; проверка выпуска выполняется.
+- Open: полезная высота/ширина панелей, стыки, комплектность электрики и техническая совместимость требуют проверки поставщика. Версия опубликована 2026-10-20; evidence — PROGRESS.md.
 - Read full when: меняются inputs, формула, версия цены, границы результата или persistence contract.
 <!-- AGENT_BRIEF:END -->
 
-Status: `Decision`; local implementation under restricted public claim CLM-029.
+Status: `Verified` implementation; owner-approved publication on 2026-10-20 under restricted public claim CLM-029.
 Last reviewed: 2026-10-20.
 
 Publication choices follow [`publication-governance.md`](publication-governance.md).
 This document owns the current calculation contract. Earlier v4 inputs and the flat 180 mm
 letter cap are superseded by the owner's 2026-10-20 instructions.
 
-## Implemented local constraints
+## Implemented constraints
 
 | Input | Allowed value | Runtime behavior |
 | --- | --- | --- |

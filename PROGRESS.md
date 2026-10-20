@@ -11,7 +11,9 @@
   Preliminary net price is valance plus panels at purchase +50%; electrical equipment,
   connection and services are explicitly excluded and calculated separately.
   The owner's 6000 × 300 mm CÄCILIE example now returns EUR 1264.58 net.
-  See `docs/architecture/configurator-calculation.md`. Owner authorised calculator-only publication on 2026-10-20; release verification is in progress.
+  See `docs/architecture/configurator-calculation.md`. Published on 2026-10-20; production Chromium/WebKit checks pass.
+  Code commit `6b14cd32a8a09b7df82f2e6c2146d7c31835191e` was deployed as
+  `dpl_B5SzdkhMC71KV2CXWUyAXiawphjG` (READY, www.lichtsaum.com and lichtsaum.com).
 - Published configurator: the full configurator uses compact sequential sheets with desktop side edges,
   mobile stacked panels and a shared preview. The large step introductions and separate progress
   strip are removed; steps 01–02 use sheet headers without duplicate bottom buttons. The next
@@ -64,7 +66,10 @@
   the dropdown, keyboard/Escape, 390/1440px views, dependent limits, EUR 1264.58 example,
   mini-configurator and FAQ. Earlier local deck/a11y checks cover 320–1920px.
   Unrelated product prototypes, navigation and dependency changes are excluded.
-- Follow-up: complete the authorised calculator-only production release. Supplier panel useful
+  After publication all six live functional checks pass; four Chromium/WebKit production
+  checks at 390/1440px confirm HTTP 200, self-canonical, unchanged product navigation,
+  no runtime errors and no detected WCAG violations. No real inquiry or email was sent.
+- Follow-up: Supplier panel useful
   dimensions, electrical package and physical assembly still require project review.
 
 

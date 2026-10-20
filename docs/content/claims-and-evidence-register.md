@@ -4,7 +4,7 @@
 ## Agent brief
 - Owns: допустимые публичные формулировки и evidence/status для цен, scope и иных claims.
 - Current: CLM-029 ограничивает `/konfigurator` предварительной B2B-netto ценой с видимыми оговорками; внутренние inputs и commercial coefficient не являются customer-facing claims.
-- Current: CLM-028 uses dependent 70/120/170 mm lettering limits; CLM-029 includes only valance/panels and excludes electrics/services. Owner decision 2026-10-20; calculator-only publication authorised.
+- Current: CLM-028 uses dependent 70/120/170 mm lettering limits; CLM-029 includes only valance/panels and excludes electrics/services. Owner decision 2026-10-20; calculator-only publication verified on the production domain.
 - Open: B2C/PAngV, Ads, Schema и общие price-range claims требуют отдельного решения и evidence.
 - Read full when: меняется публичная формулировка, статус claim, scope разрешённых поверхностей или доказательная база.
 <!-- AGENT_BRIEF:END -->
