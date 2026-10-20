@@ -1,7 +1,4 @@
-import {
-  MINI_CONFIGURATOR_CONSTRAINTS,
-  isWithinMiniConfiguratorConstraint
-} from "@/features/mini-configurator/constraints";
+import { isSupportedValanceHeight, isValidLetterHeight } from "@/features/mini-configurator/constraints";
 import type {
   MiniConfiguratorConfig,
   MiniConfiguratorGeometry,
@@ -55,19 +52,13 @@ export function evaluateMiniConfiguratorGeometry(
   const issues: MiniConfiguratorGeometryIssue[] = [];
 
   if (
-    !isWithinMiniConfiguratorConstraint(
-      configuration.valanceHeightMm,
-      MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm
-    )
+    !isSupportedValanceHeight(configuration.valanceHeightMm)
   ) {
     issues.push("VALANCE_HEIGHT_OUT_OF_RANGE");
   }
 
   if (
-    !isWithinMiniConfiguratorConstraint(
-      configuration.letterHeightMm,
-      MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm
-    )
+    !isValidLetterHeight(configuration.letterHeightMm, Number(configuration.valanceHeightMm))
   ) {
     issues.push("LETTERS_TOO_TALL");
   }

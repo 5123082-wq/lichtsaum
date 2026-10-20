@@ -682,7 +682,7 @@ test("renders the concise object-specific FAQ with the approved marker treatment
   ).toHaveText([
     "Nein. Vorgesehen ist der Austausch des vorhandenen Volants nur bei einer geeigneten bestehenden Gewerbemarkise. Entscheidend sind die Austauschbarkeit des Volants, die Befestigungsart und die Maße, ein ungehinderter Bewegungsablauf, ein sicher planbarer Kabelweg sowie eine geeignete Stromversorgung. Die Eignung wird am konkreten Objekt geprüft.",
     "Für den ersten Kontakt genügt eine E-Mail-Adresse. Falls vorhanden, helfen Fotos der Markise und der Volantbefestigung, bekannte Maße, eine Logo- oder Schriftzugvorlage sowie Angaben zu Stromversorgung, Zugang und zum Zustimmungsstatus am Objekt.",
-    "Im aktuellen Konfigurator kann die Volanthöhe zwischen 200 und 300 mm gewählt werden. Die Buchstabenhöhe ist auf maximal 180 mm begrenzt. Ob der gesamte Schriftzug bei der gewählten Schriftart und Höhe in die verfügbare Breite passt, wird anhand seiner tatsächlich gemessenen Länge geprüft. Die finale technische Ausführung bleibt objektbezogen.",
+    "Im aktuellen Konfigurator stehen 200, 250 und 300 mm Volanthöhe zur Auswahl. Die maximale Buchstabenhöhe beträgt entsprechend 70, 120 oder 170 mm und wird bei der Auswahl voreingestellt. Kleinere Buchstabenhöhen sind möglich. Ob der gesamte Schriftzug bei der gewählten Schriftart und Höhe in die verfügbare Breite passt, wird anhand seiner tatsächlich gemessenen Länge geprüft. Die finale technische Ausführung bleibt objektbezogen.",
     "Das ist objekt- und standortabhängig. Zu prüfen sind insbesondere die erforderlichen Zustimmungen am Objekt sowie örtliche Vorgaben für Werbeanlagen. Bei denkmalgeschützten Gebäuden oder in geschützten Bereichen können zusätzliche denkmalrechtliche Anforderungen gelten.",
     "Vor der Ausführung müssen Kabelweg, Einbauort und erforderlicher Schutz des Netzteils beziehungsweise LED-Treibers, Anschlussart sowie die Verantwortung für erforderliche Elektroarbeiten am konkreten Objekt festgelegt werden.",
     "Nicht passend ist ein Leuchtvolant insbesondere, wenn der vorhandene Volant nicht separat austauschbar ist, die Markise beschädigt oder mechanisch ungeeignet ist oder kein sicherer Kabelweg möglich ist. Solange notwendige Zustimmungen oder örtliche Anforderungen ungeklärt sind, kann die Ausführung nicht freigegeben werden. Wenn keine Beleuchtung benötigt wird, kann ein bedruckter Volant genügen; muss die Markise selbst ersetzt werden, ist ein neues Markisensystem zu prüfen."
@@ -934,7 +934,8 @@ test("configures the physical SVG valance and enforces its height limits", async
   await expect(compositionTrigger).toBeFocused();
   await section.getByLabel("Text auf dem Volant").fill("ABENDLICHT");
   await section.getByLabel("Volantbreite").fill("2600");
-  await section.getByLabel("Volanthöhe").fill("300");
+  await section.getByRole("button", { name: /^Volanthöhe:/ }).click();
+  await section.getByRole("option", { name: "300 mm", exact: true }).click();
   await section.getByLabel("Buchstabenhöhe").fill("140");
   await fontTrigger.click();
   await section
@@ -1034,47 +1035,20 @@ test("configures the physical SVG valance and enforces its height limits", async
   ).toBeVisible();
   await expect(preview.locator("[data-configurator-logo]")).toHaveCount(2);
 
-  const valanceHeightInput = section.getByLabel("Volanthöhe");
   const letterHeightInput = section.getByLabel("Buchstabenhöhe");
+  for (const [height, maximum] of [[200, 70], [250, 120], [300, 170]]) {
+    await section.getByRole("button", { name: /^Volanthöhe:/ }).click();
+    await section.getByRole("option", { name: `${height} mm`, exact: true }).click();
+    await expect(letterHeightInput).toHaveValue(String(maximum));
+    await expect(letterHeightInput).toHaveAttribute("max", String(maximum));
+    await letterHeightInput.fill(String(maximum + 1));
+    await expect(letterHeightInput).toHaveAttribute("aria-invalid", "true");
+    await expect(continuationButton).toHaveAttribute("aria-disabled", "true");
+    await expect(preview).toHaveAttribute("data-error", "true");
+    await letterHeightInput.fill(String(maximum));
+    await expect(continuationButton).toHaveAttribute("aria-disabled", "false");
+  }
 
-  await expect(valanceHeightInput).toHaveAttribute("min", "200");
-  await expect(valanceHeightInput).toHaveAttribute("max", "300");
-  await expect(letterHeightInput).toHaveAttribute("min", "1");
-  await expect(letterHeightInput).toHaveAttribute("max", "180");
-
-  await valanceHeightInput.fill("199");
-  await expect(
-    section.getByText("Die Volanthöhe muss zwischen 200 und 300 mm liegen.")
-  ).toBeVisible();
-  await expect(valanceHeightInput).toHaveAttribute("aria-invalid", "true");
-  await expect(continuationButton).toHaveAttribute("aria-disabled", "true");
-  await expect(preview).toHaveAttribute("data-error", "true");
-
-  await valanceHeightInput.fill("301");
-  await expect(
-    section.getByText("Die Volanthöhe muss zwischen 200 und 300 mm liegen.")
-  ).toBeVisible();
-
-  await valanceHeightInput.fill("300");
-  await expect(
-    section.getByText("Die Volanthöhe muss zwischen 200 und 300 mm liegen.")
-  ).toHaveCount(0);
-
-  await letterHeightInput.fill("181");
-  await expect(
-    section.getByText(
-      "Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen."
-    )
-  ).toBeVisible();
-  await expect(letterHeightInput).toHaveAttribute("aria-invalid", "true");
-  await expect(continuationButton).toHaveAttribute("aria-disabled", "true");
-  await expect(preview).toHaveAttribute("data-error", "true");
-
-  await letterHeightInput.fill("180");
-  await expect(
-    section.getByText("Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.")
-  ).toHaveCount(0);
-  await expect(continuationButton).toHaveAttribute("aria-disabled", "false");
 });
 
 test("opens an accessible mobile navigation drawer", async ({ page }) => {

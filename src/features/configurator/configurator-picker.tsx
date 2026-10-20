@@ -11,7 +11,7 @@ import {
 } from "react";
 import { CaretDown, Check, Diamond } from "@phosphor-icons/react";
 
-export type ConfiguratorPickerKind = "composition" | "font" | "color";
+export type ConfiguratorPickerKind = "composition" | "font" | "color" | "size";
 
 export type ConfiguratorPickerOption = Readonly<{
   id: string;
@@ -107,7 +107,7 @@ function PickerOptionContent({
     );
   }
 
-  if (kind === "font") {
+  if (kind === "font" || kind === "size") {
     return (
       <>
         <strong>{option.label}</strong>
@@ -133,7 +133,7 @@ function pickerClassName(kind: ConfiguratorPickerKind) {
     return "configurator-composition-picker";
   }
 
-  if (kind === "font") {
+  if (kind === "font" || kind === "size") {
     return "configurator-font-picker";
   }
 
@@ -145,7 +145,7 @@ function listboxClassName(kind: ConfiguratorPickerKind) {
     return "configurator-composition-listbox";
   }
 
-  if (kind === "font") {
+  if (kind === "font" || kind === "size") {
     return "configurator-font-listbox";
   }
 
@@ -157,7 +157,7 @@ function triggerClassName(kind: ConfiguratorPickerKind) {
     return "configurator-composition-trigger";
   }
 
-  if (kind === "font") {
+  if (kind === "font" || kind === "size") {
     return "configurator-font-trigger";
   }
 
@@ -169,7 +169,7 @@ function optionClassName(kind: ConfiguratorPickerKind) {
     return "configurator-composition-option";
   }
 
-  if (kind === "font") {
+  if (kind === "font" || kind === "size") {
     return "configurator-font-option";
   }
 
@@ -189,6 +189,7 @@ function checkClassName(kind: ConfiguratorPickerKind) {
 }
 
 function optionLabel(kind: ConfiguratorPickerKind) {
+  if (kind === "size") return "Volanthöhe auswählen";
   if (kind === "composition") {
     return "Komposition auswählen";
   }
@@ -345,7 +346,7 @@ export function ConfiguratorPicker({
       >
         {kind === "composition" ? (
           <CompositionDiagram mode={selectedOption.id} />
-        ) : kind === "font" ? (
+        ) : (kind === "font" || kind === "size") ? (
           <span>
             {selectedOption.label}
             {selectedOption.direction ? ` · ${selectedOption.direction}` : ""}
@@ -392,7 +393,7 @@ export function ConfiguratorPicker({
             type="button"
           >
             <PickerOptionContent kind={kind} option={option} />
-            {kind !== "font" ? (
+            {kind !== "font" && kind !== "size" ? (
               <Check
                 aria-hidden="true"
                 className={checkClass}

@@ -98,6 +98,9 @@ export type ConfiguratorPanelCounts = Readonly<{
   600: number;
   1000: number;
   1200: number;
+  // Optional when reading snapshots created before pricing v5.
+  1600?: number;
+  2000?: number;
 }>;
 
 export type ConfiguratorPanelAllocation = Readonly<{

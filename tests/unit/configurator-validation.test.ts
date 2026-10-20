@@ -7,6 +7,23 @@ import {
 } from "@/features/configurator/validation";
 
 describe("configurator input validation", () => {
+  it.each([[200, 70], [250, 120], [300, 170]])(
+    "enforces the dependent letter limit for %i mm valance height",
+    (valanceHeightMm, maximum) => {
+      const configuration = { ...DEFAULT_CONFIGURATOR_CONFIGURATION, valanceHeightMm };
+      for (const letterHeightMm of [1, maximum - 1, maximum]) {
+        expect(parseConfiguratorConfiguration({ ...configuration, letterHeightMm })).not.toBeNull();
+      }
+      expect(parseConfiguratorConfiguration({ ...configuration, letterHeightMm: maximum + 1 })).toBeNull();
+      expect(parseConfiguratorConfiguration({ ...configuration, letterHeightMm: 0 })).toBeNull();
+    }
+  );
+
+  it("rejects intermediate heights without a supplier rate", () => {
+    expect(parseConfiguratorConfiguration({
+      ...DEFAULT_CONFIGURATOR_CONFIGURATION, valanceHeightMm: 270, letterHeightMm: 100
+    })).toBeNull();
+  });
   it("accepts the complete allowlisted v1 configuration", () => {
     expect(
       parseConfiguratorConfiguration(DEFAULT_CONFIGURATOR_CONFIGURATION)

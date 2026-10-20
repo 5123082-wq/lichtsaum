@@ -4,13 +4,13 @@ const configuratorTechnicalSections: readonly ConfiguratorTechnicalSection[] = [
   {
     title: "Was der Konfigurator berechnet",
     intro:
-      "Der Konfigurator bildet einen Leuchtvolant mit den gewählten Maßen, dem Schriftzug, der Komposition sowie Volant- und Lichtfarbe ab. Aus der vollständigen beleuchteten Komposition ermittelt er die benötigte Lichtlänge und eine passende Verteilung der Lichtfelder. Auf Grundlage der eingegebenen Maße und der ermittelten Lichtfelder berechnet das System einen vorläufigen Nettopreis.",
+      "Der Konfigurator bildet einen Leuchtvolant mit den gewählten Maßen, dem Schriftzug, der Komposition sowie Volant- und Lichtfarbe ab. Aus der vollständigen beleuchteten Komposition ermittelt er die benötigte Lichtlänge und eine passende Verteilung der Lichtfelder. Auf Grundlage der eingegebenen Maße und der ermittelten Lichtfelder berechnet das System einen vorläufigen Nettopreis für den Volant und die LED-Paneele.",
     claimIds: ["CLM-016", "CLM-028", "CLM-029"]
   },
   {
     title: "Was der vorläufige Nettopreis nicht umfasst",
     intro:
-      "Der angezeigte Betrag gilt ausschließlich für gewerbliche Projekte und versteht sich zuzüglich gesetzlicher Umsatzsteuer. Gewählte Dienstleistungen – Gestaltung, Lieferung, Aufmaß, Demontage des alten Volants, Montage des neuen Volants und Elektroanschluss – werden manuell kalkuliert und sind nicht enthalten. Der vorläufige Nettopreis ist kein verbindliches Angebot.",
+      "Der angezeigte Betrag gilt ausschließlich für gewerbliche Projekte und versteht sich zuzüglich gesetzlicher Umsatzsteuer. Elektrische Ausstattung wie Netzteil, Dimmer und Verkabelung sowie der Elektroanschluss sind nicht enthalten und werden projektbezogen separat kalkuliert. Gewählte Dienstleistungen – Gestaltung, Lieferung, Aufmaß, Demontage des alten Volants, Montage des neuen Volants und Elektroanschluss – werden manuell kalkuliert und sind nicht enthalten. Der vorläufige Nettopreis ist kein verbindliches Angebot.",
     claimIds: ["CLM-029"]
   },
   {

@@ -1,5 +1,7 @@
 import {
   MINI_CONFIGURATOR_CONSTRAINTS,
+  isSupportedValanceHeight,
+  isValidLetterHeight,
   isWithinMiniConfiguratorConstraint
 } from "@/features/mini-configurator/constraints";
 import {
@@ -57,14 +59,8 @@ export function isMiniConfiguratorConfig(
       candidate.valanceWidthMm,
       MINI_CONFIGURATOR_CONSTRAINTS.valanceWidthMm
     ) &&
-    isWithinMiniConfiguratorConstraint(
-      candidate.valanceHeightMm,
-      MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm
-    ) &&
-    isWithinMiniConfiguratorConstraint(
-      candidate.letterHeightMm,
-      MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm
-    ) &&
+    isSupportedValanceHeight(candidate.valanceHeightMm) &&
+    isValidLetterHeight(candidate.letterHeightMm, Number(candidate.valanceHeightMm)) &&
     typeof candidate.awningColorId === "string" &&
     awningColorIds.has(candidate.awningColorId) &&
     typeof candidate.lightColorId === "string" &&

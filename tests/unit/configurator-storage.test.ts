@@ -68,7 +68,7 @@ describe("full configurator session storage", () => {
           text: "LICHTSAUM",
           fontId: "oswald",
           valanceWidthMm: 3600,
-          valanceHeightMm: 280,
+          valanceHeightMm: 300,
           letterHeightMm: 140,
           awningColorId: "night-blue",
           lightColorId: "neutral-white",
@@ -84,7 +84,7 @@ describe("full configurator session storage", () => {
         text: "LICHTSAUM",
         fontId: "oswald",
         valanceWidthMm: 3600,
-        valanceHeightMm: 280,
+        valanceHeightMm: 300,
         letterHeightMm: 140,
         awningColorId: "night-blue",
         lightColorId: "neutral-white"

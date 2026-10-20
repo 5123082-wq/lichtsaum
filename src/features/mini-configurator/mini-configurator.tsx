@@ -13,9 +13,12 @@ import {
   ConfiguratorPicker,
   ConfiguratorPickerGroup
 } from "@/features/configurator/configurator-picker";
+import { ValanceHeightPicker } from "@/features/configurator/valance-height-picker";
 import {
   MINI_CONFIGURATOR_CONSTRAINTS,
-  isWithinMiniConfiguratorConstraint
+  isSupportedValanceHeight,
+  isValidLetterHeight,
+  maximumLetterHeightMm
 } from "@/features/mini-configurator/constraints";
 import { measureMiniConfiguratorText } from "@/features/mini-configurator/font-metrics";
 import { evaluateMiniConfiguratorGeometry } from "@/features/mini-configurator/geometry";
@@ -180,14 +183,9 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
   const letterHeightMm = configuration?.letterHeightMm ?? null;
   const textIsSupported = SUPPORTED_MINI_CONFIGURATOR_TEXT.test(draft.text);
   const textIsEmpty = draft.text.trim().length === 0;
-  const valanceHeightIsValid = isWithinMiniConfiguratorConstraint(
-    draft.valanceHeightMm,
-    MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm
-  );
-  const letterHeightIsValid = isWithinMiniConfiguratorConstraint(
-    draft.letterHeightMm,
-    MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm
-  );
+  const maxLetterHeight = maximumLetterHeightMm(Number(draft.valanceHeightMm));
+  const valanceHeightIsValid = isSupportedValanceHeight(draft.valanceHeightMm);
+  const letterHeightIsValid = isValidLetterHeight(draft.letterHeightMm, Number(draft.valanceHeightMm));
 
   useEffect(() => {
     let storedConfiguration: MiniConfiguratorConfig | null = null;
@@ -342,7 +340,10 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
     }
     userHasInteractedRef.current = true;
     setContinuationMessage("");
-    setDraft((currentDraft) => ({ ...currentDraft, [key]: value }));
+    setDraft((currentDraft) => ({
+      ...currentDraft, [key]: value,
+      ...(key === "valanceHeightMm" ? { letterHeightMm: maximumLetterHeightMm(Number(value)) } : {})
+    }));
   }
 
   function clearConfiguratorDrafts() {
@@ -498,19 +499,9 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
               onChange={(value) => updateDraft("valanceWidthMm", value)}
               value={draft.valanceWidthMm}
             />
-            <NumberField
-              describedBy={
-                valanceHeightOutOfRange
-                  ? "configurator-valance-height-error"
-                  : undefined
-              }
-              id="configurator-height"
-              invalid={!valanceHeightIsValid}
-              label="Volanthöhe"
-              max={MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm.max}
-              min={MINI_CONFIGURATOR_CONSTRAINTS.valanceHeightMm.min}
-              onChange={(value) => updateDraft("valanceHeightMm", value)}
+            <ValanceHeightPicker
               value={draft.valanceHeightMm}
+              onChange={(value) => updateDraft("valanceHeightMm", value)}
             />
             <NumberField
               describedBy={
@@ -521,7 +512,7 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
               id="configurator-letter-height"
               invalid={!letterHeightIsValid}
               label="Buchstabenhöhe"
-              max={MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm.max}
+              max={maxLetterHeight}
               min={MINI_CONFIGURATOR_CONSTRAINTS.letterHeightMm.min}
               onChange={(value) => updateDraft("letterHeightMm", value)}
               value={draft.letterHeightMm}
@@ -532,7 +523,7 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
               className="configurator-field-error"
               id="configurator-valance-height-error"
             >
-              Die Volanthöhe muss zwischen 200 und 300 mm liegen.
+              Bitte wählen Sie 200, 250 oder 300 mm Volanthöhe.
             </p>
           ) : null}
           {letterHeightOutOfRange ? (
@@ -540,7 +531,7 @@ export function MiniConfigurator({ attachmentsEnabled }: { attachmentsEnabled: b
               className="configurator-field-error"
               id="configurator-letter-height-error"
             >
-              Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.
+              Die Buchstabenhöhe muss zwischen 1 und {maxLetterHeight} mm liegen.
             </p>
           ) : null}
           {compositionTooWide ? (

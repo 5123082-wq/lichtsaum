@@ -140,7 +140,7 @@ export const DEFAULT_MINI_CONFIGURATOR_CONFIG: MiniConfiguratorConfig = {
   fontId: "montserrat",
   valanceWidthMm: 3000,
   valanceHeightMm: 300,
-  letterHeightMm: 120,
+  letterHeightMm: 170,
   awningColorId: "anthracite",
   lightColorId: "warm-white",
   previewMode: "night"

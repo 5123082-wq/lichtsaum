@@ -10,6 +10,11 @@ import {
   useTransition
 } from "react";
 
+import {
+  isValidLetterHeight,
+  maximumLetterHeightMm
+} from "@/features/mini-configurator/constraints";
+import { ValanceHeightPicker } from "@/features/configurator/valance-height-picker";
 import { calculateConfigurator } from "@/features/configurator/actions";
 import { loadConfiguratorFont } from "@/features/configurator/client-font";
 import {
@@ -86,7 +91,7 @@ const STEPS = [
 }>;
 
 const POSTAL_CODE_PATTERN = /^\d{5}$/;
-const PANEL_LENGTHS = [600, 1000, 1200] as const;
+const PANEL_LENGTHS = [600, 1000, 1200, 1600, 2000] as const;
 const euroCurrencyFormatter = new Intl.NumberFormat("de-DE", {
   style: "currency",
   currency: "EUR"
@@ -194,6 +199,12 @@ function PriceScopeNotice() {
     <ul className="full-configurator__price-notes">
       <li>Vorschau und Nettopreis sind vorläufig.</li>
       <li>zzgl. gesetzlicher Umsatzsteuer</li>
+      <li>Enthalten: Volant und die berechneten LED-Paneele.</li>
+      <li>
+        Nicht enthalten: elektrische Ausstattung (z. B. Netzteil, Dimmer
+        und Verkabelung) sowie Elektroanschluss. Diese werden projektbezogen
+        geprüft und separat kalkuliert.
+      </li>
       <li>
         Gewählte Dienstleistungen werden manuell kalkuliert und sind nicht
         enthalten.
@@ -225,7 +236,7 @@ function PriceSummary({
     (serviceId) => servicesById.get(serviceId)?.label ?? serviceId
   );
   const panelDistribution = PANEL_LENGTHS.flatMap((lengthMm) => {
-    const count = calculation.panelAllocation.counts[lengthMm];
+    const count = calculation.panelAllocation.counts[lengthMm] ?? 0;
 
     return count > 0 ? [`${count} × ${lengthMm} mm`] : [];
   }).join(" · ");
@@ -559,7 +570,10 @@ export function ConfiguratorWizard({
   ) {
     if (draft[key] === value) return;
     markStarted();
-    const nextDraft = { ...draft, [key]: value };
+    const nextDraft = {
+      ...draft, [key]: value,
+      ...(key === "valanceHeightMm" ? { letterHeightMm: maximumLetterHeightMm(Number(value)) } : {})
+    };
     const nextConfiguration = toConfiguration(nextDraft);
 
     userHasInteractedRef.current = true;
@@ -645,16 +659,8 @@ export function ConfiguratorWizard({
     draft.valanceWidthMm === "" ||
     !Number.isSafeInteger(draft.valanceWidthMm) ||
     draft.valanceWidthMm < 1;
-  const valanceHeightIsInvalid =
-    draft.valanceHeightMm === "" ||
-    !Number.isSafeInteger(draft.valanceHeightMm) ||
-    draft.valanceHeightMm < 200 ||
-    draft.valanceHeightMm > 300;
-  const letterHeightIsInvalid =
-    draft.letterHeightMm === "" ||
-    !Number.isSafeInteger(draft.letterHeightMm) ||
-    draft.letterHeightMm < 1 ||
-    draft.letterHeightMm > 180;
+  const maxLetterHeight = maximumLetterHeightMm(Number(draft.valanceHeightMm));
+  const letterHeightIsInvalid = !isValidLetterHeight(draft.letterHeightMm, Number(draft.valanceHeightMm));
   const submission: ConfiguratorProjectSubmission | undefined =
     calculationIsReady && configuration && postalCodeIsValid
       ? {
@@ -898,43 +904,10 @@ export function ConfiguratorWizard({
                                 ) : null}
                               </div>
 
-                              <div className="configurator-number-field">
-                                <label htmlFor="configurator-height">Volanthöhe</label>
-                                <span className="configurator-number-input">
-                                  <input
-                                    aria-describedby={
-                                      valanceHeightIsInvalid
-                                        ? "configurator-height-error"
-                                        : undefined
-                                    }
-                                    aria-invalid={valanceHeightIsInvalid}
-                                    id="configurator-height"
-                                    inputMode="numeric"
-                                    max={300}
-                                    min={200}
-                                    onChange={(event) =>
-                                      updateDraft(
-                                        "valanceHeightMm",
-                                        event.currentTarget.value === ""
-                                          ? ""
-                                          : event.currentTarget.valueAsNumber
-                                      )
-                                    }
-                                    step={1}
-                                    type="number"
-                                    value={draft.valanceHeightMm}
-                                  />
-                                  <span>mm</span>
-                                </span>
-                                {valanceHeightIsInvalid ? (
-                                  <p
-                                    className="configurator-field-error"
-                                    id="configurator-height-error"
-                                  >
-                                    Die Volanthöhe muss zwischen 200 und 300 mm liegen.
-                                  </p>
-                                ) : null}
-                              </div>
+                              <ValanceHeightPicker
+                                value={draft.valanceHeightMm}
+                                onChange={(value) => updateDraft("valanceHeightMm", value)}
+                              />
 
                               <div className="configurator-number-field">
                                 <label htmlFor="configurator-letter-height">
@@ -950,7 +923,7 @@ export function ConfiguratorWizard({
                                     aria-invalid={letterHeightIsInvalid}
                                     id="configurator-letter-height"
                                     inputMode="numeric"
-                                    max={180}
+                                    max={maxLetterHeight}
                                     min={1}
                                     onChange={(event) =>
                                       updateDraft(
@@ -971,7 +944,7 @@ export function ConfiguratorWizard({
                                     className="configurator-field-error"
                                     id="configurator-letter-height-error"
                                   >
-                                    Die Buchstabenhöhe muss zwischen 1 und 180 mm liegen.
+                                    Die Buchstabenhöhe muss zwischen 1 und {maxLetterHeight} mm liegen.
                                   </p>
                                 ) : null}
                               </div>

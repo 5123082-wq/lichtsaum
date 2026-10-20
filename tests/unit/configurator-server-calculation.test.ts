@@ -54,7 +54,7 @@ describe("authoritative configurator calculation", () => {
       expect(result.calculation.pricingVersion).toBe(
         CONFIGURATOR_PRICING_VERSION
       );
-      expect(result.calculation.netTotalCents).toBe(67_500);
+      expect(result.calculation.netTotalCents).toBe(119_865);
       expect(result.calculation).not.toHaveProperty("markupPercent");
       expect(Number.isSafeInteger(result.calculation.netTotalCents)).toBe(true);
       expect(result.calculation.geometry.issues).toEqual([]);
@@ -78,29 +78,29 @@ describe("authoritative configurator calculation", () => {
       text: "TSOMI",
       fontId: "pt-sans",
       valanceWidthMm: 9500,
-      letterHeightMm: 180
+      letterHeightMm: 170
     });
 
     expect(result.status).toBe("ok");
 
     if (result.status === "ok") {
       expect(result.calculation.measurement.widthMm).toBeCloseTo(
-        709.060773,
+        669.668508,
         5
       );
       expect(result.calculation.geometry.compositionWidthMm).toBe(8740);
       expect(result.calculation.geometry.lightSegmentLengthsMm).toEqual([
-        180,
-        709.060773,
-        180
+        170,
+        669.668508,
+        170
       ]);
       expect(result.calculation.panelAllocation).toMatchObject({
-        requiredLengthMm: 1069.060773,
+        requiredLengthMm: 1009.668508,
         totalLengthMm: 2200,
         panelCount: 3,
         counts: { 600: 2, 1000: 1, 1200: 0 }
       });
-      expect(result.calculation.netTotalCents).toBe(160_000);
+      expect(result.calculation.netTotalCents).toBe(305_378);
     }
   });
 
@@ -133,7 +133,7 @@ describe("authoritative configurator calculation", () => {
         ...DEFAULT_CONFIGURATOR_CONFIGURATION,
         text: "W".repeat(60),
         valanceWidthMm: 600,
-        letterHeightMm: 180
+        letterHeightMm: 170
       })
     ).resolves.toMatchObject({
       status: "invalid",

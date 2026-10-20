@@ -1,6 +1,55 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+for (const viewportWidth of [390, 1440]) {
+test(`uses supplier heights, dependent letter limits and the screenshot price at ${viewportWidth}px`, async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: viewportWidth, height: 1000 });
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/konfigurator");
+  const letters = page.getByLabel("Buchstabenhöhe", { exact: true });
+  await expect(letters).toHaveValue("170");
+  const heightMenu = page.getByRole("listbox", { name: "Volanthöhe auswählen" });
+  await page.getByRole("button", { name: /^Volanthöhe:/ }).focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(heightMenu).toBeVisible();
+  await expect(heightMenu.getByRole("option")).toHaveCount(3);
+  await page.keyboard.press("Home");
+  await page.keyboard.press("Enter");
+  await expect(letters).toHaveValue("70");
+  await expect(heightMenu).toBeHidden();
+  for (const [height, maximum] of [[200, 70], [250, 120], [300, 170]]) {
+    await page.getByRole("button", { name: /^Volanthöhe:/ }).click();
+    await page.getByRole("option", { name: `${height} mm`, exact: true }).click();
+    await expect(letters).toHaveValue(String(maximum));
+    await expect(letters).toHaveAttribute("max", String(maximum));
+    await letters.fill(String(maximum + 1));
+    await expect(letters).toHaveAttribute("aria-invalid", "true");
+    await expect(page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen" })).toBeDisabled();
+    await letters.fill(String(maximum - 10));
+    await expect(letters).toHaveAttribute("aria-invalid", "false");
+  }
+  await page.getByLabel("Volantbreite", { exact: true }).fill("6000");
+  await page.getByLabel("Text auf dem Volant", { exact: true }).fill("CÄCILIE");
+  await letters.fill("170");
+  await expect(page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen" })).toBeEnabled();
+  await page.getByRole("button", { name: "Volanthöhe: 300 mm", exact: true }).scrollIntoViewIfNeeded();
+  await page.getByRole("button", { name: "Volanthöhe: 300 mm", exact: true }).click();
+  await expect(heightMenu).toBeVisible();
+  await page.screenshot({ path: `/tmp/lichtsaum-height-menu-${testInfo.project.name}-${viewportWidth}.png` });
+  await page.keyboard.press("Escape");
+  await expect(heightMenu).toBeHidden();
+  await page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen" }).click();
+  await page.getByRole("button", { name: "Schritt 3 von 3: Preis & Projektanfrage" }).click();
+  const summary = page.getByLabel("Konfigurationsübersicht").first();
+  await expect(summary.getByText("1.264,58 €", { exact: true })).toBeVisible();
+  await expect(summary.getByText("1 × 1000 mm", { exact: true })).toBeVisible();
+  await expect(summary.getByText("Enthalten: Volant und die berechneten LED-Paneele.")).toBeVisible();
+  await expect(summary.getByText(/Nicht enthalten: elektrische Ausstattung/)).toBeVisible();
+  expect(errors).toEqual([]);
+});
+}
+
 test("serves a substantive server-rendered configurator route", async ({
   page,
   request
@@ -369,6 +418,10 @@ test("blocks preview, price and continuation for an impossible composition", asy
     "ready",
     { timeout: 15_000 }
   );
+  await expect(page.getByRole("button", {
+    name: "Schritt 2 von 3: Weitere Optionen",
+    exact: true
+  })).toBeEnabled();
   await page.getByLabel("Volantbreite").fill("100");
 
   await expect(configurator).toHaveAttribute(

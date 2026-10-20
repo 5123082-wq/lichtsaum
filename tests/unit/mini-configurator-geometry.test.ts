@@ -19,7 +19,7 @@ const measurement: MiniConfiguratorTextMeasurement = {
 describe("mini configurator geometry", () => {
   it("centers the inscription inside the physical valance width", () => {
     const geometry = evaluateMiniConfiguratorGeometry(
-      DEFAULT_MINI_CONFIGURATOR_CONFIG,
+      { ...DEFAULT_MINI_CONFIGURATOR_CONFIG, letterHeightMm: 120 },
       measurement
     );
 
@@ -33,7 +33,7 @@ describe("mini configurator geometry", () => {
     const geometry = evaluateMiniConfiguratorGeometry(
       {
         ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
-        compositionMode: "logo-left"
+        compositionMode: "logo-left", letterHeightMm: 120
       },
       measurement
     );
@@ -48,7 +48,7 @@ describe("mini configurator geometry", () => {
     const geometry = evaluateMiniConfiguratorGeometry(
       {
         ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
-        compositionMode: "logo-both"
+        compositionMode: "logo-both", letterHeightMm: 120
       },
       measurement
     );
@@ -60,16 +60,16 @@ describe("mini configurator geometry", () => {
     expect(geometry.textCenterMm).toBe(1500);
   });
 
-  it.each([200, 300])(
+  it.each([200, 250, 300])(
     "accepts the %i mm valance-height boundary",
     (valanceHeightMm) => {
       const geometry = evaluateMiniConfiguratorGeometry(
         {
           ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
           valanceHeightMm,
-          letterHeightMm: 180
+          letterHeightMm: valanceHeightMm - 130
         },
-        { ...measurement, visibleHeightMm: 180 }
+        { ...measurement, visibleHeightMm: valanceHeightMm - 130 }
       );
 
       expect(geometry.issues).not.toContain("VALANCE_HEIGHT_OUT_OF_RANGE");
@@ -92,13 +92,13 @@ describe("mini configurator geometry", () => {
     }
   );
 
-  it("reports a letter height above 180 mm", () => {
+  it("reports a letter height above 170 mm", () => {
     const geometry = evaluateMiniConfiguratorGeometry(
       {
         ...DEFAULT_MINI_CONFIGURATOR_CONFIG,
-        letterHeightMm: 181
+        letterHeightMm: 171
       },
-      { ...measurement, visibleHeightMm: 181 }
+      { ...measurement, visibleHeightMm: 171 }
     );
 
     expect(geometry.issues).toContain("LETTERS_TOO_TALL");

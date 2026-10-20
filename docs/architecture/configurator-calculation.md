@@ -2,115 +2,94 @@
 
 <!-- AGENT_BRIEF:START -->
 ## Agent brief
-- Owns: размерные ограничения, внутренние компонентные inputs, серверный pricing version и scope отображаемого результата конфигуратора.
-- Current: pricing `2026-08-20.v4` применяет server-only компонентные коэффициенты: электрический комплект +25%, готовый Volant +25%, LED-панели +100%; логотипы и текст получают отдельные световые раскладки; клиент получает только итоговую цену и расчётные геометрические данные.
-- Open: техническая совместимость, поставщик, монтаж/электрика, consumer/PAngV и публичное расширение цены остаются отдельными вопросами.
+- Owns: размерные ограничения, закупочные inputs, серверный pricing version и состав предварительной цены.
+- Current: `2026-10-20.v5`: закупка волана и пяти размеров панелей из Excel поставщика +50%; электрика и услуги исключены. Автоподбор одинаковых панелей на каждый участок сохранён.
+- Current: высота волана 200/250/300 мм; буквы максимум 70/120/170 мм соответственно. Выбор высоты автоматически подставляет максимум, который можно уменьшить.
+- Open: полезная высота/ширина панелей, стыки, комплектность электрики и техническая совместимость требуют проверки поставщика. Публикация только калькулятора разрешена владельцем 2026-10-20; проверка выпуска выполняется.
 - Read full when: меняются inputs, формула, версия цены, границы результата или persistence contract.
 <!-- AGENT_BRIEF:END -->
 
-Status: `Decision`; full server-authoritative calculation implemented locally under restricted
-public claim CLM-029
+Status: `Decision`; local implementation under restricted public claim CLM-029.
+Last reviewed: 2026-10-20.
 
-Last reviewed: 2026-08-20
-
-Publication choices follow [`publication-governance.md`](publication-governance.md). The claim and
-legal boundaries below are facts to show the owner; they do not autonomously block publication.
-
-Этот документ — единственный источник истины для размерных ограничений конфигуратора,
-компонентных стоимостей и версии предварительного расчёта. Значения подтверждены владельцем
-2026-08-06; явный implementation plan от 2026-08-11, обновлённый распоряжениями владельца от
-2026-08-12 и 2026-08-20, разрешил показывать итоговую коммерческую цену на основе этих значений как
-ограниченный `/konfigurator` B2B-netto result. Это не общий клиентский тариф, проверка
-совместимости или обязательное предложение.
+Publication choices follow [`publication-governance.md`](publication-governance.md).
+This document owns the current calculation contract. Earlier v4 inputs and the flat 180 mm
+letter cap are superseded by the owner's 2026-10-20 instructions.
 
 ## Implemented local constraints
 
 | Input | Allowed value | Runtime behavior |
-| --- | ---: | --- |
-| `Volantbreite` | `>= 1 mm` | Existing horizontal fit validation remains authoritative |
-| `Volanthöhe` | `200–300 mm` inclusive | Outside the range: visible error, `aria-invalid`, continuation disabled |
-| `Buchstabenhöhe` | `1–180 mm` inclusive | Outside the range: visible error, `aria-invalid`, continuation disabled |
+| --- | --- | --- |
+| Volantbreite (ширина волана) | Positive integer millimetres | Existing horizontal text/composition fit remains authoritative |
+| Volanthöhe (высота волана) | 200, 250 or 300 mm | One popup listbox with 200, 250 and 300 mm, matching the existing font picker |
+| Buchstabenhöhe (высота букв) | Integer 1 through valance height minus 130 mm | Default/reset to 70, 120 or 170 mm when the selected height changes; smaller values allowed |
 
-The UI keeps the entered draft value and does not silently clamp or auto-fit it. Homepage teaser
-keeps `lichtsaum:mini-configurator:v2`. The full route uses `lichtsaum:configurator:v1`, migrates
-only a valid mini v2 configuration and persists only configuration/services for the browser
-session. Optional PLZ, contacts and files are not stored.
+`Decision`: the owner relayed the supplier's 300 → 170 mm limit and explicitly requested the
+same 130 mm difference for all three heights. The reason for the difference is `TBD`; do not
+describe it as a verified cutting allowance or assume 65 mm physical margins on each edge.
 
-The 180 mm owner limit is the authoritative LICHTSAUM configurator and FAQ value. Dimensions found
-in individual supplier or competitor catalogue examples are market evidence and must not override
-this product setting or guide future calculator development as a general cap.
+Invalid typed letter sizes remain visible with an error and block price continuation.
+Server validation enforces the same dependent limit. Existing storage keys remain
+`lichtsaum:mini-configurator:v2` and `lichtsaum:configurator:v1`; valid saved smaller lettering
+is retained, unsupported heights/oversized lettering are rejected rather than silently resized.
+PLZ, contacts and files are not stored in browser drafts.
 
 ## Internal component cost inputs
 
-All amounts below are net internal manufacturing-cost inputs. They exclude customer margin,
-delivery, measurement, design work, removal, installation, electrical field work, special access,
-permit/document coordination, warranty reserve and VAT treatment.
+`Verified`: read from owner-supplied `Volant_LED_Kalkulation.xlsx`, `Preisdaten!A1:G6`,
+on 2026-10-20. The source workbook is held by the owner outside the repository.
+The owner identified its final EK/net totals as purchase prices. Panel EK is the supplier VK
+less a 45% dealer discount, applied once. No extra discount applies to the listed valance rates.
 
-| Component | Internal net input |
+| Component | Internal net purchase input |
 | --- | ---: |
-| Dimmable electrical set: power supply, cable and related electrics | EUR 100 fixed per valance |
-| Finished valance | EUR 40 per running metre of full valance width |
-| Light panel `600 × 200 mm` | EUR 150 |
-| Light panel `1000 × 200 mm` | EUR 200 |
-| Light panel `1200 × 200 mm` | EUR 250 |
+| Volant height 200 mm | EUR 25 / running metre |
+| Volant height 250 mm | EUR 30 / running metre |
+| Volant height 300 mm | EUR 35 / running metre |
+| Panel width 600 mm | EUR 535.15 |
+| Panel width 1000 mm | EUR 633.05 |
+| Panel width 1200 mm | EUR 694.10 |
+| Panel width 1600 mm | EUR 790.90 |
+| Panel width 2000 mm | EUR 855.25 |
 
-The EUR 40 running-metre rate applies unchanged across the allowed 200–300 mm valance-height
-range.
+The workbook does not specify panel height, useful illuminated area, manufacturing margins,
+lettering-production scope or electrical package contents. No panel height is asserted here.
 
 ## Implemented pricing version
 
-- `pricingVersion`: `2026-08-20.v4`;
-- server-only component coefficients: electrical set `25%`, finished valance `25%`, selected panels `100%`;
-- all money arithmetic: integer euro cents;
-- electrical set: `10_000` cents fixed;
-- finished valance: `4` cents per full-width millimetre;
-- selected panel cost: internal catalog above;
-- displayed result: electrical set × `1.25` + finished valance × `1.25` + selected panels × `2`.
+- `pricingVersion`: `2026-10-20.v5`.
+- Valance purchase cents: round(full width in mm × selected rate in cents per metre / 1000).
+- Panel purchase cents: sum(count × the matching panel purchase cents).
+- Displayed net cents: round((valance purchase cents + panel purchase cents) × 1.50).
+- Round the combined marked-up amount once; purchase inputs and returned totals use integer cents.
+- `Decision`: no fixed EUR 100 electrical set. Electrical equipment and connection require
+  project review and separate calculation; the automatic total does not promise a complete
+  electrically operational system.
+- Design, delivery, measurement, removal and installation remain recorded for manual pricing.
 
-The component coefficients are intentionally not part of the client-facing calculation result.
-The browser receives the authoritative total and panel allocation, but not the component cost
-inputs or the coefficients themselves. Future coefficient changes must update `pricingVersion`.
+Purchase costs and markup remain server-only. The browser receives only the authoritative
+total and geometry/allocation. Subsequent tariff changes must update the pricing version.
+The result, inquiry summary and new-version manager notification explicitly identify the
+included valance/LED panels and excluded electrics/services. Historical notification snapshots
+retain the scope appropriate to their saved pricing version.
 
-Selected design, delivery, site measurement, old-valance removal, new-valance installation and
-electrical connection are recorded for manual review and never change this version's displayed
-amount.
+Verification example: 6000 × 300 mm, CÄCILIE / Montserrat at 170 mm, 773.8 mm measured light
+length → 1 × 1000 mm. Purchase EUR 210 + EUR 633.05 = EUR 843.05;
+displayed preliminary net price EUR 1264.58.
 
 ## Panel allocation
 
-The panel calculation is segment-based. Each illuminated logo receives its own minimum panel, and
-the inscription receives its own panel sequence. The empty distances between the logo and the
-inscription are not priced as illuminated length. Electrical hardware remains one fixed set per
-complete valance, regardless of the number of segments.
+The owner explicitly retained the existing automatic geometry and equal-panel rule.
+Each logo and the inscription have separate illuminated segments; empty gaps are not priced.
+For each segment, first find the minimum panel count, then the smallest equal panel width
+from 600/1000/1200/1600/2000 mm that covers that segment.
+Examples: 1500 mm → 1 × 1600; 2001 mm → 2 × 1200; 4001 mm → 3 × 1600.
+This is deterministic coverage, not a claim of globally lowest cost across mixed sizes.
 
-For one required segment length `L`, use this order:
-
-1. select one complete panel if `L` fits into 600, 1000 or 1200 mm;
-2. if one panel does not fit, use two equal panels, preferring 2 × 1000 mm and then 2 × 1200 mm;
-3. if two panels do not fit, use three equal panels and continue the same rule for longer text.
-
-Within a panel count, choose the smallest panel size that covers the segment. This keeps each
-segment's panel composition deterministic and prevents the full distance between two logos from
-being interpreted as illuminated text.
-
-For example, a 180 mm logo uses one 600 mm panel. A 709 mm inscription uses one 1000 mm panel.
-Two such logos plus that inscription therefore use 2 × 600 mm + 1 × 1000 mm, while the electrical
-set is still counted once.
-
-The authoritative internal component subtotal is:
-
-`EUR 100 + (Volantbreite in m × EUR 40) + selected panel cost`
-
-The displayed net price applies the server-only component coefficients to the internal inputs:
-
-`EUR 100 × 1.25 + (Volantbreite in m × EUR 40) × 1.25 + selected panel cost × 2`
-
-Maximum panel count, physical joints, cable routing and mounting gaps remain `TBD`; v1 therefore
-does not claim technical compatibility and routes the result to project review. The solver itself
-has no arbitrary panel-count cap and remains valid for the entered positive width. The homepage
-mini-configurator still performs no price or panel allocation.
-
-The UI may show total panel counts/allocation but does not expose the purchase cost of individual
-components.
+Maximum panel count, physical joints, cable routing, mounting gaps and actual useful panel
+dimensions remain `TBD`. Current validation checks lettering/composition fit, not physical
+panel placement. Project review remains necessary. The mini-configurator does not price panels.
+Old persisted allocations may omit the new 1600/2000 count keys; readers treat those as zero.
 
 ## Authoritative font and geometry boundary
 
@@ -130,14 +109,14 @@ conversion and the application does not log its body. On explicit shared-form su
 validates the raw configuration again, repeats measurement/geometry/pricing and persists only its
 own result in the optional versioned `leads.request_context` snapshot.
 
-If the submitted confirmation version differs from `2026-08-20.v4`, the server returns the current
+If the submitted confirmation version differs from `2026-10-20.v5`, the server returns the current
 authoritative calculation before any lead insert. The UI replaces the displayed result and requires
 an explicit new confirmation.
 
 ## Public presentation evidence
 
 Every total on `/konfigurator` is labelled `Vorläufiger Nettopreis` and is adjacent to all three
-limitations: `zzgl. gesetzlicher Umsatzsteuer`, selected services are excluded, and the result is
+limitations: `zzgl. gesetzlicher Umsatzsteuer`, electrical equipment, connection and selected services are excluded, and the result is
 not a `verbindliches Angebot` (обязательное предложение). The page explicitly addresses
 `gewerbliche Projekte`.
 

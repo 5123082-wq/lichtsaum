@@ -18,9 +18,13 @@ vi.mock("resend", () => ({
 import { sendLeadNotification } from "@/features/lead-form/notification-service";
 
 const originalEnv = { ...process.env };
+let pricingVersion = "2026-08-20.v4";
+let panelCounts: Record<number, number> = {};
 
 describe("sendLeadNotification", () => {
   beforeEach(() => {
+    pricingVersion = "2026-08-20.v4";
+    panelCounts = { 600: 0, 1000: 1, 1200: 0 };
     vi.clearAllMocks();
     process.env.RESEND_API_KEY = "re_test";
     process.env.LEAD_EMAIL_FROM = "LICHTSAUM Website <info@lichtsaum.com>";
@@ -55,10 +59,10 @@ describe("sendLeadNotification", () => {
                   services: ["design"],
                   calculation: {
                     panelAllocation: {
-                      counts: { 600: 0, 1000: 1, 1200: 0 }
+                      counts: panelCounts
                     }
                   },
-                  pricingVersion: "2026-08-20.v4",
+                  pricingVersion,
                   netTotalCents: 67_000
                 },
                 sourcePath: "/konfigurator",
@@ -94,6 +98,17 @@ describe("sendLeadNotification", () => {
     expect(message.text).toContain("Gestaltung");
     expect(message.text).toContain("Vorläufiger Nettopreis: 670,00");
     expect(message.html).toContain("LS-2026-000042");
+    expect(message.text).not.toContain("Elektrische Ausstattung");
     expect(message).not.toHaveProperty("attachments");
+  });
+
+  it("includes larger panels and the electrical exclusion for new pricing snapshots", async () => {
+    pricingVersion = "2026-10-20.v5";
+    panelCounts = { 600: 0, 1000: 0, 1200: 0, 1600: 1, 2000: 2 };
+    await sendLeadNotification("00000000-0000-4000-8000-000000000001");
+    const [message] = mocks.send.mock.calls[0]!;
+    expect(message.text).toContain("1 × 1600 mm, 2 × 2000 mm");
+    expect(message.text).toContain("Elektrische Ausstattung, Elektroanschluss");
+    expect(message.html).toContain("Elektrische Ausstattung, Elektroanschluss");
   });
 });

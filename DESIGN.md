@@ -50,6 +50,8 @@ they do not decide publication. Concrete public actions follow
   Published on 2026-10-05; Chromium/WebKit production screenshots were reviewed.
   Release evidence and remaining real-device/field checks belong to `PROGRESS.md`.
 - Open: working brand and remaining content inputs stay `TBD` where not owner-confirmed.
+- Current configurator: one height dropdown and dependent lettering limits follow
+  `docs/architecture/configurator-calculation.md`; the dark control rhythm is preserved.
 - Current palette: both configurators use ten fabric-inspired colours from one registry, with
   generic German names and no supplier identity. Legacy white drafts migrate to Naturweiß.
   Supplier independence and no copied fabric photos/striped designs are owner decisions (2026-10-04).
@@ -301,9 +303,10 @@ remains a separate unresolved check.
   наклонного полотна маркизы.
 - Внешний SVG сохраняет композицию сцены, внутренний physical SVG использует реальные ширину и
   высоту волана в миллиметрах. Пропорции не подменяются декоративной растяжкой.
-- `Volanthöhe` принимает `200–300 mm` включительно, `Buchstabenhöhe` — `1–180 mm` включительно.
-  Введённое невалидное значение остаётся видимым: интерфейс показывает короткую ошибку,
-  `aria-invalid` и блокирует continuation CTA без автоматического исправления.
+- `Volanthöhe` (высота волана) выбирается одним popup-меню 200/250/300 mm в стиле шрифта и цвета.
+  `Buchstabenhöhe` (высота букв) при смене высоты подставляется как 70/120/170 mm соответственно;
+  её можно уменьшать. Превышение остаётся видимым с ошибкой, `aria-invalid` и блокировкой CTA.
+  Это общий контракт mini/full; числовое поле высоты волана удалено.
 - На desktop controls образуют три равноправные колонки; на mobile они переходят в одну колонку
   без горизонтальной прокрутки. Минимальная ширина проверки — 320px. Порядок и смысл колонок:
   `01 Gestaltung` содержит сначала текст, затем выбор шрифта и внизу композицию/логотипы; `02 Maße` — только физические

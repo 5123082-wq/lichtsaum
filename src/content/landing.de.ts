@@ -387,7 +387,7 @@ export const faqItems = [
     id: "dimensions",
     question: "Welche Maße sind für Volant und Schriftzug möglich?",
     answer:
-      "Im aktuellen Konfigurator kann die Volanthöhe zwischen 200 und 300 mm gewählt werden. Die Buchstabenhöhe ist auf maximal 180 mm begrenzt. Ob der gesamte Schriftzug bei der gewählten Schriftart und Höhe in die verfügbare Breite passt, wird anhand seiner tatsächlich gemessenen Länge geprüft. Die finale technische Ausführung bleibt objektbezogen."
+      "Im aktuellen Konfigurator stehen 200, 250 und 300 mm Volanthöhe zur Auswahl. Die maximale Buchstabenhöhe beträgt entsprechend 70, 120 oder 170 mm und wird bei der Auswahl voreingestellt. Kleinere Buchstabenhöhen sind möglich. Ob der gesamte Schriftzug bei der gewählten Schriftart und Höhe in die verfügbare Breite passt, wird anhand seiner tatsächlich gemessenen Länge geprüft. Die finale technische Ausführung bleibt objektbezogen."
   },
   {
     id: "permission",

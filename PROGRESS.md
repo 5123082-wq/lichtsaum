@@ -3,7 +3,15 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-10-09
+- Last updated: 2026-10-20
+- Calculator release: supplier-based pricing `2026-10-20.v5` is implemented.
+  Both configurators select 200/250/300 mm and preset letters to the corresponding maximum
+  70/120/170 mm; smaller lettering is allowed, excess is blocked on client and server.
+  Five panel widths from the supplier workbook retain automatic equal-panel allocation.
+  Preliminary net price is valance plus panels at purchase +50%; electrical equipment,
+  connection and services are explicitly excluded and calculated separately.
+  The owner's 6000 × 300 mm CÄCILIE example now returns EUR 1264.58 net.
+  See `docs/architecture/configurator-calculation.md`. Owner authorised calculator-only publication on 2026-10-20; release verification is in progress.
 - Published configurator: the full configurator uses compact sequential sheets with desktop side edges,
   mobile stacked panels and a shared preview. The large step introductions and separate progress
   strip are removed; steps 01–02 use sheet headers without duplicate bottom buttons. The next
@@ -43,6 +51,23 @@
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
+### CHG-20261020-01 — Supplier pricing and dependent lettering limits
+
+- Scope: mini/full configurators, server pricing/validation, summary/notification scope,
+  FAQ, calculation contract and claims.
+- Outcome: one dropdown with heights 200/250/300 mm resets lettering to 70/120/170 mm; smaller values remain
+  editable. Five supplier panel widths, height-based fabric rates and +50% markup replace
+  the legacy inputs. Electrical equipment and services are excluded explicitly. Equal-panel
+  selection, text geometry and separate logo segments remain; old notification scope is preserved.
+- Verification: the isolated release passes all 212 unit tests, full lint and production build
+  including TypeScript checks. Six Chromium/WebKit checks against that production build cover
+  the dropdown, keyboard/Escape, 390/1440px views, dependent limits, EUR 1264.58 example,
+  mini-configurator and FAQ. Earlier local deck/a11y checks cover 320–1920px.
+  Unrelated product prototypes, navigation and dependency changes are excluded.
+- Follow-up: complete the authorised calculator-only production release. Supplier panel useful
+  dimensions, electrical package and physical assembly still require project review.
+
+
 ### CHG-20261009-01 — Configurator release
 
 - Scope: sequential configurator sheets, mini-configurator field order and regression checks.
@@ -76,6 +101,10 @@
   The shared dev server remains available. Physical-device Safari and mobile keyboard are unverified.
 - Follow-up: real-device Safari/mobile keyboard and field CWV remain unverified.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
 ### CHG-20261005-03 — Production release and live-site verification
 
 - Scope: all accumulated site changes, generated media/provenance, regression checks and release.
@@ -92,9 +121,7 @@
 
 
 
-<!-- RECENT_CHANGES:END -->
 
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261005-02 — Straight, spaced hero lettering
 

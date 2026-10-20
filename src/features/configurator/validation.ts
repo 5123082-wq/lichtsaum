@@ -1,3 +1,4 @@
+import { isSupportedValanceHeight, isValidLetterHeight } from "@/features/mini-configurator/constraints";
 import { z } from "zod";
 
 import { normalizeAwningColorId } from "@/features/mini-configurator/options";
@@ -44,13 +45,17 @@ export const configuratorConfigurationSchema = z.strictObject({
   ),
   valanceHeightMm: millimeterSchema
     .min(CONFIGURATOR_CONSTRAINTS.valanceHeightMm.min)
-    .max(CONFIGURATOR_CONSTRAINTS.valanceHeightMm.max),
+    .max(CONFIGURATOR_CONSTRAINTS.valanceHeightMm.max)
+    .refine(isSupportedValanceHeight),
   letterHeightMm: millimeterSchema
     .min(CONFIGURATOR_CONSTRAINTS.letterHeightMm.min)
     .max(CONFIGURATOR_CONSTRAINTS.letterHeightMm.max),
   awningColorId: z.preprocess(normalizeAwningColorId, z.enum(awningColorIds)),
   lightColorId: z.enum(lightColorIds)
-}) satisfies z.ZodType<ConfiguratorConfigurationV1>;
+}).refine(
+  (value) => isValidLetterHeight(value.letterHeightMm, value.valanceHeightMm),
+  { path: ["letterHeightMm"], message: "Buchstabenhöhe überschreitet das Maximum für diese Volanthöhe." }
+) satisfies z.ZodType<ConfiguratorConfigurationV1>;
 
 export const configuratorServicesSchema = z
   .array(z.enum(serviceIds))

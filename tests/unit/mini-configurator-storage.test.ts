@@ -66,7 +66,7 @@ describe("mini configurator storage", () => {
 
   it.each([
     { valanceHeightMm: 200, letterHeightMm: 1 },
-    { valanceHeightMm: 300, letterHeightMm: 180 }
+    { valanceHeightMm: 300, letterHeightMm: 170 }
   ])("accepts the inclusive physical boundaries: %o", (boundaries) => {
     const configuration = {
       ...DEFAULT_MINI_CONFIGURATOR_CONFIG,

@@ -95,8 +95,8 @@ function buildConfiguratorEmailSection(
       )
     : ["Keine Leistungen angefragt"];
   const panelCounts = snapshot.calculation.panelAllocation.counts;
-  const panels = ([600, 1000, 1200] as const)
-    .filter((width) => panelCounts[width] > 0)
+  const panels = ([600, 1000, 1200, 1600, 2000] as const)
+    .filter((width) => (panelCounts[width] ?? 0) > 0)
     .map((width) => `${panelCounts[width]} × ${width} mm`)
     .join(", ");
   const rows = [
@@ -112,6 +112,9 @@ function buildConfiguratorEmailSection(
     ...(snapshot.postalCode ? [["PLZ des Objekts", snapshot.postalCode]] : [])
   ];
   const netTotal = formatNetTotal(snapshot.netTotalCents);
+  const priceScope = snapshot.pricingVersion === "2026-10-20.v5"
+    ? "Zuzüglich gesetzlicher Umsatzsteuer. Der Preis umfasst Volant und LED-Paneele. Elektrische Ausstattung, Elektroanschluss und angefragte Leistungen sind nicht enthalten und werden separat kalkuliert. Kein verbindliches Angebot."
+    : "Zuzüglich gesetzlicher Umsatzsteuer. Angefragte Leistungen sind nicht enthalten. Kein verbindliches Angebot.";
   const text = [
     "Konfiguration:",
     ...rows.map(([label, value]) => `- ${label}: ${value}`),
@@ -121,7 +124,7 @@ function buildConfiguratorEmailSection(
     "",
     `Vorläufiger Nettopreis: ${netTotal}`,
     `Preisstand: ${snapshot.pricingVersion}`,
-    "Zuzüglich gesetzlicher Umsatzsteuer. Angefragte Leistungen sind nicht enthalten. Kein verbindliches Angebot."
+    priceScope
   ].join("\n");
   const html = `
     <h2>Konfiguration</h2>
@@ -139,7 +142,7 @@ function buildConfiguratorEmailSection(
     <h2>Vorläufiger Nettopreis</h2>
     <p><strong>${escapeHtml(netTotal)}</strong></p>
     <p>Preisstand: ${escapeHtml(snapshot.pricingVersion)}</p>
-    <p>Zuzüglich gesetzlicher Umsatzsteuer. Angefragte Leistungen sind nicht enthalten. Kein verbindliches Angebot.</p>
+    <p>${escapeHtml(priceScope)}</p>
   `;
 
   return { text, html };

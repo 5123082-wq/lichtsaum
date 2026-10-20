@@ -1,3 +1,4 @@
+import { isSupportedValanceHeight, isValidLetterHeight } from "@/features/mini-configurator/constraints";
 import { CONFIGURATOR_CONSTRAINTS } from "@/features/configurator/options";
 import type {
   ConfiguratorConfigurationV1,
@@ -60,21 +61,13 @@ export function evaluateConfiguratorGeometry(
   }
 
   if (
-    !Number.isSafeInteger(configuration.valanceHeightMm) ||
-    configuration.valanceHeightMm <
-      CONFIGURATOR_CONSTRAINTS.valanceHeightMm.min ||
-    configuration.valanceHeightMm >
-      CONFIGURATOR_CONSTRAINTS.valanceHeightMm.max
+    !isSupportedValanceHeight(configuration.valanceHeightMm)
   ) {
     issues.push("VALANCE_HEIGHT_OUT_OF_RANGE");
   }
 
   if (
-    !Number.isSafeInteger(configuration.letterHeightMm) ||
-    configuration.letterHeightMm <
-      CONFIGURATOR_CONSTRAINTS.letterHeightMm.min ||
-    configuration.letterHeightMm >
-      CONFIGURATOR_CONSTRAINTS.letterHeightMm.max
+    !isValidLetterHeight(configuration.letterHeightMm, configuration.valanceHeightMm)
   ) {
     issues.push("LETTER_HEIGHT_OUT_OF_RANGE");
   }
