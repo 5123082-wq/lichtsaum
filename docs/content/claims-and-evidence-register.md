@@ -4,7 +4,7 @@
 ## Agent brief
 - Owns: допустимые публичные формулировки и evidence/status для цен, scope и иных claims.
 - Current: CLM-029 ограничивает `/konfigurator` предварительной B2B-netto ценой с видимыми оговорками; внутренние inputs и commercial coefficient не являются customer-facing claims.
-- Current: CLM-028 uses dependent 70/120/170 mm lettering limits; CLM-029 includes only valance/panels and excludes electrics/services. Owner decision 2026-10-20; calculator-only publication verified on the production domain.
+- Current: CLM-028 keeps 70/120/170 mm lettering limits. CLM-029 v6 includes one electrical set, excludes connection/installation/services; owner authorised v6 publication on 2026-10-20.
 - Open: B2C/PAngV, Ads, Schema и общие price-range claims требуют отдельного решения и evidence.
 - Read full when: меняется публичная формулировка, статус claim, scope разрешённых поверхностей или доказательная база.
 <!-- AGENT_BRIEF:END -->
@@ -61,7 +61,7 @@ publication policy: [`../architecture/publication-governance.md`](../architectur
 | CLM-026 | `Für den Außeneinsatz geeignet` | Подходит для наружной эксплуатации | Technical/safety | TBD | Complete-system declarations, enclosure, installation method and operating limits | None | — |
 | CLM-027 | `Größe und Anzahl der Lichtfelder beeinflussen die Projektkosten.` | Размер и количество световых элементов влияют на стоимость проекта | Price driver | Approved | Owner confirmation for the local prototype; no public price or price range implied | Landing: Engineered Precision | 2026-07-31 |
 | CLM-028 | `Volanthöhe 200/250/300 mm; Buchstabenhöhe max. 70/120/170 mm entsprechend` | Выбор высоты волана и зависимый максимум букв | Technical | Approved | Owner relayed supplier 30→17 cm and explicitly chose height minus 13 cm for all three sizes on 2026-10-20; manufacturing reason remains TBD | Configurator and FAQ | 2026-10-20 |
-| CLM-029 | `Vorläufiger Nettopreis; zzgl. gesetzlicher Umsatzsteuer; Volant und LED-Paneele enthalten; elektrische Ausstattung, Elektroanschluss und gewählte Leistungen nicht enthalten; kein verbindliches Angebot.` | Предварительная B2B-netto сумма; НДС и выбранные услуги не включены; не обязательное предложение | Price/calculation | Restricted | Owner-approved v5 on 2026-10-20: supplier purchase +50%, no separate electrical set; the server must reproduce the current pricing version from validated inputs. Internal component inputs and coefficient are not customer-facing claims. | Only `/konfigurator`, visibly limited to `gewerbliche Projekte`; no Ads price claim, `Product`/`Offer` Schema, B2C presentation or other surface until separate legal/release approval | 2026-10-20 |
+| CLM-029 | `Vorläufiger Nettopreis; zzgl. gesetzlicher Umsatzsteuer; Volant, LED-Paneele und ein Elektroset enthalten; Elektroanschluss, Montage und gewählte Leistungen nicht enthalten; kein verbindliches Angebot.` | Предварительная B2B-netto сумма; НДС и выбранные услуги не включены; не обязательное предложение | Price/calculation | Restricted | Owner-approved v6 on 2026-10-20: three panels EUR 450/600/750, valance EUR 45/50/55 per metre, one electrical set EUR 150 included; publication authorised; the server must reproduce the current pricing version from validated inputs. Internal component inputs and coefficient are not customer-facing claims. | Only `/konfigurator`, visibly limited to `gewerbliche Projekte`; no Ads price claim, `Product`/`Offer` Schema, B2C presentation or other surface until separate legal/release approval | 2026-10-20 |
 
 ## Approval record template
 

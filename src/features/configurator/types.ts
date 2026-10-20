@@ -98,7 +98,7 @@ export type ConfiguratorPanelCounts = Readonly<{
   600: number;
   1000: number;
   1200: number;
-  // Optional when reading snapshots created before pricing v5.
+  // Historical v5 panel sizes; not allocated by the current three-size catalogue.
   1600?: number;
   2000?: number;
 }>;

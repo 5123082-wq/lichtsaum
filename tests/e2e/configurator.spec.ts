@@ -42,10 +42,10 @@ test(`uses supplier heights, dependent letter limits and the screenshot price at
   await page.getByRole("button", { name: "Schritt 2 von 3: Weitere Optionen" }).click();
   await page.getByRole("button", { name: "Schritt 3 von 3: Preis & Projektanfrage" }).click();
   const summary = page.getByLabel("Konfigurationsübersicht").first();
-  await expect(summary.getByText("1.264,58 €", { exact: true })).toBeVisible();
+  await expect(summary.getByText("1.080,00 €", { exact: true })).toBeVisible();
   await expect(summary.getByText("1 × 1000 mm", { exact: true })).toBeVisible();
-  await expect(summary.getByText("Enthalten: Volant und die berechneten LED-Paneele.")).toBeVisible();
-  await expect(summary.getByText(/Nicht enthalten: elektrische Ausstattung/)).toBeVisible();
+  await expect(summary.getByText(/Enthalten: Volant, die berechneten LED-Paneele und ein Elektroset/)).toBeVisible();
+  await expect(summary.getByText(/Nicht enthalten: Elektroanschluss und Montage/)).toBeVisible();
   expect(errors).toEqual([]);
 });
 }

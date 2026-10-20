@@ -91,7 +91,7 @@ const STEPS = [
 }>;
 
 const POSTAL_CODE_PATTERN = /^\d{5}$/;
-const PANEL_LENGTHS = [600, 1000, 1200, 1600, 2000] as const;
+const PANEL_LENGTHS = [600, 1000, 1200] as const;
 const euroCurrencyFormatter = new Intl.NumberFormat("de-DE", {
   style: "currency",
   currency: "EUR"
@@ -199,12 +199,11 @@ function PriceScopeNotice() {
     <ul className="full-configurator__price-notes">
       <li>Vorschau und Nettopreis sind vorläufig.</li>
       <li>zzgl. gesetzlicher Umsatzsteuer</li>
-      <li>Enthalten: Volant und die berechneten LED-Paneele.</li>
       <li>
-        Nicht enthalten: elektrische Ausstattung (z. B. Netzteil, Dimmer
-        und Verkabelung) sowie Elektroanschluss. Diese werden projektbezogen
-        geprüft und separat kalkuliert.
+        Enthalten: Volant, die berechneten LED-Paneele und ein Elektroset
+        (Netzteil, Dimmer, Handsender und Kabel).
       </li>
+      <li>Nicht enthalten: Elektroanschluss und Montage.</li>
       <li>
         Gewählte Dienstleistungen werden manuell kalkuliert und sind nicht
         enthalten.

@@ -4,7 +4,12 @@
 ## Context Beacon
 
 - Last updated: 2026-10-20
-- Calculator release: supplier-based pricing `2026-10-20.v5` is implemented.
+- Current calculator release: owner-approved v6 uses only 600/1000/1200 mm panels at EUR
+  450/600/750, valance EUR 45/50/55 per metre for 200/250/300 mm heights, and one EUR 150
+  electrical set per configuration. Connection/installation/services remain excluded.
+  The 6000 × 300 mm CÄCILIE example returns EUR 1080 net. Owner authorised publication on 2026-10-20; release verification is in progress.
+  See `docs/architecture/configurator-calculation.md`. Previous v5 release is recorded below.
+- Previous calculator release: supplier-based pricing `2026-10-20.v5` is implemented.
   Both configurators select 200/250/300 mm and preset letters to the corresponding maximum
   70/120/170 mm; smaller lettering is allowed, excess is blocked on client and server.
   Five panel widths from the supplier workbook retain automatic equal-panel allocation.
@@ -53,6 +58,20 @@
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
+### CHG-20261020-02 — Agreed three-panel prices and included electrical set
+
+- Scope: server tariff/allocation, summary/page/notification scope, regression tests and pricing contract.
+- Outcome: v6 selects only 600/1000/1200 mm panels at EUR 450/600/750; valance rates
+  EUR 45/50/55 per metre and one EUR 150 electrical set produce EUR 1080 for the owner's
+  example. Equal-panel allocation and height/lettering rules remain. Historical notifications
+  preserve their original scope and panel sizes. Old pricing requires reconfirmation.
+- Verification: the isolated release passes all 216 unit tests, full lint and production build
+  with TypeScript checks; the full local workspace previously passed 227 tests.
+  Four Chromium/WebKit checks at 390/1440px verify limits, keyboard controls, panel selection,
+  total and electrical inclusion. Summary screenshots reviewed at both widths. Dev server remains available.
+- Follow-up: complete authorised calculator-only publication and production verification.
+
+
 ### CHG-20261020-01 — Supplier pricing and dependent lettering limits
 
 - Scope: mini/full configurators, server pricing/validation, summary/notification scope,
@@ -86,6 +105,10 @@
 - Follow-up: real-device Safari/mobile keyboard, field CWV and controlled delivery/conversion QA.
   No real lead, upload or email delivery was tested.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
 ### CHG-20261007-01 — Compact sequential configurator sheets
 
 - Scope: full configurator presentation, navigation, responsive styles and focused browser checks.
@@ -106,9 +129,7 @@
   The shared dev server remains available. Physical-device Safari and mobile keyboard are unverified.
 - Follow-up: real-device Safari/mobile keyboard and field CWV remain unverified.
 
-<!-- RECENT_CHANGES:END -->
 
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261005-03 — Production release and live-site verification
 

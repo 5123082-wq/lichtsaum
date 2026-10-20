@@ -112,7 +112,9 @@ function buildConfiguratorEmailSection(
     ...(snapshot.postalCode ? [["PLZ des Objekts", snapshot.postalCode]] : [])
   ];
   const netTotal = formatNetTotal(snapshot.netTotalCents);
-  const priceScope = snapshot.pricingVersion === "2026-10-20.v5"
+  const priceScope = snapshot.pricingVersion === "2026-10-20.v6"
+    ? "Zuzüglich gesetzlicher Umsatzsteuer. Der Preis umfasst Volant, LED-Paneele und ein Elektroset (Netzteil, Dimmer, Handsender und Kabel). Elektroanschluss, Montage und angefragte Leistungen sind nicht enthalten und werden separat kalkuliert. Kein verbindliches Angebot."
+    : snapshot.pricingVersion === "2026-10-20.v5"
     ? "Zuzüglich gesetzlicher Umsatzsteuer. Der Preis umfasst Volant und LED-Paneele. Elektrische Ausstattung, Elektroanschluss und angefragte Leistungen sind nicht enthalten und werden separat kalkuliert. Kein verbindliches Angebot."
     : "Zuzüglich gesetzlicher Umsatzsteuer. Angefragte Leistungen sind nicht enthalten. Kein verbindliches Angebot.";
   const text = [

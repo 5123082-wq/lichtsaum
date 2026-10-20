@@ -5,22 +5,19 @@ import type {
   ConfiguratorPanelCounts
 } from "@/features/configurator/types";
 
-export const CONFIGURATOR_PRICING_VERSION = "2026-10-20.v5" as const;
-// Keep the commercial coefficients server-only. They must never be exposed as
-// part of the client-facing calculation result.
-export const CONFIGURATOR_MARKUP_PERCENT = 50 as const;
-const VALANCE_COST_CENTS_PER_METER: Readonly<Record<number, number>> = {
-  200: 2500,
-  250: 3000,
-  300: 3500
+export const CONFIGURATOR_PRICING_VERSION = "2026-10-20.v6" as const;
+// Owner-approved net selling prices. Keep tariff calculation server-only.
+const ELECTRICAL_SET_PRICE_CENTS = 15_000;
+const VALANCE_PRICE_CENTS_PER_METER: Readonly<Record<number, number>> = {
+  200: 4500,
+  250: 5000,
+  300: 5500
 };
 
 const PANEL_CATALOG = [
-  { lengthMm: 600, costCents: 53_515 },
-  { lengthMm: 1000, costCents: 63_305 },
-  { lengthMm: 1200, costCents: 69_410 },
-  { lengthMm: 1600, costCents: 79_090 },
-  { lengthMm: 2000, costCents: 85_525 }
+  { lengthMm: 600, priceCents: 45_000 },
+  { lengthMm: 1000, priceCents: 60_000 },
+  { lengthMm: 1200, priceCents: 75_000 }
 ] as const;
 
 function roundMillimeters(value: number): number {
@@ -29,7 +26,7 @@ function roundMillimeters(value: number): number {
 
 export type ConfiguratorPricedPanelAllocation = Readonly<{
   allocation: ConfiguratorPanelAllocation;
-  panelCostCents: number;
+  panelPriceCents: number;
 }>;
 
 export type ConfiguratorNetCalculation = Readonly<{
@@ -62,11 +59,11 @@ export function selectOptimalPanelAllocation(
     }
 
     const totalLengthMm = panelCount * panel.lengthMm;
-    const panelCostCents = panelCount * panel.costCents;
+    const panelPriceCents = panelCount * panel.priceCents;
 
     if (
       !Number.isSafeInteger(totalLengthMm) ||
-      !Number.isSafeInteger(panelCostCents)
+      !Number.isSafeInteger(panelPriceCents)
     ) {
       return null;
     }
@@ -74,9 +71,7 @@ export function selectOptimalPanelAllocation(
     const counts: ConfiguratorPanelCounts = {
       600: panel.lengthMm === 600 ? panelCount : 0,
       1000: panel.lengthMm === 1000 ? panelCount : 0,
-      1200: panel.lengthMm === 1200 ? panelCount : 0,
-      1600: panel.lengthMm === 1600 ? panelCount : 0,
-      2000: panel.lengthMm === 2000 ? panelCount : 0
+      1200: panel.lengthMm === 1200 ? panelCount : 0
     };
 
     return {
@@ -87,7 +82,7 @@ export function selectOptimalPanelAllocation(
         panelCount,
         counts
       },
-      panelCostCents
+      panelPriceCents
     };
   }
 
@@ -103,7 +98,7 @@ export function calculateConfiguratorNet(
     !Number.isSafeInteger(valanceWidthMm) ||
     valanceWidthMm < 1 ||
     requiredPanelLengthsMm.length === 0 ||
-    !Object.hasOwn(VALANCE_COST_CENTS_PER_METER, valanceHeightMm)
+    !Object.hasOwn(VALANCE_PRICE_CENTS_PER_METER, valanceHeightMm)
   ) {
     return null;
   }
@@ -111,14 +106,12 @@ export function calculateConfiguratorNet(
   const aggregateCounts = {
     600: 0,
     1000: 0,
-    1200: 0,
-    1600: 0,
-    2000: 0
+    1200: 0
   };
   let requiredLengthMm = 0;
   let totalLengthMm = 0;
   let panelCount = 0;
-  let panelCostCents = 0;
+  let panelPriceCents = 0;
 
   for (const requiredLength of requiredPanelLengthsMm) {
     const pricedAllocation = selectOptimalPanelAllocation(requiredLength);
@@ -130,19 +123,17 @@ export function calculateConfiguratorNet(
     requiredLengthMm += pricedAllocation.allocation.requiredLengthMm;
     totalLengthMm += pricedAllocation.allocation.totalLengthMm;
     panelCount += pricedAllocation.allocation.panelCount;
-    panelCostCents += pricedAllocation.panelCostCents;
+    panelPriceCents += pricedAllocation.panelPriceCents;
     aggregateCounts[600] += pricedAllocation.allocation.counts[600];
     aggregateCounts[1000] += pricedAllocation.allocation.counts[1000];
     aggregateCounts[1200] += pricedAllocation.allocation.counts[1200];
-    aggregateCounts[1600] += pricedAllocation.allocation.counts[1600] ?? 0;
-    aggregateCounts[2000] += pricedAllocation.allocation.counts[2000] ?? 0;
   }
 
   if (
     !Number.isFinite(requiredLengthMm) ||
     !Number.isSafeInteger(totalLengthMm) ||
     !Number.isSafeInteger(panelCount) ||
-    !Number.isSafeInteger(panelCostCents)
+    !Number.isSafeInteger(panelPriceCents)
   ) {
     return null;
   }
@@ -150,14 +141,11 @@ export function calculateConfiguratorNet(
   const roundedRequiredLengthMm = roundMillimeters(requiredLengthMm);
 
   const valanceCents = Math.round(
-    valanceWidthMm * VALANCE_COST_CENTS_PER_METER[valanceHeightMm] / 1000
+    valanceWidthMm * VALANCE_PRICE_CENTS_PER_METER[valanceHeightMm] / 1000
   );
-  const netTotalCents = applyMarkupCents(
-    valanceCents + panelCostCents,
-    CONFIGURATOR_MARKUP_PERCENT
-  );
+  const netTotalCents = valanceCents + panelPriceCents + ELECTRICAL_SET_PRICE_CENTS;
 
-  if (netTotalCents === null || !Number.isSafeInteger(netTotalCents)) {
+  if (!Number.isSafeInteger(netTotalCents)) {
     return null;
   }
 
@@ -171,24 +159,4 @@ export function calculateConfiguratorNet(
       counts: aggregateCounts
     }
   };
-}
-
-export function applyMarkupCents(
-  subtotalCents: number,
-  markupPercent: number
-): number | null {
-  if (
-    !Number.isSafeInteger(subtotalCents) ||
-    subtotalCents < 0 ||
-    !Number.isFinite(markupPercent) ||
-    markupPercent < 0
-  ) {
-    return null;
-  }
-
-  const markedUpCents = Math.round(
-    (subtotalCents * (100 + markupPercent)) / 100
-  );
-
-  return Number.isSafeInteger(markedUpCents) ? markedUpCents : null;
 }

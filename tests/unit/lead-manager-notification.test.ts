@@ -102,7 +102,7 @@ describe("sendLeadNotification", () => {
     expect(message).not.toHaveProperty("attachments");
   });
 
-  it("includes larger panels and the electrical exclusion for new pricing snapshots", async () => {
+  it("includes larger panels and the electrical exclusion for historical v5 snapshots", async () => {
     pricingVersion = "2026-10-20.v5";
     panelCounts = { 600: 0, 1000: 0, 1200: 0, 1600: 1, 2000: 2 };
     await sendLeadNotification("00000000-0000-4000-8000-000000000001");
@@ -111,4 +111,15 @@ describe("sendLeadNotification", () => {
     expect(message.text).toContain("Elektrische Ausstattung, Elektroanschluss");
     expect(message.html).toContain("Elektrische Ausstattung, Elektroanschluss");
   });
+  it("includes one electrical set and excludes connection work for v6 snapshots", async () => {
+    pricingVersion = "2026-10-20.v6";
+    await sendLeadNotification("00000000-0000-4000-8000-000000000001");
+    const [message] = mocks.send.mock.calls[0]!;
+    for (const content of [message.text, message.html]) {
+      expect(content).toContain("ein Elektroset (Netzteil, Dimmer, Handsender und Kabel)");
+      expect(content).toContain("Elektroanschluss, Montage und angefragte Leistungen sind nicht enthalten");
+      expect(content).not.toContain("Elektrische Ausstattung, Elektroanschluss");
+    }
+  });
+
 });

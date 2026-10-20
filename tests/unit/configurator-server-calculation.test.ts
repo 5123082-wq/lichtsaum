@@ -54,7 +54,7 @@ describe("authoritative configurator calculation", () => {
       expect(result.calculation.pricingVersion).toBe(
         CONFIGURATOR_PRICING_VERSION
       );
-      expect(result.calculation.netTotalCents).toBe(119_865);
+      expect(result.calculation.netTotalCents).toBe(106_500);
       expect(result.calculation).not.toHaveProperty("markupPercent");
       expect(Number.isSafeInteger(result.calculation.netTotalCents)).toBe(true);
       expect(result.calculation.geometry.issues).toEqual([]);
@@ -100,20 +100,20 @@ describe("authoritative configurator calculation", () => {
         panelCount: 3,
         counts: { 600: 2, 1000: 1, 1200: 0 }
       });
-      expect(result.calculation.netTotalCents).toBe(305_378);
+      expect(result.calculation.netTotalCents).toBe(217_250);
     }
   });
 
   it("requires reconfirmation when the pricing version is stale", async () => {
     const result = await calculateConfiguratorAuthoritatively(
       DEFAULT_CONFIGURATOR_CONFIGURATION,
-      "outdated-version"
+      "2026-10-20.v5"
     );
 
     expect(result.status).toBe("pricing-changed");
 
     if (result.status === "pricing-changed") {
-      expect(result.confirmedPricingVersion).toBe("outdated-version");
+      expect(result.confirmedPricingVersion).toBe("2026-10-20.v5");
       expect(result.calculation.pricingVersion).toBe(
         CONFIGURATOR_PRICING_VERSION
       );
