@@ -2159,6 +2159,10 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   gap: 0.8rem;
 }
 
+.configurator-number-grid > .configurator-select-field {
+  margin-top: 0;
+}
+
 .configurator-number-field {
   display: grid;
   gap: 0.55rem;
