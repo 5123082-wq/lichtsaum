@@ -5,11 +5,11 @@
 - Owns: размерные ограничения, закупочные inputs, серверный pricing version и состав предварительной цены.
 - Current: `2026-10-20.v6`: три панели 600/1000/1200 мм по EUR 450/600/750; волан по EUR 45/50/55 за метр; один электрокомплект EUR 150 включён. Автоподбор одинаковых панелей на каждый участок сохранён.
 - Current: высота волана 200/250/300 мм; буквы максимум 70/120/170 мм соответственно. Выбор высоты автоматически подставляет максимум, который можно уменьшить.
-- Open: полезная высота/ширина панелей, стыки, комплектность электрики и техническая совместимость требуют проверки поставщика. Публикация v6 разрешена владельцем 2026-10-20; проверка выпуска выполняется.
+- Open: полезная высота/ширина панелей, стыки, комплектность электрики и техническая совместимость требуют проверки поставщика. v6 опубликована и проверена 2026-10-20; evidence — PROGRESS.md.
 - Read full when: меняются inputs, формула, версия цены, границы результата или persistence contract.
 <!-- AGENT_BRIEF:END -->
 
-Status: `Decision`; owner-approved v6 implementation under restricted public claim CLM-029. Owner authorised v6 publication on 2026-10-20.
+Status: `Verified` implementation; owner-approved v6 release under restricted public claim CLM-029. Owner authorised v6 publication on 2026-10-20.
 Last reviewed: 2026-10-20.
 
 Publication choices follow [`publication-governance.md`](publication-governance.md).

@@ -7,7 +7,9 @@
 - Current calculator release: owner-approved v6 uses only 600/1000/1200 mm panels at EUR
   450/600/750, valance EUR 45/50/55 per metre for 200/250/300 mm heights, and one EUR 150
   electrical set per configuration. Connection/installation/services remain excluded.
-  The 6000 × 300 mm CÄCILIE example returns EUR 1080 net. Owner authorised publication on 2026-10-20; release verification is in progress.
+  The 6000 × 300 mm CÄCILIE example returns EUR 1080 net. Published and verified on 2026-10-20.
+  Code commit `ee63a655f039685d5e81417855ea20498815d909` deployed as
+  `dpl_ERizcC1UizV1mDeR7aS8vJJDiXTz` (READY, www.lichtsaum.com and lichtsaum.com).
   See `docs/architecture/configurator-calculation.md`. Previous v5 release is recorded below.
 - Previous calculator release: supplier-based pricing `2026-10-20.v5` is implemented.
   Both configurators select 200/250/300 mm and preset letters to the corresponding maximum
@@ -69,7 +71,10 @@
   with TypeScript checks; the full local workspace previously passed 227 tests.
   Four Chromium/WebKit checks at 390/1440px verify limits, keyboard controls, panel selection,
   total and electrical inclusion. Summary screenshots reviewed at both widths. Dev server remains available.
-- Follow-up: complete authorised calculator-only publication and production verification.
+  All four functional checks also pass on production. Four further Chromium/WebKit checks
+  confirm the EUR 1080 summary, zero detected WCAG violations/runtime errors, correct canonical
+  and unchanged navigation at 390/1440px. Screenshots reviewed. No real inquiry was sent.
+- Follow-up: physical assembly/electrical capacity remain subject to project review.
 
 
 ### CHG-20261020-01 — Supplier pricing and dependent lettering limits
