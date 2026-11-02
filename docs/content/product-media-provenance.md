@@ -4,9 +4,10 @@ Status: `Verified` source records / `Decision` owner-approved presentation, 2026
 
 <!-- AGENT_BRIEF:START -->
 ## Agent brief
-- Owns: provenance of the seven media files used by the current editorial product page.
+- Owns: provenance of the eight media files used by the current editorial product page.
 - Current: generated imagery illustrates the product; it does not verify construction, supplier stock or completed customer projects.
 - Decision: the owner requested original video quality, removal of public AI/concept captions and publication on 2026-11-02. Neutral German alt text remains.
+- Current correction: a separate first-frame poster covers normal video loading; the illuminated still remains for reduced motion/failure. The MP4 is unchanged.
 - Open: independent documentary verification of underlying media rights and physical-product correspondence.
 - Read full when: replacing product media or changing its provenance/evidence status.
 <!-- AGENT_BRIEF:END -->
@@ -21,6 +22,7 @@ dependencies or required files in a fresh release checkout.
 | --- | --- | --- |
 | `public/videos/product/lichtsaum-orbit-v1.mp4` | Gemini Videos result downloaded by the owner on 2026-10-20; input `light-keyframes/01-start-off.png`. Original silent AVFoundation passthrough copy: 1280 × 720, 240 frames, 10 seconds, 6,070,629 bytes, no audio. Restored byte-for-byte on 2026-11-02; no further re-encoding. | Generated perspective/light scene; exact model was not confirmed. |
 | `public/images/product/orbit-poster-v1.webp` | Illuminated frame from the same original clip at 9.7 seconds, converted to WebP. | Same generated scene. |
+| `public/images/product/orbit-start-v1.webp` | Exact first decoded frame of the same original silent MP4, extracted on 2026-11-02; 1280 × 720, same-size WebP quality 90, 207,716 bytes. | Same generated scene; opening cover only. No MP4 re-encoding. |
 | `public/images/product/hem-comparison-v1.webp` | Built-in imagegen, 2026-10-20. Three graphite textile specimens; 1920 × 819 source PNG, WebP quality 88, 163,660 bytes. Local-only prompt record: `hem-comparison-prompt.md`. | Illustrative edge forms; no supplier collection or availability assertion. |
 | `public/images/product/markisenstoff-acryl-graphit-melange.webp` | Gemini textile study; owner supplied the 3392 × 1248 JPEG original on 2026-11-01. Same-size WebP quality 90, 720,908 bytes. | WAREMA catalogues informed art direction; the image is not an authentic manufacturer sample or photograph. |
 | `public/images/product/markisenstoff-farbfaecher-petrol-terrakotta-oliv.webp` | Same owner-approved series; supplied 3392 × 1248 JPEG original, same-size WebP quality 90, 1,056,522 bytes. | No calibrated colour match, supplier identity, stock or fabric specification is established. |

@@ -18,8 +18,9 @@ they do not decide publication. Concrete public actions follow
 - Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft.
 - Decision (2026-11-02): owner authorised publication with the original silent 6,070,629-byte video and no public AI/concept captions; provenance remains internal.
 - Current: video resumes after offscreen/hidden pauses, respects manual pause and holds its lit ending; reduced-motion/failure poster and explicit controls remain.
+- Current correction (2026-11-02): normal first paint uses the exact unlit opening frame with the same portrait crop as video; reduced-motion/failure retain the illuminated still. Picture selection works before JavaScript.
 - Current: header-only 64rem container query prevents clipping, including enlarged text. Lower chapters share one type scale; hero styling remains owner-approved.
-- Verified: 28 product and 48 header/hero Chromium/WebKit checks passed locally; final release export passes all 226 unit tests, full lint, typecheck/build.
+- Verified: 34 local product checks across runs and six live startup Chromium/WebKit checks across main/reruns pass; ten route/SEO unit tests, clean release lint and typecheck/build pass. Earlier 48 header/hero checks remain recorded.
 - Open: physical-device Safari and field CWV; older mobile lab results cover the rejected smaller encode only. Local-only services/3D studies are not release dependencies.
 - Read full when: changing shared visual tokens, motion, responsive behavior or product presentation. Release facts belong to PROGRESS.md.
 <!-- AGENT_BRIEF:END -->
@@ -559,6 +560,10 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   The Gemini clip plays once, silently, holds its illuminated ending and offers pause/replay.
   Offscreen/hidden playback pauses and resumes from the same frame on return. Manual pause and
   the completed ending prevent automatic restart; reduced motion starts with the lit poster and explicit play.
+  Normal first paint uses a separate poster extracted from the exact first decoded video frame.
+  Its desktop/portrait crop matches the opening video, preventing the previous lit-ending flash
+  while the MP4 loads. A responsive picture selects the illuminated still for reduced motion
+  before hydration and on media failure; only the selected poster is requested.
   Mobile media occupies the upper 74% of the hero and blends into its dark base; a restrained
   time-dependent crop follows the lettering. The slogan stays below the awning. Minimum heights
   preserve content on short screens. The video is generated imagery, not a measured sample;

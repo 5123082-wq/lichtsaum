@@ -5,17 +5,23 @@
 
 - Last updated: 2026-11-02.
 - Published product: https://www.lichtsaum.com/produkt. Owner explicitly authorised publication.
-  Code commit `f91184edadb02acc60c1294fd08d3654b2e7cdac` was pushed directly to origin/main;
-  Vercel `dpl_6n7efxFZV1KEgHjMP2DjMXwTGfZY` is READY and assigned to www/apex.
+  Current code commit `ef08cc225346831ad18e3b14ab6193e2a42138dc` was pushed directly to origin/main;
+  Vercel `dpl_GcuodRgy2areW2yA71YZjE3PGiE4` is READY and assigned to www/apex.
 - Current page: five editorial chapters (video, textile/colour, shapes/configurator, questions,
   project/enquiry). Shared navigation opens `/produkt`; the review route remains production 404.
   Absolute self-canonical, own social metadata and one sitemap entry follow the existing search gate.
+- Startup correction (2026-11-02): normal loading shows the exact unlit first frame with the same
+  desktop/portrait crop as video. Reduced motion and media failure keep the illuminated poster.
+  Picture selection works before JavaScript and fetches only the selected cover. The old lit-ending
+  flash was reproduced live before the fix. Local 34 product checks across runs, ten route/SEO unit
+  tests, clean release lint/typecheck/build and all six live Chromium/WebKit startup checks pass
+  across the main run and corrected screenshot/network-wait fixture reruns. Live MP4 SHA-256 is unchanged.
 - Owner revision: original 6,070,629-byte silent 720p/240-frame video, no extra re-encoding;
   public product-page AI/concept captions removed, including equivalent alt/ARIA wording.
   Video resumes after offscreen/hidden pauses, respects manual pause and holds its illuminated ending.
   Header handles intermediate widths/enlarged text; copy explicitly explains valance replacement.
   Internal provenance belongs to `docs/content/product-media-provenance.md`.
-- Final release export: unchanged package/lock; no legacy Three.js scenes, raw source media,
+- Initial editorial release export: unchanged package/lock; no legacy Three.js scenes, raw source media,
   promo, services prototype, local artifacts, secrets or environment files. Full lint, 226 unit tests,
   typecheck and production build pass; 26 production-build Chromium/WebKit scenarios pass.
   Earlier local runs cover 28 product and 48 shared header/hero scenarios.
@@ -32,12 +38,26 @@
 - Evidence limits: physical-device Safari, field CWV, actual lead delivery/deduplication and current
   Ads/Tag Assistant diagnostics remain untested. Earlier mobile lab results apply only to the rejected
   smaller video encode. Owner publication authority does not verify unknown third-party media rights.
-- Next action: owner review of the live product page; additional Ads final-URL changes or diagnostics
+- Next action: owner review of the corrected live startup; additional Ads final-URL changes or diagnostics
   are separate tasks. The shared development watchdog on port 3000 remains available.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20261102-04 — First-frame cover removes the product startup flash
+
+- Scope: video hero picture/crop, one first-frame WebP, browser regression checks and media/design contracts.
+- Outcome: normal loading shows the exact opening frame rather than the illuminated ending. Reduced
+  motion/failure retain the lit still; pause/resume/ending behavior is unchanged. Code `ef08cc225346831ad18e3b14ab6193e2a42138dc`
+  was pushed directly to main; Vercel `dpl_GcuodRgy2areW2yA71YZjE3PGiE4` is READY on www/apex.
+- Verification: reproduced on live 390/1440 before changes. All 34 local Chromium/WebKit product
+  checks pass across runs; ten route/SEO unit tests, clean release lint, TypeScript/build pass.
+  Six live startup checks pass across main/reruns: delayed MP4 at 390/1440, matching crop, early playback,
+  pre-JavaScript normal/reduced selection and no unselected-poster/video fetches before JavaScript.
+  WebKit capture of an intentionally held video and real-network startup waits required fixture adjustments.
+  Screenshots reviewed; downloaded MP4 remains byte-identical (6,070,629 bytes). Shared dev server returns 200.
+- Follow-up: physical-device Safari and field CWV remain unverified.
 
 ### CHG-20261102-03 — Product page published and verified live
 
@@ -62,6 +82,10 @@
   screenshots reviewed; the user's browser was reloaded and the dev server remains available.
 - Follow-up: owner publication decision; previous mobile lab measurements do not cover the restored file.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
 ### CHG-20261102-01 — Product audit corrections and publication candidate
 
 - Scope: responsive header, editorial copy, video delivery, product metadata/navigation/sitemap,
@@ -75,9 +99,6 @@
   Full-repository lint retains existing vendor/service-artifact issues outside this scope.
 - Follow-up: owner publication decision; real-device/field CWV and live Ads/conversion diagnostics.
 
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261101-06 — Resume product video after scrolling back
 

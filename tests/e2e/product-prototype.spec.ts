@@ -55,17 +55,18 @@ for (const width of [390, 1440]) {
     try {
       await page.goto(route, { waitUntil: "domcontentloaded" });
       await expect.poll(() => poster.evaluate(el => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0)).toBe(true);
-      await page.screenshot({ path: testInfo.outputPath(`loading-${width}.png`) });
       expect(await poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("orbit-start-v1.webp");
       await expect(video).toHaveCSS("opacity", "0");
       // The portrait cover and the first video frame must use the same crop.
       expect(await poster.evaluate(el => getComputedStyle(el).objectPosition)).toBe(await video.evaluate(el => getComputedStyle(el).objectPosition));
+      // WebKit may wait for the held media request during capture; its no-JS test records this cover.
+      if (testInfo.project.name === "chromium") await page.screenshot({ path: testInfo.outputPath(`loading-${width}.png`) });
     } finally {
       releaseVideo();
     }
     const consentBanner = page.getByTestId("consent-banner");
     if (await consentBanner.isVisible()) await consentBanner.getByRole("button", { name: "Alle ablehnen", exact: true }).click();
-    await expect(page.getByRole("button", { name: "Video pausieren", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Video pausieren", exact: true })).toBeVisible({ timeout: 15_000 });
     await page.getByRole("button", { name: "Video pausieren", exact: true }).click();
     expect(await video.evaluate(el => (el as HTMLVideoElement).currentTime)).toBeLessThan(2);
     await expect(video).toHaveCSS("opacity", "1");
