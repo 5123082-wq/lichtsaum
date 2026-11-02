@@ -22,12 +22,12 @@
 .editorial-text-link:hover { color: var(--accent); }
 .editorial-text-link > span { text-decoration: none; }
 
-.editorial-video-hero { position: relative; display: flex; align-items: flex-end; min-height: max(42rem, 100svh); overflow: hidden; isolation: isolate; background: #171915; color: #fffaf1; }
-.editorial-video-hero__media { position: absolute; inset: 0; z-index: -2; }
+.editorial-video-hero { position: relative; display: flex; align-items: flex-end; min-height: max(42rem, 100svh); overflow: hidden; isolation: isolate; background: var(--background); color: #fffaf1; }
+.editorial-video-hero__media { position: absolute; inset: 0; z-index: -2; container-type: size; }
 .editorial-video-hero__media img, .editorial-video-hero__film { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .editorial-video-hero__film { position: absolute; inset: 0; opacity: 0; }
 .editorial-video-hero__media[data-playing="true"] .editorial-video-hero__film { opacity: 1; }
-.editorial-video-hero__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(10 13 10 / 55%), transparent 22%), linear-gradient(0deg, rgb(10 13 10 / 88%), transparent 64%), linear-gradient(90deg, rgb(10 13 10 / 40%), transparent 65%); }
+.editorial-video-hero__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(0 0 0 / 55%), transparent 22%), linear-gradient(0deg, rgb(0 0 0 / 88%), transparent 64%), linear-gradient(90deg, rgb(0 0 0 / 40%), transparent 65%); }
 .editorial-video-hero__content { padding-block: calc(var(--header-height) + 12rem) 7rem; }
 .editorial-video-hero .editorial-caption { font-weight: 400; line-height: 1.65; letter-spacing: .065em; }
 .editorial-video-hero__content > .editorial-caption { color: #eee7d7; font-size: .65rem; margin-bottom: 1.25rem; }
@@ -36,14 +36,11 @@
 .editorial-video-hero__intro { max-width: 29rem; margin-top: 1.4rem !important; font-size: 1rem; line-height: 1.6; color: #eee9df; }
 .editorial-video-hero__content > a { margin-top: 1rem; }
 .editorial-video-hero__utility { position: absolute; inset: auto 0 1.5rem; width: min(100%, var(--container)); margin-inline: auto; padding-inline: var(--page-gutter); display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
-.editorial-video-hero__utility button { display: inline-flex; align-items: center; gap: .65rem; min-height: 44px; padding: .5rem 1rem; border: 1px solid rgb(255 250 241 / 40%); color: #fffaf1; background: rgb(18 21 17 / 68%); font-size: .75rem; }
-.editorial-video-hero__utility button:hover { background: #292c24; }
+.editorial-video-hero__utility button { display: inline-flex; align-items: center; gap: .65rem; min-height: 44px; padding: .5rem 1rem; border: 1px solid rgb(255 250 241 / 40%); color: #fffaf1; background: var(--background); font-size: .75rem; }
+.editorial-video-hero__utility button:hover { background: var(--surface-high); }
 .editorial-video-hero + .editorial-fabric-chapter { padding-top: clamp(4rem, 8vw, 8rem); }
 @media (max-width: 760px) {
   .editorial-video-hero { min-height: max(40rem, 100svh); }
-  .editorial-video-hero__media { bottom: auto; height: min(74%, 160vw); mask-image: linear-gradient(#000 78%, transparent); }
-  .editorial-video-hero__media img, .editorial-video-hero__film { object-position: 56% center; }
-  .editorial-video-hero__shade { background: linear-gradient(180deg, rgb(10 13 10 / 60%), transparent 22%, transparent 40%, #171915 76%); }
   .editorial-video-hero__content { padding-block: 23rem 7rem; }
   .editorial-video-hero h1 { font-size: clamp(1.9rem, 7.7vw, 3.4rem); }
   .editorial-video-hero__intro { font-size: .875rem; max-width: 24rem; margin-top: 1rem !important; }
@@ -52,11 +49,21 @@
   .editorial-video-hero__utility button { padding-inline: .65rem; font-size: .6875rem; }
 }
 
+@media (max-width: 760px), (orientation: portrait) {
+  .editorial-video-hero__media { bottom: auto; height: min(70%, 125vw); mask-image: linear-gradient(#000 62%, transparent); }
+  .editorial-video-hero__shade { background: linear-gradient(180deg, rgb(0 0 0 / 42%), transparent 26%); }
+  .editorial-video-hero__media img, .editorial-video-hero__film {
+    /* Final lettering spans x=502..758 in the 1280x720 source: its centre is 10px left of the frame centre. */
+    object-position: calc(50% + 10 * max(100cqw / 1280, 100cqh / 720)) center;
+  }
+}
+
 
 .editorial-image-card { position: relative; height: clamp(34rem, 48vw, 44rem); overflow: hidden; isolation: isolate; background: #222221; }
 .editorial-product .editorial-light-study { width: 92%; }
 .editorial-material-study { width: 100%; }
 .editorial-study-media { position: absolute; inset: 0; touch-action: pan-y; }
+.editorial-study-media picture, .editorial-hem-crop picture { display: block; width: 100%; height: 100%; }
 .editorial-study-media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 65% center; }
 .editorial-study-media__entering { animation: editorial-study-reveal 240ms ease-out; }
 @keyframes editorial-study-reveal { from { opacity: .5; } to { opacity: 1; } }
@@ -87,6 +94,7 @@
 .editorial-shape-intro > p { max-width: 23rem; justify-self: end; color: var(--editorial-dim); }
 .editorial-hems { margin-top: 2rem; background: #191a18; }
 .editorial-hem-panorama { display: block; width: 100%; height: auto; }
+.editorial-hem-panorama img { display: block; width: 100%; height: auto; }
 .editorial-hem-labels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .editorial-hem-crop { display: none; }
 .editorial-hems figcaption { padding: 1.25rem clamp(1rem, 3vw, 3rem) 1.5rem; display: block; }
@@ -170,7 +178,7 @@
   .editorial-hem-panorama { display: none; }
   .editorial-hem-labels { grid-template-columns: 1fr; gap: 1rem; }
   .editorial-hem-crop { display: block; position: relative; overflow: hidden; aspect-ratio: 1.6; }
-  .editorial-hem-crop img { position: absolute; top: 50%; transform: translateY(-50%); width: 300%; max-width: none; height: auto; }
+  .editorial-hem-crop img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .editorial-hems figcaption { padding-top: 1rem; }
   .editorial-principle h2 { font-size: clamp(1.8rem, 7vw, 3.5rem); }
   .editorial-principle__note { margin-top: 2rem !important; margin-left: 0 !important; }

@@ -24,7 +24,7 @@ function playFromCurrentFrame(video: HTMLVideoElement) {
 }
 
 export function VideoHero() {
-  const heroRef = useRef<HTMLElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const pausedByUser = useRef(false);
   const [playing, setPlaying] = useState(false);
@@ -34,8 +34,8 @@ export function VideoHero() {
 
   useEffect(() => {
     const video = videoRef.current;
-    const hero = heroRef.current;
-    if (!video || !hero) return;
+    const media = mediaRef.current;
+    if (!video || !media) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let visible = false;
     const pause = () => video.pause();
@@ -58,7 +58,7 @@ export function VideoHero() {
       if (visible) startOrResume();
       else pause();
     }, { threshold: [0, 0.25] });
-    observer.observe(hero);
+    observer.observe(media);
     document.addEventListener("visibilitychange", onVisibility);
     reducedMotion.addEventListener("change", onPreference);
     return () => {
@@ -83,8 +83,8 @@ export function VideoHero() {
     playFromCurrentFrame(video);
   };
 
-  return <header ref={heroRef} className="editorial-video-hero" id="licht" data-chapter="opening">
-    <div className="editorial-video-hero__media" data-playing={hasFrame}>
+  return <header className="editorial-video-hero" id="licht" data-chapter="opening">
+    <div ref={mediaRef} className="editorial-video-hero__media" data-playing={hasFrame}>
       <picture>
         <source media={failed ? undefined : "(prefers-reduced-motion: reduce)"}
           srcSet={illuminatedPoster.srcSet} sizes={illuminatedPoster.sizes} />

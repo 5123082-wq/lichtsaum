@@ -1,0 +1,519 @@
+{
+  "graphite": {
+    "original": "/images/product/markisenstoff-acryl-graphit-melange.webp",
+    "variants": {
+      "desktop": {
+        "avif": [
+          {
+            "src": "/images/product/optimized/graphite-desktop-960.ff3c39f44b74.avif",
+            "width": 960,
+            "height": 353,
+            "bytes": 32404
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-1440.264321933fb3.avif",
+            "width": 1440,
+            "height": 530,
+            "bytes": 83977
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-1920.b84d3f3689f5.avif",
+            "width": 1920,
+            "height": 706,
+            "bytes": 151043
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-2880.050c7694814d.avif",
+            "width": 2880,
+            "height": 1060,
+            "bytes": 292225
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-3392.9347b815c81a.avif",
+            "width": 3392,
+            "height": 1248,
+            "bytes": 501581
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/product/optimized/graphite-desktop-960.8be103d0383a.webp",
+            "width": 960,
+            "height": 353,
+            "bytes": 33162
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-1440.0bd2c4fa0b39.webp",
+            "width": 1440,
+            "height": 530,
+            "bytes": 90248
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-1920.4d21459aec01.webp",
+            "width": 1920,
+            "height": 706,
+            "bytes": 165938
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-2880.85e9eefde490.webp",
+            "width": 2880,
+            "height": 1060,
+            "bytes": 350944
+          },
+          {
+            "src": "/images/product/optimized/graphite-desktop-3392.e1aa0f20ad94.webp",
+            "width": 3392,
+            "height": 1248,
+            "bytes": 557686
+          }
+        ]
+      },
+      "mobile": {
+        "avif": [
+          {
+            "src": "/images/product/optimized/graphite-mobile-480.0ba631e8a006.avif",
+            "width": 480,
+            "height": 428,
+            "bytes": 41123
+          },
+          {
+            "src": "/images/product/optimized/graphite-mobile-800.ff300d45c317.avif",
+            "width": 800,
+            "height": 714,
+            "bytes": 133363
+          },
+          {
+            "src": "/images/product/optimized/graphite-mobile-1080.0dce8c0eb2e0.avif",
+            "width": 1080,
+            "height": 964,
+            "bytes": 232713
+          },
+          {
+            "src": "/images/product/optimized/graphite-mobile-1398.898ea06a501c.avif",
+            "width": 1398,
+            "height": 1248,
+            "bytes": 385236
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/product/optimized/graphite-mobile-480.2d28dcb84845.webp",
+            "width": 480,
+            "height": 428,
+            "bytes": 42672
+          },
+          {
+            "src": "/images/product/optimized/graphite-mobile-800.047eef7c0730.webp",
+            "width": 800,
+            "height": 714,
+            "bytes": 145554
+          },
+          {
+            "src": "/images/product/optimized/graphite-mobile-1080.a824232b62f7.webp",
+            "width": 1080,
+            "height": 964,
+            "bytes": 259544
+          },
+          {
+            "src": "/images/product/optimized/graphite-mobile-1398.efbcf8ccd5db.webp",
+            "width": 1398,
+            "height": 1248,
+            "bytes": 418474
+          }
+        ]
+      },
+      "tablet": {
+        "avif": [
+          {
+            "src": "/images/product/optimized/graphite-tablet-800.efbd10489fd7.avif",
+            "width": 800,
+            "height": 533,
+            "bytes": 89432
+          },
+          {
+            "src": "/images/product/optimized/graphite-tablet-1280.03df091a0971.avif",
+            "width": 1280,
+            "height": 853,
+            "bytes": 236256
+          },
+          {
+            "src": "/images/product/optimized/graphite-tablet-1536.428ebfd67406.avif",
+            "width": 1536,
+            "height": 1024,
+            "bytes": 324824
+          },
+          {
+            "src": "/images/product/optimized/graphite-tablet-1872.75049b6cd816.avif",
+            "width": 1872,
+            "height": 1248,
+            "bytes": 498485
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/product/optimized/graphite-tablet-800.32f27ad460b8.webp",
+            "width": 800,
+            "height": 533,
+            "bytes": 96656
+          },
+          {
+            "src": "/images/product/optimized/graphite-tablet-1280.88415b9429e1.webp",
+            "width": 1280,
+            "height": 853,
+            "bytes": 264576
+          },
+          {
+            "src": "/images/product/optimized/graphite-tablet-1536.7cf555324ba5.webp",
+            "width": 1536,
+            "height": 1024,
+            "bytes": 369290
+          },
+          {
+            "src": "/images/product/optimized/graphite-tablet-1872.1b7c8a54cc5f.webp",
+            "width": 1872,
+            "height": 1248,
+            "bytes": 545594
+          }
+        ]
+      }
+    }
+  },
+  "sand": {
+    "original": "/images/product/textile-workbench-sand.webp",
+    "variants": {
+      "desktop": {
+        "avif": [],
+        "webp": [
+          {
+            "src": "/images/product/optimized/sand-desktop-960.7b1be9999303.webp",
+            "width": 960,
+            "height": 640,
+            "bytes": 98308
+          },
+          {
+            "src": "/images/product/optimized/sand-desktop-1440.f0ce0f0c167c.webp",
+            "width": 1440,
+            "height": 960,
+            "bytes": 178318
+          },
+          {
+            "src": "/images/product/optimized/sand-desktop-1536.230513fc1929.webp",
+            "width": 1536,
+            "height": 1024,
+            "bytes": 228556
+          }
+        ]
+      },
+      "mobile": {
+        "avif": [],
+        "webp": [
+          {
+            "src": "/images/product/optimized/sand-mobile-480.32af4f713482.webp",
+            "width": 480,
+            "height": 429,
+            "bytes": 41978
+          },
+          {
+            "src": "/images/product/optimized/sand-mobile-800.c778f2e60825.webp",
+            "width": 800,
+            "height": 714,
+            "bytes": 103446
+          },
+          {
+            "src": "/images/product/optimized/sand-mobile-1080.06d086ab6b8e.webp",
+            "width": 1080,
+            "height": 964,
+            "bytes": 161832
+          },
+          {
+            "src": "/images/product/optimized/sand-mobile-1147.fc343bef2c49.webp",
+            "width": 1147,
+            "height": 1024,
+            "bytes": 177506
+          }
+        ]
+      },
+      "tablet": {
+        "avif": [],
+        "webp": [
+          {
+            "src": "/images/product/optimized/sand-tablet-800.89a445cb13ad.webp",
+            "width": 800,
+            "height": 533,
+            "bytes": 81488
+          },
+          {
+            "src": "/images/product/optimized/sand-tablet-1280.5e38f01cdfc7.webp",
+            "width": 1280,
+            "height": 853,
+            "bytes": 177222
+          },
+          {
+            "src": "/images/product/optimized/sand-tablet-1536.230513fc1929.webp",
+            "width": 1536,
+            "height": 1024,
+            "bytes": 228556
+          }
+        ]
+      }
+    }
+  },
+  "palette": {
+    "original": "/images/product/markisenstoff-farbfaecher-petrol-terrakotta-oliv.webp",
+    "variants": {
+      "desktop": {
+        "avif": [
+          {
+            "src": "/images/product/optimized/palette-desktop-960.91b3a8e9bf8b.avif",
+            "width": 960,
+            "height": 353,
+            "bytes": 37179
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-1440.d53fc09fa372.avif",
+            "width": 1440,
+            "height": 530,
+            "bytes": 108360
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-1920.18c35967fc34.avif",
+            "width": 1920,
+            "height": 706,
+            "bytes": 214980
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-2880.50621cd0c3a2.avif",
+            "width": 2880,
+            "height": 1060,
+            "bytes": 462785
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-3392.48f5cbea98b6.avif",
+            "width": 3392,
+            "height": 1248,
+            "bytes": 791456
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/product/optimized/palette-desktop-960.d52c92a1dbd8.webp",
+            "width": 960,
+            "height": 353,
+            "bytes": 41212
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-1440.ccfbe553040b.webp",
+            "width": 1440,
+            "height": 530,
+            "bytes": 120658
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-1920.6870686287eb.webp",
+            "width": 1920,
+            "height": 706,
+            "bytes": 235334
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-2880.cdcead1f4755.webp",
+            "width": 2880,
+            "height": 1060,
+            "bytes": 530322
+          },
+          {
+            "src": "/images/product/optimized/palette-desktop-3392.113f15763062.webp",
+            "width": 3392,
+            "height": 1248,
+            "bytes": 843302
+          }
+        ]
+      },
+      "mobile": {
+        "avif": [
+          {
+            "src": "/images/product/optimized/palette-mobile-480.94404996c7c7.avif",
+            "width": 480,
+            "height": 428,
+            "bytes": 46018
+          },
+          {
+            "src": "/images/product/optimized/palette-mobile-800.0ae0d21ea616.avif",
+            "width": 800,
+            "height": 714,
+            "bytes": 193423
+          },
+          {
+            "src": "/images/product/optimized/palette-mobile-1080.257029921bbd.avif",
+            "width": 1080,
+            "height": 964,
+            "bytes": 376364
+          },
+          {
+            "src": "/images/product/optimized/palette-mobile-1398.3081818b430c.avif",
+            "width": 1398,
+            "height": 1248,
+            "bytes": 647272
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/product/optimized/palette-mobile-480.cccf62a2e76a.webp",
+            "width": 480,
+            "height": 428,
+            "bytes": 52720
+          },
+          {
+            "src": "/images/product/optimized/palette-mobile-800.cfcd0ca06f53.webp",
+            "width": 800,
+            "height": 714,
+            "bytes": 225628
+          },
+          {
+            "src": "/images/product/optimized/palette-mobile-1080.511422cd2be1.webp",
+            "width": 1080,
+            "height": 964,
+            "bytes": 417766
+          },
+          {
+            "src": "/images/product/optimized/palette-mobile-1398.e4ed23e76382.webp",
+            "width": 1398,
+            "height": 1248,
+            "bytes": 694044
+          }
+        ]
+      },
+      "tablet": {
+        "avif": [
+          {
+            "src": "/images/product/optimized/palette-tablet-800.268c68bba11d.avif",
+            "width": 800,
+            "height": 533,
+            "bytes": 115380
+          },
+          {
+            "src": "/images/product/optimized/palette-tablet-1280.4e0ba5a80483.avif",
+            "width": 1280,
+            "height": 853,
+            "bytes": 353689
+          },
+          {
+            "src": "/images/product/optimized/palette-tablet-1536.a426c6e1cf07.avif",
+            "width": 1536,
+            "height": 1024,
+            "bytes": 518323
+          },
+          {
+            "src": "/images/product/optimized/palette-tablet-1872.6eeeb4e938d5.avif",
+            "width": 1872,
+            "height": 1248,
+            "bytes": 807455
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/product/optimized/palette-tablet-800.a759d4876a8c.webp",
+            "width": 800,
+            "height": 533,
+            "bytes": 134784
+          },
+          {
+            "src": "/images/product/optimized/palette-tablet-1280.1d8417cb1156.webp",
+            "width": 1280,
+            "height": 853,
+            "bytes": 403960
+          },
+          {
+            "src": "/images/product/optimized/palette-tablet-1536.b737514b6828.webp",
+            "width": 1536,
+            "height": 1024,
+            "bytes": 580466
+          },
+          {
+            "src": "/images/product/optimized/palette-tablet-1872.6cbf325cc474.webp",
+            "width": 1872,
+            "height": 1248,
+            "bytes": 860770
+          }
+        ]
+      }
+    }
+  },
+  "hems": {
+    "original": "/images/product/hem-comparison-v1.webp",
+    "variants": {
+      "desktop": {
+        "avif": [],
+        "webp": [
+          {
+            "src": "/images/product/optimized/hems-desktop-960.eb8520646e11.webp",
+            "width": 960,
+            "height": 410,
+            "bytes": 8626
+          },
+          {
+            "src": "/images/product/optimized/hems-desktop-1440.029879ebe115.webp",
+            "width": 1440,
+            "height": 614,
+            "bytes": 30342
+          },
+          {
+            "src": "/images/product/optimized/hems-desktop-1920.4d9eba0bd63a.webp",
+            "width": 1920,
+            "height": 819,
+            "bytes": 85450
+          }
+        ]
+      },
+      "straight": {
+        "avif": [],
+        "webp": [
+          {
+            "src": "/images/product/optimized/hems-straight-480.cdd21b71be7d.webp",
+            "width": 480,
+            "height": 300,
+            "bytes": 14426
+          },
+          {
+            "src": "/images/product/optimized/hems-straight-640.3e7b9bf78559.webp",
+            "width": 640,
+            "height": 400,
+            "bytes": 31738
+          }
+        ]
+      },
+      "wave": {
+        "avif": [],
+        "webp": [
+          {
+            "src": "/images/product/optimized/hems-wave-480.b29c333dfbf2.webp",
+            "width": 480,
+            "height": 300,
+            "bytes": 12404
+          },
+          {
+            "src": "/images/product/optimized/hems-wave-640.16105d1ad73c.webp",
+            "width": 640,
+            "height": 400,
+            "bytes": 27518
+          }
+        ]
+      },
+      "scallop": {
+        "avif": [],
+        "webp": [
+          {
+            "src": "/images/product/optimized/hems-scallop-480.9683ec7984f3.webp",
+            "width": 480,
+            "height": 300,
+            "bytes": 11620
+          },
+          {
+            "src": "/images/product/optimized/hems-scallop-640.37b519a298f3.webp",
+            "width": 640,
+            "height": 400,
+            "bytes": 26660
+          }
+        ]
+      }
+    }
+  }
+}

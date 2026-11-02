@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import { writeFile } from "node:fs/promises";
 import { devices, expect, test } from "@playwright/test";
 
 const route = "/produkt";
@@ -266,7 +267,10 @@ test("iPhone keeps its frame after a sustained offscreen pause", async ({ browse
     if (await banner.isVisible()) await banner.getByRole("button", { name: "Alle ablehnen", exact: true }).click();
     const video = page.locator("#product-hero-video");
     await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime), { timeout: 20_000 }).toBeGreaterThan(1.5);
-    await page.evaluate(() => window.scrollTo({ top: 1800, behavior: "instant" }));
+    await page.locator(".editorial-video-hero__media").evaluate(el => window.scrollTo({
+      top: window.scrollY + el.getBoundingClientRect().bottom + 1, behavior: "instant"
+    }));
+    expect(await page.locator(".editorial-video-hero").evaluate(el => el.getBoundingClientRect().bottom)).toBeGreaterThan(0);
     await expect(video).toHaveJSProperty("paused", true);
     const stoppedAt = await video.evaluate(v => (v as HTMLVideoElement).currentTime);
     await page.waitForTimeout(1500);
@@ -314,11 +318,58 @@ test("iPhone crop stays fixed throughout the clip", async ({ browser, baseURL },
     }
     expect(new Set(positions).size).toBe(1);
     const crop = await page.locator(".editorial-video-hero__media").boundingBox();
-    expect(crop!.height).toBeLessThanOrEqual(390 * 1.6 + 1);
+    const sourceAspect = await video.evaluate(v => (v as HTMLVideoElement).videoWidth / (v as HTMLVideoElement).videoHeight);
+    // Portrait framing should retain at least 44% of the landscape frame's width.
+    expect(crop!.width / (crop!.height * sourceAspect)).toBeGreaterThanOrEqual(.44);
   } finally {
     await context.close();
   }
 });
+
+for (const [width, height] of [[320, 568], [375, 812], [390, 844], [430, 932], [540, 720], [768, 1366], [1024, 1366]]) {
+  test(`final inscription is centred for portrait ${width}x${height}`, async ({ browser, baseURL }, testInfo) => {
+    const context = await browser.newContext({ baseURL, viewport: { width, height }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+    try {
+      const page = await context.newPage();
+      await page.goto(route, { waitUntil: "domcontentloaded" });
+      const video = page.locator("#product-hero-video");
+      await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime), { timeout: 20_000 }).toBeGreaterThan(0);
+      await video.evaluate(v => { (v as HTMLVideoElement).pause(); (v as HTMLVideoElement).currentTime = (v as HTMLVideoElement).duration - 1 / 24; });
+      await expect(video).toHaveJSProperty("seeking", false);
+      const geometry = await video.evaluate(v => {
+        const video = v as HTMLVideoElement;
+        const box = video.getBoundingClientRect();
+        const scale = Math.max(box.width / video.videoWidth, box.height / video.videoHeight);
+        const offsetY = (box.height - video.videoHeight * scale) / 2;
+        return { width: innerWidth, height: innerHeight, scale, letteringTop: box.top + offsetY + 280 * scale, letteringBottom: box.top + offsetY + 318 * scale, objectPosition: getComputedStyle(video).objectPosition };
+      });
+      await page.screenshot({ path: testInfo.outputPath("final-centre.png"), style: "nextjs-portal { display: none; }" });
+      const geometryPath = testInfo.outputPath("final-centre-geometry.json");
+      await writeFile(geometryPath, JSON.stringify(geometry));
+      await testInfo.attach("final-centre-geometry", { path: geometryPath, contentType: "application/json" });
+      // Resolve the percentage and length portions independently of the focal-point formula.
+      const centre = await video.evaluate(v => {
+        const video = v as HTMLVideoElement;
+        const box = video.getBoundingClientRect();
+        const scale = Math.max(box.width / video.videoWidth, box.height / video.videoHeight);
+        const position = getComputedStyle(video).objectPosition;
+        const percent = Number(position.match(/([-\d.]+)%/)?.[1] ?? 0) / 100;
+        const pixels = Number(position.match(/\+\s*([-\d.]+)px/)?.[1] ?? 0);
+        return box.left + (box.width - video.videoWidth * scale) * percent + pixels + 630 * scale;
+      });
+      expect(Math.abs(centre - width / 2)).toBeLessThan(1);
+      const visibleSourceWidth = await video.evaluate(v => {
+        const video = v as HTMLVideoElement;
+        const box = video.getBoundingClientRect();
+        return box.width / Math.max(box.width / video.videoWidth, box.height / video.videoHeight);
+      });
+      expect(visibleSourceWidth).toBeGreaterThanOrEqual(570);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    } finally {
+      await context.close();
+    }
+  });
+}
 
 test("reduced motion does not fetch video until explicit play and live preference changes restore the poster", async ({ page }) => {
   const requests: string[] = [];
