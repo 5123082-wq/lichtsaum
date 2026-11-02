@@ -4,46 +4,114 @@
 ## Context Beacon
 
 - Last updated: 2026-11-02.
-- Published product: https://www.lichtsaum.com/produkt. Owner explicitly authorised publication.
-  Current code commit `ef08cc225346831ad18e3b14ab6193e2a42138dc` was pushed directly to origin/main;
-  Vercel `dpl_GcuodRgy2areW2yA71YZjE3PGiE4` is READY and assigned to www/apex.
-- Current page: five editorial chapters (video, textile/colour, shapes/configurator, questions,
-  project/enquiry). Shared navigation opens `/produkt`; the review route remains production 404.
-  Absolute self-canonical, own social metadata and one sitemap entry follow the existing search gate.
-- Startup correction (2026-11-02): normal loading shows the exact unlit first frame with the same
-  desktop/portrait crop as video. Reduced motion and media failure keep the illuminated poster.
-  Picture selection works before JavaScript and fetches only the selected cover. The old lit-ending
-  flash was reproduced live before the fix. Local 34 product checks across runs, ten route/SEO unit
-  tests, clean release lint/typecheck/build and all six live Chromium/WebKit startup checks pass
-  across the main run and corrected screenshot/network-wait fixture reruns. Live MP4 SHA-256 is unchanged.
-- Owner revision: original 6,070,629-byte silent 720p/240-frame video, no extra re-encoding;
-  public product-page AI/concept captions removed, including equivalent alt/ARIA wording.
-  Video resumes after offscreen/hidden pauses, respects manual pause and holds its illuminated ending.
-  Header handles intermediate widths/enlarged text; copy explicitly explains valance replacement.
-  Internal provenance belongs to `docs/content/product-media-provenance.md`.
-- Initial editorial release export: unchanged package/lock; no legacy Three.js scenes, raw source media,
-  promo, services prototype, local artifacts, secrets or environment files. Full lint, 226 unit tests,
-  typecheck and production build pass; 26 production-build Chromium/WebKit scenarios pass.
-  Earlier local runs cover 28 product and 48 shared header/hero scenarios.
-- Live QA: Chromium at 390/1440px passes content/alt, no overflow, final-frame playback,
-  configurator/enquiry links, full-page axe and zero JavaScript errors. Tracking query canonical,
-  sitemap, prototype 404 and AdsBot user-agent 200 verified. Downloaded MP4 SHA-256 matches source.
-  No optional Google request before consent or after rejection. No real lead/file/email was sent.
-- Existing production flags, providers, database and Ads settings were not changed. Existing
-  configurator v6 remains published; its contract belongs to `docs/architecture/configurator-calculation.md`.
-  Lead persistence/notification/files continue through Neon/Resend/private Blob; IONOS handles mailbox reception.
-- Local-only work remains: prior 3D/product studies, services HTML in
-  `DesignPrototip/prototypes/leistungen/`, promo notes in `docs/marketing/product-promo-20s.md`
-  and its editable/exported project under `output/`. These are not files of this release.
-- Evidence limits: physical-device Safari, field CWV, actual lead delivery/deduplication and current
-  Ads/Tag Assistant diagnostics remain untested. Earlier mobile lab results apply only to the rejected
-  smaller video encode. Owner publication authority does not verify unknown third-party media rights.
-- Next action: owner review of the corrected live startup; additional Ads final-URL changes or diagnostics
-  are separate tasks. The shared development watchdog on port 3000 remains available.
+- Published combined product release: https://www.lichtsaum.com/produkt. The owner explicitly
+  authorised the portrait-video work together with the other agent's image/carousel changes.
+  Application commit `64933773ffad2022fe780e8e300c25b3a2cc4236` and its corrective parent `e83e1f9`
+  were pushed directly to origin/main. Vercel `dpl_FuvxkDU7RmigL2dB3EF1ZCTnK1Az` is READY on www/apex.
+- Current page: five editorial chapters with shared navigation, own metadata/canonical and one
+  sitemap entry. `/prototyp/produkt` remains production 404; preview/local search policy is unchanged.
+- Published portrait hero: the final inscription is aligned from the measured source focal point
+  using actual CSS container dimensions. The wider portrait surface has a neutral #131313 fade;
+  time-driven horizontal shifts are removed. First-frame cover, reduced-motion/failure still,
+  preserved paused time, manual-pause guard and illuminated ending are retained. Original silent
+  6,070,629-byte video remains byte-identical. DESIGN.md owns geometry and presentation.
+- Published imagery/carousel: four approved masters use 71 prebuilt responsive derivatives with
+  hash-based immutable caching. Masters are unchanged. Near-chapter preload, decoding before
+  switching, latest-choice handling, retained frames on errors and retry are implemented.
+  Source/encoding details belong to `docs/content/product-media-provenance.md`.
+- Final exact release export passes full lint, TypeScript/build and all 226 unit tests. All 72
+  production-build Chromium/WebKit product/media scenarios pass. Manifest dimensions, byte lengths
+  and filename hashes validate for all 71 files. Existing package/lock versions are used.
+- Live QA passes Chromium desktop and Chromium/WebKit iPhone emulation: pause/resume/manual pause,
+  lit ending, responsive images, carousel, full-page axe, metadata, no overflow/runtime errors and
+  no optional Google requests before consent/after rejection. All 71 hash URLs return 200 with
+  immutable caching; sitemap, prototype 404, AdsBot 200 and original MP4 SHA-256 are verified.
+  Mobile screenshot pixel checks confirm centring. No real leads/uploads/emails were sent.
+- Existing production environment flags, Neon/Resend/private Blob, configurator prices and Google
+  tag/Ads settings are unchanged. No migration or new processor/data flow was introduced.
+- Inventory: the apparent 80k-line backlog is 80,305 lines in two vendored Three.js files for an
+  unused prototype. They and the previous 3D source, raw prototype/promo media, supplier PDFs,
+  unused public-image candidates and Three package additions remain local. Nothing was deleted
+  or hidden. Exact snapshot and release scope: `docs/architecture/release-inventory-2026-11-02.md`.
+- Evidence limits: physical-device iPhone/Safari, field CWV and actual lead delivery/deduplication
+  remain unverified. Earlier media lab numbers are not field results; ownership approval does not
+  independently verify unknown third-party media rights.
+- Next action: owner review of the live combined product page. Further prototype integration,
+  local-work cleanup, Ads final-URL changes and live conversion diagnostics are separate tasks.
+  The shared development watchdog on port 3000 remains available.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20261102-08 — Combined product release published after inventory review
+
+- Scope: portrait hero corrections, responsive image/carousel work, release inventory and owning documents.
+- Outcome: owner-authorised application commit `64933773ffad2022fe780e8e300c25b3a2cc4236` plus local corrective
+  parent `e83e1f9` were pushed directly to main; Vercel `dpl_FuvxkDU7RmigL2dB3EF1ZCTnK1Az` is READY on www/apex.
+  The reviewed code commit has 83 files, including 71 responsive images. Unused 80,305-line Three.js copies,
+  earlier prototypes, supplier PDFs and raw media stay local; no files were deleted or newly ignored.
+- Verification: exact export passes full lint, TypeScript/build, 226 unit tests and 72 product/media
+  Chromium/WebKit scenarios. Three live desktop/mobile profiles pass playback, carousel, full-page axe,
+  no runtime errors/overflow or optional Google traffic before consent/after rejection. All 71 assets
+  return 200 with immutable cache; canonical/social/sitemap, prototype 404, AdsBot and unchanged video
+  SHA-256 are checked. Mobile screenshot pixels confirm centring; screenshots reviewed.
+  No real leads, uploads or emails were sent. Existing flags/providers/Ads are unchanged.
+- Follow-up: physical devices, field CWV and live conversion diagnostics remain separate; excluded work
+  is itemised in `docs/architecture/release-inventory-2026-11-02.md`.
+
+### CHG-20261102-07 — Adaptive portrait centering of the final inscription
+
+- Scope: hero focal geometry, shared portrait surface, responsive browser checks and design contract.
+- Outcome: owner-approved local CSS anchors the final lettering at source x=630 to the horizontal
+  video centre. Source dimensions and actual container size determine the offset; no model list,
+  JavaScript resize loop or playback-time framing is used. The wider neutral composition also
+  covers portrait tablets. Video and both posters share the same alignment. Publication remains held.
+- Verification: all 22 targeted Chromium/WebKit checks pass, including seven portrait formats per
+  engine, pre-JavaScript poster selection, first-frame loading, static crop, pause/resume/manual pause
+  and ending. Independent pixel checks of all 14 final-frame screenshots show at most 0.5 CSS px
+  centre error with complete lettering; each format retains at least 570 source pixels of width.
+  TypeScript, scoped lint and diff checks pass. Original MP4 is unchanged; screenshots reviewed.
+- Follow-up: owner local review; real-device iPhone verification and publication remain separate.
+
+### CHG-20261102-06 — Responsive textile images and decoded carousel switching
+
+- Scope: four product image sets, static delivery/cache headers, carousel loading and regression coverage.
+- Outcome: local responsive AVIF/WebP derivatives preserve the approved masters and visible crops.
+  Desktop, Retina, tablet and phone use less image data; the current frame remains until its successor
+  decodes. Near-chapter preload, latest-choice handling and retry cover slow/error cases. Publication
+  remains held; the independent local iPhone/hero revision is preserved.
+- Verification: build and TypeScript pass; 235 unit tests pass with two workers after two initial
+  parallel-load timeouts. All application-source lint checks pass; unrestricted lint still encounters
+  pre-existing local artifact/vendor violations. Final production-build Chromium/WebKit passes 22 new
+  media checks; another 19 Chromium cases include product responsive layout, keyboard/touch, reduced
+  motion and full-page axe. All 71 derivative dimensions, lengths and filename hashes validate;
+  original SHA-256 values are unchanged. Before/after detail crops and rendered screenshots reviewed.
+  Slow-4G image-chapter checks and immutable headers pass; the shared port-3000 server remains 200.
+- Follow-up: owner local review and separate publication approval; physical-device and field results
+  remain unverified. Exact transfer evidence belongs to DESIGN.md.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
+### CHG-20261102-05 — Stable and wider local iPhone presentation
+
+- Scope: mobile video framing/fade, playback resumption and iPhone browser regressions.
+- Outcome: live iPhone emulation reproduced resetting to zero and four different horizontal crop
+  positions. Local commit `e83e1f9` reasserts the paused time and removes time-based framing.
+  Later owner revisions show more source width with a 125vw cap, an earlier 62% fade and a
+  neutral site-background transition instead of olive/green tint. Centering was discussed, not applied.
+  Publication is held at the owner's request; no push or production change occurred.
+- Verification: 14 focused Chromium/WebKit checks, ten Chromium regressions and a final two-case
+  iPhone rerun passed for the first correction; clean release lint, ten route/SEO unit tests and
+  TypeScript/build passed. The later wider composition passes six focused startup/iPhone checks
+  and a five-case Chromium responsive rerun; TypeScript/scoped lint pass. At least 44% source
+  width remains visible; pause is checked when the media exits but the hero text remains in view.
+  Start/middle/ending screenshots reviewed. The neutral-shade revision passes both iPhone crop
+  scenarios and the page accessibility check, including axe.
+- Follow-up: owner local review; real iPhone hardware and publication of this correction remain unverified.
+
 
 ### CHG-20261102-04 — First-frame cover removes the product startup flash
 
@@ -59,6 +127,7 @@
   Screenshots reviewed; downloaded MP4 remains byte-identical (6,070,629 bytes). Shared dev server returns 200.
 - Follow-up: physical-device Safari and field CWV remain unverified.
 
+
 ### CHG-20261102-03 — Product page published and verified live
 
 - Scope: editorial product page/media, shared navigation/header, search metadata/sitemap and release documentation.
@@ -72,6 +141,7 @@
   Screenshots reviewed; no real leads, uploads or emails sent. Shared dev server remains 200.
 - Follow-up: physical-device Safari, field CWV and live conversion/Ads diagnostics remain separate.
 
+
 ### CHG-20261102-02 — Original product video restored and provenance captions removed
 
 - Scope: original MP4 delivery, product media captions/alt/ARIA, related layout and owning documents.
@@ -82,9 +152,6 @@
   screenshots reviewed; the user's browser was reloaded and the dev server remains available.
 - Follow-up: owner publication decision; previous mobile lab measurements do not cover the restored file.
 
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261102-01 — Product audit corrections and publication candidate
 

@@ -15,12 +15,12 @@ they do not decide publication. Concrete public actions follow
 ## Agent brief
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
 - Current: dark architectural UI, self-hosted Hanken/JetBrains, orange actions and square geometry.
-- Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft.
+- Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft. Responsive imagery and decoded carousel switching are published.
 - Decision (2026-11-02): owner authorised publication with the original silent 6,070,629-byte video and no public AI/concept captions; provenance remains internal.
-- Current: video resumes after offscreen/hidden pauses, respects manual pause and holds its lit ending; reduced-motion/failure poster and explicit controls remain.
+- Current published portrait revision (2026-11-02): adaptive final-inscription alignment across portrait formats, wider video surface capped at 125vw with an earlier neutral bottom fade into the shared #131313 canvas. Paused time is reasserted before play to prevent iOS restarting offscreen media. Combined publication was owner-authorised and verified on 2026-11-02.
 - Current correction (2026-11-02): normal first paint uses the exact unlit opening frame with the same portrait crop as video; reduced-motion/failure retain the illuminated still. Picture selection works before JavaScript.
 - Current: header-only 64rem container query prevents clipping, including enlarged text. Lower chapters share one type scale; hero styling remains owner-approved.
-- Verified: 34 local product checks across runs and six live startup Chromium/WebKit checks across main/reruns pass; ten route/SEO unit tests, clean release lint and typecheck/build pass. Earlier 48 header/hero checks remain recorded.
+- Verified: the exact combined release passes 226 unit tests, full lint/typecheck/build and 72 product/media Chromium/WebKit checks; desktop and mobile live QA passes. Details belong to PROGRESS.md.
 - Open: physical-device Safari and field CWV; older mobile lab results cover the rejected smaller encode only. Local-only services/3D studies are not release dependencies.
 - Read full when: changing shared visual tokens, motion, responsive behavior or product presentation. Release facts belong to PROGRESS.md.
 <!-- AGENT_BRIEF:END -->
@@ -564,17 +564,57 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   Its desktop/portrait crop matches the opening video, preventing the previous lit-ending flash
   while the MP4 loads. A responsive picture selects the illuminated still for reduced motion
   before hydration and on media failure; only the selected poster is requested.
-  Mobile media occupies the upper 74% of the hero and blends into its dark base; a restrained
-  time-dependent crop follows the lettering. The slogan stays below the awning. Minimum heights
+  The published portrait revision anchors the final inscription to the horizontal centre for video
+  and both posters. The 1280 × 720 final frame has visible lettering at x=502..758, centred at
+  x=630. CSS container dimensions scale the 10-source-pixel offset from the geometric centre;
+  no per-model rules or playback-time updates are used. The shared portrait surface is capped
+  at min(70% of the hero, 125vw), retaining at least 45% of the landscape
+  source width on portrait phones. The bottom mask starts fading at 62%, lifting the blend into
+  the shared #131313 canvas. The former olive hero background and green-tinted overlays are
+  removed; neutral black provides shading and the mobile bottom fade is handled once by the media
+  mask. Playback controls use the shared background/surface tokens. The owner approved this
+  centering on 2026-11-02. Time-driven object-position updates are removed; only the source camera
+  moves. Chromium/WebKit checks cover seven portrait dimensions from 320 × 568 to 1024 × 1366;
+  independent screenshot pixel checks place the final lettering centre within 0.5 CSS px.
+  Container-relative units follow [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries), checked 2026-11-02.
+  Resumption reasserts the paused position before play because the iPhone profile reproducibly
+  reset to zero without this seek. Visibility follows the media surface rather than the entire
+  hero, so the shorter video pauses when its own band leaves view. Manual pause, ending,
+  reduced motion and failure behavior remain. The slogan stays below the awning. Minimum heights
   preserve content on short screens. The video is generated imagery, not a measured sample;
   the owner-requested product presentation has no public provenance caption.
 - Textile arrows still switch Gewebe, Verarbeitung and Farben manually, with touch/keyboard support.
+  `Decision` / published implementation (2026-11-02): prebuilt responsive sources cover all four
+  textile/shape images on desktop, tablet and phone. Desktop panoramas select enough pixels for
+  their height under `object-fit: cover`; tablet/portrait derivatives retain the previous visible
+  crop. Approved masters stay intact. Encoding and file records belong to the
+  [product media record](docs/content/product-media-provenance.md#responsive-derivatives).
+  Neighbouring carousel views load at low priority only near the chapter after the first image
+  decodes. The current image and copy stay visible until the requested image decodes; the most
+  recent arrow/touch choice wins. Failure preserves the current view and allows arrow retry.
+  Reduced motion disables the reveal; source selection works in server HTML without JavaScript.
   One generated `hem-comparison-v1.webp` now shows three graphite textile specimens with soft
   side lighting and natural shadows. Desktop uses the complete panorama; mobile stacks three
-  equal-width portions of that same image, cropped vertically around each specimen. HTML captions
+  pre-cropped equal-width portions of that same image, centred vertically around each specimen. HTML captions
   stay outside the raster. The imagery remains generated, not a confirmed collection; public
   provenance captions are omitted by the owner decision above.
   Current provenance: [product media record](docs/content/product-media-provenance.md). Exact prompt remains local-only at `DesignPrototip/prototypes/produkt/hem-comparison-prompt.md`.
+- `Verified` — local image transfer comparison, 2026-11-02. These totals cover the four unique
+  textile/shape subjects after visiting the carousel and shape section in cold Chromium contexts;
+  video, posters, fonts and JavaScript are excluded. Browser-selected source bytes:
+
+  | Viewport / density | Before | Responsive delivery | Reduction |
+  | --- | ---: | ---: | ---: |
+  | Desktop 1440px / DPR1 | 848,678 B | 400,997 B | 52.8% |
+  | Desktop 1440px / DPR2 | 2,075,454 B | 1,069,016 B | 48.5% |
+  | Tablet 768px / DPR2 | 2,075,454 B | 1,102,045 B | 46.9% |
+  | Phone 390px / DPR3 | 1,974,530 B | 856,825 B | 56.6% |
+
+  Production-build Chromium/WebKit verifies 320–1920px source selection, high-density cover,
+  preload gating, delayed/failed loads, retry, rapid choices and no-JavaScript WebP fallback.
+  A separate production-build Chromium run at 1.6Mbps/150ms measured 38–94ms arrow-to-heading
+  changes after the neighbouring images finished preloading, with a decoded image throughout.
+  This isolates the image chapter with reduced motion and describes lab checks, not field CWV.
 - `Decision` — before refining the exchange animation, the owner requested one static realistic
   awning view on the page background. After catalogue review, the model includes folding arms, fork joints, washers, wall brackets,
   a rear support rail and a fabric roller. Owner feedback changed the fixed view to front-left,
