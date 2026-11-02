@@ -41,6 +41,59 @@ test("integrated, substantive, noindex product; prototype remains available", as
   expect(normalizePlayback(await page.locator("main").innerText())).toBe(normalizePlayback(content));
 });
 
+for (const width of [390, 1440]) {
+  test(`first paint matches the unlit opening while video is loading at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    let releaseVideo!: () => void;
+    const videoGate = new Promise<void>(resolve => { releaseVideo = resolve; });
+    await page.route("**/videos/product/lichtsaum-orbit-v1.mp4", async request => {
+      await videoGate;
+      await request.continue();
+    });
+    const poster = page.locator(".editorial-video-hero__poster");
+    const video = page.locator("#product-hero-video");
+    try {
+      await page.goto(route, { waitUntil: "domcontentloaded" });
+      await expect.poll(() => poster.evaluate(el => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0)).toBe(true);
+      await page.screenshot({ path: testInfo.outputPath(`loading-${width}.png`) });
+      expect(await poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("orbit-start-v1.webp");
+      await expect(video).toHaveCSS("opacity", "0");
+      // The portrait cover and the first video frame must use the same crop.
+      expect(await poster.evaluate(el => getComputedStyle(el).objectPosition)).toBe(await video.evaluate(el => getComputedStyle(el).objectPosition));
+    } finally {
+      releaseVideo();
+    }
+    const consentBanner = page.getByTestId("consent-banner");
+    if (await consentBanner.isVisible()) await consentBanner.getByRole("button", { name: "Alle ablehnen", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Video pausieren", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Video pausieren", exact: true }).click();
+    expect(await video.evaluate(el => (el as HTMLVideoElement).currentTime)).toBeLessThan(2);
+    await expect(video).toHaveCSS("opacity", "1");
+    await page.screenshot({ path: testInfo.outputPath(`started-${width}.png`) });
+  });
+}
+
+test("poster matches motion preference before JavaScript runs", async ({ browser, baseURL }, testInfo) => {
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    const context = await browser.newContext({ baseURL, javaScriptEnabled: false, reducedMotion, viewport: { width: 390, height: 900 } });
+    try {
+      const page = await context.newPage();
+      const requested: string[] = [];
+      page.on("request", request => { if (/orbit-(?:start|poster)-v1\.webp|lichtsaum-orbit-v1\.mp4/.test(request.url())) requested.push(request.url()); });
+      await page.goto(route);
+      const poster = page.locator(".editorial-video-hero__poster");
+      await expect.poll(() => poster.evaluate(el => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0)).toBe(true);
+      const selected = reducedMotion === "reduce" ? "orbit-poster-v1.webp" : "orbit-start-v1.webp";
+      expect(await poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain(selected);
+      expect(requested.length).toBeGreaterThan(0);
+      expect(requested.every(url => url.includes(selected))).toBe(true);
+      await page.screenshot({ path: testInfo.outputPath(`before-javascript-${reducedMotion}.png`) });
+    } finally {
+      await context.close();
+    }
+  }
+});
+
 test("material views wrap and work with keyboard and touch", async ({ page }) => {
   await page.goto(route);
   const card = page.getByRole("group", { name: "Tuch & Farbe", exact: true });
@@ -122,6 +175,7 @@ test("reduced motion keeps the static poster and disables material transitions",
   await page.goto(route);
   await expect(page.locator("#licht img")).toBeVisible();
   await expect(page.locator("#licht video")).not.toHaveAttribute("src", /.+/);
+  expect(await page.locator(".editorial-video-hero__poster").evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("orbit-poster-v1.webp");
   await expect(page.locator(".editorial-facade")).toHaveCount(0);
   await page.getByRole("button", { name: "Tuch & Farbe: nächste Ansicht" }).click();
   await expect(page.locator(".editorial-study-media__entering")).toHaveCSS("animation-name", "none");
@@ -227,6 +281,7 @@ test("unavailable hero video keeps the illuminated poster and content", async ({
   await expect(page.locator(".editorial-video-hero__media")).toHaveAttribute("data-playing", "false");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator(".editorial-video-hero__poster")).toBeVisible();
+  await expect.poll(() => page.locator(".editorial-video-hero__poster").evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("orbit-poster-v1.webp");
   await expect(page.getByRole("link", { name: "Jetzt konfigurieren" })).toHaveAttribute("href", "/konfigurator");
 });
 

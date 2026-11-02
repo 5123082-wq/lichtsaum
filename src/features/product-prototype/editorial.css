@@ -42,6 +42,8 @@
 @media (max-width: 760px) {
   .editorial-video-hero { min-height: max(40rem, 100svh); }
   .editorial-video-hero__media { bottom: auto; height: 74%; }
+  .editorial-video-hero__media img { object-position: 65% center; }
+  .editorial-video-hero__media[data-failed="true"] img { object-position: center; }
   .editorial-video-hero__film { object-position: var(--inscription-position, 65%) center; }
   .editorial-video-hero__shade { background: linear-gradient(180deg, rgb(10 13 10 / 60%), transparent 22%, transparent 40%, #171915 76%); }
   .editorial-video-hero__content { padding-block: 23rem 7rem; }
@@ -187,6 +189,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .editorial-video-hero__media img { object-position: center; }
   .editorial-light-study__off, .editorial-study-arrows button { transition: none; }
   .editorial-study-media__entering { animation: none; }
 }

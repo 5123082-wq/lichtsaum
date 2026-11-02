@@ -1,9 +1,19 @@
 "use client";
 
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const videoSource = "/videos/product/lichtsaum-orbit-v1.mp4";
+const posterOptions = {
+  className: "editorial-video-hero__poster",
+  alt: "Caféfassade mit LICHTSAUM-Schriftzug auf dem Markisenvolant.",
+  fill: true,
+  loading: "eager",
+  fetchPriority: "high",
+  sizes: "(max-width: 760px) 135vh, 100vw"
+} as const;
+const { props: openingPoster } = getImageProps({ ...posterOptions, src: "/images/product/orbit-start-v1.webp" });
+const { props: illuminatedPoster } = getImageProps({ ...posterOptions, src: "/images/product/orbit-poster-v1.webp" });
 
 export function VideoHero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -69,10 +79,13 @@ export function VideoHero() {
   };
 
   return <header ref={heroRef} className="editorial-video-hero" id="licht" data-chapter="opening">
-    <div className="editorial-video-hero__media" data-playing={hasFrame}>
-      <Image className="editorial-video-hero__poster" src="/images/product/orbit-poster-v1.webp"
-        alt="Caféfassade mit beleuchtetem LICHTSAUM-Schriftzug auf dem Markisenvolant."
-        fill priority sizes="(max-width: 760px) 135vh, 100vw" />
+    <div className="editorial-video-hero__media" data-playing={hasFrame} data-failed={failed}>
+      <picture>
+        <source media={failed ? undefined : "(prefers-reduced-motion: reduce)"}
+          srcSet={illuminatedPoster.srcSet} sizes={illuminatedPoster.sizes} />
+        {/* getImageProps keeps responsive optimization; picture selects before hydration. */}
+        <img {...openingPoster} alt={posterOptions.alt} />
+      </picture>
       <video ref={videoRef} id="product-hero-video" className="editorial-video-hero__film"
         muted playsInline preload="none" aria-hidden="true" tabIndex={-1}
         onPlaying={() => { setPlaying(true); setHasFrame(true); setEnded(false); }}
