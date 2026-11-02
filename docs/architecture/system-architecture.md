@@ -12,6 +12,10 @@ flags below describe code behavior; they do not autonomously forbid or authorize
 - Owns: application stack, routes, rendering, environments, lead storage/uploads and notifications.
 - Current: Next.js 16 server-first app; unified lead records use Neon, private Blob and Resend;
   runtime capabilities remain environment-gated.
+- Current (2026-11-02): `/produkt` is published and verified on www.lichtsaum.com and follows the central
+  indexing gate. The shared header links to `/produkt` in every environment.
+  `/prototyp/produkt` shares its editorial component but retains production 404 and local/preview noindex.
+  The configurator link preserves its existing draft; there is no inline inscription input.
 - Open: final hosting/CMP facts and production choices remain owner decisions.
 - Read full when: changing framework boundaries, routes, runtime flags, persistence, uploads,
   notifications, environments or security boundaries.
@@ -63,6 +67,8 @@ fonts. Prefer built-in mechanisms over parallel SEO plugins.
 | Route | Purpose | Index policy |
 | --- | --- | --- |
 | `/` | Primary German landing | index |
+| `/produkt` | Editorial product details: textile, colour, shape and light; published and verified on 2026-11-02 | index/self-canonical and sitemap only through the central production indexing gate; otherwise noindex without canonical/social metadata |
+| `/prototyp/produkt` | Separate editorial design experiment; direct local/preview URL only, no menu entry; production returns 404 | noindex; no canonical/social inheritance; absent from sitemap |
 | `/konfigurator` | Server-reproduced preliminary B2B-net configurator and shared project inquiry | index |
 | `/referenzen` | Real project evidence | index when substantive |
 | `/kontakt` | Contact options and request entry | index |

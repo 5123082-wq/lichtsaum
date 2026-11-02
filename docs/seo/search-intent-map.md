@@ -8,9 +8,9 @@ Last reviewed: 2026-08-17
 ## Agent brief
 
 - Owns: German search-intent clusters, dated demand evidence and canonical route ownership.
-- Current: the homepage owns exact product/retrofit intent, `/konfigurator` owns preliminary-price
-  intent and `/referenzen` remains one gallery; the 2026-08-17 Keyword Planner sample does not
-  justify new landing pages.
+- Current: the homepage owns exact product/retrofit intent; the published `/produkt` page
+  supports textile/form/light exploration. `/konfigurator` owns preliminary-price intent and
+  `/referenzen` remains one gallery. No new keyword-demand evidence is implied.
 - Open: Search Console evidence, buyer vocabulary and detailed Planner metrics after real campaign
   activity.
 - Read full when: changing route ownership, keyword clusters or adding an indexable search page.
@@ -80,6 +80,17 @@ Full dated evidence and URLs are in
   terrace intent.
 - By owner decision, the homepage owns this intent; do not create the formerly proposed
   `/beleuchteter-markisen-volant` duplicate.
+
+### `/produkt`
+
+- Decision (2026-11-02): supporting product-detail page for textile, colour, shape and light,
+  published after owner-requested audit corrections and explicit publication approval.
+- Job: understand the valance replacement principle and compare illustrative design directions,
+  then open the existing configurator or project enquiry.
+- Primary CTA: `Jetzt konfigurieren`; secondary enquiry uses the existing shared form.
+- It does not replace the homepage's exact-category/compatibility pillar or the configurator's
+  preliminary-price job. No new query volume or proven ranking opportunity is asserted.
+- Actual Ads final-URL changes remain a separate owner action; existing campaigns are unchanged.
 
 ### `/konfigurator`
 

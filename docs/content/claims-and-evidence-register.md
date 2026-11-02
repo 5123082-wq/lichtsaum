@@ -5,6 +5,7 @@
 - Owns: допустимые публичные формулировки и evidence/status для цен, scope и иных claims.
 - Current: CLM-029 ограничивает `/konfigurator` предварительной B2B-netto ценой с видимыми оговорками; внутренние inputs и commercial coefficient не являются customer-facing claims.
 - Current: CLM-028 keeps 70/120/170 mm lettering limits. CLM-029 v6 includes one electrical set, excludes connection/installation/services; owner-authorised v6 publication verified on 2026-10-20.
+- Current: owner-authorised publication on 2026-11-02 extends the unchanged CLM-014 replacement wording to the `/produkt` introduction; no new technical claim is added.
 - Open: B2C/PAngV, Ads, Schema и общие price-range claims требуют отдельного решения и evidence.
 - Read full when: меняется публичная формулировка, статус claim, scope разрешённых поверхностей или доказательная база.
 <!-- AGENT_BRIEF:END -->
@@ -46,7 +47,7 @@ publication policy: [`../architecture/publication-governance.md`](../architectur
 | CLM-011 | Certification/award | Сертификат или награда | Trust | TBD | Issuer documentation | None | — |
 | CLM-012 | Public object gallery | Публичная галерея объектов | Visual evidence | Restricted | Owner approved the four current images for publication on 2026-08-10 | `/` and `/referenzen`; factual visible descriptions only; do not claim a completed LICHTSAUM project relationship; concept visual requires persistent disclosure | 2026-08-10 |
 | CLM-013 | `Beleuchteter Markisen-Volant für bestehende Gewerbemarkisen` | Светящийся волан для существующих коммерческих маркиз | Product/category | Approved | Final owner decision on 2026-08-10; O2 closed | Homepage metadata and Ads; may support accurate Schema where the selected type and visible content match; do not add as new visible hero copy | 2026-08-10 |
-| CLM-014 | `Der textile Volant wird durch einen individuell gestalteten Leuchtvolant ersetzt.` | Текстильный волан заменяется индивидуально оформленным светящимся воланом | Product/process | Approved | Final owner decision on 2026-08-10; retain current live wording; O2 closed | Landing `Eignung` / `Was sich ändert`; no adjacent qualifier required | 2026-08-10 |
+| CLM-014 | `Der textile Volant wird durch einen individuell gestalteten Leuchtvolant ersetzt.` | Текстильный волан заменяется индивидуально оформленным светящимся воланом | Product/process | Approved | Final owner decision on 2026-08-10; unchanged wording reused in owner-authorised product publication on 2026-11-02; O2 closed | Landing `Eignung` / `Was sich ändert` and `/produkt` introduction; no adjacent qualifier required | 2026-11-02 |
 | CLM-015 | `Mit individuellem Logo oder Schriftzug` | С индивидуальным логотипом или надписью | Product | Evidence received | Supplier catalogue supports artwork formats; owner/supplier contract and design limits still required | None | 2026-07-30 |
 | CLM-016 | Legacy flagship dimensions and flat 180 mm lettering cap | Прежние ограничения | Technical | Superseded | Replaced by owner instructions on 2026-10-20; current size contract is CLM-028 and architecture/configurator-calculation.md | Historical only | 2026-10-20 |
 | CLM-017 | `Aufmaß, Montage und Elektroanschluss aus einer Hand` | Замер, монтаж и электрика из одних рук | Service | TBD | Named contractors, territory, responsibility and warranty | None | — |

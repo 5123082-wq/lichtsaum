@@ -13,49 +13,15 @@ they do not decide publication. Concrete public actions follow
 
 <!-- AGENT_BRIEF:START -->
 ## Agent brief
-
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
-- Current: production UI follows the approved dark architectural direction. The mobile menu uses
-  a Safari-safe right-anchored two-way 260ms drawer transition, a separately fading backdrop and
-  one unchanged header wordmark; global input-modality handling prevents pointer-close focus
-  styling while keyboard focus remains visible, and reduced motion removes lateral travel. Real
-  Safari verification is open.
-  The full configurator
-  opens with a fixed technical concept background that fades into the left background while intro
-  content and the calculator scroll upward. Inside the calculator, one full-width preview precedes
-  three sequential sheets: an expanded panel and narrow labelled edges on desktop, stacked
-  full-width panels on mobile. Large step introductions and the separate progress strip are removed;
-  steps 01–02 navigate through sheet headers only and share a stable desktop height with aligned
-  service/PLZ rows; forward navigation always opens the adjacent step.
-  Step 01 repeats the homepage
-  mini-configurator's three-group layout, step 02 keeps all service choices visible, and price plus
-  specification appear only after both steps. Internal legal review markers are not part of the
-  visual system.
-- Current inquiry flow: mini and full configurators use a shared native dialog (desktop max 48rem,
-  below 64rem full screen while editing, compact and centered after acceptance); submission feedback becomes visible and receives focus after pending
-  settles, including retries. The homepage plain inquiry stays independent. The mini footer
-  prioritizes price continuation with a two-button desktop row and price-first mobile stack,
-  without routine captions below the buttons.
-- Current Wirkung: three rich concept scenes now open a native image viewer;
-  the original `Eine Fassade. Zwei Ansichten.` heading is retained; the revised images were published on 2026-10-05.
-- Current hero: the homepage header overlays the raised image and gains its surface on
-  scroll; the headline scrolls upward naturally, stays fully visible through 100px and fades by
-  320px as the next block enters, earlier on phones. The image slowly drifts downward until the following sections
-  fully cover its sticky stage, without a visible upward reversal, while the
-  softly lit lettering becomes bright. Native CSS scroll timelines own motion in supported browsers;
-  the fallback never compensates headline position. One cleaned derivative of the original PNG stays constant;
-  a transparent SVG uses Hanken Grotesk 800 outlines with 0.12em tracking and one perspective
-  transform. A crisp warm-white core and gradual halo use the footer light palette. Crop-aware image sizes and quality 90
-  preserve the available source detail on Retina phones. Reduced motion keeps a static illuminated scene.
-  Published on 2026-10-05; Chromium/WebKit production screenshots were reviewed.
-  Release evidence and remaining real-device/field checks belong to `PROGRESS.md`.
-- Open: working brand and remaining content inputs stay `TBD` where not owner-confirmed.
-- Current configurator: one height dropdown and dependent lettering limits follow
-  `docs/architecture/configurator-calculation.md`; the dark control rhythm is preserved.
-- Current palette: both configurators use ten fabric-inspired colours from one registry, with
-  generic German names and no supplier identity. Legacy white drafts migrate to Naturweiß.
-  Supplier independence and no copied fabric photos/striped designs are owner decisions (2026-10-04).
-- Read full when: changing the visual system, major page composition or cross-route UI contracts.
+- Current: dark architectural UI, self-hosted Hanken/JetBrains, orange actions and square geometry.
+- Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft.
+- Decision (2026-11-02): owner authorised publication with the original silent 6,070,629-byte video and no public AI/concept captions; provenance remains internal.
+- Current: video resumes after offscreen/hidden pauses, respects manual pause and holds its lit ending; reduced-motion/failure poster and explicit controls remain.
+- Current: header-only 64rem container query prevents clipping, including enlarged text. Lower chapters share one type scale; hero styling remains owner-approved.
+- Verified: 28 product and 48 header/hero Chromium/WebKit checks passed locally; final release export passes all 226 unit tests, full lint, typecheck/build.
+- Open: physical-device Safari and field CWV; older mobile lab results cover the rejected smaller encode only. Local-only services/3D studies are not release dependencies.
+- Read full when: changing shared visual tokens, motion, responsive behavior or product presentation. Release facts belong to PROGRESS.md.
 <!-- AGENT_BRIEF:END -->
 
 ## Stitch provenance
@@ -539,6 +505,189 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   `concept-visual` при постоянном disclosure. Концепт не является доказательством выполненных работ.
 - Desktop/mobile композиция и текущие focal points проверяются на фактически опубликованных
   изображениях.
+
+### Services prototype `/leistungen` — proposed
+
+- `Proposed` — owner requested a separate editable HTML presentation on 2026-10-07, using the
+  alternating image/text rhythm of `/referenzen` as a starting point. The local prototype is in
+  `DesignPrototip/prototypes/leistungen/index.html` (local-only: `DesignPrototip/prototypes/leistungen/index.html`).
+- One dominant Leuchtvolant feature is followed by unequal, staggered planning/design and
+  cleaning/fabric cards. Installation, repairs and new awnings have a quieter disclosure list;
+  a facade panorama leads into the project-check action. Existing colours, fonts and sharp edges
+  remain authoritative. The composition is a proposal, not an approved cross-route contract.
+- Mobile preserves the sequence in a single column, with restrained alternating card offsets
+  where space allows. Photo enlargement uses a native dialog with keyboard controls; optional
+  details use native disclosure elements. Reduced motion disables image zoom and smooth scroll.
+- Generated images are visibly labelled concepts. The existing object photo does not assert
+  LICHTSAUM project authorship. The enquiry action is a labelled local demonstration and sends
+  no data. No production route, navigation, metadata contract or sitemap was changed.
+- Editing, local preview, asset provenance, verification and open content/operational questions
+  are recorded in the prototype notes (local-only: `DesignPrototip/prototypes/leistungen/README.md`).
+
+### Editorial product `/produkt` and review route `/prototyp/produkt`
+
+- `Decision` — the owner requested an isolated review route on 2026-10-11 and authorised the
+  six-chapter refinement on 2026-10-20. Components remain in `src/features/product-prototype/`;
+  On 2026-11-01 the owner authorised local replacement of `/produkt` with the current version.
+  Both routes share `ProductEditorialPage`; the owner authorised publication on 2026-11-02. Route/publication boundaries belong to
+  [system architecture](docs/architecture/system-architecture.md#planned-routes).
+- `Decision` (2026-11-02): the owner requested the audit corrections and release preparation.
+  The candidate clarifies the replacement principle, uses `Gewebe & Struktur`, removes the
+  non-answer about care and changes internal-link indicators to `→`. The shared header's own
+  64rem container query keeps navigation compact until links and CTA fit, including enlarged text;
+  the homepage's unrelated 48rem layout breakpoint is unchanged.
+- `Decision`, later owner revision on 2026-11-02: restore the original silent 6,070,629-byte
+  video without re-encoding. Remove product-page AI/concept credits and illustrative-study labels,
+  including equivalent wording in alt/ARIA. Describe visible subjects neutrally; provenance remains
+  recorded internally. Material matching and object-specific availability explanations remain.
+  This does not change the separate proof/reference-gallery labelling contract.
+- `Verified` (2026-11-02): 28 product and 48 shared header/hero Chromium/WebKit scenarios pass
+  across the main runs and corrected parity-test rerun. Coverage includes 320–1920px product
+  layouts, intermediate header widths, 200% text, menu lifecycle, media playback/fallback,
+  keyboard/touch, enquiry/configurator navigation and axe. Screenshots were reviewed.
+  For the earlier 2.66 MB encode, one cold mobile lab run at 390px/DPR2, 1.6Mbps, 150ms latency and 4× CPU
+  slowdown measured LCP 2312ms, CLS 0.0001 and one tested interaction at 80ms. No runtime errors
+  or horizontal overflow occurred. These are historical lab observations, not measurements of the
+  restored original video, field CWV or measured field INP.
+- `Current` sequence: full-screen video opening → textile/colour with a short introduction
+  → shapes and configurator link → practical questions → project steps and enquiry.
+  Earlier awning/inscription studies below describe previous iterations, not current visible blocks.
+  The full sequence and copy direction belong to the [refinement brief](docs/content/product-page-refinement-brief.md).
+- `Decision` — the owner subsequently merged the opening and light scene into a viewport-height
+  video hero. The existing slogan sits lower-left over a soft dark gradient; the shared homepage
+  header starts transparent and gains its backing on scroll. The repeated light section is removed.
+  The Gemini clip plays once, silently, holds its illuminated ending and offers pause/replay.
+  Offscreen/hidden playback pauses and resumes from the same frame on return. Manual pause and
+  the completed ending prevent automatic restart; reduced motion starts with the lit poster and explicit play.
+  Mobile media occupies the upper 74% of the hero and blends into its dark base; a restrained
+  time-dependent crop follows the lettering. The slogan stays below the awning. Minimum heights
+  preserve content on short screens. The video is generated imagery, not a measured sample;
+  the owner-requested product presentation has no public provenance caption.
+- Textile arrows still switch Gewebe, Verarbeitung and Farben manually, with touch/keyboard support.
+  One generated `hem-comparison-v1.webp` now shows three graphite textile specimens with soft
+  side lighting and natural shadows. Desktop uses the complete panorama; mobile stacks three
+  equal-width portions of that same image, cropped vertically around each specimen. HTML captions
+  stay outside the raster. The imagery remains generated, not a confirmed collection; public
+  provenance captions are omitted by the owner decision above.
+  Current provenance: [product media record](docs/content/product-media-provenance.md). Exact prompt remains local-only at `DesignPrototip/prototypes/produkt/hem-comparison-prompt.md`.
+- `Decision` — before refining the exchange animation, the owner requested one static realistic
+  awning view on the page background. After catalogue review, the model includes folding arms, fork joints, washers, wall brackets,
+  a rear support rail and a fabric roller. Owner feedback changed the fixed view to front-left,
+  slightly elevated: the left edge is closer/larger and the valance is the primary visible surface;
+  underside hardware remains in the model but is mostly concealed. The revised span/projection
+  ratio is about 1.74, with unchanged hardware cross-sections and a more distant 22° camera.
+  Lettering uses the same 8:1 aspect ratio as its texture, removing horizontal glyph stretching. Warm grey woven cloth contrasts with a dark coated metal frame;
+  flat sewn overlaps, restrained tension ripples and soft arm shadows replace heavy raised seams.
+  Studio environment reflections and a soft grounding shadow sit on a transparent canvas.
+  Playback, stage selection and rotation are absent. Rendering occurs only on load, resize or
+  inscription changes; lazy loading and resource disposal remain. A transparent WebP of the same
+  study covers unavailable WebGL. This is an illustrative model, not verified construction.
+  The previous exchange renderer is retained for later animation work. The owner wants a reversible
+  scroll-controlled exchange followed by the next section covering the pinned scene; this is still
+  deferred pending static model review and confirmation of the real attachment mechanism.
+  Source/provenance: awning study (local-only: `DesignPrototip/prototypes/produkt/awning-study.md`).
+- The inscription input now closes the design chapter; its button is `Jetzt konfigurieren`.
+  Valid input still updates the scene's textures and the HTML text preview. Reading a saved draft
+  does not write or migrate it. Continuing transfers only the inscription into the latest draft,
+  retaining dimensions/styling/services. Empty input preserves the draft; blocked storage offers
+  explicit continuation without transfer. No text enters URLs or analytics. No separate price section.
+- Questions use native details. The closing enquiry section uses two columns (visitor input /
+  provider clarification), then one explicit form-opening CTA. Service discussions remain a
+  quiet text link below it; copy ownership is in the product refinement brief.
+  Services are a quiet closing link to `/kontakt`, replacing the temporary port-4174 destination.
+- Local Hanken/JetBrains, dark tokens and square geometry remain. Typography, spacing and section
+  scale were adjusted for the new hierarchy. Copy/specifications and final media still need owner review.
+  Verification evidence belongs to `PROGRESS.md`.
+
+### Product refinement direction 2026-10-20
+
+- Status: `Proposed` production treatment; `Decision` owner preference for a markilux-like camera
+  movement and a single composition comparing several hem shapes. The six-chapter local
+  iteration now uses the Gemini draft in a full-screen opening; final production media remains open.
+  The content sequence and media preparation tasks live in the
+  [refinement brief](docs/content/product-page-refinement-brief.md).
+- Preserve the current dark architectural tokens, local typefaces, square geometry and restrained
+  overlays. This scoped proposal does not change the homepage hero or the global visual system.
+- Proposed light scene: one commercial facade and one awning at dusk; a slow, shallow camera arc
+  from a three-quarter view towards a near-frontal readable inscription. No full orbit, fast cuts,
+  RGB cycling or implied terrace floodlighting. The illuminated lettering is the subject.
+- Proposed 8–12-second storyboard: establish the unlit awning for about 2 seconds; move gently
+  while the lettering turns on for 3–4 seconds; settle and hold the lit name for 3–4 seconds.
+  Exact duration/angle are chosen from a rough camera test. No change of facade, lettering or fabric
+  geometry between frames; bloom must preserve letter edges and textile detail.
+- Three approval frames: initial unlit three-quarter view, moving lit detail, final readable facade.
+  A generated review set (local-only: `DesignPrototip/prototypes/produkt/light-keyframes/README.md`) is ready:
+  the middle view proposes a gentle approach before easing back to the final facade. These
+  separate AI stills contain small geometry/detail variations; continuous motion remains unverified.
+  The owner liked the scene but rejected the planar animatic (local-only: `DesignPrototip/prototypes/produkt/light-keyframes/motion-notes.md`)
+  as a substitute for an orbit. The current Gemini video draft and review (local-only: `DesignPrototip/prototypes/produkt/light-keyframes/gemini-video-v1.md`)
+  show changing perspective towards a near-frontal view and the lettering turning on.
+  It is a 10s, 720p, 24fps source. The original silent passthrough copy (6,070,629 bytes, 240 frames)
+  is restored after the owner rejected the smaller lossy encode; the source and lit WebP poster
+  remain. Restoration was checked byte for byte; browser playback and mobile framing are checked.
+  Full-scene geometric consistency,
+  physical-device composition and final delivery quality remain open.
+  Produce a desktop landscape master and a mobile composition that retains the whole relevant name;
+  do not rely on centre-cropping the landscape export. Media provenance remains in the internal record.
+- Implemented local delivery is a self-hosted prerendered clip with a static lit poster. Playback:
+  once when in view, silent, with pause/replay; no forced scroll scrubbing. Offscreen/hidden pauses
+  resume from the same frame on return, unless manually paused, completed or reduced motion is active.
+  Reduced motion or playback failure keeps the static poster and the complete HTML explanation.
+  Media dimensions are reserved and video loads on first visibility unless reduced motion is active.
+  An explicit play control covers autoplay restrictions. Production encoding/performance assessment remains open.
+- Shape composition: three separated textile specimens at matched scale, fabric colour and
+  frontal viewpoint, showing straight, wavy and scalloped hems against the site's dark surface.
+  Use soft side lighting, restrained shadows and generous separation; avoid overlapping lower
+  edges or a perspective that prevents comparison. This is a material study, not a catalogue claim.
+  Keep names outside the raster image as HTML. For mobile, recompose the same specimens vertically
+  or in a legible compact arrangement; do not squeeze the desktop strip into unreadable thumbnails.
+
+### Previous product page — superseded by the editorial release on 2026-11-02
+
+The following records the former design. The current `/produkt` uses the editorial presentation above.
+
+- `Proposed` — on 2026-10-10 the owner requested a compact product page prototype following
+  the agreed five-part story: close-up, product explanation, individual expression, a quiet
+  service bridge and project steps. Editable HTML (local-only: `DesignPrototip/prototypes/produkt/index.html`).
+- Product imagery leads; cleaning, fabric replacement and installation have only short contextual
+  text and links to the sibling services prototype. No service before/after imagery is used.
+- The integrated hero is compact and text-only: a product heading and one anchor to the 3D
+  scene, without a hero image, explanatory paragraph or chapter navigation. The original
+  prototype paired type with a textile close-up. The product explanation uses
+  a procedural three-quarter 3D awning: the old valance slides out, the new one slides in and
+  the lettering lights up. Native timeline/phase controls, pointer rotation and 3D/front views
+  expose the sequence in the original prototype. In the integrated scene, the initial view is
+  frontal; a shaded curved ribbon replaces the view switch with left/right rotation buttons.
+  Drag and keyboard arrows also rotate the model. Both valances and the canopy share one fabric
+  colour; front/rear tubes use a dark-grey diffuse matte coating. Phase cards remain below the
+  timeline; no duplicate phase caption or number overlays the 3D scene.
+  One initial play, idle/offscreen pause, reduced motion and a static fallback
+  keep the interaction bounded. The presentation continues as four independent vertical blocks:
+  appearance on the facade, fabric/colour, hem shape and lighting. Each topic owns its own image
+  and translucent text panel. Fabric, shape and lighting use previous/next arrows without a
+  bottom row of labelled buttons or a visible slide counter;
+  changing one does not reset another. No global topic carousel or autoplay is used.
+  Each topic uses its own composition: cloth rolls/cutting-table/sample arrangements for textile,
+  a daylight view of the front rail and lower edge for shape, and the nighttime close-up for light.
+  A separate on/off control preserves the selected light tone; this is a visual study, not a claim
+  that the manufactured product changes colours. Copy uses concise product descriptions.
+  Mobile panels sit across the lower part of each scene, keeping the product detail above them.
+  Every image is visibly labelled as a concept and does not establish construction evidence.
+- Existing dark surfaces, local Hanken/JetBrains fonts, orange actions and square geometry remain.
+  Responsive behaviour, the native non-sending enquiry preview and scope boundaries are recorded
+  in the prototype notes (local-only: `DesignPrototip/prototypes/produkt/README.md`).
+- `Decision` — on 2026-10-11 the owner requested local application integration. The route now
+  uses the existing shared header/footer and action styles. `Produkt` opens `/produkt` in
+  non-production environments; production keeps its existing target until release approval.
+  Prototype enquiry placeholders are replaced by links to the existing `/#projekt-pruefen` form;
+  configurator and contact stay on local routes. Service discussions lead to `/kontakt` or the
+  project form while `/leistungen` remains a separate prototype.
+- The native TypeScript scene preserves the 30% slimmer front profile and matte tubes. It loads
+  near the viewport, disposes GPU resources/listeners on navigation and keeps the static fallback.
+  Presentation controls use React state and independent keyboard/manual navigation. WebP media
+  use Next Image responsive delivery; original generation provenance remains with the prototype.
+- Public copy, material/light specifications and service scope still need final owner review.
+  Local integration does not authorize production publication.
 
 ### Marker loop
 

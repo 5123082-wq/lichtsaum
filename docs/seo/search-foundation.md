@@ -14,6 +14,10 @@ Last reviewed: 2026-08-12
 - Owns: canonical, metadata, robots, sitemap and indexability contracts.
 - Current: one central environment gate plus exact canonical-origin validation controls production
   indexing; the apex host redirect is source-controlled in `vercel.json`.
+- Current (2026-11-02): `/produkt` has an explicit absolute self-canonical, own social
+  metadata and one sitemap URL through the existing production indexing gate; shared navigation
+  points to it. Published and verified live; local/preview stay noindex without canonical/social output.
+- Current: `/prototyp/produkt` retains its production 404 and non-indexable review boundary.
 - Open: the concrete production indexing and Search Console actions remain owner decisions.
 - Read full when: changing URLs, canonical behavior, robots, sitemap or indexing controls.
 <!-- AGENT_BRIEF:END -->
@@ -54,6 +58,14 @@ preferred `www` host. By owner decision on 2026-08-10, `/` owns the exact
 product intent in v1 and is the Google Ads landing URL. Do not create the previously proposed
 `/beleuchteter-markisen-volant` route unless a later owner decision gives the homepage a genuinely
 different purpose and authorizes a substantive separate product page.
+
+On 2026-11-02 the owner authorised publication of `/produkt` after the audit corrections.
+The editorial route is published in production and linked from
+the shared navigation. It uses the same production indexing gate as other public routes, with an
+explicit absolute self-canonical, route-specific title/description and social metadata, and one
+clean sitemap entry. Local/preview remain noindex without canonical/social output; the separate
+`/prototyp/produkt` review URL still returns 404 in production. Live canonical/social/robots, sitemap,
+tracking query and AdsBot user-agent 200 were verified. Campaign URLs/settings were unchanged. The page's supporting role is defined in [search-intent-map.md](search-intent-map.md#produkt).
 
 `/konfigurator` is the clean canonical URL for the implemented full tool. Configuration, PLZ,
 contacts and files are never placed in its query string. Harmless tracking parameters canonicalize
@@ -177,6 +189,8 @@ Status: `Verified` locally on 2026-08-12; not deployed by this audit
 - The substantive `/konfigurator` route follows the same central indexing gate and is included as
   one clean canonical sitemap URL. Its H1, explanation and calculation limitations are
   server-rendered; `Product` and `Offer` structured data remain absent.
+- The published `/produkt` route follows that same gate with route-specific metadata and one
+  self-canonical sitemap URL; it adds no unverified `Product`/`Offer` structured data.
 - The minimal site graph is limited to verified `Organization` and `WebSite` facts and is emitted
   only through the same indexing gate.
 - Indexable inner routes publish route-specific Open Graph and Twitter metadata; previews and

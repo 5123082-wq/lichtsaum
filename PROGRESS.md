@@ -3,62 +3,283 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-10-20
-- Current calculator release: owner-approved v6 uses only 600/1000/1200 mm panels at EUR
-  450/600/750, valance EUR 45/50/55 per metre for 200/250/300 mm heights, and one EUR 150
-  electrical set per configuration. Connection/installation/services remain excluded.
-  The 6000 × 300 mm CÄCILIE example returns EUR 1080 net. Published and verified on 2026-10-20.
-  Code commit `ee63a655f039685d5e81417855ea20498815d909` deployed as
-  `dpl_ERizcC1UizV1mDeR7aS8vJJDiXTz` (READY, www.lichtsaum.com and lichtsaum.com).
-  See `docs/architecture/configurator-calculation.md`. Previous v5 release is recorded below.
-- Previous calculator release: supplier-based pricing `2026-10-20.v5` is implemented.
-  Both configurators select 200/250/300 mm and preset letters to the corresponding maximum
-  70/120/170 mm; smaller lettering is allowed, excess is blocked on client and server.
-  Five panel widths from the supplier workbook retain automatic equal-panel allocation.
-  Preliminary net price is valance plus panels at purchase +50%; electrical equipment,
-  connection and services are explicitly excluded and calculated separately.
-  The owner's 6000 × 300 mm CÄCILIE example now returns EUR 1264.58 net.
-  See `docs/architecture/configurator-calculation.md`. Published on 2026-10-20; production Chromium/WebKit checks pass.
-  Code commit `6b14cd32a8a09b7df82f2e6c2146d7c31835191e` was deployed as
-  `dpl_B5SzdkhMC71KV2CXWUyAXiawphjG` (READY, www.lichtsaum.com and lichtsaum.com).
-- Published configurator: the full configurator uses compact sequential sheets with desktop side edges,
-  mobile stacked panels and a shared preview. The large step introductions and separate progress
-  strip are removed; steps 01–02 use sheet headers without duplicate bottom buttons. The next
-  desktop edge is 10% wider, its companion 10% narrower; forward navigation always uses the adjacent step.
-  Steps 01–02 share a stable desktop height; larger service cells and the PLZ field use aligned rows. Default steps 01–02 fit with the preview at 1440×900. See `DESIGN.md`.
-- Local verification: 30 configurator Chromium/WebKit checks cover 320–1920px, progression guards,
-  state retention, keyboard focus, reduced motion and accessibility. Typecheck, scoped lint and
-  production build pass. Published on 2026-10-09; production smoke checks passed.
-- Previous release: owner-authorised site changes were published on 2026-10-05. Release includes the illuminated hero/header, Wirkung concept
-  viewer and revised images, shared ten-colour palette, mini price/inquiry actions and compact
-  inquiry receipt with visible submission feedback. Existing production flags and providers
-  remain unchanged. GTM/Ads publication and real synthetic inquiries are separate actions.
-- Verification: 196 unit tests, typecheck, full lint and production build passed. Chromium/WebKit
-  suite passed 151 checks; all three stale colour/delay expectation failures passed on rerun. Two local consent tests skipped because optional tags are dormant locally.
-- Publication: site commit `a4675154eaafa5cb26296772a204659a80d25806` matches origin/main
-  after direct Git push/fetch. Vercel deployment `dpl_DKGhCFd6CP7THxtCBFXHNGuYcKvD` is READY
-  and assigned to www.lichtsaum.com and lichtsaum.com. Local screenshots, unrelated agent output,
-  tmp/, secrets and environment files were excluded. No database migration was performed.
-- Evidence boundaries: generated images are concepts, not customer projects. Owner publication
-  authority is recorded separately from documentary verification of underlying media rights.
-  Real-device Safari, mobile keyboard, field CWV and conversion deduplication remain unverified.
-- Existing production: LICHTSAUM on Vercel; lead persistence/notifications use Neon/Resend, files
-  use private Blob. Mail for info@lichtsaum.com is received/stored by IONOS. Google Ads remains
-  under its separately approved settings; see docs/marketing/google-ads-search-test-2026-09-06.md.
-- Other tracks: /konfigurator SEO K1–K4 is implemented; /referenzen research/copy remains open.
-  Keyword Planner evidence does not justify additional landing pages.
-- Production QA: Chromium/WebKit at 390px and 1440px passed homepage/configurator, media,
-  gallery and inquiry dialogs, absolute self-canonicals, zero detected WCAG violations and zero
-  runtime errors. Consent rejection works; no optional Google request occurred before consent
-  or after rejection. Other public routes/media return 200; robots allows Googlebot/AdsBot,
-  sitemap uses the production domain, missing page returns 404 and apex redirects with 308.
-  Screenshots reviewed. No real lead, file upload or email delivery was tested in this release.
-- Next action: real-device/field and controlled delivery/conversion verification remain separate. Real-device/field checks and
-  controlled delivery/conversion verification remain separate work. Keep localhost available.
+- Last updated: 2026-11-02.
+- Published product: https://www.lichtsaum.com/produkt. Owner explicitly authorised publication.
+  Code commit `f91184edadb02acc60c1294fd08d3654b2e7cdac` was pushed directly to origin/main;
+  Vercel `dpl_6n7efxFZV1KEgHjMP2DjMXwTGfZY` is READY and assigned to www/apex.
+- Current page: five editorial chapters (video, textile/colour, shapes/configurator, questions,
+  project/enquiry). Shared navigation opens `/produkt`; the review route remains production 404.
+  Absolute self-canonical, own social metadata and one sitemap entry follow the existing search gate.
+- Owner revision: original 6,070,629-byte silent 720p/240-frame video, no extra re-encoding;
+  public product-page AI/concept captions removed, including equivalent alt/ARIA wording.
+  Video resumes after offscreen/hidden pauses, respects manual pause and holds its illuminated ending.
+  Header handles intermediate widths/enlarged text; copy explicitly explains valance replacement.
+  Internal provenance belongs to `docs/content/product-media-provenance.md`.
+- Final release export: unchanged package/lock; no legacy Three.js scenes, raw source media,
+  promo, services prototype, local artifacts, secrets or environment files. Full lint, 226 unit tests,
+  typecheck and production build pass; 26 production-build Chromium/WebKit scenarios pass.
+  Earlier local runs cover 28 product and 48 shared header/hero scenarios.
+- Live QA: Chromium at 390/1440px passes content/alt, no overflow, final-frame playback,
+  configurator/enquiry links, full-page axe and zero JavaScript errors. Tracking query canonical,
+  sitemap, prototype 404 and AdsBot user-agent 200 verified. Downloaded MP4 SHA-256 matches source.
+  No optional Google request before consent or after rejection. No real lead/file/email was sent.
+- Existing production flags, providers, database and Ads settings were not changed. Existing
+  configurator v6 remains published; its contract belongs to `docs/architecture/configurator-calculation.md`.
+  Lead persistence/notification/files continue through Neon/Resend/private Blob; IONOS handles mailbox reception.
+- Local-only work remains: prior 3D/product studies, services HTML in
+  `DesignPrototip/prototypes/leistungen/`, promo notes in `docs/marketing/product-promo-20s.md`
+  and its editable/exported project under `output/`. These are not files of this release.
+- Evidence limits: physical-device Safari, field CWV, actual lead delivery/deduplication and current
+  Ads/Tag Assistant diagnostics remain untested. Earlier mobile lab results apply only to the rejected
+  smaller video encode. Owner publication authority does not verify unknown third-party media rights.
+- Next action: owner review of the live product page; additional Ads final-URL changes or diagnostics
+  are separate tasks. The shared development watchdog on port 3000 remains available.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20261102-03 — Product page published and verified live
+
+- Scope: editorial product page/media, shared navigation/header, search metadata/sitemap and release documentation.
+- Outcome: owner-authorised code commit `f91184edadb02acc60c1294fd08d3654b2e7cdac` matches origin/main after
+  direct push/fetch; Vercel `dpl_6n7efxFZV1KEgHjMP2DjMXwTGfZY` is READY on www.lichtsaum.com and lichtsaum.com.
+  Original video and owner-requested caption removal are live. Existing flags/providers/Ads unchanged.
+- Verification: exact release export passes full lint, 226 unit tests, typecheck/build and 26 Chromium/WebKit
+  browser scenarios. Live Chromium 390/1440 checks pass: full-page axe, zero runtime errors/overflow,
+  video ending, configurator/enquiry links, canonical/social/robots, sitemap, prototype 404, AdsBot 200,
+  byte-identical downloaded video and no optional Google traffic before consent/after rejection.
+  Screenshots reviewed; no real leads, uploads or emails sent. Shared dev server remains 200.
+- Follow-up: physical-device Safari, field CWV and live conversion/Ads diagnostics remain separate.
+
+### CHG-20261102-02 — Original product video restored and provenance captions removed
+
+- Scope: original MP4 delivery, product media captions/alt/ARIA, related layout and owning documents.
+- Outcome: original 6,070,629-byte silent video is restored without re-encoding. Product-page
+  AI/concept/illustrative-study labels are removed; neutral German descriptions remain. No publication.
+- Verification: byte-for-byte comparison and ffprobe confirm 1280 × 720, 240 frames and 10 seconds;
+  all 28 Chromium/WebKit product scenarios, typecheck and scoped lint pass. Desktop/mobile
+  screenshots reviewed; the user's browser was reloaded and the dev server remains available.
+- Follow-up: owner publication decision; previous mobile lab measurements do not cover the restored file.
+
+### CHG-20261102-01 — Product audit corrections and publication candidate
+
+- Scope: responsive header, editorial copy, video delivery, product metadata/navigation/sitemap,
+  tests and owning design/architecture/content/search contracts.
+- Outcome: navigation no longer clips at 768px or enlarged text; replacement principle is explicit,
+  three useful FAQs remain, internal arrows are clear. `/produkt` is production-ready in source
+  behind the existing search gate; the prototype remains private. Video is 56% smaller. No publication.
+- Verification: 235 unit tests; 28 product and 48 header/hero Chromium/WebKit scenarios pass across
+  runs/reruns; optimized build/TypeScript, source/tests lint and rendered production SEO fixture pass.
+  One mobile lab run: LCP 2312ms, CLS 0.0001, tested interaction 80ms; screenshots reviewed.
+  Full-repository lint retains existing vendor/service-artifact issues outside this scope.
+- Follow-up: owner publication decision; real-device/field CWV and live Ads/conversion diagnostics.
+
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
+### CHG-20261101-06 — Resume product video after scrolling back
+
+- Scope: shared video hero, playback browser tests and DESIGN.md.
+- Outcome: automatic offscreen/hidden pauses resume from the same frame; manual pause remains
+  paused and the completed video holds its illuminated ending. Reduced-motion/failure fallback retained.
+- Verification: 12 Chromium/WebKit scenarios pass, including manual pause, resumption and ending at
+  390/1440px; screenshots reviewed, typecheck/scoped lint pass. Existing dev server still returns 200.
+- Follow-up: physical-device Safari remains unverified; no publication.
+
+
+### CHG-20261101-05 — Approved product fabric and colour images
+
+- Scope: two local product media assets, image dimensions/alt/sizes, mobile framing and source record.
+- Outcome: approved 3392 × 1248 originals appear as responsive WebP; warm palette colours and fabric roll
+  remain visible on mobile. Existing carousel, typography and video preserved; no publication.
+- Verification: typecheck/scoped lint and 14 final Chromium/WebKit scenarios pass at 320–1920px,
+  including axe, keyboard/touch and noindex. Earlier motion/playback checks pass; screenshots reviewed.
+- Follow-up: owner review of local rendering; physical-device Safari remains unverified.
+
+### CHG-20261101-04 — Clearer first-contact section on the product page
+
+- Scope: closing product copy/layout, navigation tests, DESIGN.md and content brief.
+- Outcome: two clear roles replace three abstract process steps; optional preparation is explicit,
+  the button opens the existing enquiry form, and services remain a secondary text link.
+- Verification: all 24 Chromium/WebKit scenarios pass at 320–1920px, including axe and navigation;
+  desktop/mobile screenshots inspected, scoped lint and diff check pass. No form submission.
+- Follow-up: owner copy/visual review; no publication.
+
+### CHG-20261101-03 — Product configurator invitation with atmospheric backdrop
+
+- Scope: editorial invitation, shared desktop header CTA width, responsive browser checks and DESIGN.md.
+- Outcome: larger copy explains configuration and preliminary price; existing concept image softly
+  dissolves behind it. CTA aligns with the header's right edge and matches its dimensions. Mobile stacks.
+- Verification: 24 product scenarios passed across main run and motion-test follow-up; 30 header
+  scenarios passed. CTA bounds/dimensions checked, screenshots reviewed, typecheck and scoped lint pass.
+  WebKit motion test now waits for the intermediate preference to render; three reruns passed.
+- Follow-up: owner visual review; no publication or enquiry submission.
+
+### CHG-20261101-02 — Unified product typography below the video
+
+- Scope: product editorial CSS and typography contract in DESIGN.md.
+- Outcome: one scale for section headings, body, lead text, FAQ and captions; original grid,
+  media and animation retained. Owner-approved video hero type and colours remain unchanged.
+- Verification: 23/24 Chromium/WebKit scenarios passed initially; live reduced-motion WebKit
+  case passed on isolated rerun. Layouts 320–1920px, axe and navigation checked; screenshots reviewed.
+- Follow-up: owner visual review; physical-device Safari remains unverified.
+
+
+### CHG-20261101-01 — Latest editorial product integrated locally
+
+- Scope: `/produkt`, shared editorial page, review route, route/browser tests and current documentation.
+- Outcome: `/produkt` displays the latest prototype with the same video and styling; both routes
+  share the presentation. Production remains blocked and noindex; no Git push or deployment.
+- Verification: optimized build, typecheck, scoped lint, 11 unit tests and all 24 Chromium/WebKit
+  scenarios passed across the main run and corrected navigation rerun. Responsive screenshots reviewed.
+  The dev Fast Refresh loop was resolved by preserving/resetting its cache; Chromium/WebKit
+  navigation reruns on port 3000 passed and the shared watchdog remains available.
+- Follow-up: owner local review; physical-device Safari and publication remain separate.
+
+
+
+### CHG-20261020-13 — Replacement keyframes and Gemini video attempt
+
+- Scope: two concept PNG keyframes and external Gemini generation request, authorised by the owner.
+- Outcome: matching plain/luminous valance views saved at 1672 × 941; Gemini returned errors on both
+  the two-frame and simplified one-frame video requests. No video was produced; prototype stays static.
+- Verification: both images visually inspected, dimensions checked, both uploads and Gemini errors
+  observed in the browser; prompt and chat link saved in the keyframe README.
+- Follow-up: retry video generation when available, assess motion, then decide on scroll integration.
+
+
+
+### CHG-20261020-12 — Reference-informed awning and separated product chapters
+
+- Scope: local `/prototyp/produkt` model, responsive framing, fallback and chapter order.
+- Outcome: textile/colour now separates the hero from the awning; shapes and inscription follow it.
+  An underside view reveals both articulated arms, fork joints, wall brackets, the support rail and
+  roller. Woven warm grey cloth, flat seams, coated profiles and soft shadows replace the prior
+  top view. The v2 transparent fallback matches the model; scroll animation remains deferred.
+- Verification: 27/28 Chromium/WebKit scenarios passed initially and the live reduced-motion
+  WebKit case passed on isolated rerun; 11 unit tests, scoped lint, typecheck and build passed.
+  Static pixels, no overflow, no axe violations and no page errors at 320/390/1440px; fallback
+  1920 × 898 alpha 0–255. Local server remains available. No publication.
+- Follow-up: owner visual review and confirmation of the real valance attachment before animation.
+
+
+
+### CHG-20261020-11 — Static awning material and lighting study
+
+- Scope: local product exchange chapter, procedural model and transparent fallback asset.
+- Outcome: one fixed three-quarter view replaces playback/rotation controls. Curved cloth panels,
+  seams, hem edges, bevelled profiles and hardware share studio illumination on the page background.
+  The existing inscription input and configurator transfer remain functional; the previous exchange
+  renderer is retained for later work. This is a conceptual model, not verified construction.
+- Verification: 28 Chromium/WebKit scenarios pass across the main run and one screenshot-failure
+  rerun; nine unit tests, scoped lint, typecheck and production build pass. Static pixels, no overflow,
+  no axe violations and no page errors verified at 320/390/1440px; transparent fallback alpha checked.
+- Follow-up: owner visual assessment and reference photographs/CAD before technical animation.
+
+
+
+### CHG-20261020-10 — Local 20-second HyperFrames product promo
+
+- Scope: standalone German product promo, original score and local Studio review artifact.
+- Outcome: 20-second 1920 × 1080 composition covers facade, material shapes, moving light reveal
+  and configurator CTA. Existing concept imagery stays labelled; site and production are unchanged.
+  See local-only `docs/marketing/product-promo-20s.md`; editable project is in local `output/lichtsaum-promo-20s/`.
+- Verification: HyperFrames check passes with zero errors/warnings and 24/24 text contrast checks;
+  five keyframes visually reviewed. Intentional scene-transition occlusions are informational only.
+  Delivery-quality MP4 verified at 20 seconds, 1080p/30 fps with stereo audio; full decode passes
+  and four exported frames were visually reviewed.
+- Follow-up: owner review; any external publication remains a separate step.
+
+
+### CHG-20261020-09 — Full-screen product video opening
+
+- Scope: local `/prototyp/produkt` hero, media delivery, responsive styling and playback checks.
+- Outcome: the Gemini orbit/light clip opens the page with the existing slogan and soft shading;
+  the homepage header gains its backing on scroll. Silent one-pass playback holds the lit ending,
+  with pause/replay, offscreen/hidden pause and reduced-motion/failure poster. The duplicate light
+  chapter is removed; five chapters remain. A video-only copy and final-frame WebP preserve the source.
+- Verification: 28 Chromium/WebKit scenarios pass across the main run and corrected scroll-test rerun;
+  nine unit tests, typecheck, scoped lint and production build pass. Start/lit/end screenshots reviewed
+  at 320/390/1440px, responsive checks cover 320–1920px, hero/header axe checks found no violations.
+  Native export reports 10 seconds and zero audio tracks. Local route still returns 200.
+- Follow-up: owner review; final 720p quality decision, physical-device Safari and field performance.
+
+### CHG-20261020-08 — Gemini camera-arc video draft received and reviewed
+
+- Scope: generated product-film source and visual review, following the owner's rejection of the planar substitute.
+- Outcome: Gemini generated a camera arc from the first keyframe using the owner's authorised account;
+  the owner downloaded `gemini_generated_video_2648993e.mp4`. The saved source is 10s, 1280 × 720,
+  24fps with one audio track. Perspective changes towards a frontal view; letters illuminate mid-shot.
+- Verification: local playback and native metadata extraction; seven frames at 0–9.7s visually inspected.
+  LICHTSAUM remains legible on inspected frames, off at 3s and on at 4.5s through the ending.
+  Exact scene geometry across every frame and audio content are unverified. No page integration or publication.
+- Follow-up: owner assessment in the local light chapter, mobile composition and final media preparation.
+
+### CHG-20261020-07 — Local light-motion animatic
+
+- Scope: product-scene media draft, local interactive preview and reproducible rendering source.
+- Outcome: owner-liked scene now has a 10-second 1280 × 720, 24fps silent WebM with camera
+  approach/retreat and a 2.4–4.2s inscription light ramp. A single planar projection preserves
+  letters and architecture; true 3D parallax is explicitly outside this draft. No product route changed.
+- Verification: control frames inspected, scripts parse, encoded duration/resolution verified;
+  full Chromium playback reports no errors or dropped frames. Preview play/pause works and
+  the shared dev-server route still returns 200. No paid generation or production publication.
+- Follow-up: owner assessment of timing/light, then real camera-parallax test via 3D or a linked
+  generation service; the Weave tool currently reports that Figma/Weave accounts are not linked.
+
+
+### CHG-20261020-06 — Three light-scene concept keyframes
+
+- Scope: local product-film storyboard, generated source media and generation provenance.
+- Outcome: three PNG frames show an unlit angled facade, a closer illuminated textile view and
+  a wider lit ending. The storyboard proposes a ten-second shallow arc with a gentle approach;
+  exact prompts and selected sources are saved with the assets. No application media changed.
+- Verification: all three images visually inspected; PNG dimensions are 1672 × 941 each, saved
+  copies match generated originals, and storyboard links resolve. Separate AI stills contain
+  small geometry/detail differences; continuous motion and mobile framing remain unverified.
+- Follow-up: owner review of scene/framing, then a rough camera test before final video.
+
+### CHG-20261020-05 — Generated three-form textile comparison
+
+- Scope: editorial prototype shape media, responsive presentation and asset provenance.
+- Outcome: one generated graphite textile panorama replaces the SVG diagrams. Desktop shows
+  all three forms together; mobile stacks cropped portions of the same image, with HTML labels.
+  Original PNG and exact built-in image-generation prompt are saved with the product prototype;
+  the 1920 × 819 WebP is 163660 bytes. The image is labelled as a concept.
+- Verification: image and desktop/mobile screenshots inspected; all 12 relevant Chromium/WebKit
+  route/responsive checks pass at 320–1920px, including image loading and axe. Typecheck and scoped
+  lint pass. No final video or production publication; the local server remains available.
+- Follow-up: owner review of the image; light-scene keyframes/video remain open.
+
+
+### CHG-20261020-04 — Six-chapter product prototype with a temporary light poster
+
+- Scope: isolated editorial route, composition/styles, continuation placement, copy and regression checks.
+- Outcome: early facade poster, compact exchange, combined textile/shape chapter ending in
+  `Jetzt konfigurieren`, practical questions and three project steps. Shaded panels and local
+  fonts remain; pinned facade and separate price section are absent. Shapes use a temporary
+  schematic plate. The services note links to contact. Existing product and production are unchanged.
+- Verification: 22 Chromium/WebKit checks at 320–1920px, nine unit tests, typecheck, scoped lint
+  and production build pass. Desktop/mobile screenshots inspected; runtime logs clean and axe
+  reports no violations in the checked main content. Draft preservation, invalid text, blocked
+  storage, no-WebGL fallback and reduced motion pass. Dev server remains available.
+- Follow-up: owner review, then final light-scene keyframes/video and shape imagery; real-device Safari and field CWV remain unverified.
+
+
+### CHG-20261020-03 — Product refinement structure and media brief
+
+- Scope: product-page content plan, scoped visual direction and media preparation.
+- Outcome: a six-part proposed sequence brings light forward, groups material/colour/shapes,
+  and closes the design chapter with a configurator link instead of a separate price section,
+  as agreed by the owner. Owner preference for camera motion and one
+  multi-shape image is recorded; a prerendered clip is recommended, with inputs and fallback defined.
+  See `docs/content/product-page-refinement-brief.md`. No application or media implementation changed.
+- Verification: inspected the markilux reference in the browser, existing product content/design
+  and the current v6 calculation contract; checked document links and rolling-history preservation.
+- Follow-up: prototype composition with a poster, three scene keyframes and one shape study.
+
 
 ### CHG-20261020-02 — Agreed three-panel prices and included electrical set
 
@@ -75,6 +296,8 @@
   confirm the EUR 1080 summary, zero detected WCAG violations/runtime errors, correct canonical
   and unchanged navigation at 390/1440px. Screenshots reviewed. No real inquiry was sent.
 - Follow-up: physical assembly/electrical capacity remain subject to project review.
+
+
 
 
 ### CHG-20261020-01 — Supplier pricing and dependent lettering limits
@@ -97,6 +320,101 @@
   dimensions, electrical package and physical assembly still require project review.
 
 
+
+
+### CHG-20261011-03 — Shaded image panels and grouped textile views
+
+- Scope: isolated editorial prototype light/material composition, interaction and visual QA.
+- Outcome: at the owner's request, the previous MVP's translucent side shading returns with
+  alternating text sides and unequal, staggered image widths. One textile card switches fabric,
+  edge construction and palette using shared source assets/copy, arrows or touch; no autoplay.
+  Mobile copy follows the image with a shaded overlap. `/produkt` remains unchanged.
+- Verification: 24 Chromium/WebKit checks and 11 relevant unit tests pass, including wrapping,
+  keyboard/touch selection, retained light state, 320–1920px, reduced motion, a11y and existing
+  3D/configurator behavior. Typecheck, scoped lint and production build pass. Desktop/mobile
+  screenshots reviewed; the running user dev-server remains available. Full lint's pre-existing
+  artifact/vendor failures are unchanged.
+- Follow-up: owner visual review; the experiment is not an approved production replacement.
+
+
+
+### CHG-20261011-02 — Separate editorial product-story prototype
+
+- Scope: `/prototyp/produkt`, isolated editorial components/styles/3D renderer, continuation and QA.
+- Outcome: typography-led story, light comparison, textiles and three frontal hem studies; a real
+  facade stays pinned before the following story covers it. Own text updates 3D and transfers to
+  the existing configurator while retaining its other settings. `/produkt` and production remain
+  unchanged; the experiment has no menu/sitemap entry and returns 404 in production.
+- Verification: 207 unit tests, 24 Chromium/WebKit checks, typecheck, scoped lint and build pass.
+  Tests cover 320–1920px, pinned/reverse scroll, reduced motion, a11y, text/replay/draft retention,
+  storage/WebGL fallback and homepage continuation. Early input before hydration is guarded.
+  Desktop/mobile screenshots reviewed. Full lint remains blocked by pre-existing local scripts
+  and vendored Three.js files. The user dev-server remained running.
+- Follow-up: owner composition/copy review and a separate integration decision. Physical-device
+  Safari/mobile keyboard and field performance remain unverified; no public release or real lead.
+
+
+
+### CHG-20261011-01 — Product page integrated into the local application
+
+- Scope: `/produkt`, product components/media, shared navigation target and route documentation.
+- Outcome: shared site shell/buttons, responsive concept chapters, lazy 3D scene with lifecycle
+  cleanup, real local configurator/contact/project-form links. No demo enquiry or external live-site
+  links remain. Non-production/noindex boundary preserves the current production site.
+- Verification: 198 unit tests, typecheck, scoped lint and application build pass. Browser checks
+  cover independent selectors, light retention, mobile menu, route return and resumed 3D rendering;
+  no overflow at 320/390/768/1440/1920px. Desktop/mobile screenshots reviewed.
+- Follow-up: owner visual/content review. No real inquiry sent; device Safari, field performance
+  and production publication remain unverified/unperformed.
+
+
+
+### CHG-20261010-04 — Distinct product imagery and light comparison
+
+- Scope: isolated product prototype, local generated assets and visual notes.
+- Outcome: textile roll/cutting-table/sample scenes, a separate daylight hem angle and nighttime
+  lettering replace repeated product close-ups. Shorter copy and neutral translucent panels remain.
+  Independent on/off control preserves the chosen light tone; all imagery is labelled as concept.
+- Verification: desktop/390px visuals inspected; 320px has no overflow or broken loaded images.
+  Keyboard on/off and retained hue, independent topic choices, 43 HTML references, JS syntax and
+  diff whitespace checked. Production/application files unchanged.
+- Follow-up: owner visual review; real textile, construction and light specifications remain open.
+
+### CHG-20261010-03 — Independent product presentation chapters
+
+- Scope: local product prototype, generated concept assets and visual documentation.
+- Outcome: facade introduction, fabric/colour, hem shapes and lighting are separate vertical
+  sections with translucent image overlays. Each of the three variant sections has independent
+  manual controls. Owner keeps supplier/material and light specifications open for later.
+- Verification: keyboard selections preserve other sections; wraparound arrows and loaded images
+  checked in the browser. JavaScript syntax and local reference checks pass. Mobile/desktop inspected.
+- Follow-up: owner composition review; confirm real fabrics, light options and product imagery
+  before public integration. Physical-device touch/accessibility/performance remain open.
+
+### CHG-20261010-02 — Interactive 3D valance exchange
+
+- Scope: isolated product prototype, local Three.js vendor modules and design notes.
+- Outcome: procedural awning with old/new valance exchange, warm lettering, three chapters,
+  a native timeline and rotatable perspective/front views. Existing app and production unchanged.
+- Verification: scene rendered in Chromium; initial/installed/lit states, keyboard timeline,
+  pointer rotation and playback checked. No horizontal overflow at 320/390/768/1440px.
+  JavaScript syntax and local asset checks pass; reduced-motion/fallback branches reviewed in code.
+- Follow-up: owner visual review; physical-device Safari/GPU and performance checks before integration.
+
+
+### CHG-20261010-01 — Compact product presentation prototype
+
+- Scope: isolated German product HTML/CSS/JS, local assets and design notes.
+- Outcome: five product-led sections, a generated close-up, on/off light comparison and short
+  contextual links to the services prototype are ready for owner review. No application route
+  or production behaviour changed; enquiries are a non-sending demonstration.
+- Verification: browser checks at 320–1920px show no horizontal overflow or broken images;
+  desktop/mobile visuals, light switching, menu, dialog Escape/focus return and service navigation
+  checked. All 28 static references resolve; JavaScript syntax passes; no recorded browser errors.
+- Follow-up: owner composition/copy review and service-scope confirmation before app integration;
+  real-device accessibility and production gates remain open.
+
+
 ### CHG-20261009-01 — Configurator release
 
 - Scope: sequential configurator sheets, mini-configurator field order and regression checks.
@@ -110,9 +428,21 @@
 - Follow-up: real-device Safari/mobile keyboard, field CWV and controlled delivery/conversion QA.
   No real lead, upload or email delivery was tested.
 
-<!-- RECENT_CHANGES:END -->
 
-<!-- CHANGE_HISTORY:START -->
+### CHG-20261007-02 — Editable services presentation prototype
+
+- Scope: isolated HTML/CSS/JS prototype, local assets, generated service illustrations and design notes.
+- Outcome: a German `Leistungen` presentation uses a dominant Leuchtvolant image, unequal staggered
+  cards for planning/design and cleaning/fabric, secondary service disclosures and a project-check
+  demonstration. All resources are local; concept imagery stays labelled. Existing application
+  files, public routes and production behaviour are unchanged by this work.
+- Verification: browser layouts at 320, 390, 768, 1024, 1280, 1440 and 1920px have no horizontal
+  overflow. Desktop/mobile views, gallery navigation, Escape/focus return, mobile navigation and
+  service context in the non-sending enquiry demo were checked. Asset/anchor checks and JavaScript
+  syntax pass; the shared site remains separate on port 3000.
+- Follow-up: owner visual/copy review and service-scope confirmation, then application integration;
+  physical-device Safari and production gates remain unverified.
+
 
 ### CHG-20261007-01 — Compact sequential configurator sheets
 
@@ -134,8 +464,6 @@
   The shared dev server remains available. Physical-device Safari and mobile keyboard are unverified.
 - Follow-up: real-device Safari/mobile keyboard and field CWV remain unverified.
 
-
-
 ### CHG-20261005-03 — Production release and live-site verification
 
 - Scope: all accumulated site changes, generated media/provenance, regression checks and release.
@@ -149,8 +477,6 @@
   and zero detected WCAG violations. Public pages/media, robots and sitemap return 200; missing
   route returns 404 and apex redirects with 308. Screenshots reviewed; localhost remains available.
 - Follow-up: real-device Safari/mobile keyboard, field CWV and real delivery/conversion checks remain open.
-
-
 
 
 

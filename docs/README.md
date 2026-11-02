@@ -34,6 +34,8 @@ Last reviewed: 2026-08-11
 | Рынок, TAM/SAM/SOM, конкуренты и источники | `strategy/market-and-competitor-evidence.md` |
 | GTM, Search/Ads и brief посадочной | `strategy/go-to-market-and-landing-brief.md` |
 | Немецкий текст и структура страниц | `content/content-strategy.md` |
+| Следующая итерация страницы продукта и подготовка медиа | `content/product-page-refinement-brief.md` |
+| Происхождение медиа текущей страницы продукта | `content/product-media-provenance.md` |
 | Claim, цена, гарантия, отзыв, сертификат | `content/claims-and-evidence-register.md` |
 | Compliance и обязательные страницы | `legal/compliance-plan.md` |
 | Tracking, cookies, processors, retention | `legal/data-processing-and-consent.md` |
