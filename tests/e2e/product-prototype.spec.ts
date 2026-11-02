@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { devices, expect, test } from "@playwright/test";
 
 const route = "/produkt";
 const key = "lichtsaum:configurator:v1";
@@ -256,6 +256,69 @@ for (const width of [390, 1440]) {
     await page.screenshot({ path: testInfo.outputPath(`hero-ending-${width}.png`) });
   });
 }
+
+test("iPhone keeps its frame after a sustained offscreen pause", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["iPhone 13"], baseURL });
+  try {
+    const page = await context.newPage();
+    await page.goto(route, { waitUntil: "domcontentloaded" });
+    const banner = page.getByTestId("consent-banner");
+    if (await banner.isVisible()) await banner.getByRole("button", { name: "Alle ablehnen", exact: true }).click();
+    const video = page.locator("#product-hero-video");
+    await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime), { timeout: 20_000 }).toBeGreaterThan(1.5);
+    await page.evaluate(() => window.scrollTo({ top: 1800, behavior: "instant" }));
+    await expect(video).toHaveJSProperty("paused", true);
+    const stoppedAt = await video.evaluate(v => (v as HTMLVideoElement).currentTime);
+    await page.waitForTimeout(1500);
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await expect(video).toHaveJSProperty("paused", false, { timeout: 15_000 });
+    expect(await video.evaluate(v => (v as HTMLVideoElement).currentTime)).toBeGreaterThanOrEqual(stoppedAt - .05);
+    await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime)).toBeGreaterThan(stoppedAt + .1);
+    await page.getByRole("button", { name: "Video pausieren", exact: true }).click();
+    const manualAt = await video.evaluate(v => (v as HTMLVideoElement).currentTime);
+    await page.evaluate(() => window.scrollTo({ top: 1800, behavior: "instant" }));
+    await page.waitForTimeout(500);
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForTimeout(300);
+    await expect(video).toHaveJSProperty("paused", true);
+    await expect(video).toHaveJSProperty("currentTime", manualAt);
+    await page.getByRole("button", { name: "Video abspielen", exact: true }).click();
+    await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime)).toBeGreaterThan(manualAt + .1);
+    await video.evaluate(v => { (v as HTMLVideoElement).currentTime = (v as HTMLVideoElement).duration - .2; });
+    await expect(page.getByRole("button", { name: "Video erneut abspielen", exact: true })).toBeVisible();
+    await page.evaluate(() => window.scrollTo({ top: 1800, behavior: "instant" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForTimeout(300);
+    await expect(video).toHaveJSProperty("ended", true);
+    await expect(video).toHaveJSProperty("paused", true);
+  } finally {
+    await context.close();
+  }
+});
+
+test("iPhone crop stays fixed throughout the clip", async ({ browser, baseURL }, testInfo) => {
+  const context = await browser.newContext({ ...devices["iPhone 13"], baseURL });
+  try {
+    const page = await context.newPage();
+    await page.goto(route, { waitUntil: "domcontentloaded" });
+    const video = page.locator("#product-hero-video");
+    await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime), { timeout: 20_000 }).toBeGreaterThan(0);
+    await video.evaluate(v => (v as HTMLVideoElement).pause());
+    const positions: string[] = [];
+    for (const time of [.05, 3, 6, 9.7]) {
+      await video.evaluate((v, time) => { (v as HTMLVideoElement).currentTime = time; }, time);
+      await expect(video).toHaveJSProperty("seeking", false);
+      positions.push(await video.evaluate(v => getComputedStyle(v).objectPosition));
+      await page.screenshot({ path: testInfo.outputPath(`iphone-frame-${time}.png`) });
+    }
+    expect(new Set(positions).size).toBe(1);
+    const crop = await page.locator(".editorial-video-hero__media").boundingBox();
+    expect(crop!.height).toBeLessThanOrEqual(390 * 1.6 + 1);
+  } finally {
+    await context.close();
+  }
+});
 
 test("reduced motion does not fetch video until explicit play and live preference changes restore the poster", async ({ page }) => {
   const requests: string[] = [];

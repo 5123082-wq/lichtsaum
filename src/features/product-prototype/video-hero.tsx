@@ -15,6 +15,14 @@ const posterOptions = {
 const { props: openingPoster } = getImageProps({ ...posterOptions, src: "/images/product/orbit-start-v1.webp" });
 const { props: illuminatedPoster } = getImageProps({ ...posterOptions, src: "/images/product/orbit-poster-v1.webp" });
 
+function playFromCurrentFrame(video: HTMLVideoElement) {
+  video.muted = true;
+  // Reassert the paused position: iOS can otherwise restart offscreen media at zero.
+  if (video.currentTime > 0) video.currentTime = video.currentTime;
+  // Autoplay can be denied; the poster and explicit play control remain usable.
+  void video.play().catch(() => {});
+}
+
 export function VideoHero() {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -36,9 +44,7 @@ export function VideoHero() {
         video.ended || video.error || !video.paused) return;
       // Keep the source and current frame when resuming an offscreen pause.
       if (!video.getAttribute("src")) video.src = videoSource;
-      video.muted = true;
-      // Autoplay can be denied; the poster and explicit play control remain usable.
-      void video.play().catch(() => {});
+      playFromCurrentFrame(video);
     };
     const onVisibility = () => document.hidden ? pause() : startOrResume();
     const onPreference = () => {
@@ -74,12 +80,11 @@ export function VideoHero() {
     pausedByUser.current = false;
     if (!video.getAttribute("src")) video.src = videoSource;
     if (video.ended) video.currentTime = 0;
-    video.muted = true;
-    void video.play().catch(() => {});
+    playFromCurrentFrame(video);
   };
 
   return <header ref={heroRef} className="editorial-video-hero" id="licht" data-chapter="opening">
-    <div className="editorial-video-hero__media" data-playing={hasFrame} data-failed={failed}>
+    <div className="editorial-video-hero__media" data-playing={hasFrame}>
       <picture>
         <source media={failed ? undefined : "(prefers-reduced-motion: reduce)"}
           srcSet={illuminatedPoster.srcSet} sizes={illuminatedPoster.sizes} />
@@ -91,12 +96,7 @@ export function VideoHero() {
         onPlaying={() => { setPlaying(true); setHasFrame(true); setEnded(false); }}
         onPause={() => setPlaying(false)}
         onEnded={() => { setPlaying(false); setEnded(true); }}
-        onError={() => { setFailed(true); setHasFrame(false); setPlaying(false); }}
-        onTimeUpdate={(event) => {
-          // Follow the inscription across the portrait crop without React frame updates.
-          const progress = Math.min(1, event.currentTarget.currentTime / 9);
-          event.currentTarget.style.setProperty("--inscription-position", `${65 - progress * 15}%`);
-        }} />
+        onError={() => { setFailed(true); setHasFrame(false); setPlaying(false); }} />
     </div>
     <div className="editorial-video-hero__shade" aria-hidden="true" />
     <div className="editorial-video-hero__content editorial-width">
