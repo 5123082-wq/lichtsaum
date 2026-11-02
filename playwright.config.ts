@@ -18,7 +18,7 @@ export default defineConfig({
     },
     {
       name: "webkit",
-      testMatch: /(?:inquiry-dialog|configurator|wirkung-gallery|hero-header)\.spec\.ts/,
+      testMatch: /(?:inquiry-dialog|configurator|wirkung-gallery|hero-header|product-prototype)\.spec\.ts/,
       use: { ...devices["Desktop Safari"] }
     }
   ],

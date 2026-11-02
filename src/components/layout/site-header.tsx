@@ -10,13 +10,15 @@ import { siteConfig } from "@/config/site";
 type SiteHeaderProps = Readonly<{
   overlayHero?: boolean;
   showReferences?: boolean;
+  productHref?: string;
 }>;
 
 type MobileMenuState = "closed" | "open";
 
 export function SiteHeader({
   overlayHero = false,
-  showReferences = false
+  showReferences = false,
+  productHref = "/#wirkung"
 }: SiteHeaderProps) {
   const headerRef = useRef<HTMLElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,13 +29,16 @@ export function SiteHeader({
   const openAnimationFrameRef = useRef<number | null>(null);
   const closeTimeoutRef = useRef<number | null>(null);
   const closeTransitionCleanupRef = useRef<(() => void) | null>(null);
-  const navigation = showReferences
+  const baseNavigation = showReferences
     ? [
         ...siteConfig.navigation.slice(0, 2),
         { href: "/referenzen", label: "Referenzen" },
         ...siteConfig.navigation.slice(2)
       ]
     : siteConfig.navigation;
+  const navigation = baseNavigation.map((item) =>
+    item.href === "/#wirkung" ? { ...item, href: productHref } : item
+  );
 
   useEffect(() => {
     const header = headerRef.current;
@@ -220,18 +225,17 @@ export function SiteHeader({
   }, []);
 
   useEffect(() => {
-    const desktopViewport = window.matchMedia("(min-width: 48rem)");
-    const closeOnDesktop = () => {
-      if (desktopViewport.matches) {
+    const header = headerRef.current;
+    const menuButton = menuButtonRef.current;
+    if (!header || !menuButton) return;
+
+    const observer = new ResizeObserver(() => {
+      if (getComputedStyle(menuButton).display === "none") {
         setIsMenuOpen(false);
       }
-    };
-
-    desktopViewport.addEventListener("change", closeOnDesktop);
-
-    return () => {
-      desktopViewport.removeEventListener("change", closeOnDesktop);
-    };
+    });
+    observer.observe(header);
+    return () => observer.disconnect();
   }, []);
 
   const closeMenu = () => {

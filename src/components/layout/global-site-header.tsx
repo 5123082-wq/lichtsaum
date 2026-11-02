@@ -17,6 +17,7 @@ export function GlobalSiteHeader({ overlayHero = false }: { overlayHero?: boolea
     <SiteHeader
       overlayHero={overlayHero}
       showReferences={referenceVisibility.render}
+      productHref="/produkt"
     />
   );
 }

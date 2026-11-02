@@ -61,6 +61,84 @@ const viewports = [
   { width: 1920, height: 1080 }
 ];
 
+for (const { width, textScale, desktop } of [
+  { width: 768, textScale: 1, desktop: false },
+  { width: 820, textScale: 1, desktop: false },
+  { width: 960, textScale: 1, desktop: false },
+  { width: 1024, textScale: 1, desktop: true },
+  { width: 1440, textScale: 1, desktop: true },
+  { width: 1280, textScale: 2, desktop: false },
+  { width: 1440, textScale: 2, desktop: false },
+  { width: 2048, textScale: 2, desktop: true }
+]) {
+  test(`keeps every header destination readable at ${width}px and ${textScale * 100}% text`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    if (textScale > 1) {
+      await page.addStyleTag({ content: `html { font-size: ${textScale * 100}% !important; }` });
+    }
+    const navigation = page.getByRole("navigation", { name: "Hauptnavigation", includeHidden: true });
+    const destinations = await navigation.locator("a").evaluateAll(links => links.map(link => link.getAttribute("href")));
+    const trigger = page.getByRole("button", { name: "Menü öffnen", includeHidden: true });
+    if (desktop) {
+      await expect(navigation).toBeVisible();
+      await expect(trigger).toBeHidden();
+      const bounds = await navigation.evaluate(element => {
+        const nav = element.getBoundingClientRect();
+        return {
+          clipped: element.scrollWidth > element.clientWidth + 1,
+          links: Array.from(element.querySelectorAll("a")).map(link => {
+            const rect = link.getBoundingClientRect();
+            return rect.left >= nav.left - 1 && rect.right <= nav.right + 1;
+          })
+        };
+      });
+      expect(bounds.clipped).toBe(false);
+      expect(bounds.links.every(Boolean)).toBe(true);
+    } else {
+      await expect(navigation).toBeHidden();
+      await expect(trigger).toBeVisible();
+      await trigger.press("Enter");
+      const dialog = page.getByRole("dialog", { name: "Hauptmenü" });
+      await expect(dialog).toBeVisible();
+      const links = dialog.getByRole("navigation", { name: "Mobiles Hauptmenü" }).locator("a");
+      expect(await links.evaluateAll(elements => elements.map(link => link.getAttribute("href")))).toEqual(destinations);
+      for (const link of await links.all()) {
+        await expect(link).toBeVisible();
+        expect(await link.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
+      }
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath(`header-${width}-text-${textScale * 100}.png`) });
+  });
+}
+
+test("closes the open mobile menu when navigation gains enough room", async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 900 });
+  await page.goto("/");
+  const trigger = page.getByRole("button", { name: "Menü öffnen" });
+  const dialog = page.getByRole("dialog", { name: "Hauptmenü" });
+  await trigger.click();
+  await expect(dialog).toBeVisible();
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await expect.poll(() => page.locator("#mobile-main-menu").evaluate(element => (element as HTMLDialogElement).open)).toBe(false);
+  await expect(page.locator("html")).not.toHaveClass(/mobile-menu-open/);
+  await expect(page.getByRole("navigation", { name: "Hauptnavigation" })).toBeVisible();
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const enlargedText = await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+  await expect(dialog).toBeVisible();
+  await enlargedText.evaluate(element => element.parentNode?.removeChild(element));
+  await expect.poll(() => page.locator("#mobile-main-menu").evaluate(element => (element as HTMLDialogElement).open)).toBe(false);
+  await expect(page.locator("html")).not.toHaveClass(/mobile-menu-open/);
+});
+
 for (const viewport of viewports) {
   test(`shows the lit lettering clear of the header and title at ${viewport.width}×${viewport.height}`, async ({
     page

@@ -7,6 +7,10 @@ import { isReferenceGalleryPublished } from "@/features/references/types";
 const CORE_INDEXABLE_ROUTES = [
   { path: "/", lastModified: new Date("2026-08-10T00:00:00.000Z") },
   {
+    path: "/produkt",
+    lastModified: new Date("2026-11-02T00:00:00.000Z")
+  },
+  {
     path: "/kontakt",
     lastModified: new Date("2026-08-06T00:00:00.000Z")
   },

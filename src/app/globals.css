@@ -88,6 +88,7 @@
   --container: 90rem;
   --section-space: clamp(5rem, 10vw, 10rem);
   --header-height: 4.5rem;
+  --header-action-width: 12.75rem;
   --focus-ring: 0 0 0 3px var(--background), 0 0 0 6px var(--accent);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -192,6 +193,7 @@ html[data-input-modality="pointer"] :focus-visible {
 }
 
 .site-header {
+  container: site-header / inline-size;
   position: fixed;
   z-index: 50;
   inset: 0 0 auto;
@@ -4818,11 +4820,8 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   color: var(--text-muted);
 }
 
-@media (min-width: 48rem) {
-  :root {
-    --header-height: 5.25rem;
-  }
-
+/* Keep navigation readable when the viewport narrows or text is enlarged. */
+@container site-header (min-width: 64rem) {
   .site-header__inner {
     grid-template-columns: auto 1fr auto;
     gap: 1.5rem;
@@ -4836,6 +4835,7 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   }
 
   .site-header__cta {
+    width: var(--header-action-width);
     display: inline-flex;
     grid-column: auto;
     grid-row: auto;
@@ -4846,6 +4846,12 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   .mobile-menu-trigger,
   .mobile-menu {
     display: none;
+  }
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --header-height: 5.25rem;
   }
 
   .hero__display {
