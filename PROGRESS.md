@@ -4,6 +4,11 @@
 ## Context Beacon
 
 - Last updated: 2026-11-03.
+- Local homepage revision: portrait phones/iPads use width-based framing that fits the front
+  valance and H1, with a compact stage and soft image edges. The 1.8s shared camera entrance is
+  +4% for portrait / +6% wide landscape; rotation updates scale without replay. All 74
+  Chromium/WebKit hero/header checks, TypeScript and scoped lint pass. Owner authorised publication through GitHub;
+  next: exact release build, push and live verification. DESIGN.md owns geometry and motion parameters.
 - Published: https://www.lichtsaum.com/produkt. Owner authorised the new frontal-ending video.
   Application commit `dac090f96d2f9dd807491b6ec127e52f1f586659` was pushed directly to origin/main;
   Vercel `dpl_7zuXa5vHkd9e8YbKrqsaHUgCRsrT` is READY on www/apex.
@@ -25,12 +30,36 @@
 - Other local work remains untouched: Three.js prototypes/dependencies, supplier PDFs, promo/raw
   media and unused candidates. Prior inventory: docs/architecture/release-inventory-2026-11-02.md.
 - Evidence limits: physical-device Safari, field CWV and actual lead delivery remain unverified.
-- Next: owner review of the live video. Other prototypes, cleanup and Ads work are separate tasks.
+- Next: owner review of the local homepage entrance. Live product video remains published.
+  Other prototypes, cleanup and Ads work are separate tasks.
   Shared development server remains available at 127.0.0.1:3000.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20261103-04 — Portrait homepage framing for phones and iPad
+
+- Scope: portrait hero geometry, orientation-aware camera scale, responsive image sizing and checks.
+- Outcome: portrait orientation overrides desktop cropping; both front-valance ends and the heading
+  fit. Shorter phone stage reduces empty space, image edges blend and rotation changes resting scale
+  without replay. Native/fallback illumination uses the same stage-relative distance. Local only.
+- Verification: 74 Chromium/WebKit hero/header checks pass, including 320×568 phones, 768×1024,
+  820×1180 and 1024×1366 portrait tablets, rotation, reduced motion, native/fallback scroll and
+  landscape regressions. TypeScript, scoped lint and diff checks pass; phone/iPad screenshots reviewed.
+- Follow-up: owner local review; publication, physical devices and field performance remain separate.
+
+### CHG-20261103-03 — Local homepage camera entrance trial
+
+- Scope: homepage media wrapper, introductory motion, hero/header browser checks and design contract.
+- Outcome: existing facade and lettering move together on entry; original scroll lighting and
+  parallax remain. Early scrolling settles the entrance; reduced motion, anchors/restored scroll,
+  hidden tabs and image readiness are handled. No new media or dependency. Local only.
+- Verification: final 58 Chromium/WebKit scenarios pass, including responsive 320–1920px layouts,
+  sampled entrance geometry, early-scroll interruption, late image loading, anchor/reduced motion,
+  native/fallback scroll behavior, menu/keyboard and existing accessibility checks. TypeScript,
+  scoped lint and diff checks pass; desktop/phone screenshots reviewed. Shared dev server stays available.
+- Follow-up: owner local review; publication, physical-device and field-performance checks are separate.
 
 ### CHG-20261103-02 — Frontal-ending video published through GitHub
 
@@ -43,6 +72,10 @@
   all 10 affected Chromium/WebKit cases pass. Application playback code is unchanged.
 - Follow-up: physical-device Safari and field performance remain unverified.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
 ### CHG-20261103-01 — Local frontal-ending product video
 
 - Scope: product hero media, portrait focal geometry, existing browser checks and media/design records.
@@ -53,6 +86,7 @@
   TypeScript, scoped lint and 52 Chromium/WebKit scenarios pass. All 14 portrait screenshot pixel
   checks are within 1 CSS px of centre; desktop/mobile screenshots reviewed. Shared dev server is available.
 - Follow-up: owner local review; publication, physical devices and field performance remain separate.
+
 
 ### CHG-20261102-08 — Combined product release published after inventory review
 
@@ -70,9 +104,6 @@
 - Follow-up: physical devices, field CWV and live conversion diagnostics remain separate; excluded work
   is itemised in `docs/architecture/release-inventory-2026-11-02.md`.
 
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261102-07 — Adaptive portrait centering of the final inscription
 

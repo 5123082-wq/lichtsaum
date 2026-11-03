@@ -50,16 +50,121 @@ async function expectDownwardDriftUntilCovered(page: Page) {
 }
 
 const viewports = [
+  { width: 320, height: 568 },
   { width: 320, height: 720 },
   { width: 390, height: 664 },
   { width: 390, height: 844 },
+  { width: 430, height: 932 },
   { width: 768, height: 900 },
+  { width: 768, height: 1024 },
+  { width: 820, height: 1180 },
+  { width: 1024, height: 1366 },
   { width: 1024, height: 768 },
   { width: 1280, height: 800 },
   { width: 1440, height: 900 },
   { width: 1512, height: 780 },
   { width: 1920, height: 1080 }
 ];
+
+for (const [width, height] of [[390, 844], [820, 1180], [1024, 1366], [1512, 844]]) {
+  test(`camera entrance keeps the facade and lettering registered at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const camera = page.locator(".hero__camera");
+    await expect.poll(() => camera.evaluate(el => el.getAnimations().length)).toBe(1);
+    const frames = await camera.evaluate(el => {
+      const animation = el.getAnimations()[0];
+      animation.pause();
+      return [0, 900, 1800].map(time => {
+        animation.currentTime = time;
+        const [day, night] = Array.from(el.querySelectorAll("img"), image => {
+          const box = image.getBoundingClientRect();
+          return { x: box.x, y: box.y, width: box.width, height: box.height };
+        });
+        return { day, night, scale: new DOMMatrix(getComputedStyle(el).transform).a };
+      });
+    });
+    // Browser image-size rounding can differ by a subpixel between raster and SVG.
+    for (const frame of frames) {
+      for (const key of ["x", "y", "width", "height"] as const) {
+        expect(Math.abs(frame.day[key] - frame.night[key])).toBeLessThan(1);
+      }
+    }
+    expect(frames[0].scale).toBe(1);
+    expect(frames[1].scale).toBeGreaterThan(1);
+    expect(frames[2].scale).toBeCloseTo(width < height ? 1.04 : 1.06);
+    await expect(page.locator(".hero__content")).toHaveCSS("transform", "none");
+    await expect(page.locator("[data-hero-night]")).toHaveCSS("opacity", "0.35");
+    await camera.evaluate(el => { const animation = el.getAnimations()[0]; animation.currentTime = 900; animation.play(); });
+    await expect.poll(() => camera.evaluate(el => el.getAnimations().length)).toBe(0);
+    await page.screenshot({ path: testInfo.outputPath(`camera-rest-${width}.png`) });
+    await page.evaluate(() => window.scrollTo({ top: innerHeight * 0.3, behavior: "instant" }));
+    await expect(page.locator("[data-hero-night]")).toHaveCSS("opacity", "1");
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    expect(await camera.evaluate(el => el.getAnimations().length)).toBe(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
+test("early scrolling settles the camera without restarting or blocking scroll", async ({ page }) => {
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  const camera = page.locator(".hero__camera");
+  await expect.poll(() => camera.evaluate(el => el.getAnimations().length)).toBe(1);
+  const before = await camera.evaluate(el => {
+    const animation = el.getAnimations()[0];
+    animation.pause();
+    animation.currentTime = 500;
+    return new DOMMatrix(getComputedStyle(el).transform).a;
+  });
+  await page.evaluate(() => window.scrollTo({ top: 160, behavior: "instant" }));
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(160);
+  await expect.poll(() => camera.evaluate(el => el.getAnimations().length)).toBe(0);
+  expect(await camera.evaluate(el => new DOMMatrix(getComputedStyle(el).transform).a)).toBeGreaterThan(before);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(camera).toHaveCSS("transform", "none");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  expect(await camera.evaluate(el => el.getAnimations().length)).toBe(0);
+});
+
+test("camera skips entrance for anchor navigation and reduced motion", async ({ page }) => {
+  await page.goto("/#wirkung");
+  expect(await page.locator(".hero__camera").evaluate(el => el.getAnimations().length)).toBe(0);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.locator(".hero__camera")).toHaveCSS("transform", "none");
+  expect(await page.locator(".hero__camera").evaluate(el => el.getAnimations().length)).toBe(0);
+});
+
+test("iPad rotation changes framing without replaying the entrance", async ({ page }) => {
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await page.goto("/");
+  const camera = page.locator(".hero__camera");
+  await expect.poll(() => camera.evaluate(el => el.getAnimations().length)).toBe(0);
+  await page.setViewportSize({ width: 1180, height: 820 });
+  await expect(camera).toHaveCSS("transform", "matrix(1.06, 0, 0, 1.06, 0, 0)");
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await expect(camera).toHaveCSS("transform", "matrix(1.04, 0, 0, 1.04, 0, 0)");
+  expect(await camera.evaluate(el => el.getAnimations().length)).toBe(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("scrolling before the image loads prevents a delayed camera entrance", async ({ page }) => {
+  let releaseImage!: () => void;
+  const gate = new Promise<void>(resolve => { releaseImage = resolve; });
+  await page.route(/lichtsaum-hero-clean-facade/, async route => {
+    await gate;
+    await route.continue();
+  });
+  try {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.evaluate(() => window.scrollTo({ top: 320, behavior: "instant" }));
+  } finally {
+    releaseImage();
+  }
+  await page.locator(".hero__image--day").evaluate(el => (el as HTMLImageElement).decode());
+  await expect(page.locator(".hero__camera")).toHaveCSS("transform", "matrix(1.06, 0, 0, 1.06, 0, 0)");
+  expect(await page.locator(".hero__camera").evaluate(el => el.getAnimations().length)).toBe(0);
+});
 
 for (const { width, textScale, desktop } of [
   { width: 768, textScale: 1, desktop: false },
@@ -153,6 +258,8 @@ for (const viewport of viewports) {
       );
     });
 
+    // Measure scroll drift from the resting camera crop, not a moving entrance frame.
+    await expect.poll(() => page.locator(".hero__camera").evaluate(el => el.getAnimations().length)).toBe(0);
     const image = await page.locator(".hero__image--day").boundingBox();
     const title = await page.locator(".hero__title").boundingBox();
     const header = await page.locator(".site-header").boundingBox();
@@ -177,6 +284,12 @@ for (const viewport of viewports) {
     expect(lettering.right).toBeLessThan(viewport.width - 16);
     expect(lettering.top).toBeGreaterThan(header.height + 24);
     expect(lettering.bottom).toBeLessThan(title.y - 24);
+    if (viewport.height > viewport.width) {
+      // Both ends of the physical front valance must fit, not just the lettering.
+      expect(image.x + image.width * (350 / 1672)).toBeGreaterThan(16);
+      expect(image.x + image.width * (940 / 1672)).toBeLessThan(viewport.width - 16);
+      expect(title.y + title.height).toBeLessThanOrEqual(viewport.height + 1);
+    }
     await expect(page.locator("[data-hero-night]")).toHaveCSS("opacity", "0.35");
     await expect(page.locator(".site-header")).toHaveAttribute("data-overlay-hero", "true");
     await expect.poll(() => page.locator(".site-header").evaluate(
@@ -188,8 +301,11 @@ for (const viewport of viewports) {
     const nextBlock = await page.locator(".signal-strip").boundingBox();
     expect(nextBlock).not.toBeNull();
     const entryDistance = (nextBlock?.y ?? 0) - viewport.height;
+    const stageHeight = (await page.locator(".hero__stage").boundingBox())!.height;
     expect(entryDistance).toBeCloseTo(
-      viewport.height * (viewport.width < 768 ? 0.1 : 0.2),
+      viewport.height > viewport.width
+        ? stageHeight - viewport.height + viewport.height * 0.1
+        : viewport.height * (viewport.width < 768 ? 0.1 : 0.2),
       0
     );
 
@@ -207,7 +323,7 @@ for (const viewport of viewports) {
       (element) => Number(getComputedStyle(element).opacity)
     )).toBeLessThan(0.6);
     const litImage = await page.locator("[data-hero-night]").boundingBox();
-    expect((litImage?.y ?? 0) - image.y).toBeGreaterThan(15);
+    expect((litImage?.y ?? 0) - image.y).toBeGreaterThan(10);
     expect((litImage?.y ?? 0) - image.y).toBeLessThan(60);
     await expect(page.locator(".hero__content")).toHaveCSS("transform", "none");
 
@@ -268,7 +384,8 @@ test("loads the full source for the phone crop and changes only vector lettering
       bitmap.close();
       return result;
     });
-    expect(source.displayWidth).toBeGreaterThan(1000);
+    expect(source.displayWidth).toBeGreaterThanOrEqual(390 * 1.6 - 1);
+    expect(source.displayWidth).toBeLessThan(390 * 1.67);
     expect(source.pixelWidth).toBe(1672);
     expect(new URL(source.url).searchParams.get("q")).toBe("90");
     await expect(light).toHaveAttribute("src", "/images/lichtsaum-hero-lettering.svg");

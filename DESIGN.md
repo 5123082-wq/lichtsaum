@@ -15,6 +15,7 @@ they do not decide publication. Concrete public actions follow
 ## Agent brief
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
 - Current: dark architectural UI, self-hosted Hanken/JetBrains, orange actions and square geometry.
+- Local homepage trial (2026-11-03): portrait phone/iPad composition fits the front valance and H1; width-based framing and a shorter stage. Shared 1.8s entrance: +4% portrait / +6% wide landscape. Owner authorised publication through GitHub on 2026-11-03.
 - Current published revision (2026-11-03): owner-supplied frontal-ending video, unchanged H.264 stream; portrait lettering focal x=632 (8px correction). First/last posters replaced; published through origin/main and Vercel on 2026-11-03.
 - Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft. Responsive imagery and decoded carousel switching are published.
 - Decision (2026-11-02): owner authorised publication with the original silent 6,070,629-byte video and no public AI/concept captions; provenance remains internal.
@@ -821,6 +822,37 @@ The following records the former design. The current `/produkt` uses the editori
 
 ## Motion
 
+- `Decision / local trial` (2026-11-03): owner requested a subtle homepage camera entrance before
+  the existing scroll-driven illumination. The facade and SVG lettering share a separate camera
+  wrapper inside the drifting media layer; heading, menu and overlays do not zoom.
+  After both images decode, scale increases from 1 to 1.06 (wide landscape) / 1.04 (portrait or up to 760px) over
+  1800ms with cubic-bezier(0.25, 0.1, 0.25, 1), anchored at 50% 28%. The final crop is retained.
+  Early scrolling settles from the current transform in 300ms without blocking scroll; returning
+  to the top does not replay it. Anchor/restored positions, hidden tabs and scrolling before image
+  readiness skip the entrance. Reduced motion cancels the entrance and restores an unscaled still.
+  Existing 35%-to-full lettering brightness, title fade, header reveal and parallax remain unchanged.
+  No new image/video payload, dependency, timers or per-frame React updates are introduced.
+  Native Web Animations API reference: [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/animate),
+  checked 2026-11-03. Verified: 58 Chromium/WebKit hero/header checks, TypeScript and scoped lint pass;
+  desktop/phone resting screenshots reviewed. Pixel registration differs by less than 1 CSS px
+  from browser raster/SVG rounding. Publication and physical-device/field-performance verification
+  are separate.
+
+- `Decision / local portrait revision` (2026-11-03): owner reported an over-cropped homepage on
+  portrait phones and iPads. Orientation now overrides the width-only desktop media framing.
+  The shared image/SVG width is 160vw, anchored at x=36.4% of the source, with a top inset of
+  header height + 2svh and a top/bottom mask. Both ends of the front valance fit; the source's
+  far-right technical drawing remains intentionally cropped. H1 uses clamp(2.35rem, 10.4vw, 6.25rem).
+  Stage height is min(100svh, max(36rem, 128vw)); scene height adds 50svh and the next block enters
+  10svh after the stage's initial bottom. Portrait padding below H1 is clamp(3rem, 6svh, 6rem).
+  Light reaches full brightness over 26% of the stage height in both native and fallback paths.
+  Rotating changes the camera's resting scale without replaying the entrance; reduced motion uses
+  the compact stage without introductory motion. Landscape media framing is retained.
+  Verified: 74 Chromium/WebKit hero/header checks pass, including 320×568 phones, 768×1024,
+  820×1180 and 1024×1366 portrait tablets, full front-valance/H1 bounds and rotation. TypeScript,
+  scoped lint and diff checks pass; phone/iPad screenshots reviewed. Physical devices and field
+  performance remain unverified.
+
 - Движение быстрое, точное и редкое.
 - Default transition: около 200ms ease-out.
 - Анимировать преимущественно opacity и transform.
@@ -834,12 +866,12 @@ The following records the former design. The current `/produkt` uses the editori
   непрозрачными блоками — около `120svh` прокрутки на desktop и `110svh` на mobile;
   фон не разворачивается вверх, пока виден.
   Sticky-stage имеет нижний запас `40svh` на desktop и `60svh` на mobile, который не увеличивает
-  высоту страницы. Hero имеет высоту `180svh` (desktop, минимум `72rem`) и `150svh` (mobile);
-  mobile-кадр занимает `72svh` от верхней границы. Следующий блок начинает входить после около
-  `20svh` прокрутки на desktop и `10svh` на mobile,
+  высоту страницы. Landscape hero имеет высоту `180svh` (desktop, минимум `72rem`) и `150svh` (узкий экран);
+  portrait-геометрия задана выше. Следующий блок начинает входить после около
+  `20svh` прокрутки на landscape desktop и `10svh` после начальной нижней границы portrait-stage,
   до полного исчезновения H1, без длинной пустой паузы. В поддерживающих браузерах CSS root scroll
   timeline управляет transform только media и opacity текста, света и подложки меню. Подложка
-  раскрывается за `160px`, свет — за `26svh`; повторно запускаемой CSS transition поверх них нет.
+  раскрывается за `160px`, свет — за `26%` высоты stage; повторно запускаемой CSS transition поверх них нет.
   В остальных браузерах используется requestAnimationFrame-fallback; CSS и JavaScript не управляют
   одной анимацией одновременно. Ни один режим не меняет позицию заголовка при прокрутке.
   `prefers-reduced-motion` получает статичный полностью светящийся кадр с видимым H1,
@@ -848,7 +880,7 @@ The following records the former design. The current `/produkt` uses the editori
   Grotesk 800, межбуквенный интервал `0.12em` и единую перспективу плоскости маркизы.
   Чёткое световое ядро и плавно затухающий ореол используют палитру подвала, без фотографии,
   embedded raster и зависимости от шрифта. База preloaded с quality `90`;
-  `sizes` учитывает полную ширину кадра (`128svh` на mobile, `max(263svh, 100vw)` на desktop),
+  `sizes` учитывает полную ширину кадра (`160vw` в portrait, `128svh` в узком landscape, `max(263svh, 100vw)` в широком landscape),
   а не ширину видимой области. SVG загружается сразу. Происхождение и ограничения исходника —
   [`DesignPrototip/assets/lichtsaum-hero-layers-2026-10-04.md`](DesignPrototip/assets/lichtsaum-hero-layers-2026-10-04.md).
 - Не вводить motion library без доказанной необходимости.

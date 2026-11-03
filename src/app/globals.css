@@ -789,6 +789,12 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   will-change: transform;
 }
 
+.hero__camera {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 28%;
+}
+
 .hero__image {
   position: absolute;
   top: 0;
@@ -883,7 +889,7 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   .hero__image--night {
     animation: hero-light-reveal 1s cubic-bezier(0.42, 0, 0.58, 1) both;
     animation-timeline: scroll(root block);
-    animation-range: 0px 26svh;
+    animation-range: 0px calc(var(--hero-stage-height) * 0.26);
   }
 
   .hero__media {
@@ -5251,6 +5257,36 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
   }
 }
 
+@media (orientation: portrait) {
+  .hero {
+    --hero-stage-height: min(100svh, max(36rem, 128vw));
+    --hero-scroll-travel: 110svh;
+    --hero-cover-reserve: 60svh;
+    --hero-parallax-offset: 104px;
+    height: calc(var(--hero-stage-height) + 50svh);
+    min-height: var(--hero-stage-height);
+  }
+
+  .hero__media { inset: 0; }
+
+  .hero__image {
+    top: calc(var(--header-height) + 2svh);
+    width: 160vw;
+    height: auto;
+    transform: translateX(-36.4%);
+    mask-image: linear-gradient(180deg, transparent, #000 12%, #000 78%, transparent);
+  }
+
+  .hero__content { padding-bottom: clamp(3rem, 6svh, 6rem); }
+
+  .hero__display {
+    font-size: clamp(2.35rem, 10.4vw, 6.25rem);
+    overflow-wrap: normal;
+  }
+
+  .signal-strip { margin-top: -40svh; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -5281,7 +5317,8 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
     will-change: auto;
   }
 
-  .hero__media {
+  .hero__media,
+  .hero__camera {
     animation: none !important;
     transform: none !important;
     will-change: auto;
@@ -5332,6 +5369,10 @@ html[data-input-modality="pointer"] .configurator-number-input:focus-within {
     animation: none !important;
     opacity: 1 !important;
   }
+}
+
+@media (orientation: portrait) and (prefers-reduced-motion: reduce) {
+  .hero { min-height: var(--hero-stage-height); }
 }
 
 @media (forced-colors: active) {
