@@ -15,10 +15,10 @@ they do not decide publication. Concrete public actions follow
 ## Agent brief
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
 - Current: dark architectural UI, self-hosted Hanken/JetBrains, orange actions and square geometry.
-- Current local revision (2026-11-03): owner-supplied frontal-ending video, unchanged H.264 stream; portrait lettering focal x=632 (8px correction). First/last posters replaced; owner authorised publication on 2026-11-03.
+- Current published revision (2026-11-03): owner-supplied frontal-ending video, unchanged H.264 stream; portrait lettering focal x=632 (8px correction). First/last posters replaced; published through origin/main and Vercel on 2026-11-03.
 - Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft. Responsive imagery and decoded carousel switching are published.
 - Decision (2026-11-02): owner authorised publication with the original silent 6,070,629-byte video and no public AI/concept captions; provenance remains internal.
-- Current published portrait revision (2026-11-02): adaptive final-inscription alignment across portrait formats, wider video surface capped at 125vw with an earlier neutral bottom fade into the shared #131313 canvas. Paused time is reasserted before play to prevent iOS restarting offscreen media. Combined publication was owner-authorised and verified on 2026-11-02.
+- Retained portrait layout (2026-11-02): adaptive final-inscription alignment across portrait formats, wider video surface capped at 125vw with an earlier neutral bottom fade into the shared #131313 canvas. Paused time is reasserted before play to prevent iOS restarting offscreen media. Combined publication was owner-authorised and verified on 2026-11-02.
 - Current correction (2026-11-02): normal first paint uses the exact unlit opening frame with the same portrait crop as video; reduced-motion/failure retain the illuminated still. Picture selection works before JavaScript.
 - Current: header-only 64rem container query prevents clipping, including enlarged text. Lower chapters share one type scale; hero styling remains owner-approved.
 - Verified: the exact combined release passes 226 unit tests, full lint/typecheck/build and 72 product/media Chromium/WebKit checks; desktop and mobile live QA passes. Details belong to PROGRESS.md.
@@ -551,7 +551,7 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   slowdown measured LCP 2312ms, CLS 0.0001 and one tested interaction at 80ms. No runtime errors
   or horizontal overflow occurred. These are historical lab observations, not measurements of the
   restored original video, field CWV or measured field INP.
-- `Decision / local` (2026-11-03): replace the opening with the new owner-supplied Gemini clip.
+- `Decision / published` (2026-11-03): replace the opening with the new owner-supplied Gemini clip.
   It retains one silent playback and the frontal illuminated ending. Opening and reduced-motion/error
   posters come from frames 0 and 239 of this clip. Media encoding/provenance belongs to
   [the media register](docs/content/product-media-provenance.md#local-frontal-ending-replacement-2026-11-03).
@@ -561,7 +561,7 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   `Verified`: 52 Chromium/WebKit product scenarios pass, including seven portrait sizes per engine.
   Independent screenshot pixel bounds place the visible lettering within 1 CSS px of screen centre
   (phones within 0.5px); inspected desktop/mobile screenshots, TypeScript and scoped lint pass.
-  Physical-device playback and field performance remain unverified; owner authorised publication on 2026-11-03; release verification pending.
+  Physical-device playback and field performance remain unverified; owner-authorised release is live on 2026-11-03.
 - `Current` sequence: full-screen video opening → textile/colour with a short introduction
   → shapes and configurator link → practical questions → project steps and enquiry.
   Earlier awning/inscription studies below describe previous iterations, not current visible blocks.

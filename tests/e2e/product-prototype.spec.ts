@@ -1,6 +1,13 @@
 import AxeBuilder from "@axe-core/playwright";
 import { writeFile } from "node:fs/promises";
-import { devices, expect, test } from "@playwright/test";
+import { devices, expect, test, type Page } from "@playwright/test";
+
+async function dismissConsent(page: Page) {
+  const banner = page.getByTestId("consent-banner");
+  await expect(banner).toBeVisible();
+  await banner.getByRole("button", { name: "Alle ablehnen", exact: true }).click();
+  await expect(banner).toBeHidden();
+}
 
 const route = "/produkt";
 const key = "lichtsaum:configurator:v1";
@@ -185,6 +192,7 @@ test("reduced motion keeps the static poster and disables material transitions",
 
 test("hero video pauses, replays, resumes onscreen and shares the homepage header surface", async ({ page }) => {
   await page.goto(route);
+  await dismissConsent(page);
   const video = page.locator("#product-hero-video");
   await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
   await expect(video).toHaveJSProperty("muted", true);
@@ -217,6 +225,7 @@ for (const width of [390, 1440]) {
   test(`hero video resumes from its frame, respects manual pause and holds its ending at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(route);
+    await dismissConsent(page);
     const video = page.locator("#product-hero-video");
     const leaveHero = () => page.locator(".editorial-video-hero").evaluate(el => window.scrollTo({
       top: window.scrollY + el.getBoundingClientRect().bottom, behavior: "instant"
@@ -263,8 +272,7 @@ test("iPhone keeps its frame after a sustained offscreen pause", async ({ browse
   try {
     const page = await context.newPage();
     await page.goto(route, { waitUntil: "domcontentloaded" });
-    const banner = page.getByTestId("consent-banner");
-    if (await banner.isVisible()) await banner.getByRole("button", { name: "Alle ablehnen", exact: true }).click();
+    await dismissConsent(page);
     const video = page.locator("#product-hero-video");
     await expect.poll(() => video.evaluate(v => (v as HTMLVideoElement).currentTime), { timeout: 20_000 }).toBeGreaterThan(1.5);
     await page.locator(".editorial-video-hero__media").evaluate(el => window.scrollTo({
@@ -376,6 +384,7 @@ test("reduced motion does not fetch video until explicit play and live preferenc
   page.on("request", request => { if (request.url().includes("lichtsaum-front-v2.mp4")) requests.push(request.url()); });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route);
+  await dismissConsent(page);
   const video = page.locator("#product-hero-video");
   await expect(page.getByRole("button", { name: "Video abspielen", exact: true })).toBeVisible();
   expect(requests).toEqual([]);

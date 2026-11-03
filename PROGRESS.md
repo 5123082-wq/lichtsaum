@@ -4,49 +4,44 @@
 ## Context Beacon
 
 - Last updated: 2026-11-03.
-- Local candidate: owner-supplied frontal-ending product video replaces the opening on `/produkt`.
-  Silent stream copy with Fast Start; first/final posters updated and portrait lettering centred
-  using the new x=632 focal point. All 52 Chromium/WebKit product checks, TypeScript and scoped
-  lint pass; screenshot pixel checks are within 1 CSS px. Owner authorised publication; next: exact release build, push and live verification.
-- Published combined product release: https://www.lichtsaum.com/produkt. The owner explicitly
-  authorised the portrait-video work together with the other agent's image/carousel changes.
-  Application commit `64933773ffad2022fe780e8e300c25b3a2cc4236` and its corrective parent `e83e1f9`
-  were pushed directly to origin/main. Vercel `dpl_FuvxkDU7RmigL2dB3EF1ZCTnK1Az` is READY on www/apex.
-- Current page: five editorial chapters with shared navigation, own metadata/canonical and one
-  sitemap entry. `/prototyp/produkt` remains production 404; preview/local search policy is unchanged.
-- Published portrait hero: the final inscription is aligned from the measured source focal point
-  using actual CSS container dimensions. The wider portrait surface has a neutral #131313 fade;
-  time-driven horizontal shifts are removed. First-frame cover, reduced-motion/failure still,
-  preserved paused time, manual-pause guard and illuminated ending are retained. Original silent
-  6,070,629-byte video remains byte-identical. DESIGN.md owns geometry and presentation.
-- Published imagery/carousel: four approved masters use 71 prebuilt responsive derivatives with
-  hash-based immutable caching. Masters are unchanged. Near-chapter preload, decoding before
-  switching, latest-choice handling, retained frames on errors and retry are implemented.
-  Source/encoding details belong to `docs/content/product-media-provenance.md`.
-- Final exact release export passes full lint, TypeScript/build and all 226 unit tests. All 72
-  production-build Chromium/WebKit product/media scenarios pass. Manifest dimensions, byte lengths
-  and filename hashes validate for all 71 files. Existing package/lock versions are used.
-- Live QA passes Chromium desktop and Chromium/WebKit iPhone emulation: pause/resume/manual pause,
-  lit ending, responsive images, carousel, full-page axe, metadata, no overflow/runtime errors and
-  no optional Google requests before consent/after rejection. All 71 hash URLs return 200 with
-  immutable caching; sitemap, prototype 404, AdsBot 200 and original MP4 SHA-256 are verified.
-  Mobile screenshot pixel checks confirm centring. No real leads/uploads/emails were sent.
-- Existing production environment flags, Neon/Resend/private Blob, configurator prices and Google
-  tag/Ads settings are unchanged. No migration or new processor/data flow was introduced.
-- Inventory: the apparent 80k-line backlog is 80,305 lines in two vendored Three.js files for an
-  unused prototype. They and the previous 3D source, raw prototype/promo media, supplier PDFs,
-  unused public-image candidates and Three package additions remain local. Nothing was deleted
-  or hidden. Exact snapshot and release scope: `docs/architecture/release-inventory-2026-11-02.md`.
-- Evidence limits: physical-device iPhone/Safari, field CWV and actual lead delivery/deduplication
-  remain unverified. Earlier media lab numbers are not field results; ownership approval does not
-  independently verify unknown third-party media rights.
-- Next action: owner review of the live combined product page. Further prototype integration,
-  local-work cleanup, Ads final-URL changes and live conversion diagnostics are separate tasks.
-  The shared development watchdog on port 3000 remains available.
+- Published: https://www.lichtsaum.com/produkt. Owner authorised the new frontal-ending video.
+  Application commit `dac090f96d2f9dd807491b6ec127e52f1f586659` was pushed directly to origin/main;
+  Vercel `dpl_7zuXa5vHkd9e8YbKrqsaHUgCRsrT` is READY on www/apex.
+- Current hero: silent 10-second H.264 stream copy with Fast Start, 5,802,997 bytes; first/final
+  posters replaced. Portrait lettering uses source focal x=632, scaled with actual container size.
+  One playback, illuminated ending, manual pause, offscreen resume and reduced-motion still remain.
+  DESIGN.md owns presentation; docs/content/product-media-provenance.md owns source/encoding.
+- Current page: five editorial chapters, shared navigation, responsive imagery/carousel and existing
+  metadata/search policy. No application changes outside hero media/focal geometry in this release.
+- Verification: scoped release export passes production webpack build/TypeScript, full lint and
+  226 unit tests. Prior local browser run passes 52 Chromium/WebKit scenarios; 14 portrait pixel
+  checks place lettering within 1 CSS px. Live media and page return 200; MP4 SHA-256 matches exactly.
+- Live browser verification: 36 selected media scenarios pass across initial run and corrected rerun.
+  Initial failures came from controls obscured by the consent banner, including hydration timing;
+  the test now waits for the banner and rejects optional cookies before control interaction.
+  All 10 affected Chromium/WebKit scenarios pass after this test-only correction. No player code fix.
+- Existing production flags, providers, Google tags/Ads and configurator prices are unchanged.
+  No migration, new processor/data flow, real lead, upload or email was introduced.
+- Other local work remains untouched: Three.js prototypes/dependencies, supplier PDFs, promo/raw
+  media and unused candidates. Prior inventory: docs/architecture/release-inventory-2026-11-02.md.
+- Evidence limits: physical-device Safari, field CWV and actual lead delivery remain unverified.
+- Next: owner review of the live video. Other prototypes, cleanup and Ads work are separate tasks.
+  Shared development server remains available at 127.0.0.1:3000.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20261103-02 — Frontal-ending video published through GitHub
+
+- Scope: owner-authorised hero release and live browser verification.
+- Outcome: application commit `dac090f` pushed to origin/main; Vercel
+  `dpl_7zuXa5vHkd9e8YbKrqsaHUgCRsrT` READY on www/apex. New video and posters are live.
+- Verification: exact export build/TypeScript, full lint and 226 unit tests pass; published media
+  return 200 and the MP4 file hash matches. All 36 selected live media scenarios pass across the
+  initial run and corrected rerun. Tests now wait for/dismiss consent before control interactions;
+  all 10 affected Chromium/WebKit cases pass. Application playback code is unchanged.
+- Follow-up: physical-device Safari and field performance remain unverified.
 
 ### CHG-20261103-01 — Local frontal-ending product video
 
@@ -75,6 +70,10 @@
 - Follow-up: physical devices, field CWV and live conversion diagnostics remain separate; excluded work
   is itemised in `docs/architecture/release-inventory-2026-11-02.md`.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
 ### CHG-20261102-07 — Adaptive portrait centering of the final inscription
 
 - Scope: hero focal geometry, shared portrait surface, responsive browser checks and design contract.
@@ -89,9 +88,6 @@
   TypeScript, scoped lint and diff checks pass. Original MP4 is unchanged; screenshots reviewed.
 - Follow-up: owner local review; real-device iPhone verification and publication remain separate.
 
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261102-06 — Responsive textile images and decoded carousel switching
 
