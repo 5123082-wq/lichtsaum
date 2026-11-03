@@ -4,11 +4,15 @@
 ## Context Beacon
 
 - Last updated: 2026-11-03.
-- Local homepage revision: portrait phones/iPads use width-based framing that fits the front
-  valance and H1, with a compact stage and soft image edges. The 1.8s shared camera entrance is
-  +4% for portrait / +6% wide landscape; rotation updates scale without replay. All 74
-  Chromium/WebKit hero/header checks, TypeScript and scoped lint pass. Owner authorised publication through GitHub;
-  next: exact release build, push and live verification. DESIGN.md owns geometry and motion parameters.
+- Published homepage: https://www.lichtsaum.com. Owner-authorised application commit
+  `8b2fa95459cd6d0198f9a6830fa701ca64e8dbfc` was pushed directly to origin/main; Vercel
+  `dpl_2Ci1xHF5WmcFDAJeC9ycAZunKjNM` is READY on www/apex. Introductory camera motion and
+  portrait phone/iPad framing are live. DESIGN.md owns geometry/motion parameters.
+- Homepage verification: exact export passes production webpack build/TypeScript, full lint and
+  226 unit tests. All 74 hero/header Chromium/WebKit scenarios pass locally and on the public domain,
+  including portrait sizes, rotation, reduced motion and native/fallback scroll. Live phone capture
+  after cookie rejection shows no runtime errors, horizontal overflow or optional Google traffic.
+  Main/product/sitemap return 200; canonical is retained. No real leads/uploads/emails were sent.
 - Published: https://www.lichtsaum.com/produkt. Owner authorised the new frontal-ending video.
   Application commit `dac090f96d2f9dd807491b6ec127e52f1f586659` was pushed directly to origin/main;
   Vercel `dpl_7zuXa5vHkd9e8YbKrqsaHUgCRsrT` is READY on www/apex.
@@ -30,13 +34,25 @@
 - Other local work remains untouched: Three.js prototypes/dependencies, supplier PDFs, promo/raw
   media and unused candidates. Prior inventory: docs/architecture/release-inventory-2026-11-02.md.
 - Evidence limits: physical-device Safari, field CWV and actual lead delivery remain unverified.
-- Next: owner review of the local homepage entrance. Live product video remains published.
+- Next: owner review of the published homepage. Live product video remains published.
   Other prototypes, cleanup and Ads work are separate tasks.
   Shared development server remains available at 127.0.0.1:3000.
 <!-- AGENT_CONTEXT:END -->
 
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
+
+### CHG-20261103-05 — Homepage entrance and portrait framing published
+
+- Scope: owner-authorised homepage release through GitHub and live verification.
+- Outcome: application commit `8b2fa95` pushed to origin/main; Vercel
+  `dpl_2Ci1xHF5WmcFDAJeC9ycAZunKjNM` READY on www/apex. Only five scoped files were included;
+  other local prototypes, media and dependency changes remain untouched.
+- Verification: exact export build/TypeScript, full lint and 226 unit tests pass. All 74
+  hero/header scenarios pass on the public domain in Chromium/WebKit. Main/product/sitemap
+  return 200, main canonical is retained; phone screenshot after cookie rejection reviewed with
+  no runtime errors, horizontal overflow or optional Google requests. Production flags unchanged.
+- Follow-up: owner live review; physical devices and field performance remain unverified.
 
 ### CHG-20261103-04 — Portrait homepage framing for phones and iPad
 
@@ -61,6 +77,10 @@
   scoped lint and diff checks pass; desktop/phone screenshots reviewed. Shared dev server stays available.
 - Follow-up: owner local review; publication, physical-device and field-performance checks are separate.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
 ### CHG-20261103-02 — Frontal-ending video published through GitHub
 
 - Scope: owner-authorised hero release and live browser verification.
@@ -72,9 +92,6 @@
   all 10 affected Chromium/WebKit cases pass. Application playback code is unchanged.
 - Follow-up: physical-device Safari and field performance remain unverified.
 
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261103-01 — Local frontal-ending product video
 

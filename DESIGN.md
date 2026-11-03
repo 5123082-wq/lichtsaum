@@ -15,7 +15,7 @@ they do not decide publication. Concrete public actions follow
 ## Agent brief
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
 - Current: dark architectural UI, self-hosted Hanken/JetBrains, orange actions and square geometry.
-- Local homepage trial (2026-11-03): portrait phone/iPad composition fits the front valance and H1; width-based framing and a shorter stage. Shared 1.8s entrance: +4% portrait / +6% wide landscape. Owner authorised publication through GitHub on 2026-11-03.
+- Published homepage (2026-11-03): portrait phone/iPad composition fits the front valance and H1; width-based framing and a shorter stage. Shared 1.8s entrance: +4% portrait / +6% wide landscape. Published through origin/main and Vercel on 2026-11-03.
 - Current published revision (2026-11-03): owner-supplied frontal-ending video, unchanged H.264 stream; portrait lettering focal x=632 (8px correction). First/last posters replaced; published through origin/main and Vercel on 2026-11-03.
 - Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft. Responsive imagery and decoded carousel switching are published.
 - Decision (2026-11-02): owner authorised publication with the original silent 6,070,629-byte video and no public AI/concept captions; provenance remains internal.
@@ -822,7 +822,7 @@ The following records the former design. The current `/produkt` uses the editori
 
 ## Motion
 
-- `Decision / local trial` (2026-11-03): owner requested a subtle homepage camera entrance before
+- `Decision / published` (2026-11-03): owner requested a subtle homepage camera entrance before
   the existing scroll-driven illumination. The facade and SVG lettering share a separate camera
   wrapper inside the drifting media layer; heading, menu and overlays do not zoom.
   After both images decode, scale increases from 1 to 1.06 (wide landscape) / 1.04 (portrait or up to 760px) over
@@ -838,7 +838,7 @@ The following records the former design. The current `/produkt` uses the editori
   from browser raster/SVG rounding. Publication and physical-device/field-performance verification
   are separate.
 
-- `Decision / local portrait revision` (2026-11-03): owner reported an over-cropped homepage on
+- `Decision / published portrait revision` (2026-11-03): owner reported an over-cropped homepage on
   portrait phones and iPads. Orientation now overrides the width-only desktop media framing.
   The shared image/SVG width is 160vw, anchored at x=36.4% of the source, with a top inset of
   header height + 2svh and a top/bottom mask. Both ends of the front valance fit; the source's
@@ -852,6 +852,11 @@ The following records the former design. The current `/produkt` uses the editori
   820×1180 and 1024×1366 portrait tablets, full front-valance/H1 bounds and rotation. TypeScript,
   scoped lint and diff checks pass; phone/iPad screenshots reviewed. Physical devices and field
   performance remain unverified.
+  Published through GitHub on 2026-11-03: application commit `8b2fa95`, Vercel
+  `dpl_2Ci1xHF5WmcFDAJeC9ycAZunKjNM` READY. All 74 hero/header scenarios also pass on the
+  public domain in Chromium/WebKit. The scoped export passes build/TypeScript, full lint and
+  226 unit tests; live phone capture after rejecting cookies has no runtime errors, overflow or
+  optional Google requests. No production environment/provider settings were changed.
 
 - Движение быстрое, точное и редкое.
 - Default transition: около 200ms ease-out.
