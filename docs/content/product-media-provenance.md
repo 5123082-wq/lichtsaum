@@ -4,14 +4,35 @@ Status: `Verified` source records / `Decision` owner-approved presentation, 2026
 
 <!-- AGENT_BRIEF:START -->
 ## Agent brief
-- Owns: provenance of the eight public masters and their responsive product-page derivatives.
+- Owns: provenance of released product masters, local replacements and responsive derivatives.
 - Current: generated imagery illustrates the product; it does not verify construction, supplier stock or completed customer projects.
 - Decision: the owner requested original video quality, removal of public AI/concept captions and publication on 2026-11-02. Neutral German alt text remains.
-- Current correction: a separate first-frame poster covers normal video loading; the illuminated still remains for reduced motion/failure. The MP4 is unchanged.
+- Current local replacement (2026-11-03): new owner-supplied frontal-ending clip; silent H.264 stream copy with Fast Start, new first/last posters. Owner authorised publication on 2026-11-03.
 - Current published delivery: all four textile/shape images use prebuilt responsive variants; approved masters are unchanged. Combined publication was owner-authorised and verified on 2026-11-02.
 - Open: independent documentary verification of underlying media rights and physical-product correspondence.
 - Read full when: replacing product media or changing its provenance/evidence status.
 <!-- AGENT_BRIEF:END -->
+
+## Local frontal-ending replacement — 2026-11-03
+
+`Decision`: owner requested a local replacement on `/produkt` and confirmed that the final
+inscription must be centred on portrait screens. Owner explicitly authorised publication on 2026-11-03.
+
+- Source: owner-created Gemini video, copied by the owner to
+  `DesignPrototip/assets/gemini_generated_video_b553e51d.mp4`; 6,991,771 bytes,
+  H.264 High/yuv420p, 1280 × 720, 24fps, 240 video frames / 10 seconds, plus AAC audio.
+- Delivery: `public/videos/product/lichtsaum-front-v2.mp4`, 5,802,997 bytes. FFmpeg maps only
+  video stream 0, uses `-c:v copy -an -map_metadata -1 -movflags +faststart`.
+  No scaling or video re-encoding; original colour signalling is preserved. No audio stream remains.
+  MP4 atom inspection confirms `moov` precedes `mdat`.
+- Verification: SHA-256 of the copied compressed video stream matches the source exactly:
+  `8c278e98a2b9fee9d8a859bef4cd6941f2f45e46dc17a5df546cbe8f1b7cbeb2`.
+  This verifies lossless video-stream copying, not a claim about original generator quality.
+- Posters: `public/images/product/front-start-v2.webp` and `front-poster-v2.webp`, decoded frames
+  0 and 239 respectively; Sharp WebP quality 90 at original 1280 × 720. Poster compression is lossy.
+- Evidence boundary: generated scene; no verified construction or completed-customer-project claim.
+  Previous released video/posters are retained unchanged. Presentation and browser checks belong to
+  [DESIGN.md](../../DESIGN.md#editorial-product-produkt-and-review-route-prototypprodukt).
 
 ## Released media
 

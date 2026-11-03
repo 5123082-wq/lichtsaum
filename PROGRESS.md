@@ -3,7 +3,11 @@
 <!-- AGENT_CONTEXT:START -->
 ## Context Beacon
 
-- Last updated: 2026-11-02.
+- Last updated: 2026-11-03.
+- Local candidate: owner-supplied frontal-ending product video replaces the opening on `/produkt`.
+  Silent stream copy with Fast Start; first/final posters updated and portrait lettering centred
+  using the new x=632 focal point. All 52 Chromium/WebKit product checks, TypeScript and scoped
+  lint pass; screenshot pixel checks are within 1 CSS px. Owner authorised publication; next: exact release build, push and live verification.
 - Published combined product release: https://www.lichtsaum.com/produkt. The owner explicitly
   authorised the portrait-video work together with the other agent's image/carousel changes.
   Application commit `64933773ffad2022fe780e8e300c25b3a2cc4236` and its corrective parent `e83e1f9`
@@ -44,6 +48,17 @@
 <!-- RECENT_CHANGES:START -->
 ## Recent changes — newest first, maximum three
 
+### CHG-20261103-01 — Local frontal-ending product video
+
+- Scope: product hero media, portrait focal geometry, existing browser checks and media/design records.
+- Outcome: new owner-supplied 10-second clip uses silent 5,802,997-byte MP4 with Fast Start and
+  an unchanged H.264 stream. New opening/final posters and 8-source-pixel portrait correction
+  centre the ending inscription; previous released assets remain intact. Local only.
+- Verification: input/output compressed-stream SHA-256 matches; no audio; moov precedes mdat.
+  TypeScript, scoped lint and 52 Chromium/WebKit scenarios pass. All 14 portrait screenshot pixel
+  checks are within 1 CSS px of centre; desktop/mobile screenshots reviewed. Shared dev server is available.
+- Follow-up: owner local review; publication, physical devices and field performance remain separate.
+
 ### CHG-20261102-08 — Combined product release published after inventory review
 
 - Scope: portrait hero corrections, responsive image/carousel work, release inventory and owning documents.
@@ -74,6 +89,10 @@
   TypeScript, scoped lint and diff checks pass. Original MP4 is unchanged; screenshots reviewed.
 - Follow-up: owner local review; real-device iPhone verification and publication remain separate.
 
+<!-- RECENT_CHANGES:END -->
+
+<!-- CHANGE_HISTORY:START -->
+
 ### CHG-20261102-06 — Responsive textile images and decoded carousel switching
 
 - Scope: four product image sets, static delivery/cache headers, carousel loading and regression coverage.
@@ -91,9 +110,6 @@
 - Follow-up: owner local review and separate publication approval; physical-device and field results
   remain unverified. Exact transfer evidence belongs to DESIGN.md.
 
-<!-- RECENT_CHANGES:END -->
-
-<!-- CHANGE_HISTORY:START -->
 
 ### CHG-20261102-05 — Stable and wider local iPhone presentation
 

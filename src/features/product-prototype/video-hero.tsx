@@ -3,7 +3,7 @@
 import { getImageProps } from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-const videoSource = "/videos/product/lichtsaum-orbit-v1.mp4";
+const videoSource = "/videos/product/lichtsaum-front-v2.mp4";
 const posterOptions = {
   className: "editorial-video-hero__poster",
   alt: "Caféfassade mit LICHTSAUM-Schriftzug auf dem Markisenvolant.",
@@ -12,8 +12,8 @@ const posterOptions = {
   fetchPriority: "high",
   sizes: "(max-width: 760px) 135vh, 100vw"
 } as const;
-const { props: openingPoster } = getImageProps({ ...posterOptions, src: "/images/product/orbit-start-v1.webp" });
-const { props: illuminatedPoster } = getImageProps({ ...posterOptions, src: "/images/product/orbit-poster-v1.webp" });
+const { props: openingPoster } = getImageProps({ ...posterOptions, src: "/images/product/front-start-v2.webp" });
+const { props: illuminatedPoster } = getImageProps({ ...posterOptions, src: "/images/product/front-poster-v2.webp" });
 
 function playFromCurrentFrame(video: HTMLVideoElement) {
   video.muted = true;

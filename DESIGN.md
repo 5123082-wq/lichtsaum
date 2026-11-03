@@ -15,6 +15,7 @@ they do not decide publication. Concrete public actions follow
 ## Agent brief
 - Owns: visual system, responsive behavior, accessibility, motion and performance evidence.
 - Current: dark architectural UI, self-hosted Hanken/JetBrains, orange actions and square geometry.
+- Current local revision (2026-11-03): owner-supplied frontal-ending video, unchanged H.264 stream; portrait lettering focal x=632 (8px correction). First/last posters replaced; owner authorised publication on 2026-11-03.
 - Current product: published on 2026-11-02; five editorial chapters, one shared component; configuration opens the existing tool without modifying its draft. Responsive imagery and decoded carousel switching are published.
 - Decision (2026-11-02): owner authorised publication with the original silent 6,070,629-byte video and no public AI/concept captions; provenance remains internal.
 - Current published portrait revision (2026-11-02): adaptive final-inscription alignment across portrait formats, wider video surface capped at 125vw with an earlier neutral bottom fade into the shared #131313 canvas. Paused time is reasserted before play to prevent iOS restarting offscreen media. Combined publication was owner-authorised and verified on 2026-11-02.
@@ -550,6 +551,17 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   slowdown measured LCP 2312ms, CLS 0.0001 and one tested interaction at 80ms. No runtime errors
   or horizontal overflow occurred. These are historical lab observations, not measurements of the
   restored original video, field CWV or measured field INP.
+- `Decision / local` (2026-11-03): replace the opening with the new owner-supplied Gemini clip.
+  It retains one silent playback and the frontal illuminated ending. Opening and reduced-motion/error
+  posters come from frames 0 and 239 of this clip. Media encoding/provenance belongs to
+  [the media register](docs/content/product-media-provenance.md#local-frontal-ending-replacement-2026-11-03).
+  In the new 1280 × 720 ending, bright lettering spans x=497..767, centre x=632, y=259..280.
+  The portrait correction is therefore 8 source pixels rightward, scaled by actual container size.
+  It replaces the previous clip's 10px correction; the existing media surface and fades remain.
+  `Verified`: 52 Chromium/WebKit product scenarios pass, including seven portrait sizes per engine.
+  Independent screenshot pixel bounds place the visible lettering within 1 CSS px of screen centre
+  (phones within 0.5px); inspected desktop/mobile screenshots, TypeScript and scoped lint pass.
+  Physical-device playback and field performance remain unverified; owner authorised publication on 2026-11-03; release verification pending.
 - `Current` sequence: full-screen video opening → textile/colour with a short introduction
   → shapes and configurator link → practical questions → project steps and enquiry.
   Earlier awning/inscription studies below describe previous iterations, not current visible blocks.
@@ -564,7 +576,7 @@ physical sample; colour of the awning frame and colour of the fabric are separat
   Its desktop/portrait crop matches the opening video, preventing the previous lit-ending flash
   while the MP4 loads. A responsive picture selects the illuminated still for reduced motion
   before hydration and on media failure; only the selected poster is requested.
-  The published portrait revision anchors the final inscription to the horizontal centre for video
+  The previously published clip’s portrait revision anchors the final inscription to the horizontal centre for video
   and both posters. The 1280 × 720 final frame has visible lettering at x=502..758, centred at
   x=630. CSS container dimensions scale the 10-source-pixel offset from the geometric centre;
   no per-model rules or playback-time updates are used. The shared portrait surface is capped

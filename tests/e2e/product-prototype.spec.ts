@@ -47,7 +47,7 @@ for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     let releaseVideo!: () => void;
     const videoGate = new Promise<void>(resolve => { releaseVideo = resolve; });
-    await page.route("**/videos/product/lichtsaum-orbit-v1.mp4", async request => {
+    await page.route("**/videos/product/lichtsaum-front-v2.mp4", async request => {
       await videoGate;
       await request.continue();
     });
@@ -56,7 +56,7 @@ for (const width of [390, 1440]) {
     try {
       await page.goto(route, { waitUntil: "domcontentloaded" });
       await expect.poll(() => poster.evaluate(el => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0)).toBe(true);
-      expect(await poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("orbit-start-v1.webp");
+      expect(await poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("front-start-v2.webp");
       await expect(video).toHaveCSS("opacity", "0");
       // The portrait cover and the first video frame must use the same crop.
       expect(await poster.evaluate(el => getComputedStyle(el).objectPosition)).toBe(await video.evaluate(el => getComputedStyle(el).objectPosition));
@@ -81,11 +81,11 @@ test("poster matches motion preference before JavaScript runs", async ({ browser
     try {
       const page = await context.newPage();
       const requested: string[] = [];
-      page.on("request", request => { if (/orbit-(?:start|poster)-v1\.webp|lichtsaum-orbit-v1\.mp4/.test(request.url())) requested.push(request.url()); });
+      page.on("request", request => { if (/front-(?:start|poster)-v2\.webp|lichtsaum-front-v2\.mp4/.test(request.url())) requested.push(request.url()); });
       await page.goto(route);
       const poster = page.locator(".editorial-video-hero__poster");
       await expect.poll(() => poster.evaluate(el => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0)).toBe(true);
-      const selected = reducedMotion === "reduce" ? "orbit-poster-v1.webp" : "orbit-start-v1.webp";
+      const selected = reducedMotion === "reduce" ? "front-poster-v2.webp" : "front-start-v2.webp";
       expect(await poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain(selected);
       expect(requested.length).toBeGreaterThan(0);
       expect(requested.every(url => url.includes(selected))).toBe(true);
@@ -177,7 +177,7 @@ test("reduced motion keeps the static poster and disables material transitions",
   await page.goto(route);
   await expect(page.locator("#licht img")).toBeVisible();
   await expect(page.locator("#licht video")).not.toHaveAttribute("src", /.+/);
-  expect(await page.locator(".editorial-video-hero__poster").evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("orbit-poster-v1.webp");
+  expect(await page.locator(".editorial-video-hero__poster").evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("front-poster-v2.webp");
   await expect(page.locator(".editorial-facade")).toHaveCount(0);
   await page.getByRole("button", { name: "Tuch & Farbe: nächste Ansicht" }).click();
   await expect(page.locator(".editorial-study-media__entering")).toHaveCSS("animation-name", "none");
@@ -341,7 +341,7 @@ for (const [width, height] of [[320, 568], [375, 812], [390, 844], [430, 932], [
         const box = video.getBoundingClientRect();
         const scale = Math.max(box.width / video.videoWidth, box.height / video.videoHeight);
         const offsetY = (box.height - video.videoHeight * scale) / 2;
-        return { width: innerWidth, height: innerHeight, scale, letteringTop: box.top + offsetY + 280 * scale, letteringBottom: box.top + offsetY + 318 * scale, objectPosition: getComputedStyle(video).objectPosition };
+        return { width: innerWidth, height: innerHeight, scale, letteringTop: box.top + offsetY + 255 * scale, letteringBottom: box.top + offsetY + 285 * scale, objectPosition: getComputedStyle(video).objectPosition };
       });
       await page.screenshot({ path: testInfo.outputPath("final-centre.png"), style: "nextjs-portal { display: none; }" });
       const geometryPath = testInfo.outputPath("final-centre-geometry.json");
@@ -355,7 +355,7 @@ for (const [width, height] of [[320, 568], [375, 812], [390, 844], [430, 932], [
         const position = getComputedStyle(video).objectPosition;
         const percent = Number(position.match(/([-\d.]+)%/)?.[1] ?? 0) / 100;
         const pixels = Number(position.match(/\+\s*([-\d.]+)px/)?.[1] ?? 0);
-        return box.left + (box.width - video.videoWidth * scale) * percent + pixels + 630 * scale;
+        return box.left + (box.width - video.videoWidth * scale) * percent + pixels + 632 * scale;
       });
       expect(Math.abs(centre - width / 2)).toBeLessThan(1);
       const visibleSourceWidth = await video.evaluate(v => {
@@ -373,7 +373,7 @@ for (const [width, height] of [[320, 568], [375, 812], [390, 844], [430, 932], [
 
 test("reduced motion does not fetch video until explicit play and live preference changes restore the poster", async ({ page }) => {
   const requests: string[] = [];
-  page.on("request", request => { if (request.url().includes("lichtsaum-orbit-v1.mp4")) requests.push(request.url()); });
+  page.on("request", request => { if (request.url().includes("lichtsaum-front-v2.mp4")) requests.push(request.url()); });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route);
   const video = page.locator("#product-hero-video");
@@ -390,13 +390,13 @@ test("reduced motion does not fetch video until explicit play and live preferenc
 });
 
 test("unavailable hero video keeps the illuminated poster and content", async ({ page }) => {
-  await page.route("**/videos/product/lichtsaum-orbit-v1.mp4", request => request.abort());
+  await page.route("**/videos/product/lichtsaum-front-v2.mp4", request => request.abort());
   await page.goto(route);
   await expect(page.getByText("Video nicht verfügbar · Standbild")).toBeVisible();
   await expect(page.locator(".editorial-video-hero__media")).toHaveAttribute("data-playing", "false");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator(".editorial-video-hero__poster")).toBeVisible();
-  await expect.poll(() => page.locator(".editorial-video-hero__poster").evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("orbit-poster-v1.webp");
+  await expect.poll(() => page.locator(".editorial-video-hero__poster").evaluate(el => (el as HTMLImageElement).currentSrc)).toContain("front-poster-v2.webp");
   await expect(page.getByRole("link", { name: "Jetzt konfigurieren" })).toHaveAttribute("href", "/konfigurator");
 });
 
